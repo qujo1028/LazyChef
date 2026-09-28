@@ -266,6 +266,82 @@ export type Database = {
           },
         ]
       }
+      shopping_list_items: {
+        Row: {
+          added_by: string | null
+          category: Database["public"]["Enums"]["item_category"]
+          checked_at: string | null
+          checked_by: string | null
+          created_at: string
+          household_id: string
+          id: string
+          ingredient_id: number | null
+          name: string
+          note: string | null
+          quantity: number | null
+          recipe_id: number | null
+          recipe_title: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string | null
+          category?: Database["public"]["Enums"]["item_category"]
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          household_id: string
+          id?: string
+          ingredient_id?: number | null
+          name: string
+          note?: string | null
+          quantity?: number | null
+          recipe_id?: number | null
+          recipe_title?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string | null
+          category?: Database["public"]["Enums"]["item_category"]
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          household_id?: string
+          id?: string
+          ingredient_id?: number | null
+          name?: string
+          note?: string | null
+          quantity?: number | null
+          recipe_id?: number | null
+          recipe_title?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_list_items_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopping_list_items_checked_by_fkey"
+            columns: ["checked_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopping_list_items_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -275,9 +351,17 @@ export type Database = {
         Args: { p_household_id: string; p_items: Json }
         Returns: string[]
       }
+      add_to_shopping_list: {
+        Args: { p_household_id: string; p_items: Json }
+        Returns: string[]
+      }
       adjust_pantry_quantity: {
         Args: { p_delta: number; p_item_id: string }
         Returns: number
+      }
+      complete_shopping_trip: {
+        Args: { p_household_id: string; p_list_item_ids: string[]; p_pantry_items: Json }
+        Returns: string[]
       }
       create_household: {
         Args: { p_name: string }
