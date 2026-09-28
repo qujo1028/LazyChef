@@ -1,18 +1,27 @@
 import type { Metadata } from "next"
-import { History } from "lucide-react"
 
-import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
+import { ActivityFeed } from "@/features/activity/components/activity-feed"
+import { getActivityFeed } from "@/features/activity/queries"
+import { requireHousehold } from "@/features/household/queries"
 
 export const metadata: Metadata = { title: "Activity" }
 
-export default function ActivityPage() {
+export default async function ActivityPage() {
+  const { viewer, household } = await requireHousehold()
+  const feed = await getActivityFeed(household.id)
+
   return (
     <>
       <PageHeading title="Activity" description="Who added, used and cooked what." />
-      <EmptyState icon={History} title="No activity yet">
-        When anyone in the household adds or uses something, it shows up here.
-      </EmptyState>
+      <ActivityFeed
+        key={household.id}
+        householdId={household.id}
+        initialRows={feed.rows}
+        members={feed.members}
+        viewerId={viewer.id}
+        serverNow={feed.fetchedAt}
+      />
     </>
   )
 }
