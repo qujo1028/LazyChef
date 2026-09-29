@@ -62,8 +62,8 @@ Built:
 - The pantry's parseIngredients calls now record usage too.
 
 Still to do:
-- **Apply the migration to the live DB (ask the user first)**, and backfill the 3 earlier migrations into the migration
-  history at the same time. Without it the recipes pages still work, but nothing is cached, so every visit spends points.
-- `SPOONACULAR_API_KEY` in Vercel (production + preview).
+- Done 2026-09-29: the user applied the migration in the SQL Editor, and all 4 migrations are now recorded in
+  `supabase_migrations.schema_migrations`. `SPOONACULAR_API_KEY` is set in Vercel (production + preview). A redeploy
+  put this branch on production before the PR merged, so merge it to keep `main` in sync.
 - Browser check with a real account once the migration is live.
 - Phase 4: the shopping list screen (recipe items already land in `shopping_list_items` with recipe id/title).
