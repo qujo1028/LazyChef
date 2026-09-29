@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleAlert, CookingPot, ListPlus, LoaderCircle, Undo2 } from "lucide-react"
+import { CircleAlert, CookingPot, Heart, ListPlus, LoaderCircle, Undo2 } from "lucide-react"
 import { useId, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -14,7 +14,7 @@ import { displayName } from "@/features/pantry/display"
 import { formatUnit } from "@/lib/units"
 import { cn } from "@/lib/utils"
 
-import { cookRecipe, undoCook } from "../actions"
+import { cookRecipe, saveRecipe, undoCook } from "../actions"
 import {
   haveLabel,
   initialChoices,
@@ -29,7 +29,18 @@ import {
 type Done = { results: CookResult[]; undone: boolean }
 
 /** "I cooked this": review what comes out of the pantry, then take it all out at once. */
-export function CookSheet({ recipeId, title, lines }: { recipeId: number; title: string; lines: CookLine[] }) {
+export function CookSheet({
+  recipeId,
+  title,
+  lines,
+  saved,
+}: {
+  recipeId: number
+  title: string
+  lines: CookLine[]
+  /** Whether the household already saved it (the done screen offers to otherwise). */
+  saved: boolean
+}) {
   const [open, setOpen] = useState(false)
   const [session, setSession] = useState(0)
   const trackable = lines.some((line) => line.kind === "deduct" || line.kind === "check")
@@ -56,7 +67,14 @@ export function CookSheet({ recipeId, title, lines }: { recipeId: number; title:
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent className="mx-auto w-full max-w-lg">
           {session > 0 ? (
-            <CookContent key={session} recipeId={recipeId} title={title} lines={lines} close={() => setOpen(false)} />
+            <CookContent
+              key={session}
+              recipeId={recipeId}
+              title={title}
+              lines={lines}
+              saved={saved}
+              close={() => setOpen(false)}
+            />
           ) : (
             <DrawerTitle className="sr-only">I cooked this</DrawerTitle>
           )}
@@ -74,11 +92,13 @@ function CookContent({
   recipeId,
   title,
   lines,
+  saved,
   close,
 }: {
   recipeId: number
   title: string
   lines: CookLine[]
+  saved: boolean
   close: () => void
 }) {
   const [choices, setChoices] = useState(() => initialChoices(lines))
@@ -133,7 +153,19 @@ function CookContent({
     })
   }
 
-  if (done) return <CookDone title={title} done={done} pending={pending} onUndo={() => undo(done.results)} close={close} />
+  if (done) {
+    return (
+      <CookDone
+        recipeId={recipeId}
+        title={title}
+        saved={saved}
+        done={done}
+        pending={pending}
+        onUndo={() => undo(done.results)}
+        close={close}
+      />
+    )
+  }
 
   return (
     <>
@@ -253,13 +285,17 @@ function CookLineCard({
 }
 
 function CookDone({
+  recipeId,
   title,
+  saved,
   done,
   pending,
   onUndo,
   close,
 }: {
+  recipeId: number
   title: string
+  saved: boolean
   done: Done
   pending: boolean
   onUndo: () => void
@@ -269,6 +305,22 @@ function CookDone({
   const [added, setAdded] = useState<ReadonlySet<string>>(() => new Set())
   const [adding, startAdding] = useTransition()
   const remaining = out.filter((item) => !added.has(item.id))
+  // Offered once: stays "Saved" here even after the page re-renders with saved = true.
+  const [offerSave] = useState(!saved)
+  const [savedNow, setSavedNow] = useState(false)
+  const [saving, startSaving] = useTransition()
+
+  function save() {
+    startSaving(async () => {
+      const result = await callAction(() => saveRecipe(recipeId, title))
+      if (result.error !== undefined) {
+        toast.error(result.error)
+        return
+      }
+      setSavedNow(true)
+      toast.success("Saved for your household")
+    })
+  }
 
   function addToList(items: { id: string; name: string }[]) {
     if (items.length === 0) return
@@ -296,6 +348,22 @@ function CookDone({
         </DrawerDescription>
       </DrawerHeader>
       <div className="grid gap-3 px-4 pb-2">
+        {!done.undone && offerSave ? (
+          <div className="flex min-h-14 items-center gap-3 rounded-xl border bg-card py-1.5 pr-2 pl-3.5">
+            <p className="min-w-0 flex-1 text-sm">
+              <span className="font-semibold">Loved it?</span> Save it so it&apos;s easy to find next time.
+            </p>
+            {savedNow ? (
+              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                <Heart className="size-4 fill-rose-500 text-rose-500" aria-hidden /> Saved
+              </span>
+            ) : (
+              <Button type="button" variant="outline" className="h-11 shrink-0" disabled={saving} onClick={save}>
+                <Heart aria-hidden /> Save
+              </Button>
+            )}
+          </div>
+        ) : null}
         {!done.undone && out.length > 0 ? (
           <section className="grid gap-2" aria-label="Ran out">
             <h3 className="text-sm font-semibold">You ran out of</h3>

@@ -16,7 +16,11 @@ Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtim
   can go straight onto the list.
 - **Shopping list**: grouped by aisle, check off with one tap at the store, then "Put away" moves it all
   into the pantry, topping up what's already there.
-- **Activity**: who added, used, cooked and restocked what. Everything above updates live for housemates.
+- **Saved recipes**: a heart on any recipe saves it for the whole household. The Saved tab shows which ones you
+  can make right now, what each still needs, and how often you've cooked it.
+- **Activity**: who added, used, cooked and bought what. Everything above updates live for housemates.
+- **Stats**: meals cooked per week, your cooking streak, most cooked recipes, shopping trips and what you buy
+  most, and what each housemate has been up to.
 
 ## Setup
 
@@ -97,4 +101,5 @@ Authentication → Emails → Templates:
 - Server actions re-check the session and validate input with zod; client calls go through
   `src/lib/call-action.ts`, so a dropped connection shows a toast instead of the error screen.
 - Multi-row changes are single Postgres functions (`add_pantry_items`, `complete_shopping_trip`,
-  `cook_recipe`), so each shows up as one entry in the activity feed.
+  `cook_recipe`), so each shows up as one entry in the activity feed. Cooking and shopping trips are logged
+  as their own actions (`cooked`, `shopped`), which is what the Stats page and cook history read.

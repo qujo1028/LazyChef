@@ -10,6 +10,7 @@ export type { RecipeDetail, RecipeIngredient, RecipeSummary } from "./recipe-sha
 //   complexSearch:     1 point + 0.01 per recipe, + 0.025 per recipe for fillIngredients
 //                      and another 0.025 for addRecipeInformation
 //   information:       1 point
+//   informationBulk:   1 point for the first recipe + 0.5 per extra one
 // Callers cache results (up to the 1 hour the terms allow) so housemates share them.
 
 /** Spoonacular's own meal types (the complexSearch `type` parameter). */
@@ -86,4 +87,25 @@ export async function getRecipeInformation(id: number): Promise<{ recipe: Recipe
   const recipe = toRecipeDetail(data)
   if (!recipe) throw new SpoonacularError("bad_response", { quota })
   return { recipe, quota }
+}
+
+/** Most recipes per informationBulk call. */
+export const BULK_LIMIT = 25
+
+/** Cost of an informationBulk call for `count` recipes. */
+export function bulkCost(count: number): number {
+  return count <= 0 ? 0 : 1 + 0.5 * (count - 1)
+}
+
+/** GET /recipes/informationBulk (no nutrition). Unknown ids are just left out. */
+export async function getRecipeInformationBulk(
+  ids: readonly number[],
+): Promise<{ recipes: RecipeDetail[]; quota: SpoonacularQuota }> {
+  const valid = [...new Set(ids)].filter((id) => Number.isInteger(id) && id > 0).slice(0, BULK_LIMIT)
+  if (valid.length === 0) return { recipes: [], quota: { request: null, used: null, left: null } }
+  const { data, quota } = await spoonacularFetch<unknown>("/recipes/informationBulk", {
+    query: { ids: valid.join(","), includeNutrition: false },
+  })
+  if (!Array.isArray(data)) throw new SpoonacularError("bad_response", { quota })
+  return { recipes: data.flatMap((raw) => toRecipeDetail(raw) ?? []), quota }
 }

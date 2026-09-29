@@ -99,7 +99,7 @@ Built:
   amounts and skip lines. Staples are just listed. Confirming calls `cook_recipe()`, which takes everything out
   in one transaction. Afterwards: a toast with Undo, a done screen with "Add to list" for anything that ran out,
   and the Activity feed shows "X cooked Recipe" with the amounts.
-- **Migration `20260930000100_cook_mode.sql`** (not yet applied to the live DB, ask first): the `cooked` activity
+- **Migration `20260930000100_cook_mode.sql`** (applied to the live DB 2026-09-29 via the Supabase connector): the `cooked` activity
   action, `cook_recipe()` (security invoker, clamps at 0, one batch, recipe in `details`), the activity trigger
   logging "cooked" inside it, and `add_pantry_items` accepting `{"merge_into", "untrack": true}`. 6 new PGlite
   tests (`supabase/tests/cook.test.mjs`), 41 total.
@@ -116,7 +116,34 @@ Built:
   I couldn't open the Vercel Speed Insights dashboard from here (no Vercel token), so real-user numbers still
   need a look.
 
+Tested end to end with a throwaway household on the live DB: deduct, ran-out "Add to list", Undo, and the
+"You cooked Korean Candy Chicken" feed entry all work.
+
 To do:
-- Apply `20260930000100_cook_mode.sql` to the live DB (ask), then test "I cooked this" end to end with a
-  throwaway account.
 - Check live sync on two phones (the sandbox browser can't open the Realtime websocket).
+
+## Phase 6: saved recipes and stats (2026-09-29, branch `claude/nice-shannon-yjvi7b`)
+Built:
+- **Migration `20261001000100_saved_recipes.sql`** (not yet applied to the live DB, ask first):
+  `saved_recipes` (household id, recipe id and title only, per Spoonacular's terms; RLS by membership;
+  `saved_by` stamped by a trigger; broadcast), and the `shopped` activity action: `complete_shopping_trip()`
+  now marks its pantry changes so a trip is logged as one "bought N items" entry, untracked items included.
+  Trips from before the migration stay as added/restocked. 6 new PGlite tests (`saved.test.mjs`), 47 total.
+- **Saved** (`/recipes/saved`, an "Ideas | Saved" toggle on Recipes): a heart on every recipe card and recipe
+  page, shared by the household. Each saved recipe shows "Can make now" or "Have 5 of 7. Need …" against the
+  current pantry, and "Cooked 3 times · last Sep 12" from the activity log. Sort by ready to cook, newest or
+  most cooked. Ingredients come from the hourly cache; anything missing is fetched in one `informationBulk`
+  call (1 point + 0.5 per extra recipe) and cached per recipe, so opening one is free. When points run out
+  the list still shows, without the match.
+- **"Loved it? Save it"** on the "I cooked this" done screen when the recipe isn't saved yet.
+- **Stats** (`/activity/stats`, a "Feed | Stats" toggle on Activity): meals this month vs last, cooking streak,
+  trips and items bought this month, a 12-week meals chart (plain CSS bars), most cooked recipes (link to the
+  recipe), each housemate's meals / trips / items, and most bought items with an "add to list" button. It's
+  computed in the browser (`stats.ts`, unit-tested) so days and weeks follow the viewer's time zone.
+
+Known limits:
+- Undoing a cook doesn't take it back out of the stats or the cook history.
+- Saved and Stats don't update live; they refresh on navigation or after an action.
+
+To do:
+- Apply `20261001000100_saved_recipes.sql` to the live DB (ask), then test with a throwaway household.

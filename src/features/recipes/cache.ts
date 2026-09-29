@@ -2,7 +2,14 @@ import "server-only"
 
 import { createHash } from "node:crypto"
 
-import { SpoonacularError, type SpoonacularQuota } from "@/lib/spoonacular"
+import {
+  bulkCost,
+  BULK_LIMIT,
+  getRecipeInformationBulk,
+  SpoonacularError,
+  type RecipeDetail,
+  type SpoonacularQuota,
+} from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 import type { Json } from "@/types/database"
 
@@ -98,4 +105,67 @@ export async function cachedSpoonacular<T>(
 
   const fresh = quota.used !== null ? { used: quota.used, left: quota.left } : usage
   return { value, savedAt: new Date().toISOString(), fromCache: false, usage: fresh }
+}
+
+/** The cache key getRecipe() uses for one recipe's details. */
+export function recipeInfoKey(recipeId: number): string {
+  return `info:${recipeId}`
+}
+
+/**
+ * Details for several recipes: whatever the household has cached, plus one
+ * informationBulk call for the rest (saved per recipe, so opening one is free).
+ * If today's points can't cover the call (keeping 1 for opening a recipe), or it
+ * fails, the rest come back in `missing` instead of throwing.
+ */
+export async function cachedRecipeDetails(
+  householdId: string,
+  recipeIds: readonly number[],
+): Promise<{ details: Map<number, RecipeDetail>; missing: number[]; usage: Usage | null }> {
+  const ids = [...new Set(recipeIds)]
+  const details = new Map<number, RecipeDetail>()
+  if (ids.length === 0) return { details, missing: [], usage: null }
+
+  const supabase = await createClient()
+  const [{ data: hits, error }, usage] = await Promise.all([
+    supabase
+      .from("spoonacular_cache")
+      .select("cache_key, response")
+      .eq("household_id", householdId)
+      .in("cache_key", ids.map(recipeInfoKey))
+      .gt("expires_at", new Date().toISOString()),
+    getUsageToday(supabase),
+  ])
+  if (error) console.error("Reading the recipe cache failed:", error.message)
+  for (const hit of hits ?? []) {
+    const recipe = hit.response as RecipeDetail | null
+    if (recipe && typeof recipe.id === "number") details.set(recipe.id, recipe)
+  }
+
+  const toFetch = ids.filter((id) => !details.has(id)).slice(0, BULK_LIMIT)
+  const left = usage?.left
+  if (toFetch.length === 0 || (left !== null && left !== undefined && left < bulkCost(toFetch.length) + 1)) {
+    return { details, missing: ids.filter((id) => !details.has(id)), usage }
+  }
+
+  try {
+    const { recipes, quota } = await getRecipeInformationBulk(toFetch)
+    await recordUsage(quota, supabase)
+    await Promise.all(
+      recipes.map(async (recipe) => {
+        details.set(recipe.id, recipe)
+        const { error: saveError } = await supabase.rpc("put_spoonacular_cache", {
+          p_household_id: householdId,
+          p_cache_key: recipeInfoKey(recipe.id),
+          p_response: recipe as unknown as Json,
+        })
+        if (saveError) console.error("Saving to the recipe cache failed:", saveError.message)
+      }),
+    )
+    const fresh = quota.used !== null ? { used: quota.used, left: quota.left } : usage
+    return { details, missing: ids.filter((id) => !details.has(id)), usage: fresh }
+  } catch (error) {
+    console.warn("[spoonacular] saved recipes failed:", error instanceof SpoonacularError ? error.code : error)
+    return { details, missing: ids.filter((id) => !details.has(id)), usage }
+  }
 }

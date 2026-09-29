@@ -1,6 +1,6 @@
 "use client"
 
-import { ChefHat, Minus, Pencil, Plus, RefreshCw, Trash2, type LucideIcon } from "lucide-react"
+import { ChefHat, Minus, Pencil, Plus, RefreshCw, ShoppingBag, Trash2, type LucideIcon } from "lucide-react"
 import { useState } from "react"
 
 import { UserAvatar } from "@/components/user-avatar"
@@ -26,9 +26,10 @@ const ACTION_STYLES: Record<ActivityAction, ActionStyle> = {
   updated: { icon: Pencil, badge: "bg-violet-500", text: "text-violet-600 dark:text-violet-400" },
   removed: { icon: Trash2, badge: "bg-rose-500", text: "text-rose-600 dark:text-rose-400" },
   cooked: { icon: ChefHat, badge: "bg-orange-500", text: "text-orange-600 dark:text-orange-400" },
+  shopped: { icon: ShoppingBag, badge: "bg-teal-500", text: "text-teal-600 dark:text-teal-400" },
 }
 
-/** For actions added to the enum later (shopped, …) before they get their own style. */
+/** For actions added to the enum later before they get their own style. */
 const FALLBACK_STYLE: ActionStyle = { icon: Pencil, badge: "bg-muted-foreground", text: "text-muted-foreground" }
 
 function styleFor(action: ActivityAction): ActionStyle {

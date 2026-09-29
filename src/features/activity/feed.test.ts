@@ -174,6 +174,23 @@ describe("cooked entries", () => {
   })
 })
 
+describe("shopping trip entries", () => {
+  it("reads as buying the items, with amounts", () => {
+    const rows = [
+      row({ action: "shopped", itemName: "eggs", quantity: 12, unit: "count", batchId: 11 }),
+      row({ action: "shopped", itemName: "milk", quantity: null, unit: "count", batchId: 11 }),
+    ]
+    const [entry] = groupActivity(rows)
+    expect(summarizeEntry(entry)).toMatchObject({ action: "shopped", verb: "bought", object: "2 items", grouped: true, mixed: false })
+    expect(entry.rows.map(describeItem)).toEqual(["12 eggs", "milk"])
+  })
+
+  it("names a single item", () => {
+    const [entry] = groupActivity([row({ action: "shopped", itemName: "rice", quantity: 2, unit: "lb", batchId: 12 })])
+    expect(summarizeEntry(entry)).toMatchObject({ verb: "bought", object: "2 lb rice", grouped: false })
+  })
+})
+
 describe("summarizeEntry", () => {
   const sentence =(rows: ActivityRow[], viewerId = "someone-else") => {
     const [entry] = groupActivity(rows)
