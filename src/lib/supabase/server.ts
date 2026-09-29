@@ -4,7 +4,7 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
 import type { Database } from "@/types/database"
-import { getSupabaseConfig } from "./config"
+import { getSupabaseConfig, secureCookies } from "./config"
 
 /**
  * Supabase client for Server Components, Server Actions and Route Handlers.
@@ -15,6 +15,7 @@ export async function createClient() {
   const { url, publishableKey } = getSupabaseConfig()
 
   return createServerClient<Database>(url, publishableKey, {
+    cookieOptions: { secure: secureCookies() },
     cookies: {
       getAll() {
         return cookieStore.getAll()

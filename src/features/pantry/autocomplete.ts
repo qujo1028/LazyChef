@@ -1,22 +1,59 @@
 // Pure helpers for the add-food input: autocomplete works on the item being typed
-// right now, i.e. the text after the last newline, comma or semicolon.
+// right now, i.e. the text after the last separator that parseLines splits on (a line
+// break, semicolon, inline bullet, or a comma that isn't inside "1,000" or parentheses).
+import { parseLine } from "@/lib/ingredients/parse-line"
 
-const SEPARATOR = /[\n,;]/
+const LINE_BREAK = /[\r\n\v\f\u0085\u2028\u2029]/
 
-/** The item currently being typed (untrimmed) and where it starts in `text`. */
-export function currentSegment(text: string): { start: number; segment: string } {
-  let start = text.length
-  while (start > 0 && !SEPARATOR.test(text[start - 1])) start--
-  return { start, segment: text.slice(start) }
+function isDigit(c: string | undefined): boolean {
+  return c !== undefined && c >= "0" && c <= "9"
 }
 
 /**
+ * Where the last item of `line` starts, splitting the way parseLines does: on ";", "•" and
+ * commas not between digits ("1,000") or inside parentheses. An unclosed "(" would hide every
+ * later comma, so then (like parseLines) the parentheses are ignored.
+ */
+function lastItemStart(line: string, parens = true): number {
+  let depth = 0
+  let start = 0
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i]
+    if (parens && c === "(") depth++
+    else if (parens && c === ")") depth = Math.max(0, depth - 1)
+    else if (depth === 0 && (c === ";" || c === "•" || (c === "," && !(isDigit(line[i - 1]) && isDigit(line[i + 1]))))) {
+      start = i + 1
+    }
+  }
+  return depth > 0 ? lastItemStart(line, false) : start
+}
+
+/** The item currently being typed (untrimmed) and where it starts in `text`. */
+export function currentSegment(text: string): { start: number; segment: string } {
+  let lineStart = text.length
+  while (lineStart > 0 && !LINE_BREAK.test(text[lineStart - 1])) lineStart--
+  const start = lineStart + lastItemStart(text.slice(lineStart))
+  return { start, segment: text.slice(start) }
+}
+
+/** Spaces parseLine turns into " ", one for one (so indexes still line up). */
+const ODD_SPACE = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\f\v]/g
+
+/**
  * Swaps the name of the item being typed for a picked suggestion, keeping the typed
- * amount: ("milk, 2 lbs chi", "2 lbs ", "chicken breast") → "milk, 2 lbs chicken breast".
+ * amount and anything before it (spaces, a list marker): ("milk, 2 lbs chi", "2 lbs ",
+ * "chicken breast") → "milk, 2 lbs chicken breast"; ("- 2 lbs chi", …) → "- 2 lbs chicken breast".
  */
 export function replaceCurrentName(text: string, amountText: string, name: string): string {
   const { start, segment } = currentSegment(text)
-  const lead = /^\s*/.exec(segment)?.[0] ?? ""
+  // parseLine's raw is the segment without leading spaces and list marker, so what's in front of
+  // it is kept as is. amountText is the start of raw.
+  const body = segment.replace(ODD_SPACE, " ").trimEnd()
+  const raw = parseLine(segment)?.raw
+  const lead =
+    raw && body.endsWith(raw) && raw.startsWith(amountText)
+      ? segment.slice(0, body.length - raw.length)
+      : (/^\s*/.exec(segment)?.[0] ?? "")
   return text.slice(0, start) + lead + amountText + name
 }
 

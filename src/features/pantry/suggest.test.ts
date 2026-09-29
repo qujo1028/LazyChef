@@ -10,6 +10,8 @@ describe("suggestionQuery", () => {
     expect(atEnd("milk, eg")).toEqual({ name: "eg", amountText: "" })
     expect(atEnd("milk\n1 dozen eg")).toEqual({ name: "eg", amountText: "1 dozen " })
     expect(atEnd("Chi ")).toEqual({ name: "chi", amountText: "" })
+    expect(atEnd("1,000 g flo")).toEqual({ name: "flo", amountText: "1,000 g " })
+    expect(atEnd("- 2 lbs chi")).toEqual({ name: "chi", amountText: "2 lbs " })
   })
 
   it("works for an earlier item when the caret is at its end", () => {
@@ -37,6 +39,7 @@ describe("replaceNameAtCaret", () => {
       caret: 18,
     })
     expect(replaceNameAtCaret("chi, milk", 3, "", "chickpeas")).toEqual({ text: "chickpeas, milk", caret: 9 })
+    expect(replaceNameAtCaret("chi • milk", 3, "", "chickpeas")).toEqual({ text: "chickpeas • milk", caret: 9 })
   })
 })
 

@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vitest"
 
+import { parseLines } from "@/lib/ingredients/parse-line"
 import type { CatalogEntry, Category, ParsedLine } from "@/lib/ingredients/types"
 
 import {
   buildHouseholdKnowledge,
+  isUnlikelyFood,
   NO_KEY_MESSAGE,
   planLookups,
   resolveParsedLines,
@@ -221,6 +223,80 @@ describe("resolveParsedLines", () => {
 
     const known = await resolveParsedLines([line("eggs")], { deps, knowledge: noKnowledge, lookup: null })
     expect(known.spoonacular).toEqual({ called: false, pointsLeft: null, error: null })
+  })
+})
+
+describe("isUnlikelyFood", () => {
+  const RECEIPT = [
+    "WALMART SUPERCENTER",
+    "Store #1234",
+    "(555) 123-4567",
+    "555.123.4567",
+    "123 Main St",
+    "4501 N Broadway Ave.",
+    "Springfield, IL 62704",
+    "ST# 05432 OP# 009 TE# 12 TR# 0931",
+    "Cashier: Jane",
+    "09/29/2026 10:32 AM",
+    "2026-09-29",
+    "****1234",
+    "0123456789012",
+    "Thank you for shopping!",
+    "www.example.com",
+  ].join("\n")
+
+  it("flags receipt header lines but keeps them as items", () => {
+    const lines = parseLines(RECEIPT)
+    // "(555) 123-4567" reads as an amount and joins "Store #1234"; "****1234" joins the date.
+    expect(lines).toHaveLength(14)
+    const food = lines.filter((l) => !isUnlikelyFood(l)).map((l) => l.name)
+    // A store's or town's name can't be told from food; everything else is caught.
+    expect(food).toEqual(["springfield"])
+  })
+
+  it("leaves food alone, including short names and receipt items with codes", () => {
+    const text = [
+      "2 lbs chicken breast",
+      "7up",
+      "V8",
+      "OJ",
+      "A1 sauce",
+      "2% milk 1 gal",
+      "GV MILK 078742351872 3.49",
+      "BANANAS 4011 @ 0.59/lb",
+      "12 milky way",
+      "1 1/2 cups flour",
+      "1,000 g sugar",
+      "2 cans (15 oz) black beans",
+      "dr pepper",
+      "half & half",
+      "salt",
+      "12-pack diet coke",
+    ].join("\n")
+    const flagged = parseLines(text).filter(isUnlikelyFood).map((l) => l.raw)
+    expect(flagged).toEqual([])
+  })
+
+  it("skips the Spoonacular lookup (and the no-key note) for them", async () => {
+    const lookup = fakeLookup({ gochujang: { id: 777, aisle: "Ethnic Foods" } })
+    const lines = parseLines("Store #1234\n555-123-4567\n09/29/2026\ngochujang\nCashier: Jane\n0123456789012")
+    const result = await resolveParsedLines(lines, { deps, knowledge: noKnowledge, lookup })
+    expect(lookup).toHaveBeenCalledWith(["gochujang"])
+    expect(result.items.map((i) => i.categorySource)).toEqual([
+      "fallback",
+      "fallback",
+      "fallback",
+      "spoonacular",
+      "fallback",
+      "fallback",
+    ])
+
+    const receiptOnly = parseLines("Store #1234\n09/29/2026")
+    const noKey = await resolveParsedLines(receiptOnly, { deps, knowledge: noKnowledge, lookup: null })
+    expect(noKey.spoonacular.error).toBeNull()
+    const none = fakeLookup({})
+    await resolveParsedLines(receiptOnly, { deps, knowledge: noKnowledge, lookup: none })
+    expect(none).not.toHaveBeenCalled()
   })
 })
 

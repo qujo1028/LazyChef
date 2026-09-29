@@ -100,6 +100,34 @@ describe("spoonacularFetch", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
+  it("backs off after a 429 for Retry-After seconds, then recovers", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] })
+    vi.setSystemTime(new Date("2026-09-29T12:00:00Z"))
+    fetchMock.mockResolvedValueOnce(jsonResponse({}, 429, { "Retry-After": "5" }))
+    const { spoonacularFetch } = await load()
+
+    await expect(spoonacularFetch("/x")).rejects.toMatchObject({ code: "rate_limit" })
+    await expect(spoonacularFetch("/x")).rejects.toMatchObject({ code: "rate_limit" })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    vi.setSystemTime(new Date("2026-09-29T12:00:06Z"))
+    fetchMock.mockResolvedValueOnce(jsonResponse({}))
+    await expect(spoonacularFetch("/x")).resolves.toMatchObject({ data: {} })
+  })
+
+  it("refuses the 61st request in a minute without calling out", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] })
+    vi.setSystemTime(new Date("2026-09-29T12:00:00Z"))
+    fetchMock.mockImplementation(async () => jsonResponse({}))
+    const { spoonacularFetch } = await load()
+    for (let i = 0; i < 60; i++) await spoonacularFetch("/x")
+    await expect(spoonacularFetch("/x")).rejects.toMatchObject({ code: "rate_limit" })
+    expect(fetchMock).toHaveBeenCalledTimes(60)
+
+    vi.setSystemTime(new Date("2026-09-29T12:01:00Z"))
+    await expect(spoonacularFetch("/x")).resolves.toBeDefined()
+  })
+
   it("runs at most two requests at once", async () => {
     let inFlight = 0
     let peak = 0
@@ -187,6 +215,57 @@ describe("parseIngredients", () => {
     fetchMock.mockResolvedValue(jsonResponse({ status: "failure" }))
     const { parseIngredients } = await load()
     await expect(parseIngredients(["egg"])).rejects.toMatchObject({ code: "bad_response" })
+  })
+
+  it.each([
+    ["unset", undefined],
+    ["empty", ""],
+    ["whitespace", "   "],
+  ])("fails fast with no_key and no request when the key is %s", async (_label, value) => {
+    if (value === undefined) delete process.env.SPOONACULAR_API_KEY
+    else vi.stubEnv("SPOONACULAR_API_KEY", value)
+    const { parseIngredients, isSpoonacularConfigured, SpoonacularError } = await load()
+    expect(isSpoonacularConfigured()).toBe(false)
+    const error = await parseIngredients(["jalapeno", "2 tbsp oregano"]).catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(SpoonacularError)
+    expect(error).toMatchObject({ code: "no_key", status: null, quota: null })
+    expect((error as Error).message).toBe("Spoonacular isn't set up yet.")
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("still answers blank input without a key", async () => {
+    vi.stubEnv("SPOONACULAR_API_KEY", "")
+    const { parseIngredients } = await load()
+    await expect(parseIngredients([" "])).resolves.toEqual({ ingredients: [null], quota: null, sent: 0 })
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("doesn't cache failures, so a later call with a key goes through", async () => {
+    vi.stubEnv("SPOONACULAR_API_KEY", "")
+    const { parseIngredients } = await load()
+    await expect(parseIngredients(["jalapeno"])).rejects.toMatchObject({ code: "no_key" })
+
+    vi.stubEnv("SPOONACULAR_API_KEY", "test-key")
+    fetchMock.mockResolvedValueOnce(jsonResponse([RESPONSE[0]]))
+    const result = await parseIngredients(["jalapeno"])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(result.ingredients[0]?.id).toBe(11979)
+  })
+
+  it("forgets cached lines after an hour", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] })
+    vi.setSystemTime(new Date("2026-09-29T12:00:00Z"))
+    fetchMock.mockImplementation(async () => jsonResponse([RESPONSE[0]]))
+    const { parseIngredients } = await load()
+    await parseIngredients(["jalapeno"])
+
+    vi.setSystemTime(new Date("2026-09-29T12:59:59Z"))
+    await parseIngredients(["jalapeno"])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    vi.setSystemTime(new Date("2026-09-29T13:00:00Z"))
+    await expect(parseIngredients(["jalapeno"])).resolves.toMatchObject({ sent: 1 })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
   it("makes no request for blank input", async () => {

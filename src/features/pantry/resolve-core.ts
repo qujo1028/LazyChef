@@ -132,6 +132,39 @@ export function resolveUnknown(line: ParsedLine, hit: SpoonacularHit | null | un
   return { ...line, category: guess, categorySource: "fallback", ingredientId }
 }
 
+// Receipt header/footer lines that aren't food. Pasted receipts keep them as items (the user can
+// delete them on review), but they shouldn't cost a Spoonacular point each.
+const PHONE_RE = /(?:^|\D)(?:\(?\d{3}\)?[ .-]?)?\d{3}[ .-]\d{4}(?!\d)/
+const DATE_RE = /(?:^|\D)(?:\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})(?!\d)|(?:^|\D)\d{1,2}:\d{2}(?!\d)/
+const ADDRESS_RE =
+  /^\d+[ \t]+(?:[\p{L}\d.'-]+[ \t]+){1,4}(?:st|street|ave|avenue|rd|road|blvd|boulevard|dr|drive|ln|lane|hwy|highway|pkwy|parkway|ste|suite)\.?$|\b[a-z]{2}[ \t]+\d{5}(?:-\d{4})?$/iu
+const RECEIPT_WORD_RE =
+  /\b(?:cashier|served by|register|reg\s*#|(?:store|st|op|te|tr|trans(?:action)?|order|invoice|terminal|term)\s*#|thank you|thanks for|receipt|www\.|\.com\b|phone|tel\b|supercenter)/i
+const LETTER_RE = /\p{L}/gu
+const OTHER_RE = /[^\p{L}\s]/gu
+
+/** Mostly digits and punctuation: "TR# 0001", "****1234", "#0042 01 07". Not "7up", "V8", "OJ". */
+function mostlyNotLetters(text: string): boolean {
+  const letters = text.match(LETTER_RE)?.length ?? 0
+  return letters < 3 && (text.match(OTHER_RE)?.length ?? 0) > letters
+}
+
+/**
+ * Lines that are obviously not food (from a pasted receipt: phone numbers, dates, addresses, "cashier" or
+ * "store #" lines, codes that are mostly digits and punctuation). They still become items, but get a
+ * keyword-guess category instead of a Spoonacular lookup.
+ */
+export function isUnlikelyFood(line: ParsedLine): boolean {
+  const text = line.raw
+  return (
+    mostlyNotLetters(text) ||
+    PHONE_RE.test(text) ||
+    DATE_RE.test(text) ||
+    ADDRESS_RE.test(text) ||
+    RECEIPT_WORD_RE.test(text)
+  )
+}
+
 function lookupKey(line: ParsedLine, key: string): string {
   return key || line.name.trim().toLowerCase()
 }
@@ -160,7 +193,9 @@ export async function resolveParsedLines(lines: ParsedLine[], options: ResolveOp
   const { deps, knowledge, lookup, maxLookups = MAX_SPOONACULAR_LOOKUPS } = options
   const keys = lines.map((line) => deps.normalize(line.name))
   const local = lines.map((line, index) => resolveLocally(line, keys[index], knowledge, deps))
-  const unknown = lines.flatMap((line, index) => (local[index] ? [] : [{ line, key: keys[index] }]))
+  const unknown = lines.flatMap((line, index) =>
+    local[index] || isUnlikelyFood(line) ? [] : [{ line, key: keys[index] }],
+  )
 
   const spoonacular: SpoonacularStatus = { called: false, pointsLeft: null, error: null }
   const hits = new Map<string, SpoonacularHit | null>()

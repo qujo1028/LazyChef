@@ -45,11 +45,13 @@ export function formatQuantityInput(quantity: number | null): string {
 }
 
 /**
- * "2" → 2, "1.5" / "1,5" → 1.5, "1/2" → 0.5, "1 1/2" → 1.5, "" → null (not tracked).
+ * "2" → 2, "1.5" / "1,5" → 1.5, "1,000" → 1000, "1/2" → 0.5, "1 1/2" → 1.5, "" → null (not tracked).
  * undefined when it isn't a usable amount.
  */
 export function parseQuantityInput(text: string): number | null | undefined {
-  const value = text.trim().replace(",", ".")
+  const trimmed = text.trim()
+  // "1,000" is a thousand (as parseLine reads it); any other comma is a decimal comma ("1,5").
+  const value = /^\d{1,3}(?:,\d{3})+(?:\.\d+)?$/.test(trimmed) ? trimmed.replace(/,/g, "") : trimmed.replace(",", ".")
   if (!value) return null
   const mixed = /^(\d+)\s+(\d+)\s*\/\s*(\d+)$/.exec(value)
   const fraction = /^(\d+)\s*\/\s*(\d+)$/.exec(value)

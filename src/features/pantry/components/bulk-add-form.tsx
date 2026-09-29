@@ -15,6 +15,7 @@ import { addItems, previewItems } from "../actions"
 import { describeAdditions } from "../merge"
 import type { SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftsToItems, type ReviewDraft } from "../review"
+import { callAction } from "./call-action"
 import { ReviewList, SpoonacularNote } from "./review-list"
 import { useToday } from "./use-clock"
 
@@ -46,7 +47,7 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
     }
     setError(null)
     startTransition(async () => {
-      const result = await previewItems(text)
+      const result = await callAction(() => previewItems(text))
       if (result.error !== undefined) {
         setError(result.error)
         return
@@ -67,13 +68,15 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
       return
     }
     startTransition(async () => {
-      const result = await addItems(items)
+      const result = await callAction(() => addItems(items))
       if (result.error !== undefined) {
         toast.error(result.error)
         return
       }
       toast.success(describeAdditions(result))
-      router.replace("/pantry")
+      // Its own transition (updates after an await aren't part of the first one), so the
+      // button stays disabled until /pantry shows instead of re-enabling mid-navigation.
+      startTransition(() => router.replace("/pantry"))
     })
   }
 

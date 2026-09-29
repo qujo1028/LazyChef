@@ -14,6 +14,7 @@ import { addItems, previewItems } from "../actions"
 import { describeAdditions } from "../merge"
 import type { SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftsToItems, type ReviewDraft } from "../review"
+import { callAction } from "./call-action"
 import { IngredientCombobox } from "./ingredient-combobox"
 import { ReviewList, SpoonacularNote } from "./review-list"
 
@@ -72,7 +73,7 @@ export function QuickAddSheet({
     }
     setError(null)
     startTransition(async () => {
-      const result = await previewItems(text)
+      const result = await callAction(() => previewItems(text))
       if (result.error !== undefined) {
         setError(result.error)
         return
@@ -91,7 +92,7 @@ export function QuickAddSheet({
       return
     }
     startTransition(async () => {
-      const result = await addItems(items)
+      const result = await callAction(() => addItems(items))
       if (result.error !== undefined) {
         toast.error(result.error)
         return

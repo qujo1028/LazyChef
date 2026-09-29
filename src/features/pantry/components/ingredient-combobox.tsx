@@ -55,6 +55,9 @@ export function IngredientCombobox({
     if (!input || position === null) return
     restoreCaret.current = null
     input.setSelectionRange(position, position)
+    // Setting the value scrolls a long line back to its start, hiding the caret; the usual
+    // case (pasting or picking at the end) scrolls it back into view.
+    if (position === input.value.length) input.scrollLeft = input.scrollWidth
   }, [value, inputRef])
 
   function pick(entry: CatalogEntry) {
@@ -105,7 +108,10 @@ export function IngredientCombobox({
     )
     if (!pasted) return
     event.preventDefault()
-    restoreCaret.current = pasted.caret
+    // Same text (pasting over an identical selection) won't re-render, so place the caret now
+    // rather than leaving it queued for some later keystroke.
+    if (pasted.text === value) input.setSelectionRange(pasted.caret, pasted.caret)
+    else restoreCaret.current = pasted.caret
     setCaret(pasted.caret)
     setDismissedFor(pasted.text)
     onValueChange(pasted.text)

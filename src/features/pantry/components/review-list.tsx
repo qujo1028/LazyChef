@@ -156,6 +156,7 @@ function ReviewItemCard({
         onChange={(expiresOn) => set({ expiresOn })}
         today={today}
         label={`${label} expires`}
+        disabled={disabled}
       />
     </li>
   )

@@ -9,7 +9,7 @@ import { shortDate } from "../display"
 import { QUICK_EXPIRY } from "../staples"
 
 const CHIP =
-  "relative inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors outline-none select-none focus-within:ring-3 focus-within:ring-ring/50 focus-visible:ring-3 focus-visible:ring-ring/50"
+  "relative inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors outline-none select-none disabled:pointer-events-none disabled:opacity-50 focus-within:ring-3 focus-within:ring-ring/50 focus-visible:ring-3 focus-visible:ring-ring/50"
 const CHIP_OFF = "border-border bg-background hover:bg-muted dark:border-input dark:bg-input/30"
 const CHIP_ON = "border-primary bg-primary text-primary-foreground"
 
@@ -22,6 +22,7 @@ export function ExpiryPicker({
   onChange,
   today,
   label = "Expires",
+  disabled,
   className,
 }: {
   value: string
@@ -29,6 +30,7 @@ export function ExpiryPicker({
   today: string
   /** Accessible name for the group, e.g. "Chicken expires". */
   label?: string
+  disabled?: boolean
   className?: string
 }) {
   const quick = QUICK_EXPIRY.map((option) => ({ ...option, date: addDays(today, option.days) }))
@@ -43,6 +45,7 @@ export function ExpiryPicker({
             key={option.days}
             type="button"
             aria-pressed={selected}
+            disabled={disabled}
             aria-label={`${option.label} (${shortDate(option.date)})`}
             onClick={() => onChange(selected ? "" : option.date)}
             className={cn(CHIP, selected ? CHIP_ON : CHIP_OFF)}
@@ -52,13 +55,14 @@ export function ExpiryPicker({
         )
       })}
       {/* A real date input stretched over the chip, so the phone's own date picker opens. */}
-      <label className={cn(CHIP, custom ? CHIP_ON : CHIP_OFF, !custom && "w-11 px-0")}>
+      <label className={cn(CHIP, custom ? CHIP_ON : CHIP_OFF, !custom && "w-11 px-0", disabled && "pointer-events-none opacity-50")}>
         <CalendarDays className="size-4" aria-hidden />
         {custom ? shortDate(value) : null}
         <span className="sr-only">{custom ? "Change expiry date" : "Pick an expiry date"}</span>
         <input
           type="date"
           value={value}
+          disabled={disabled}
           onChange={(event) => onChange(event.target.value)}
           onClick={(event) => {
             try {
@@ -74,6 +78,7 @@ export function ExpiryPicker({
         <button
           type="button"
           onClick={() => onChange("")}
+          disabled={disabled}
           aria-label="Clear expiry date"
           className={cn(CHIP, CHIP_OFF, "w-11 px-0")}
         >

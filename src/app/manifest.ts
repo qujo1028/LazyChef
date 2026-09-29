@@ -8,6 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "LazyChef",
     description: "One shared pantry, shopping list and recipe finder for your household.",
     start_url: "/pantry",
+    scope: "/",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: BRAND_GREEN,

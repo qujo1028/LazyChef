@@ -17,6 +17,7 @@ import { addedByLabel, amountLabel, categoryLabel, displayName, remainingMessage
 import { changedFields, formFromItem, itemFormErrors, usedAmount, type ItemForm } from "../item-form"
 import type { PantryChange } from "../pantry-state"
 import type { PantryItem, PantryMember } from "../types"
+import { callAction } from "./call-action"
 import { ExpiryPicker } from "./expiry-picker"
 import { CategorySelect, UnitSelect } from "./selects"
 import { useNow } from "./use-clock"
@@ -114,7 +115,7 @@ function EditItemContent({
     const before = item
     apply({ type: "patch", id: item.id, fields })
     startTransition(async () => {
-      const result = await updateItem(item.id, fields)
+      const result = await callAction(() => updateItem(item.id, fields))
       if (result.error !== undefined) {
         apply({ type: "upsert", item: before })
         toast.error(result.error)
@@ -131,7 +132,7 @@ function EditItemContent({
     apply({ type: "patch", id: item.id, fields: { quantity: 0 } })
     close()
     startTransition(async () => {
-      const result = await updateItem(item.id, { quantity: 0 })
+      const result = await callAction(() => updateItem(item.id, { quantity: 0 }))
       if (result.error !== undefined) {
         apply({ type: "upsert", item: before })
         toast.error(result.error)
@@ -143,7 +144,7 @@ function EditItemContent({
   }
 
   async function remove() {
-    const result = await deleteItem(item.id)
+    const result = await callAction(() => deleteItem(item.id))
     if (result.error === undefined) {
       close()
       apply({ type: "remove", id: item.id })

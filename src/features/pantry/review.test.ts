@@ -26,11 +26,14 @@ describe("parseQuantityInput", () => {
     ["1/2", 0.5],
     ["1 1/2", 1.5],
     ["0", 0],
+    ["1,000", 1000],
+    ["12,500.5", 12500.5],
+    ["1,25", 1.25],
   ])("%j → %j", (text, expected) => {
     expect(parseQuantityInput(text)).toBe(expected)
   })
 
-  it.each(["abc", "-1", "1/0", "2 lbs", "1e3", "9999999"])("rejects %j", (text) => {
+  it.each(["abc", "-1", "1/0", "2 lbs", "1e3", "9999999", "1,000,000,000"])("rejects %j", (text) => {
     expect(parseQuantityInput(text)).toBeUndefined()
   })
 })

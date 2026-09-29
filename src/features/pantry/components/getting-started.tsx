@@ -14,6 +14,7 @@ import { addStaples } from "../actions"
 import { displayName } from "../display"
 import { describeAdditions } from "../merge"
 import { COMMON_STAPLES } from "../staples"
+import { callAction } from "./call-action"
 
 /**
  * The empty pantry: what this is, a big "Add food" button, and one-tap kitchen basics.
@@ -43,7 +44,7 @@ export function GettingStarted({
     if (names.length === 0) return
     setPending((current) => new Set([...current, ...names]))
     startTransition(async () => {
-      const result = await addStaples(names)
+      const result = await callAction(() => addStaples(names))
       setPending((current) => new Set([...current].filter((name) => !names.includes(name))))
       if (result.error !== undefined) {
         toast.error(result.error)

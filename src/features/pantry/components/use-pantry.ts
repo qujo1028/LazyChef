@@ -18,6 +18,7 @@ import {
   type QuantityOverrides,
 } from "../pantry-state"
 import type { PantryItem } from "../types"
+import { callAction } from "./call-action"
 
 export type AdjustOptions = {
   /** After the server confirms, with the new amount. */
@@ -70,7 +71,7 @@ export function usePantry({
       if (!item) return
       setOverrides((current) => beginAdjust(current, id, (item.quantity ?? 0) + delta))
       startTransition(async () => {
-        const result = await adjustQuantity(id, delta)
+        const result = await callAction(() => adjustQuantity(id, delta))
         if (result.error === undefined) apply({ type: "patch", id, fields: { quantity: result.quantity } })
         setOverrides((current) => endAdjust(current, id))
         if (result.error !== undefined) toast.error(result.error)

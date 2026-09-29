@@ -9,7 +9,7 @@ import { CATEGORIES, type Category } from "@/lib/ingredients/types"
 import { createClient } from "@/lib/supabase/server"
 import { convertQuantity, normalizeUnit } from "@/lib/units"
 import type { Database } from "@/types/database"
-import { categoryOverrides, planAdditions } from "./merge"
+import { categoryOverrides, planAdditions, roundQuantity } from "./merge"
 import { resolveItems, type ResolveResult } from "./resolve"
 import type { ActionResult, AddItemsSummary, NewPantryItem, PantryItem, PantryItemFields } from "./types"
 
@@ -46,6 +46,16 @@ const fieldsSchema = z.strictObject({
 
 const REMOVED = "Someone already removed that item."
 
+/** Messages our own SQL functions raise for people to read (see the pantry migration). */
+const READABLE_CODES = new Set(["P0001", "P0002"])
+
+/** A database error as something to show: ours as is, anything else logged and replaced. */
+function dbError(action: string, error: { message: string; code?: string }): string {
+  if (error.code && READABLE_CODES.has(error.code)) return error.message
+  console.error(`${action} failed:`, error.code ?? "", error.message)
+  return "That didn't go through. Check your connection and try again."
+}
+
 function firstIssue(error: z.ZodError) {
   return error.issues[0]?.message ?? "Check what you entered."
 }
@@ -79,12 +89,12 @@ async function addToPantry(householdId: string, items: NewPantryItem[]): Promise
     .select("id, name, quantity, unit, ingredient_id")
     .eq("household_id", householdId)
     .order("created_at")
-  if (loadError) return { error: loadError.message }
+  if (loadError) return { error: dbError("Loading the pantry", loadError) }
 
   const plan = planAdditions(items, existing, { normalize: normalizeIngredientName, convert: convertQuantity })
   if (plan.entries.length > 0) {
     const { error } = await supabase.rpc("add_pantry_items", { p_household_id: householdId, p_items: plan.entries })
-    if (error) return { error: error.message }
+    if (error) return { error: dbError("add_pantry_items", error) }
   }
 
   await saveCategoryOverrides(supabase, householdId, categoryOverrides(items, normalizeIngredientName))
@@ -172,6 +182,7 @@ export async function updateItem(id: string, fields: PantryItemFields): Promise<
   const { household } = await requireHousehold()
   const changes: Database["public"]["Tables"]["pantry_items"]["Update"] = { ...parsed.data }
   if (parsed.data.unit !== undefined) changes.unit = canonicalUnit(parsed.data.unit)
+  if (parsed.data.quantity != null) changes.quantity = roundQuantity(parsed.data.quantity)
   // A renamed item may be a different ingredient now.
   if (parsed.data.name !== undefined) changes.ingredient_id = findIngredient(parsed.data.name)?.id ?? null
   if (Object.keys(changes).length === 0) return { error: "Nothing to save." }
@@ -184,7 +195,7 @@ export async function updateItem(id: string, fields: PantryItemFields): Promise<
     .eq("household_id", household.id)
     .select()
     .maybeSingle()
-  if (error) return { error: error.message }
+  if (error) return { error: dbError("updateItem", error) }
   if (!data) return { error: REMOVED }
 
   if (parsed.data.category !== undefined) {
@@ -213,9 +224,10 @@ export async function adjustQuantity(id: string, delta: number): Promise<ActionR
     p_item_id: parsedId.data,
     p_delta: parsedDelta.data,
   })
-  if (error) return { error: error.message }
-  const quantity = data as number | null
-  if (quantity === null) return { error: REMOVED }
+  if (error) return { error: dbError("adjust_pantry_quantity", error) }
+  // null when the item is gone (or not visible to us). Numerics can arrive as strings.
+  if (data === null || data === undefined) return { error: REMOVED }
+  const quantity = Number(data)
 
   revalidatePath("/pantry")
   return { quantity }
@@ -232,7 +244,7 @@ export async function deleteItem(id: string): Promise<ActionResult> {
     .delete()
     .eq("id", parsedId.data)
     .eq("household_id", household.id)
-  if (error) return { error: error.message }
+  if (error) return { error: dbError("deleteItem", error) }
 
   revalidatePath("/pantry")
   return {}

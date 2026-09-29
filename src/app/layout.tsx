@@ -15,7 +15,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+/** Absolute base for metadata URLs: NEXT_PUBLIC_SITE_URL, else Vercel's production domain. */
+function siteUrl() {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+  ]
+  for (const candidate of candidates) {
+    if (!candidate) continue
+    try {
+      return new URL(candidate)
+    } catch {
+      // A malformed value shouldn't break the build; try the next one.
+    }
+  }
+  return new URL("http://localhost:3000")
+}
+
 export const metadata: Metadata = {
+  metadataBase: siteUrl(),
   title: { default: "LazyChef", template: "%s · LazyChef" },
   description: "One shared pantry, shopping list and recipe finder for your household.",
   applicationName: "LazyChef",

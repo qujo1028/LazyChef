@@ -39,6 +39,23 @@ Authentication → Emails → Templates:
 4. While the Google app is in "Testing", only the test users you list can sign in. Add your
    housemates there, or publish the app. Basic email/profile access doesn't need Google's review.
 
+## Deploying to Vercel
+
+1. `npx vercel@latest login`, then link this folder to the `lazychef` project (`npx vercel@latest link`).
+   `vercel.json` tells Vercel it's a Next.js app.
+2. Project → Settings → Environment Variables (names only; values come from Supabase):
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: all environments.
+   - `SUPABASE_SECRET_KEY`: Production and Preview, marked Sensitive.
+   - `SPOONACULAR_API_KEY`: optional. Without it, adding food uses the built-in ingredient library only.
+   - `NEXT_PUBLIC_SITE_URL`: optional, e.g. `https://lazychef-gamma.vercel.app`. Only used when a request
+     doesn't say which host it came from.
+3. `npx vercel@latest deploy --prod`
+4. Supabase → Authentication → URL Configuration: set Site URL to the production URL, add
+   `https://<domain>/**` to Redirect URLs, and keep `http://localhost:3000/**` for local development.
+   (Preview deployments need their own URL here too, or their email links fall back to the Site URL.)
+5. Google sign-in: the authorized redirect URI stays `https://<project-ref>.supabase.co/auth/v1/callback`.
+   Add the production URL to Authorized JavaScript origins.
+
 ## Scripts
 
 | Command | What it does |

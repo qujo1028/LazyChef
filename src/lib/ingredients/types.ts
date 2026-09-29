@@ -26,7 +26,12 @@ export const CATEGORY_META = Object.fromEntries(
 
 /** One line of typed text, split into amount, unit and name. */
 export type ParsedLine = {
-  /** The original text of this line, trimmed. */
+  /**
+   * The line as parsed, not exactly as typed: trimmed, odd spaces (no-break, thin) turned into " ",
+   * invisible characters removed, and any list marker ("- ", "1. ") and trailing price ("$3.49")
+   * removed, so it starts with amountText. When parseLines joins an amount-only piece onto the item
+   * before it ("chicken breast, 2 lbs"), that item's raw is both pieces joined ("chicken breast, 2 lbs").
+   */
   raw: string
   /** The leading amount + unit exactly as typed, e.g. "2 lbs " ("" when none). Lets the UI swap the name for a suggestion. */
   amountText: string

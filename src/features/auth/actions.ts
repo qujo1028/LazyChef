@@ -12,9 +12,36 @@ export type AuthFormState = { error?: string; notice?: string; email?: string } 
 const email = z.email("Enter a valid email address.")
 const newPassword = z.string().min(8, "Use at least 8 characters.")
 
+/** "https://host[:port]" if `value` is an http(s) URL, else null (e.g. Origin: null). */
+function httpOrigin(value: string | null | undefined) {
+  if (!value) return null
+  try {
+    const url = new URL(value)
+    return url.protocol === "https:" || url.protocol === "http:" ? url.origin : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * The site's public origin, for links in emails and OAuth redirects. Browsers
+ * send Origin with every Server Action (Next.js checks it against the host), so
+ * that's used first. Without it, fall back to the host Vercel's proxy forwards,
+ * then NEXT_PUBLIC_SITE_URL. Supabase still only redirects to allow-listed URLs.
+ */
 async function siteOrigin() {
   const requestHeaders = await headers()
-  return requestHeaders.get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  const forwardedHost = requestHeaders.get("x-forwarded-host")?.split(",")[0].trim()
+  const host = forwardedHost || requestHeaders.get("host")
+  const proto =
+    requestHeaders.get("x-forwarded-proto")?.split(",")[0].trim() ||
+    (host?.startsWith("localhost") || host?.startsWith("127.0.0.1") ? "http" : "https")
+  return (
+    httpOrigin(requestHeaders.get("origin")) ??
+    httpOrigin(host ? `${proto}://${host}` : null) ??
+    httpOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
+    "http://localhost:3000"
+  )
 }
 
 function callbackUrl(origin: string, next: string) {

@@ -4,7 +4,7 @@ import { parseLine } from "@/lib/ingredients/parse-line"
 import { currentSegment, replaceCurrentName } from "./autocomplete"
 
 /** The caret is at the end of an item: only spaces before the next separator (or the end). */
-const END_OF_ITEM = /^[ \t]*(?:[\n,;]|$)/
+const END_OF_ITEM = /^[ \t]*(?:[\r\n,;•]|$)/
 
 export type SuggestionQuery = {
   /** What's typed of the name so far, as parseLine reads it ("chi"). */

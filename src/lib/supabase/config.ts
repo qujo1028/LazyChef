@@ -10,3 +10,13 @@ export function getSupabaseConfig() {
   }
   return { url, publishableKey }
 }
+
+/**
+ * Marks auth cookies Secure wherever the site is served over HTTPS: Vercel
+ * production/preview on the server, the page's own protocol in the browser.
+ * Local http://localhost (including `next start`) keeps plain cookies.
+ */
+export function secureCookies() {
+  if (typeof window !== "undefined") return window.location.protocol === "https:"
+  return process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === "preview"
+}

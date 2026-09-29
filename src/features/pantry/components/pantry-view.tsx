@@ -88,11 +88,13 @@ export function PantryView({
   }
 
   function takeOne(item: PantryItem) {
+    // The database stops at 0, so Undo gives back only what was actually taken (0.5 of 0.5, not 1).
+    const taken = Math.min(1, Math.max(0, item.quantity ?? 0))
     adjust(item.id, -1, {
       onDone: (quantity) =>
         toast.success(remainingMessage(item.name, quantity, item.unit), {
           id: `used-${item.id}`,
-          action: { label: "Undo", onClick: () => adjust(item.id, 1) },
+          action: { label: "Undo", onClick: () => adjust(item.id, taken) },
         }),
     })
   }

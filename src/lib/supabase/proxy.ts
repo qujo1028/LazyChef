@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { PENDING_INVITE_COOKIE } from "@/lib/invite"
 import { safeNext } from "@/lib/safe-next"
 import type { Database } from "@/types/database"
-import { getSupabaseConfig } from "./config"
+import { getSupabaseConfig, secureCookies } from "./config"
 
 /** Reachable without signing in. Everything else redirects to /login. */
 const PUBLIC_PATHS = ["/login", "/signup", "/forgot-password", "/auth"]
@@ -25,6 +25,7 @@ export async function updateSession(request: NextRequest) {
   const { url, publishableKey } = getSupabaseConfig()
 
   const supabase = createServerClient<Database>(url, publishableKey, {
+    cookieOptions: { secure: secureCookies() },
     cookies: {
       getAll() {
         return request.cookies.getAll()
@@ -62,6 +63,7 @@ export async function updateSession(request: NextRequest) {
         maxAge: 60 * 60 * 24 * 7,
         sameSite: "lax",
         httpOnly: true,
+        secure: secureCookies(),
       })
     }
     return redirect

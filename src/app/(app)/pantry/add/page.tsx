@@ -26,7 +26,7 @@ export default async function BulkAddPage({ searchParams }: PageProps<"/pantry/a
         title="Just went shopping?"
         description="Type or paste everything you bought. You'll check it all before anything is added."
       />
-      <BulkAddForm defaultText={text} serverToday={localDateKey()} />
+      <BulkAddForm key={text} defaultText={text} serverToday={localDateKey()} />
     </>
   )
 }
