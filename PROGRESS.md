@@ -124,7 +124,7 @@ To do:
 
 ## Phase 6: saved recipes and stats (2026-09-29, branch `claude/nice-shannon-yjvi7b`)
 Built:
-- **Migration `20261001000100_saved_recipes.sql`** (not yet applied to the live DB, ask first):
+- **Migration `20261001000100_saved_recipes.sql`** (applied to the live DB 2026-09-29 via the Supabase connector):
   `saved_recipes` (household id, recipe id and title only, per Spoonacular's terms; RLS by membership;
   `saved_by` stamped by a trigger; broadcast), and the `shopped` activity action: `complete_shopping_trip()`
   now marks its pantry changes so a trip is logged as one "bought N items" entry, untracked items included.
@@ -145,5 +145,6 @@ Known limits:
 - Undoing a cook doesn't take it back out of the stats or the cook history.
 - Saved and Stats don't update live; they refresh on navigation or after an action.
 
-To do:
-- Apply `20261001000100_saved_recipes.sql` to the live DB (ask), then test with a throwaway household.
+Tested with a throwaway household on the live DB (then deleted): saving from cards, the recipe page and
+the cook done screen, unsaving, the Saved match and cook history, a trip logged as "bought 3 items", every
+Stats section, and "add to list" from Most bought. No overflow or small tap targets at 320/375 px, light and dark.
