@@ -6,6 +6,7 @@ import { MAX_KEY_LENGTH } from "@/lib/ingredients/library/normalize"
 import { parseLines } from "@/lib/ingredients/parse-line"
 import { isSpoonacularConfigured, parseIngredients, SpoonacularError } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
+import { recordUsage } from "@/features/recipes/cache"
 
 import {
   buildHouseholdKnowledge,
@@ -24,6 +25,7 @@ const MAX_PANTRY_ROWS = 2000
 async function lookupWithSpoonacular(names: string[]): Promise<SpoonacularLookup> {
   try {
     const { ingredients, quota } = await parseIngredients(names)
+    await recordUsage(quota)
     return {
       ok: true,
       hits: ingredients.map((ingredient) => (ingredient ? { id: ingredient.id, aisle: ingredient.aisle } : null)),

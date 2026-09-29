@@ -342,6 +342,62 @@ export type Database = {
           },
         ]
       }
+      spoonacular_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          household_id?: string
+          response?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spoonacular_cache_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spoonacular_usage: {
+        Row: {
+          day: string
+          points_left: number | null
+          points_used: number
+          requests: number
+          updated_at: string
+        }
+        Insert: {
+          day: string
+          points_left?: number | null
+          points_used?: number
+          requests?: number
+          updated_at?: string
+        }
+        Update: {
+          day?: string
+          points_left?: number | null
+          points_used?: number
+          requests?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -382,6 +438,14 @@ export type Database = {
       }
       leave_household: {
         Args: { p_household_id: string }
+        Returns: undefined
+      }
+      put_spoonacular_cache: {
+        Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
+        Returns: string
+      }
+      record_spoonacular_usage: {
+        Args: { p_points_left: number | null; p_points_used: number }
         Returns: undefined
       }
       regenerate_invite_code: {
