@@ -41,3 +41,8 @@ To resume, restart these three review/fix agents (they had edited nothing yet wh
 2. Pantry UI (`components/**`, `app/(app)/pantry/**`): code review, then a read-only phone check at 375px. It was looking at a `router.replace` after an `await` that isn't wrapped in `startTransition`.
 3. Deploy readiness (proxy, supabase, spoonacular, auth, layout/manifest, README): Spoonacular without a key, auth origins behind the Vercel proxy (`x-forwarded-host`), metadataBase, and a "Deploying to Vercel" section in the README.
 Then: `npm test`, `npm run test:db`, `npm run typecheck`, `npm run lint`, `npm run build`, a browser check, and a commit (ask). Then `npx vercel@latest deploy --prod` (confirmed by the user on 2026-09-29). After that the user sets the Supabase Site URL and Redirect URLs to the production domain.
+
+## Deployed (2026-09-29)
+- Production: https://lazychef-gamma.vercel.app (Vercel project `lazychef`, team `quinn2212-7879s-projects`; `vercel.json` sets the framework to nextjs). Deploy from commit `47739f4`.
+- The user runs `npx vercel@latest deploy --prod`, because the auto-mode permission checker blocks Claude from running production deploys.
+- User to do: in Supabase, under Authentication → URL Configuration, set Site URL to https://lazychef-gamma.vercel.app and add `https://lazychef-gamma.vercel.app/**` to Redirect URLs (keep localhost).
