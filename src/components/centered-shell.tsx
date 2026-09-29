@@ -14,7 +14,7 @@ export function CenteredShell({
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-10">
       <header className="flex h-16 items-center justify-between">
-        <Link href="/" aria-label="LazyChef home">
+        <Link href="/" aria-label="LazyChef home" className="inline-flex min-h-11 items-center">
           <Brand />
         </Link>
         {aside}

@@ -419,6 +419,16 @@ export type Database = {
         Args: { p_household_id: string; p_list_item_ids: string[]; p_pantry_items: Json }
         Returns: string[]
       }
+      cook_recipe: {
+        Args: { p_deductions: Json; p_household_id: string; p_recipe_id: number; p_recipe_title: string }
+        Returns: {
+          item_id: string
+          name: string
+          quantity_after: number | null
+          quantity_before: number | null
+          unit: string
+        }[]
+      }
       create_household: {
         Args: { p_name: string }
         Returns: string
@@ -458,7 +468,7 @@ export type Database = {
       }
     }
     Enums: {
-      activity_action: "added" | "used" | "restocked" | "updated" | "removed"
+      activity_action: "added" | "used" | "restocked" | "updated" | "removed" | "cooked"
       household_role: "owner" | "member"
       item_category:
         | "produce"

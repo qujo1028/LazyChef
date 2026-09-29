@@ -2,7 +2,7 @@
 
 import { toast } from "sonner"
 
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { displayName } from "@/features/pantry/display"
 import type { PantryItem } from "@/features/pantry/types"
 

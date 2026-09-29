@@ -155,8 +155,27 @@ describe("resolveActor", () => {
   })
 })
 
+describe("cooked entries", () => {
+  const details = { recipe_id: 715538, recipe_title: "Chicken Tikka Masala" }
+
+  it("reads as cooking the recipe, with the amounts it used listed", () => {
+    const rows = [
+      row({ action: "cooked", itemName: "chicken breast", quantity: 1, unit: "lb", batchId: 9, details }),
+      row({ action: "cooked", itemName: "rice", quantity: 2, unit: "cup", batchId: 9, details }),
+    ]
+    const [entry] = groupActivity(rows)
+    expect(summarizeEntry(entry)).toMatchObject({ action: "cooked", verb: "cooked", object: "Chicken Tikka Masala", grouped: true })
+    expect(entry.rows.map(describeItem)).toEqual(["1 lb chicken breast", "2 cup rice"])
+  })
+
+  it("still reads as cooking for a single item", () => {
+    const [entry] = groupActivity([row({ action: "cooked", itemName: "eggs", quantity: 2, batchId: 10, details })])
+    expect(summarizeEntry(entry)).toMatchObject({ verb: "cooked", object: "Chicken Tikka Masala", grouped: true })
+  })
+})
+
 describe("summarizeEntry", () => {
-  const sentence = (rows: ActivityRow[], viewerId = "someone-else") => {
+  const sentence =(rows: ActivityRow[], viewerId = "someone-else") => {
     const [entry] = groupActivity(rows)
     const s = summarizeEntry(entry)
     return `${resolveActor(entry.rows[0], viewerId, members).label} ${s.verb} ${s.object}`

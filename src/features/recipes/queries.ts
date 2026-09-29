@@ -17,6 +17,8 @@ import {
 import { createClient } from "@/lib/supabase/server"
 
 import { cachedSpoonacular, cacheKey, type Usage } from "./cache"
+import type { CookLine } from "./cook"
+import { planCook } from "./cook-plan"
 import { hasFilters, type RecipeFilters } from "./filters"
 import { buildPantryIndex, checkIngredients, pantrySearchNames, sortSuggestions, type CheckedIngredient, type Suggestions } from "./match"
 
@@ -93,6 +95,8 @@ export type RecipeDetailResult =
       ingredients: CheckedIngredient[]
       /** Normalized names (and ids) of unchecked shopping list lines. */
       onList: { keys: string[]; ids: number[] }
+      /** "I cooked this": what comes out of the pantry for each ingredient. */
+      cook: CookLine[]
     }
 
 async function getOpenListLines(householdId: string) {
@@ -114,11 +118,13 @@ export async function getRecipeDetail(householdId: string, recipeId: number): Pr
       getPantryItems(householdId),
       getOpenListLines(householdId),
     ])
-    const index = buildPantryIndex(items, localDateKey())
+    const today = localDateKey()
+    const index = buildPantryIndex(items, today)
     return {
       status: "ok",
       recipe,
       ingredients: checkIngredients(index, recipe.ingredients),
+      cook: planCook(recipe.ingredients, items, today),
       onList: {
         keys: lines.map((line) => normalizeIngredientName(line.name)),
         ids: lines.flatMap((line) => (line.ingredient_id === null ? [] : [line.ingredient_id])),

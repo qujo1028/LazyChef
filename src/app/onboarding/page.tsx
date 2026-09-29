@@ -6,7 +6,7 @@ import { CenteredShell } from "@/components/centered-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
-import { dismissPendingInvite } from "@/features/household/actions"
+import { DismissInviteButton } from "@/features/household/components/household-actions"
 import { CreateHouseholdForm, JoinHouseholdForm } from "@/features/household/components/household-forms"
 import { getHouseholdContext, getPendingInvite } from "@/features/household/queries"
 
@@ -20,7 +20,7 @@ export default async function OnboardingPage() {
   return (
     <CenteredShell aside={<SignOutButton compact />}>
       {hasHousehold ? (
-        <Button asChild variant="ghost" size="sm" className="-ml-2 justify-self-start self-start">
+        <Button asChild variant="ghost" className="-ml-2 justify-self-start self-start">
           <Link href="/pantry">
             <ArrowLeft />
             Back to your pantry
@@ -47,11 +47,7 @@ export default async function OnboardingPage() {
           </CardHeader>
           <CardContent className="grid gap-2">
             <JoinHouseholdForm defaultCode={invite.code} />
-            <form action={dismissPendingInvite}>
-              <Button type="submit" variant="ghost" size="sm" className="w-full text-muted-foreground">
-                Not now
-              </Button>
-            </form>
+            <DismissInviteButton />
           </CardContent>
         </Card>
       ) : null}

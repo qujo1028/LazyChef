@@ -1,22 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
+import { SectionError } from "@/components/section-error"
 
-import { Button } from "@/components/ui/button"
-
-/** Keeps the tab bar and the rest of the app up if the shopping list fails to load. */
-export default function ListError({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
-
-  return (
-    <div role="alert" className="grid justify-items-center gap-3 rounded-2xl border border-dashed px-6 py-8 text-center">
-      <h1 className="text-lg font-semibold">Couldn&apos;t load the list</h1>
-      <p className="max-w-xs text-sm text-muted-foreground">Check your connection, then try again.</p>
-      <Button size="lg" className="h-12 w-full max-w-xs text-base" onClick={() => retry()}>
-        Try again
-      </Button>
-    </div>
-  )
+export default function ListError(props: { error: Error & { digest?: string }; retry: () => void }) {
+  return <SectionError what="the shopping list" {...props} />
 }

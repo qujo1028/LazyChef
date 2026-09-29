@@ -90,3 +90,33 @@ Add, top-up, check/undo, edit, delete, put away (4 lb chicken in the pantry afte
 list → clear without adding all worked, with no horizontal scroll. Live sync couldn't be checked here: the
 sandbox's browser can't open the Supabase Realtime websocket. It uses the same channel as the pantry, so check it on
 two phones after deploy.
+
+## Phase 5: cook mode and polish (2026-09-30, branch `claude/nice-shannon-yjvi7b`)
+Built:
+- **I cooked this** (recipe page): `cook-plan.ts` matches each ingredient to a pantry item (Spoonacular id, then
+  name via the ingredient library) and converts the amount to the item's unit. It says "check this" when units
+  don't convert (clove vs head, cups vs lb, servings). The review sheet (`cook-sheet.tsx`) lets you edit
+  amounts and skip lines. Staples are just listed. Confirming calls `cook_recipe()`, which takes everything out
+  in one transaction. Afterwards: a toast with Undo, a done screen with "Add to list" for anything that ran out,
+  and the Activity feed shows "X cooked Recipe" with the amounts.
+- **Migration `20260930000100_cook_mode.sql`** (not yet applied to the live DB, ask first): the `cooked` activity
+  action, `cook_recipe()` (security invoker, clamps at 0, one batch, recipe in `details`), the activity trigger
+  logging "cooked" inside it, and `add_pantry_items` accepting `{"merge_into", "untrack": true}`. 6 new PGlite
+  tests (`supabase/tests/cook.test.mjs`), 41 total.
+- **Known gaps fixed**: typing "eggs" with no amount after eggs ran out reuses that row as untracked (needs the
+  migration). "−1" / "Used some" now return the full row, so a stale server render can't win. Every section has
+  `error.tsx` (shared `SectionError`) and `loading.tsx`. `callAction` moved to `src/lib/call-action.ts` and now
+  wraps every action call, including household, invites, auth forms (`withConnectionErrors`), sign out and Google.
+- **Polish**: every screen checked at 320 and 375 px in light and dark with an automated audit (overflow,
+  unlabeled controls, tap targets under 44 px, inputs under 16 px). Fixed: Button default and icon sizes are now
+  44 px, plus the header links, recipe filter chips, checklist hit areas, "Forgot it?", and a household button
+  that overflowed at 320 px. Empty states and loading skeletons were checked too.
+- **Performance**: the recipe page was shipping the 179 KB ingredient library. Planning now happens on the
+  server (`cook-plan.ts`), so no page loads the library up front (the add-food box still lazy-loads it).
+  I couldn't open the Vercel Speed Insights dashboard from here (no Vercel token), so real-user numbers still
+  need a look.
+
+To do:
+- Apply `20260930000100_cook_mode.sql` to the live DB (ask), then test "I cooked this" end to end with a
+  throwaway account.
+- Check live sync on two phones (the sandbox browser can't open the Realtime websocket).

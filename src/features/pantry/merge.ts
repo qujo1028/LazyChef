@@ -18,7 +18,10 @@ export type InsertEntry = {
   ingredient_id: number | null
 }
 
-export type PlanEntry = MergeEntry | InsertEntry
+/** Make a ran-out item untracked (quantity null) again: "eggs" typed with no amount after eggs ran out. */
+export type UntrackEntry = { merge_into: string; untrack: true; expires_on: string | null }
+
+export type PlanEntry = MergeEntry | UntrackEntry | InsertEntry
 
 export type MergeDeps = {
   /** Stable matching key for a name (normalizeIngredientName). */
@@ -31,7 +34,7 @@ export type MergeDeps = {
 export type LineOutcome =
   /** A new pantry row (possibly shared with earlier lines of the same thing). */
   | { type: "insert" }
-  /** Tops up this existing item. */
+  /** Tops up this existing item (or brings it back from "ran out"). */
   | { type: "merge"; into: string }
   /** No amount, and it's already on hand: skipped. */
   | { type: "on-hand" }
@@ -40,7 +43,7 @@ export type AdditionPlan = {
   entries: PlanEntry[]
   /** One per incoming line, in order. */
   outcomes: LineOutcome[]
-  /** New pantry rows. */
+  /** New pantry rows, plus ran-out rows brought back as untracked. */
   added: number
   /** Existing rows that get more. */
   toppedUp: number
@@ -67,7 +70,8 @@ function earliest(a: string | null, b: string | null): string | null {
  *   unit converts. Best = ingredient id match, then same unit, then pantry order.
  *   Otherwise fold into an earlier new line from this batch, otherwise insert.
  * - Without an amount: skip if the same thing is already on hand (untracked or > 0),
- *   here or earlier in the batch; otherwise insert an untracked row.
+ *   here or earlier in the batch. Otherwise, if it ran out (0), make that row untracked
+ *   again rather than adding a second one; failing that, insert an untracked row.
  * - Several lines topping up one item become one merge entry; expiry = earliest.
  */
 export function planAdditions(
@@ -75,12 +79,14 @@ export function planAdditions(
   existing: readonly ExistingItem[],
   deps: MergeDeps,
 ): AdditionPlan {
-  const current = existing.map((item) => ({ item, key: deps.normalize(item.name) }))
+  // Copies: bringing back a ran-out row changes its quantity for the lines after it.
+  const current = existing.map((item) => ({ item: { ...item }, key: deps.normalize(item.name) }))
   const inserts: { key: string; entry: InsertEntry }[] = []
   const merges = new Map<string, MergeEntry>()
   const entries: PlanEntry[] = []
   const outcomes: LineOutcome[] = []
   let alreadyOnHand = 0
+  let untracked = 0
 
   for (const line of incoming) {
     const key = deps.normalize(line.name)
@@ -94,6 +100,14 @@ export function planAdditions(
       if (onHand) {
         alreadyOnHand++
         outcomes.push({ type: "on-hand" })
+        continue
+      }
+      const ranOut = current.find(({ item, key: k }) => same(k, item.ingredient_id) && item.quantity === 0)
+      if (ranOut && !merges.has(ranOut.item.id)) {
+        ranOut.item.quantity = null
+        untracked++
+        entries.push({ merge_into: ranOut.item.id, untrack: true, expires_on: line.expires_on })
+        outcomes.push({ type: "merge", into: ranOut.item.id })
       } else insert(key, line)
       continue
     }
@@ -166,7 +180,7 @@ export function planAdditions(
     outcomes.push({ type: "insert" })
   }
 
-  return { entries, outcomes, added: inserts.length, toppedUp: merges.size, alreadyOnHand }
+  return { entries, outcomes, added: inserts.length + untracked, toppedUp: merges.size, alreadyOnHand }
 }
 
 /** Category fixes to remember for the household: one per normalized name, last wins. */

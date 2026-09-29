@@ -5,7 +5,7 @@ import { useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { IngredientCombobox } from "@/features/pantry/components/ingredient-combobox"
 
 import { addListText, deleteListItems } from "../actions"

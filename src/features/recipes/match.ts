@@ -9,7 +9,7 @@ import type { RecipeIngredient, RecipeSummary } from "@/lib/spoonacular/recipe-s
 import { daysBetween, EXPIRING_SOON_DAYS } from "../pantry/dates"
 import type { PantryItem } from "../pantry/types"
 
-type PantryRow = Pick<PantryItem, "name" | "quantity" | "ingredient_id" | "is_staple" | "expires_on">
+export type PantryRow = Pick<PantryItem, "name" | "quantity" | "ingredient_id" | "is_staple" | "expires_on">
 
 /** Recipes missing at most this many ingredients show up under "Almost there". */
 export const MAX_MISSING = 3
@@ -56,21 +56,21 @@ export function pantrySearchNames(items: readonly PantryRow[], today: string): s
   return names
 }
 
-export type PantryIndex = {
-  byId: ReadonlyMap<number, PantryRow>
-  byKey: ReadonlyMap<string, PantryRow>
+export type PantryIndex<T extends PantryRow = PantryRow> = {
+  byId: ReadonlyMap<number, T>
+  byKey: ReadonlyMap<string, T>
   /** Pantry items that expire within EXPIRING_SOON_DAYS (or already have). */
-  expiring: ReadonlySet<PantryRow>
+  expiring: ReadonlySet<T>
 }
 
-function addKey(map: Map<string, PantryRow>, key: string, item: PantryRow) {
+function addKey<T>(map: Map<string, T>, key: string, item: T) {
   if (key && !map.has(key)) map.set(key, item)
 }
 
-export function buildPantryIndex(items: readonly PantryRow[], today: string): PantryIndex {
-  const byId = new Map<number, PantryRow>()
-  const byKey = new Map<string, PantryRow>()
-  const expiring = new Set<PantryRow>()
+export function buildPantryIndex<T extends PantryRow>(items: readonly T[], today: string): PantryIndex<T> {
+  const byId = new Map<number, T>()
+  const byKey = new Map<string, T>()
+  const expiring = new Set<T>()
   for (const item of items) {
     if (!isAvailable(item)) continue
     if (expiresSoon(item, today)) expiring.add(item)
@@ -95,7 +95,10 @@ function lastWord(key: string) {
  * pantry item of the same kind ("rice" is covered by "brown rice", but "chicken broth" is
  * not covered by "chicken", and "garlic powder" is not covered by "garlic").
  */
-export function findInPantry(index: PantryIndex, ingredient: Pick<RecipeIngredient, "id" | "name">): PantryRow | null {
+export function findInPantry<T extends PantryRow>(
+  index: PantryIndex<T>,
+  ingredient: Pick<RecipeIngredient, "id" | "name">,
+): T | null {
   if (ingredient.id !== null) {
     const hit = index.byId.get(ingredient.id)
     if (hit) return hit

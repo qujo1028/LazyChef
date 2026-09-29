@@ -19,7 +19,7 @@ import { addedByLabel, amountLabel, categoryLabel, displayName, remainingMessage
 import { changedFields, formFromItem, itemFormErrors, usedAmount, type ItemForm } from "../item-form"
 import type { PantryChange } from "../pantry-state"
 import type { PantryItem, PantryMember } from "../types"
-import { callAction } from "./call-action"
+import { callAction } from "@/lib/call-action"
 import { ExpiryPicker } from "./expiry-picker"
 import { CategorySelect, UnitSelect } from "./selects"
 import { useNow } from "./use-clock"

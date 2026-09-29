@@ -14,10 +14,11 @@ import {
   updatePassword,
   type AuthFormState,
 } from "@/features/auth/actions"
+import { withConnectionErrors } from "@/lib/call-action"
 
 export function LoginForm({ next, initialError }: { next: string; initialError?: string }) {
   const [state, action, pending] = useActionState<AuthFormState, FormData>(
-    signIn,
+    withConnectionErrors(signIn),
     initialError ? { error: initialError } : undefined,
   )
   return (
@@ -31,7 +32,7 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
         <Field>
           <div className="flex items-center justify-between">
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Link href="/forgot-password" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+            <Link href="/forgot-password" className="-my-3 inline-flex min-h-11 items-center text-sm text-muted-foreground underline-offset-4 hover:underline">
               Forgot it?
             </Link>
           </div>
@@ -47,7 +48,7 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
 }
 
 export function SignupForm({ next }: { next: string }) {
-  const [state, action, pending] = useActionState<AuthFormState, FormData>(signUp, undefined)
+  const [state, action, pending] = useActionState<AuthFormState, FormData>(withConnectionErrors(signUp), undefined)
   if (state?.notice) return <FormMessage notice={state.notice} />
   return (
     <form action={action} className="grid gap-5">
@@ -77,7 +78,7 @@ export function SignupForm({ next }: { next: string }) {
 }
 
 export function ForgotPasswordForm() {
-  const [state, action, pending] = useActionState<AuthFormState, FormData>(requestPasswordReset, undefined)
+  const [state, action, pending] = useActionState<AuthFormState, FormData>(withConnectionErrors(requestPasswordReset), undefined)
   return (
     <form action={action} className="grid gap-5">
       <Field>
@@ -93,7 +94,7 @@ export function ForgotPasswordForm() {
 }
 
 export function ResetPasswordForm() {
-  const [state, action, pending] = useActionState<AuthFormState, FormData>(updatePassword, undefined)
+  const [state, action, pending] = useActionState<AuthFormState, FormData>(withConnectionErrors(updatePassword), undefined)
   return (
     <form action={action} className="grid gap-5">
       <Field>

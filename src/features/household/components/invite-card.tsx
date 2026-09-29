@@ -7,6 +7,7 @@ import { ConfirmButton } from "@/components/confirm-button"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { regenerateInviteCode } from "@/features/household/actions"
+import { callAction } from "@/lib/call-action"
 import { formatInviteCode } from "@/lib/invite"
 
 export function InviteCard({
@@ -74,7 +75,7 @@ export function InviteCard({
         {isOwner ? (
           <ConfirmButton
             trigger={
-              <Button variant="ghost" size="sm" className="justify-self-center text-muted-foreground">
+              <Button variant="ghost" className="justify-self-center text-muted-foreground">
                 <RefreshCw />
                 Reset code
               </Button>
@@ -83,7 +84,7 @@ export function InviteCard({
             description="The current code and link stop working. People already in the household stay."
             confirmLabel="Reset code"
             successMessage="New invite code ready"
-            onConfirm={() => regenerateInviteCode(householdId)}
+            onConfirm={() => callAction(() => regenerateInviteCode(householdId))}
           />
         ) : null}
       </CardContent>
