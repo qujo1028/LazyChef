@@ -6,6 +6,7 @@ import { useDeferredValue, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { PageHeading } from "@/components/page-heading"
+import { addPantryItemToList } from "@/features/list/components/add-to-list"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -161,6 +162,7 @@ export function PantryView({
             setEditing({ id: item.id, open: true })
           }}
           onUseOne={takeOne}
+          onAddToList={(item) => void addPantryItemToList(item)}
         />
       )}
 

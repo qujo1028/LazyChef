@@ -5,35 +5,14 @@ import { z } from "zod"
 
 import { requireHousehold } from "@/features/household/queries"
 import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { CATEGORIES, type Category } from "@/lib/ingredients/types"
 import { createClient } from "@/lib/supabase/server"
-import { convertQuantity, normalizeUnit } from "@/lib/units"
+import { convertQuantity } from "@/lib/units"
 import type { Database } from "@/types/database"
 import { categoryOverrides, planAdditions, roundQuantity } from "./merge"
 import { resolveItems, type ResolveResult } from "./resolve"
+import { canonicalUnit, category, date, firstIssue, itemId, name, newItemSchema, quantity, unit } from "./schemas"
+import { dbError, saveCategoryOverrides } from "./server-helpers"
 import type { ActionResult, AddItemsSummary, NewPantryItem, PantryItem, PantryItemFields } from "./types"
-
-type Supabase = Awaited<ReturnType<typeof createClient>>
-
-const CATEGORY_VALUES = CATEGORIES.map((c) => c.value) as [Category, ...Category[]]
-
-const itemId = z.uuid("That item doesn't exist anymore.")
-const name = z.string().trim().min(1, "Give it a name.").max(80, "Keep names under 80 characters.")
-const quantity = z.number().nonnegative("Amounts can't be negative.").max(1_000_000, "That amount looks too big.")
-const unit = z.string().trim().min(1, "Pick a unit.").max(24)
-const category = z.enum(CATEGORY_VALUES)
-const date = z.iso.date("Pick a valid date.")
-
-const newItemSchema = z.object({
-  name,
-  quantity: quantity.nullable(),
-  unit,
-  category,
-  expires_on: date.nullable(),
-  is_staple: z.boolean(),
-  ingredient_id: z.number().int().positive().nullable(),
-  category_changed: z.boolean(),
-})
 
 const fieldsSchema = z.strictObject({
   name: name.optional(),
@@ -46,40 +25,7 @@ const fieldsSchema = z.strictObject({
 
 const REMOVED = "Someone already removed that item."
 
-/** Messages our own SQL functions raise for people to read (see the pantry migration). */
-const READABLE_CODES = new Set(["P0001", "P0002"])
 
-/** A database error as something to show: ours as is, anything else logged and replaced. */
-function dbError(action: string, error: { message: string; code?: string }): string {
-  if (error.code && READABLE_CODES.has(error.code)) return error.message
-  console.error(`${action} failed:`, error.code ?? "", error.message)
-  return "That didn't go through. Check your connection and try again."
-}
-
-function firstIssue(error: z.ZodError) {
-  return error.issues[0]?.message ?? "Check what you entered."
-}
-
-function canonicalUnit(value: string) {
-  return normalizeUnit(value) ?? value
-}
-
-async function saveCategoryOverrides(
-  supabase: Supabase,
-  householdId: string,
-  overrides: { ingredient_key: string; category: Category }[],
-) {
-  if (overrides.length === 0) return
-  const updated_at = new Date().toISOString()
-  const { error } = await supabase
-    .from("category_overrides")
-    .upsert(
-      overrides.map((o) => ({ household_id: householdId, ...o, updated_at })),
-      { onConflict: "household_id,ingredient_key" },
-    )
-  // The items are saved either way; a missed category fix isn't worth failing over.
-  if (error) console.error("Couldn't save category fixes:", error.message)
-}
 
 /** Tops up what's already there, inserts the rest, in one transaction. */
 async function addToPantry(householdId: string, items: NewPantryItem[]): Promise<ActionResult<AddItemsSummary>> {

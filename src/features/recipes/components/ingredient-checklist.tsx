@@ -10,6 +10,8 @@ import { callAction } from "@/features/pantry/components/call-action"
 import { displayName } from "@/features/pantry/display"
 import { cn } from "@/lib/utils"
 
+import { describeListAdditions } from "@/features/list/plan"
+
 import { addRecipeIngredientsToList } from "../actions"
 import type { IngredientStatus } from "../match"
 
@@ -55,9 +57,7 @@ export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lin
         return
       }
       setAdded((current) => new Set([...current, ...chosen]))
-      const parts = [result.added > 0 ? `Added ${plural(result.added, "item")} to the shopping list` : null]
-      if (result.alreadyOnList > 0) parts.push(`${plural(result.alreadyOnList, "item")} already there`)
-      toast.success(parts.filter(Boolean).join(" · ") || "Already on the list")
+      toast.success(describeListAdditions(result), { description: "Shopping list" })
     })
   }
 
