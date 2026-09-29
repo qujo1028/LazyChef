@@ -10,6 +10,7 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { ingredientEmoji } from "@/lib/ingredients/emoji"
 
 import { addPantryItemToList } from "@/features/list/components/add-to-list"
 
@@ -159,7 +160,12 @@ function EditItemContent({
   return (
     <>
       <DrawerHeader className="gap-1 text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
-        <DrawerTitle className="text-lg">{name}</DrawerTitle>
+        <DrawerTitle className="flex min-w-0 items-center gap-2 text-lg">
+          <span className="text-xl leading-none" aria-hidden>
+            {ingredientEmoji(item)}
+          </span>
+          <span className="min-w-0 break-words">{name}</span>
+        </DrawerTitle>
         <DrawerDescription>
           {amountLabel(item)} · {categoryLabel(item.category)}
         </DrawerDescription>

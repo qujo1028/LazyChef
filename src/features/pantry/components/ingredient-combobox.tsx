@@ -3,6 +3,7 @@
 import { useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
+import { ingredientEmoji } from "@/lib/ingredients/emoji"
 import { CATEGORY_META, type CatalogEntry } from "@/lib/ingredients/types"
 import { cn } from "@/lib/utils"
 
@@ -203,7 +204,7 @@ function SuggestionOption({
       className="flex min-h-12 min-w-0 cursor-pointer items-center gap-3 rounded-lg px-2.5 text-base select-none hover:bg-muted/70 aria-selected:bg-muted md:text-sm"
     >
       <span className="text-xl leading-none" aria-hidden>
-        {meta.emoji}
+        {ingredientEmoji(entry)}
       </span>
       <span className="min-w-0 flex-1 truncate">
         {range ? (
