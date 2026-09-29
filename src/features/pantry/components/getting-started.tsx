@@ -7,7 +7,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { CATEGORY_META } from "@/lib/ingredients/types"
+import { ingredientEmoji } from "@/lib/ingredients/emoji"
 import { cn } from "@/lib/utils"
 
 import { addStaples } from "../actions"
@@ -109,7 +109,7 @@ export function GettingStarted({
                   )}
                 >
                   <span className="text-base leading-none" aria-hidden>
-                    {CATEGORY_META[staple.category].emoji}
+                    {ingredientEmoji(staple)}
                   </span>
                   {displayName(staple.name)}
                   {done ? (
