@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import type { ResolvedItem } from "@/lib/ingredients/types"
-import { draftError, draftFromResolved, draftsToItems, draftToItem, parseQuantityInput } from "./review"
+import { draftError, draftFromResolved, draftsFromResolved, draftsToItems, draftToItem, parseQuantityInput } from "./review"
 
 const resolved: ResolvedItem = {
   raw: "2 lbs chicken breast",
@@ -77,5 +77,13 @@ describe("drafts", () => {
     expect(draftToItem(draft)).toBeNull()
     expect(draftsToItems([draftFromResolved(resolved, "a"), draft])).toBeNull()
     expect(draftsToItems([draftFromResolved(resolved, "a")])).toHaveLength(1)
+  })
+})
+
+describe("draftsFromResolved", () => {
+  it("keys drafts by batch and position", () => {
+    const drafts = draftsFromResolved([resolved, { ...resolved, name: "eggs" }], 3)
+    expect(drafts.map((d) => d.key)).toEqual(["3-0", "3-1"])
+    expect(drafts[1]).toMatchObject({ name: "eggs", resolvedName: "eggs", quantity: "2", unit: "lb" })
   })
 })

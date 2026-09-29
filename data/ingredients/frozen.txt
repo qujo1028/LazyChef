@@ -1,0 +1,134 @@
+# Frozen: anything sold frozen.
+@units bag, oz, lb, box, package
+@tier 3
+
+# ── Vegetables and fruit ─────────────────────────────────────────────────────────────────────
+frozen peas ~2 : frozen green peas, frozen sweet peas, petite peas
+frozen corn ~2 : frozen sweet corn, frozen corn kernels
+frozen broccoli ~2 : frozen broccoli florets, frozen broccoli cuts
+frozen spinach ~2 : frozen chopped spinach | box, oz, bag
+frozen mixed vegetables ~2 : mixed vegetables, frozen veggies, frozen vegetable medley, mixed veggies
+frozen vegetables ~3
+frozen green beans ~3 : frozen cut green beans
+frozen peas and carrots ~4 : peas and carrots
+frozen stir fry vegetables ~3 : frozen stir-fry vegetables, frozen stir fry mix, asian vegetables
+frozen cauliflower ~4
+frozen cauliflower rice ~3 : frozen riced cauliflower
+frozen edamame ~3 : edamame, shelled edamame, edamame in the pod, edamame beans
+frozen brussels sprouts ~4
+frozen okra ~5
+frozen butternut squash ~5
+frozen sweet potatoes ~5
+frozen artichoke hearts ~5
+frozen lima beans ~5 : frozen baby lima beans
+frozen onions ~5 : frozen diced onions
+frozen peppers and onions ~4 : frozen fajita vegetables, pepper and onion mix
+frozen steamer vegetables ~4 : steamfresh, steam in bag vegetables
+frozen berries ~2 : frozen mixed berries, frozen berry blend
+frozen strawberries ~2 : frozen sliced strawberries
+frozen blueberries ~2 : frozen wild blueberries
+frozen raspberries ~3
+frozen mango ~3 : frozen mango chunks
+frozen pineapple ~4 : frozen pineapple chunks
+frozen cherries ~4 : frozen dark sweet cherries
+frozen peaches ~4 : frozen sliced peaches
+frozen fruit ~3 : frozen fruit blend
+frozen bananas ~5
+frozen avocado ~5 : frozen avocado chunks
+acai packs ~5 : frozen acai, acai puree, frozen acai packs | package, count
+smoothie packs ~5 : frozen smoothie packs, smoothie kits | package, box
+
+# ── Meals, pizza, sides ──────────────────────────────────────────────────────────────────────
+frozen pizza ~1 : pizza, digiorno, totino's | count, box
+pizza rolls ~3 : pizza bites, totino's pizza rolls | bag, box
+french bread pizza ~5 | box, count
+frozen meals ~3 : tv dinners, frozen dinners, frozen entrees, microwave meals, lean cuisine | count, box
+frozen lasagna ~4 | count, box
+frozen mac and cheese ~5 | count, box
+frozen fried rice ~5 : fried rice | bag, package
+frozen burritos ~3 : burritos, bean and cheese burritos | count, package
+frozen enchiladas ~5 | count, box
+tamales ~4 | count, package
+taquitos ~4 | box, package
+egg rolls ~3 : frozen egg rolls | box, count, package
+spring rolls ~4 : frozen spring rolls | box, count
+potstickers ~3 : pot stickers, gyoza, frozen potstickers | bag, package
+dumplings ~3 : frozen dumplings, soup dumplings, xiao long bao, wontons, frozen wontons | bag, package
+pierogies ~4 : pierogi, pierogis | box, package
+frozen ravioli ~4 | bag, lb
+frozen tortellini ~5 | bag, oz
+frozen gnocchi ~5 | bag, oz
+pot pies ~4 : chicken pot pie, pot pie | count, box
+hot pockets ~4 : hot pocket | box, count
+corn dogs ~4 : corn dog | box, count
+frozen breakfast sandwiches ~4 : breakfast sandwiches, jimmy dean croissants | box, count
+frozen breakfast burritos ~5 : breakfast burritos | box, count
+frozen waffles ~2 : eggo waffles, toaster waffles, eggos, eggo | box, count
+frozen pancakes ~4 | box, count
+frozen french toast sticks ~5 : french toast sticks | box
+french fries ~2 : fries, frozen fries, frozen french fries, crinkle fries, shoestring fries, steak fries | bag, oz, lb
+waffle fries ~4 | bag
+curly fries ~4 | bag
+sweet potato fries ~3 | bag
+tater tots ~2 : tots, potato puffs | bag, oz
+hash browns ~2 : frozen hash browns, shredded hash browns, hash brown patties, hashbrowns | bag, oz, package
+onion rings ~4 | bag, box
+mozzarella sticks ~4 : breaded mozzarella sticks, fried mozzarella sticks | box, bag
+jalapeño poppers ~5 : jalapeno poppers | box, bag
+garlic bread ~4 : frozen garlic bread, garlic toast | box, package
+texas toast ~4 : frozen texas toast | box
+frozen dinner rolls ~5 : rhodes rolls | bag, package
+frozen bread dough ~5 : rhodes bread dough | package
+frozen biscuits ~5 | bag, package
+falafel ~5 : frozen falafel | package, bag
+
+# ── Meat, poultry, seafood ───────────────────────────────────────────────────────────────────
+chicken nuggets ~2 : nuggets, frozen chicken nuggets, dino nuggets | bag, box, lb
+breaded chicken strips ~3 : chicken strips, frozen chicken tenders, crispy chicken strips, chicken fingers | bag, lb
+popcorn chicken ~4 | bag
+frozen chicken breasts ~3 : frozen chicken breast, individually frozen chicken breasts | bag, lb
+frozen chicken wings ~4 : frozen wings | bag, lb
+boneless wings ~5 : frozen boneless wings | bag
+meatballs ~2 : frozen meatballs, italian meatballs, swedish meatballs | bag, lb, oz
+turkey meatballs ~4 | bag, oz
+frozen burgers ~4 : frozen burger patties, frozen hamburger patties | box, package, lb
+veggie burgers ~3 : veggie burger, garden burgers, black bean burgers | box, package
+veggie nuggets ~5 | box, bag
+frozen shrimp ~3 : frozen raw shrimp, frozen cooked shrimp | bag, lb
+popcorn shrimp ~5 : breaded shrimp, coconut shrimp | bag, box
+fish sticks ~3 : fish fingers | box, bag
+frozen fish fillets ~4 : breaded fish fillets, battered fish, frozen fish | box, bag
+frozen salmon ~4 : frozen salmon fillets | bag, lb
+frozen tilapia ~5 | bag, lb
+frozen turkey ~5 | lb, count
+
+# ── Desserts ────────────────────────────────────────────────────────────────────────────────
+@units pt, qt, gal, carton
+ice cream ~1 : icecream
+vanilla ice cream ~2
+chocolate ice cream ~3
+strawberry ice cream ~4
+mint chocolate chip ice cream ~5
+cookies and cream ice cream ~5
+non-dairy ice cream ~4 : dairy-free ice cream, vegan ice cream
+gelato ~4
+sorbet ~4
+sherbet ~4 : rainbow sherbet
+frozen yogurt ~4 : froyo
+ice cream bars ~3 : ice cream bar, klondike bars, drumsticks ice cream | box, count
+ice cream sandwiches ~3 : ice cream sandwich | box, count
+popsicles ~3 : ice pops, freezer pops, frozen fruit bars, otter pops, paletas | box, count
+mochi ice cream ~4 : mochi | box, count
+frozen custard ~5
+ice cream cake ~5 | count
+frozen pie ~5 : frozen fruit pie | count, box
+frozen cheesecake ~5 | count, box
+whipped topping ~2 : cool whip, frozen whipped topping, non-dairy whipped topping | oz, package
+frozen pie crust ~4 : frozen pie shells, deep dish pie crust, frozen pie crusts | package, count
+puff pastry ~3 : puff pastry sheets, puff pastry dough, frozen puff pastry | box, package
+phyllo dough ~4 : filo pastry, phyllo, filo dough, fillo dough, phyllo sheets | box, package
+puff pastry shells ~5 : vol au vent | box, package
+mini phyllo shells ~5 : mini filo shells, phyllo cups | box, package
+frozen juice concentrate ~4 : juice concentrate, frozen orange juice concentrate, orange juice concentrate | can, oz
+frozen lemonade concentrate ~5 : lemonade concentrate | can, oz
+ice ~3 : ice cubes, bag of ice, crushed ice | bag, lb

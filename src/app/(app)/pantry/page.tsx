@@ -1,19 +1,24 @@
 import type { Metadata } from "next"
-import { Refrigerator } from "lucide-react"
 
-import { EmptyState } from "@/components/empty-state"
-import { PageHeading } from "@/components/page-heading"
+import { requireHousehold } from "@/features/household/queries"
+import { PantryView } from "@/features/pantry/components/pantry-view"
+import { getPantrySnapshot } from "@/features/pantry/queries"
 
 export const metadata: Metadata = { title: "Pantry" }
 
-export default function PantryPage() {
+export default async function PantryPage() {
+  const { viewer, household } = await requireHousehold()
+  const pantry = await getPantrySnapshot(household.id)
+
   return (
-    <>
-      <PageHeading title="Pantry" description="Everything your household has on hand." />
-      <EmptyState icon={Refrigerator} title="Your pantry is empty">
-        Coming next: type things like &ldquo;2 lbs chicken breast&rdquo; or &ldquo;1 dozen eggs&rdquo; and they&apos;ll
-        sort themselves into categories.
-      </EmptyState>
-    </>
+    <PantryView
+      key={household.id}
+      householdId={household.id}
+      viewerId={viewer.id}
+      items={pantry.items}
+      members={pantry.members}
+      fetchedAt={pantry.fetchedAt}
+      serverToday={pantry.today}
+    />
   )
 }

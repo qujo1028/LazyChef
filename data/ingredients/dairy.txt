@@ -1,0 +1,167 @@
+# Dairy & eggs: milk, cream, butter, cheese, yogurt, sour cream, eggs, plant milks, refrigerated dips.
+@units oz, package, cup
+@tier 3
+
+# ── Milk and cream ───────────────────────────────────────────────────────────────────────────
+@units gal, qt, cup, l
+milk ~1 : cow's milk, dairy milk
+whole milk ~1 : vitamin d milk
+2% milk ~1 : reduced fat milk, 2 percent milk, two percent milk
+1% milk ~2 : low fat milk, 1 percent milk, lowfat milk
+skim milk ~2 : nonfat milk, fat free milk, fat-free milk
+lactose-free milk ~3 : lactaid, lactaid milk, lactose free whole milk | carton, gal, qt, cup
+ultra-filtered milk ~4 : fairlife, fairlife milk | carton, qt, cup
+chocolate milk ~3 | gal, qt, bottle, cup
+strawberry milk ~5 | qt, bottle
+buttermilk ~2 | qt, pt, cup
+goat milk ~5 : goat's milk | qt, cup
+@units pt, qt, cup, fl oz
+heavy cream ~1 : heavy whipping cream, whipping cream, double cream, thickened cream
+half and half ~1 : half & half, half-and-half
+light cream ~4 : single cream, table cream
+coffee creamer ~2 : creamer, flavored creamer, coffee mate, liquid creamer | bottle, qt, fl oz
+oat milk creamer ~4 | bottle, qt, fl oz
+nondairy creamer ~4 : non-dairy creamer, powdered creamer, non dairy creamer | oz, jar, bottle
+whipped cream ~2 : reddi wip, spray whipped cream, whipped cream can | can, oz
+sour cream ~1 | oz, cup, tbsp
+light sour cream ~4 | oz, cup
+creme fraiche ~4 : crème fraîche | oz, cup
+mexican crema ~4 : crema, crema mexicana | oz, cup
+eggnog ~4 | qt, carton
+
+# ── Butter ───────────────────────────────────────────────────────────────────────────────────
+@units lb, stick, oz, tbsp
+butter ~1 : stick butter, butter sticks
+unsalted butter ~1 : sweet butter, unsalted sweet butter, sweet cream butter
+salted butter ~2 : salted sweet cream butter
+european butter ~4 : irish butter, kerrygold butter, kerrygold, plugra
+whipped butter ~4 | oz, tbsp
+plant butter ~4 : vegan butter, dairy-free butter, nondairy butter, vegan buttery stick, earth balance
+margarine ~3 : stick margarine, oleo
+buttery spread ~4 : country crock, i can't believe it's not butter | oz, tbsp
+cultured butter ~5
+compound butter ~5 : herb butter, garlic butter
+
+# ── Eggs ─────────────────────────────────────────────────────────────────────────────────────
+@units count
+eggs ~1 : dozen eggs, chicken eggs, large eggs, brown eggs, white eggs
+cage-free eggs ~4 : cage free eggs, pasture raised eggs, free range eggs
+egg whites ~3 : liquid egg whites, carton egg whites | carton, oz, cup, count
+liquid eggs ~4 : egg beaters, egg substitute, eggbeaters, just egg | carton, oz, cup
+hard-boiled eggs ~4 : hard boiled eggs, boiled eggs | count, package
+egg yolks ~5 : egg yolk
+duck eggs ~5
+quail eggs ~5
+
+# ── Cheese ───────────────────────────────────────────────────────────────────────────────────
+@units oz, lb, package, cup
+cheese ~2 : block cheese
+cheddar cheese ~1 : cheddar, cheddar block
+sharp cheddar cheese ~2 : sharp cheddar
+extra sharp cheddar ~3 : extra sharp cheddar cheese
+mild cheddar ~4 : mild cheddar cheese
+white cheddar ~4 : white cheddar cheese, vermont white cheddar
+shredded cheddar cheese ~1 : shredded cheddar, grated cheddar | oz, bag, cup
+shredded cheese ~2 : grated cheese | oz, bag, cup
+mexican blend cheese ~2 : shredded mexican cheese blend, mexican cheese, mexican blend, fiesta blend cheese, mexican cheese blend, taco cheese | oz, bag, cup
+italian blend cheese ~3 : italian cheese, shredded italian cheese, italian blend | oz, bag, cup
+mozzarella cheese ~1 : mozzarella, part skim mozzarella, part skim mozzarella cheese, low moisture mozzarella, low moisture part skim mozzarella cheese, whole milk mozzarella
+shredded mozzarella ~1 : shredded mozzarella cheese, grated mozzarella | oz, bag, cup
+fresh mozzarella ~2 : mozzarella balls, fresh mozzarella balls, mozzarella di bufala, ciliegine, pearl mozzarella | oz, package
+buffalo mozzarella ~5 | oz, package
+burrata ~4 | oz, package, count
+bocconcini ~5 | oz, package
+parmesan cheese ~1 : parmesan, parmigiano reggiano, grated parmesan cheese, grated parmesan, parm, parmigiano, shredded parmesan | oz, cup, package
+pecorino romano ~4 : pecorino, romano cheese, romano, pecorino cheese | oz, cup
+grana padano ~5 | oz
+asiago cheese ~4 : asiago
+swiss cheese ~2 : swiss, sliced swiss | oz, lb, package, slice
+provolone ~3 : provolone cheese, provolone cheese slices, sliced provolone | oz, lb, package, slice
+american cheese ~2 : kraft singles, cheese singles, american slices, white american cheese | package, slice, oz
+cheese slices ~3 : deli cheese | package, slice, oz
+pepper jack cheese ~2 : pepperjack cheese, pepper jack, pepperjack | oz, lb, package
+monterey jack cheese ~2 : monterey jack, jack cheese
+colby jack cheese ~2 : colby jack, colby-jack
+colby cheese ~4 : colby
+feta cheese ~2 : feta, crumbled feta, feta crumbles
+goat cheese ~2 : chevre, goat cheese crumbles | oz, package
+blue cheese ~3 : blue cheese crumbles, bleu cheese, crumbled blue cheese
+gorgonzola ~4 : gorgonzola cheese
+brie ~3 : brie cheese
+camembert ~5 : camembert cheese
+gouda ~3 : gouda cheese, smoked gouda
+havarti ~4 : havarti cheese, dill havarti
+gruyere ~4 : gruyère, gruyere cheese
+fontina cheese ~4 : fontina
+manchego cheese ~4 : manchego
+muenster cheese ~4 : muenster, munster
+emmental ~5 : emmentaler, emmantaler cheese, emmental cheese
+jarlsberg ~5 : jarlsberg cheese
+edam ~5 : edam cheese
+cotija cheese ~3 : cotija
+queso fresco ~3
+oaxaca cheese ~4 : quesillo
+queso blanco ~4
+quesadilla cheese ~5 : queso quesadilla
+asadero cheese ~5
+paneer ~3 : panir
+halloumi ~4 : grilling cheese, halloumi cheese
+ricotta cheese ~2 : ricotta, whole milk ricotta, part skim ricotta
+cottage cheese ~2 | oz, cup, package
+mascarpone ~3 : mascarpone cheese
+cream cheese ~1 : block cream cheese, block style cream cheese, philadelphia cream cheese, neufchatel | oz, package
+whipped cream cheese ~4 | oz, package
+flavored cream cheese ~4 : chive and onion cream cheese, strawberry cream cheese, veggie cream cheese | oz, package
+string cheese ~2 : cheese sticks, mozzarella string cheese | package, count, oz
+babybel ~4 : mini babybel | package, count
+cheese curds ~4 | oz, bag
+velveeta ~3 : velveeta cheese, processed cheese, process cheese | oz, package, lb
+laughing cow ~5 : spreadable cheese wedges, cheese wedges | package, count
+boursin ~4 : boursin cheese, garlic herb spreadable cheese | package, oz
+smoked cheese ~5 | oz
+vegan cheese ~4 : dairy-free cheese, plant-based cheese, non-dairy cheese | oz, package
+pimento cheese ~4 : pimiento cheese | oz, package
+cheese spread ~5 | oz, jar
+
+# ── Yogurt and cultured ──────────────────────────────────────────────────────────────────────
+@units oz, cup, count, package
+yogurt ~1 : yoghurt
+greek yogurt ~1 : plain greek yogurt, greek yoghurt, nonfat greek yogurt
+vanilla yogurt ~3
+vanilla greek yogurt ~3
+strawberry yogurt ~4
+plain yogurt ~2 : natural yogurt, whole milk yogurt
+yogurt cups ~3 : yogurt cup, yoplait, individual yogurts, fruit yogurt | count, package
+yogurt tubes ~4 : gogurt, go-gurt | package, count
+drinkable yogurt ~4 : yogurt drink, yogurt smoothie | bottle, count
+kefir ~3 | qt, bottle, cup
+skyr ~4 : icelandic yogurt, siggi's | oz, count
+dairy-free yogurt ~4 : plant-based yogurt, soy yogurt, coconut yogurt, almond milk yogurt, oat yogurt, vegan yogurt | oz, count
+labneh ~5 | oz
+quark ~5 | oz
+clotted cream ~5 | oz
+tzatziki ~4 | oz, package
+french onion dip ~3 : onion dip, chip dip, sour cream dip | oz, package
+spinach dip ~4 : spinach artichoke dip | oz, package
+ranch dip ~4 | oz, package
+pudding ~4 : pudding snack | package, count, oz
+rice pudding ~5 | package, oz
+
+# ── Plant milks ──────────────────────────────────────────────────────────────────────────────
+@units carton, gal, qt, cup, l
+almond milk ~1 : almondmilk
+unsweetened almond milk ~3
+vanilla almond milk ~4
+oat milk ~1 : oatmilk, oatly
+soy milk ~2 : soymilk, silk soy milk
+unsweetened soy milk ~5 : unsweetened soymilk
+coconut milk beverage ~3 : coconut milk drink, carton coconut milk, so delicious coconut milk
+cashew milk ~3
+rice milk ~4
+pea milk ~4 : ripple milk, pea protein milk
+hemp milk ~5
+flax milk ~5
+macadamia milk ~5
+pistachio milk ~5
+hazelnut milk ~5
+plant milk ~4 : non-dairy milk, nondairy milk, dairy-free milk, milk alternative, milk substitute

@@ -1,0 +1,190 @@
+# Spices: dried herbs, spices, salt, pepper, seasoning blends and packets, bouillon.
+@units oz, jar, tsp, tbsp
+@tier 3
+
+# ── Salt and pepper ──────────────────────────────────────────────────────────────────────────
+salt ~1 : table salt, iodized salt, fine salt | oz, lb, box, tsp
+kosher salt ~1 : coarse kosher salt, diamond crystal, morton kosher salt, coarse salt | box, oz, lb, tsp
+sea salt ~2 : fine sea salt, coarse sea salt | oz, jar, tsp
+flaky sea salt ~4 : maldon salt, fleur de sel, finishing salt, flake salt | oz, box
+himalayan pink salt ~3 : pink himalayan salt, pink salt, himalayan salt | oz, jar, tsp
+smoked salt ~5 | oz
+seasoned salt ~3 : lawry's seasoned salt, seasoning salt | oz, jar, tsp
+garlic salt ~3
+onion salt ~5
+celery salt ~4
+truffle salt ~5
+rock salt ~5 : ice cream salt | lb, box
+black pepper ~1 : ground black pepper, pepper, cracked black pepper, fresh ground pepper
+black peppercorns ~2 : peppercorns, whole black peppercorns, whole peppercorns, tellicherry peppercorns
+white pepper ~4 : ground white pepper
+white peppercorns ~5
+pink peppercorns ~5
+green peppercorns ~5
+sichuan peppercorns ~5 : szechuan peppercorns, szechuan pepper, sichuan pepper
+lemon pepper ~3 : lemon pepper seasoning
+salt and pepper ~5 : salt & pepper
+
+# ── Ground and whole spices ──────────────────────────────────────────────────────────────────
+red pepper flakes ~1 : crushed red pepper, crushed red pepper flakes, chili flakes, chilli flakes, chile flakes, red chili flakes
+cayenne pepper ~2 : cayenne, ground cayenne pepper, ground cayenne
+chili powder ~2 : chile powder, chilli powder
+ancho chili powder ~4 : ancho chile powder
+chipotle powder ~4 : chipotle chili powder, ground chipotle chile pepper, ground chipotle
+kashmiri chili powder ~5 : kashmiri red chili powder
+paprika ~1 : ground paprika
+smoked paprika ~2 : pimenton, pimenton de la vera, spanish paprika, smoked spanish paprika
+sweet paprika ~4 : hungarian sweet paprika, hungarian paprika
+hot paprika ~5
+garlic powder ~1 : granulated garlic, garlic granules
+onion powder ~1 : granulated onion
+dried minced onion ~4 : dried onion, dried onion flakes, onion flakes, dehydrated onion
+dried minced garlic ~5 : dehydrated garlic, garlic flakes
+cumin ~1 : ground cumin
+cumin seeds ~4 : cumin seed
+cinnamon ~1 : ground cinnamon
+cinnamon sticks ~3 : cinnamon stick
+saigon cinnamon ~5 : vietnamese cinnamon
+nutmeg ~2 : ground nutmeg, whole nutmeg
+ground ginger ~2 : ginger powder, dried ginger, powdered ginger
+ground cloves ~3 : ground clove
+whole cloves ~3 : cloves
+allspice ~3 : ground allspice, allspice berries, whole allspice
+cardamom ~4 : ground cardamom, cardamom powder, cardamom pods, green cardamom, green cardamoms
+black cardamom ~5 : black cardamoms
+turmeric ~2 : ground turmeric, turmeric powder
+coriander ~3 : ground coriander, coriander powder
+coriander seeds ~4 : whole coriander seeds, coriander seed
+curry powder ~2 : madras curry powder
+garam masala ~3
+chaat masala ~5
+tandoori masala ~5 : tandoori spice
+five spice powder ~4 : chinese five spice, five spice, 5 spice powder
+star anise ~4 : star anise pods
+anise seed ~5 : anise, aniseed
+fennel seeds ~4 : fennel seed
+ground fennel ~5
+caraway seeds ~5 : caraway seed, caraway
+celery seed ~5 : celery seeds
+mustard seeds ~4 : yellow mustard seeds, brown mustard seeds, mustard seed
+black mustard seeds ~5
+mustard powder ~4 : dry mustard, ground mustard, colman's mustard powder
+poppy seeds ~4 : poppy seed
+sesame seeds ~3 : toasted sesame seeds, white sesame seeds, sesame seed | jar, oz, tbsp
+black sesame seeds ~5 | jar, oz
+saffron ~4 : saffron threads | g, jar
+sumac ~5 : ground sumac
+fenugreek ~5 : fenugreek seeds, methi seeds
+dried fenugreek leaves ~5 : kasuri methi
+asafoetida ~5 : hing
+amchur ~5 : amchoor, mango powder, dry mango powder
+nigella seeds ~5 : kalonji, black cumin seeds, charnushka
+ajwain ~5 : carom seeds
+juniper berries ~5
+mace ~5 : ground mace
+annatto ~5 : achiote, annatto seeds, achiote seeds
+file powder ~5 : gumbo file
+long pepper ~5
+grains of paradise ~5
+tonka beans ~5
+dried lavender ~5 : culinary lavender
+dried hibiscus ~5 : hibiscus flowers, flor de jamaica
+
+# ── Dried herbs ──────────────────────────────────────────────────────────────────────────────
+oregano ~1 : dried oregano, oregano leaves
+mexican oregano ~4
+dried basil ~2 : basil flakes
+thyme ~2 : dried thyme, thyme leaves, ground thyme
+rosemary ~2 : dried rosemary
+sage ~3 : dried sage, rubbed sage, ground sage
+dried parsley ~2 : parsley flakes, dried parsley flakes
+dried dill ~3 : dill weed, dried dill weed
+dill seed ~5
+dried chives ~5
+marjoram ~4 : dried marjoram
+tarragon ~4 : dried tarragon
+bay leaves ~2 : bay leaf, dried bay leaves, turkish bay leaves, laurel leaves
+dried mint ~5
+dried cilantro ~5 : cilantro flakes
+savory ~5 : summer savory, winter savory, ground savory
+italian seasoning ~1 : italian herbs, italian herb seasoning
+herbes de provence ~4 : herbs de provence
+fines herbes ~5
+dried herbs ~5 : mixed herbs, dried mixed herbs
+
+# ── Blends and packets ───────────────────────────────────────────────────────────────────────
+cajun seasoning ~2 : cajun spice, cajun spice mix, louisiana seasoning
+creole seasoning ~4 : tony chachere's, tony chacheres
+old bay seasoning ~2 : old bay, seafood seasoning
+taco seasoning ~1 : taco seasoning mix, taco spice, taco seasoning packet | package, oz, tbsp
+fajita seasoning ~4 : fajita seasoning mix | package, oz
+chili seasoning ~4 : chili seasoning mix, chili mix | package, oz
+enchilada seasoning ~5 | package
+guacamole seasoning ~5 : guacamole mix | package
+ranch seasoning ~3 : ranch dressing mix, dry ranch dressing mix, hidden valley ranch packet, ranch mix, ranch packet | package, oz, tbsp
+onion soup mix ~3 : dry onion soup mix, lipton onion soup mix, onion soup packet | package, box, oz
+italian dressing mix ~4 : italian salad dressing mix, good seasons | package
+gravy mix ~4 : brown gravy mix, gravy packet, turkey gravy mix, chicken gravy mix | package
+spaghetti sauce mix ~5 | package
+sloppy joe seasoning ~5 : sloppy joe mix | package
+meatloaf seasoning ~5 | package
+pot roast seasoning ~5 | package
+alfredo sauce mix ~5 | package
+hollandaise sauce mix ~5 : hollandaise mix | package
+steak seasoning ~3 : montreal steak seasoning, montreal steak | jar, oz
+chicken seasoning ~4 : montreal chicken seasoning, rotisserie chicken seasoning
+poultry seasoning ~3
+pork seasoning ~5
+burger seasoning ~5 : hamburger seasoning
+everything bagel seasoning ~3 : everything but the bagel, everything seasoning
+pumpkin pie spice ~3 : pumpkin spice
+apple pie spice ~4
+chai spice ~5 : chai spice mix
+gingerbread spice ~5
+mixed spice ~5 : pudding spice
+adobo seasoning ~3 : goya adobo, adobo, adobo all purpose seasoning
+sazon ~4 : sazon goya, sazon completa, sazón
+jerk seasoning ~4 : jamaican jerk seasoning
+greek seasoning ~4 : cavender's
+barbecue rub ~4 : bbq rub, dry rub, dry seasoning rub, barbecue seasoning, bbq seasoning, meat rub
+blackening seasoning ~5 : blackening spice, blackened seasoning
+pizza seasoning ~5
+grill seasoning ~5 : grilling seasoning
+fish seasoning ~5
+za'atar ~4 : zaatar, zatar
+ras el hanout ~5
+berbere ~5
+baharat ~5
+dukkah ~5 : duqqa
+shawarma seasoning ~5 : shawarma spice
+tikka masala seasoning ~5
+biryani masala ~5
+sambar powder ~5
+rasam powder ~5
+panch phoron ~5
+shichimi togarashi ~5 : togarashi, shichimi
+gochugaru ~4 : korean chili flakes, korean red pepper flakes, korean chili powder
+tajin ~4 : tajín, chili lime seasoning
+msg ~4 : monosodium glutamate, accent seasoning, accent flavor enhancer, ajinomoto
+nutritional yeast ~3 : nooch, nutritional yeast flakes, savory yeast flakes | oz, jar, tbsp
+salt-free seasoning ~5 : mrs dash, mrs. dash, dash seasoning
+garlic and herb seasoning ~5 : garlic herb seasoning
+lemon herb seasoning ~5
+cinnamon sugar ~4
+vegeta ~5
+pickling spice ~5 : pickling spices
+mulling spices ~5 : mulling spice
+crab boil ~5 : crab boil seasoning, zatarain's crab boil, shrimp boil, seafood boil seasoning
+bouquet garni ~5
+seasoning ~4 : seasonings, seasoning mix
+spices ~4 : spice, spice blend
+
+# ── Bouillon ─────────────────────────────────────────────────────────────────────────────────
+@units jar, count, oz, tsp
+chicken bouillon ~2 : chicken bouillon cubes, chicken bouillon cube, chicken bouillon granules, chicken bouillon powder, chicken base, chicken stock powder, knorr chicken bouillon, chicken consomme powder
+beef bouillon ~3 : beef bouillon cubes, beef bouillon cube, beef bouillon granules, beef bouillon powder, beef base, beef stock powder
+vegetable bouillon ~4 : vegetable bouillon cube, vegetable bouillon cubes, vegetable base, veggie bouillon
+bouillon cubes ~3 : bouillon cube, bouillon, bouillon granules, bouillon powder, stock cubes, stock powder
+better than bouillon ~3 : better than bouillon chicken, bouillon base, soup base
+dashi powder ~5 : hondashi, instant dashi, dashi granules
+tomato bouillon ~5 : caldo de tomate, knorr tomato bouillon

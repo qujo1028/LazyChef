@@ -1,0 +1,339 @@
+# Produce: fresh fruit, vegetables, herbs, fresh garlic and ginger.
+# Format: name [~tier] [: alias, alias …] [| units]   (see scripts/build-ingredient-library.mjs)
+# Tiers: 1 staple most households buy, 2 very common, 3 common (default), 4 less common, 5 rare.
+
+# ── Fruit ────────────────────────────────────────────────────────────────────────────────────
+@units count, lb, oz
+@tier 3
+apples ~1 | count, lb, bag
+bananas ~1 | count, lb
+lemons ~1
+limes ~1
+oranges ~1 : navel oranges | count, lb, bag
+avocados ~1 : hass avocados
+strawberries ~1 | lb, oz, package, pt
+blueberries ~1 | oz, pt, package, cup
+raspberries ~2 | oz, pt, package
+blackberries ~2 | oz, pt, package
+grapes ~1 | lb, oz, bag
+red grapes ~2 : seedless red grapes | lb, oz, bag
+green grapes ~2 : seedless green grapes, white grapes | lb, oz, bag
+seedless grapes ~4 | lb, oz, bag
+black grapes ~4 | lb, oz, bag
+cotton candy grapes ~4 | lb, oz, bag
+concord grapes ~5 | lb, oz
+muscadine grapes ~5 | lb, oz
+pineapple ~2 | count
+mangoes ~2 : mango
+watermelon ~2 | count, lb
+seedless watermelon ~4 | count, lb
+cantaloupe ~2 : rockmelon | count
+honeydew melon ~3 : honeydew | count
+melon ~4 | count
+peaches ~2
+nectarines ~3
+plums ~3
+pears ~2
+bartlett pears ~4 : bartlett pear
+bosc pears ~4
+anjou pears ~4 : d'anjou pears
+asian pears ~4 : nashi pears
+apricots ~3
+cherries ~2 : sweet cherries, bing cherries | lb, oz, bag
+rainier cherries ~5 | lb, oz
+sour cherries ~5 : tart cherries
+kiwi ~2 : kiwifruit, kiwi fruit
+golden kiwi ~5
+clementines ~2 : cuties, halos | count, lb, bag
+mandarins ~3 : mandarin | count, lb, bag
+tangerines ~3
+satsumas ~4
+blood oranges ~4
+cara cara oranges ~4
+valencia oranges ~5
+grapefruit ~3 : grapefruits
+red grapefruit ~4 : ruby red grapefruit, pink grapefruit
+meyer lemons ~4
+key limes ~4
+pomegranate ~3 : pomegranates
+pomegranate seeds ~4 : pomegranate arils | oz, package, cup
+papaya ~4
+guava ~4 : guavas
+passion fruit ~4 : passionfruit
+dragon fruit ~4 : pitaya
+lychees ~4 : lychee, litchi
+starfruit ~5 : carambola
+persimmons ~4 : persimmon
+fuyu persimmons ~5
+kumquats ~5
+plantains ~3 : plantain
+green plantains ~4
+figs ~4 : fresh figs
+dates ~3 : pitted dates | oz, lb, package
+medjool dates ~3 | oz, lb, package
+coconut ~4 : whole coconut | count
+cranberries ~3 : fresh cranberries | oz, bag, lb
+rhubarb ~4 | lb, count, bunch
+gooseberries ~5 | oz, pt
+red currants ~5 | oz, pt
+mixed berries ~3 | oz, package
+honeycrisp apples ~2 : honeycrisp
+gala apples ~2 : gala apple, royal gala apples
+granny smith apples ~2 : granny smith apple, green apples
+fuji apples ~2 : fuji apple
+pink lady apples ~3 : pink lady apple, cripps pink apples
+red delicious apples ~3 : red delicious apple
+golden delicious apples ~4 : golden delicious apple, yellow apples
+mcintosh apples ~4 : mcintosh apple
+braeburn apples ~4 : braeburn apple
+cosmic crisp apples ~4 : cosmic crisp
+jazz apples ~5
+envy apples ~5
+ambrosia apples ~5
+jackfruit ~5 | count, lb
+durian ~5 | count, lb
+rambutan ~5 | lb, oz
+longan ~5 | lb, oz
+mangosteen ~5 | lb, oz
+cherimoya ~5 : custard apple
+tamarillo ~5
+yuzu ~5
+quince ~5
+feijoa ~5
+physalis ~5 : ground cherries, cape gooseberries
+breadfruit ~5
+
+# ── Onions, garlic, roots and tubers ─────────────────────────────────────────────────────────
+@units count, lb, oz
+onions ~1 | count, lb, bag
+yellow onions ~2 : brown onions | count, lb, bag
+red onions ~1 : purple onions | count, lb, bag
+white onions ~2 | count, lb, bag
+sweet onions ~2 : vidalia onions, sweet yellow onions, walla walla onions, maui onions | count, lb, bag
+shallots ~2 : shallot, banana shallots | count, lb, oz
+pearl onions ~4 | oz, bag, lb
+cipollini onions ~5 | oz, lb
+green onions ~1 : scallions, spring onions, salad onions | bunch, count
+leeks ~3 | count, bunch, lb
+ramps ~5 : wild leeks | bunch, oz
+garlic ~1 : garlic cloves, garlic bulb, whole garlic | head, clove, count
+garlic scapes ~5 | bunch, oz
+ginger ~2 : ginger root, gingerroot | oz, lb, count
+fresh turmeric ~5 : turmeric root | oz, count
+galangal ~5 | oz, count
+horseradish root ~5 | count, oz, lb
+potatoes ~1 | lb, bag, count
+russet potatoes ~2 : russet potato, baking potatoes, idaho potatoes | lb, bag, count
+yukon gold potatoes ~2 : yukon potatoes, gold potatoes, yellow potatoes | lb, bag, count
+red potatoes ~2 : red skin potatoes | lb, bag, count
+white potatoes ~4 | lb, bag, count
+fingerling potatoes ~3 | lb, bag, oz
+baby potatoes ~3 : new potatoes, creamer potatoes, petite potatoes | lb, bag, oz
+purple potatoes ~5 | lb, bag
+sweet potatoes ~1 : sweet potato | lb, count, bag
+yams ~4 | lb, count
+carrots ~1 | lb, bag, count, bunch
+baby carrots ~2 | bag, lb, oz
+rainbow carrots ~5 | bunch, lb
+celery ~1 : celery stalks, celery ribs, celery sticks | bunch, count
+celery hearts ~4 | package, count
+beets ~2 : beetroot | count, lb, bunch
+golden beets ~5 | count, lb, bunch
+radishes ~2 | bunch, count, lb
+daikon radish ~4 : daikon, mooli | count, lb
+watermelon radish ~5 | count, lb
+turnips ~3 | count, lb
+parsnips ~3 | lb, count
+rutabaga ~4 : swede | count, lb
+celery root ~4 : celeriac | count, lb
+kohlrabi ~5 | count, lb
+jicama ~4 | count, lb
+sunchokes ~5 : jerusalem artichokes | lb, oz
+cassava ~4 : yuca, yucca root, manioc | lb, count
+taro root ~5 : taro | lb, count
+malanga ~5 | lb, count
+lotus root ~5 | lb, count
+burdock root ~5 : gobo | count, lb
+
+# ── Vegetables ───────────────────────────────────────────────────────────────────────────────
+@units count, lb, oz
+tomatoes ~1 | count, lb
+roma tomatoes ~1 : plum tomatoes, italian tomatoes | count, lb
+cherry tomatoes ~1 | pt, oz, package
+grape tomatoes ~2 | pt, oz, package
+tomatoes on the vine ~3 : vine tomatoes, vine ripened tomatoes, tov tomatoes | count, lb
+heirloom tomatoes ~3 | count, lb
+beefsteak tomatoes ~4 : beefsteak tomato | count, lb
+green tomatoes ~5 | count, lb
+tomatillos ~3 | count, lb
+cucumbers ~1 | count, lb
+english cucumbers ~2 : seedless cucumbers, hothouse cucumbers, european cucumbers | count
+mini cucumbers ~3 : persian cucumbers, baby cucumbers, lebanese cucumbers | count, package, lb
+bell peppers ~1 : sweet peppers, peppers | count, lb
+red bell peppers ~1 : red peppers, red capsicum | count, lb
+green bell peppers ~1 : green peppers, green capsicum | count, lb
+yellow bell peppers ~2 : yellow peppers | count, lb
+orange bell peppers ~3 : orange peppers | count, lb
+mini sweet peppers ~3 : mini peppers, snacking peppers | bag, oz, lb
+jalapeños ~1 : jalapeno peppers, jalapenos, jalapeno chiles | count, lb, oz
+serrano peppers ~3 : serranos, serrano chiles | count, oz
+poblano peppers ~2 : poblanos, poblano chiles | count, lb
+anaheim peppers ~4 : anaheim chiles | count, lb
+hatch chiles ~5 : hatch peppers | count, lb
+habanero peppers ~3 : habaneros, habanero chili, habanero chiles | count, oz
+scotch bonnet peppers ~5 : scotch bonnet chili, scotch bonnets | count, oz
+fresno peppers ~4 : fresno chiles | count, oz
+thai chilies ~4 : thai chili, bird's eye chilies, birds eye chili, thai chili peppers | oz, count
+shishito peppers ~4 | oz, bag
+padron peppers ~5 | oz, bag
+banana peppers ~4 : banana pepper | count, oz
+cubanelle peppers ~5 : cubanelle pepper | count
+chili peppers ~3 : chile peppers, hot peppers, chiles, chillies | count, oz
+red chili peppers ~4 : red chiles, red chili pepper | count, oz
+green chili peppers ~4 : finger chilies, green chilies | count, oz
+broccoli ~1 : broccoli crowns | head, lb, count, oz
+broccoli florets ~3 : broccoli flowerets | oz, bag, lb
+broccolini ~3 : baby broccoli, tenderstem broccoli | bunch, oz
+broccoli rabe ~4 : rapini | bunch, lb
+chinese broccoli ~5 : gai lan, kai lan | bunch, lb
+cauliflower ~2 | head, count, lb
+cauliflower florets ~4 | oz, bag, lb
+romanesco ~5 | head, count
+cabbage ~2 : green cabbage | head, count, lb
+red cabbage ~2 : purple cabbage | head, count, lb
+napa cabbage ~3 : chinese cabbage, wombok | head, count, lb
+savoy cabbage ~4 | head, count
+bok choy ~3 : pak choi, bok choi | head, count, lb, bunch
+baby bok choy ~3 | count, lb, bag
+choy sum ~5 | bunch, lb
+water spinach ~5 : ong choy, morning glory | bunch, lb
+brussels sprouts ~2 | lb, oz, bag
+asparagus ~2 | bunch, lb
+white asparagus ~5 | bunch, lb
+green beans ~1 : string beans, snap beans | lb, oz, bag
+haricots verts ~4 : french green beans, french beans, fine beans | oz, lb, bag
+long beans ~5 : yardlong beans, chinese long beans | lb, bunch
+wax beans ~5 : yellow wax beans, yellow beans | lb, oz
+sugar snap peas ~3 : snap peas | oz, lb, bag
+snow peas ~3 : mangetout | oz, lb, bag
+peas ~3 : green peas, english peas, garden peas | lb, oz, cup
+pea shoots ~5 | oz, bag
+corn ~2 : corn on the cob, sweet corn, ears of corn, sweet corn on the cob | count, lb
+zucchini ~1 : courgette, green zucchini | count, lb
+yellow squash ~2 : summer squash, crookneck squash | count, lb
+butternut squash ~2 | count, lb
+acorn squash ~3 | count, lb
+spaghetti squash ~3 | count, lb
+delicata squash ~4 | count, lb
+kabocha squash ~4 : kabocha | count, lb
+squash ~4 | count, lb
+pumpkin ~3 : pumpkins, pie pumpkin, sugar pumpkin | count, lb
+eggplant ~2 : aubergine, globe eggplant | count, lb
+japanese eggplant ~4 : chinese eggplant | count, lb
+chayote ~5 : chayote squash | count, lb
+okra ~3 | lb, oz
+artichokes ~3 : globe artichokes | count
+fennel ~3 : fennel bulb, fennel bulbs | count, lb
+bitter melon ~5 : bitter gourd, karela | count, lb
+nopales ~5 : cactus paddles, nopalitos | lb, oz
+fiddleheads ~5 : fiddlehead ferns | oz, lb
+squash blossoms ~5 : zucchini flowers | count, oz
+bean sprouts ~3 : mung bean sprouts | oz, bag
+alfalfa sprouts ~4 | oz, package
+sprouts ~4 | oz, package
+
+# ── Lettuce and greens ───────────────────────────────────────────────────────────────────────
+@units bag, oz, head, count
+lettuce ~2 | head, count, bag
+romaine lettuce ~1 : romaine | head, count, bag
+romaine hearts ~2 : hearts of romaine | package, count
+iceberg lettuce ~2 : iceberg | head, count
+butter lettuce ~3 : bibb lettuce, boston lettuce, butterhead lettuce | head, count
+green leaf lettuce ~3 : leaf lettuce | head, count
+red leaf lettuce ~3 | head, count
+little gem lettuce ~5 : little gem | head, count, package
+spring mix ~2 : mixed greens, mesclun, mixed baby greens, salad greens, salad mix, baby greens | oz, package, bag
+spinach ~1 | oz, bag, bunch
+baby spinach ~1 | oz, bag, package
+arugula ~2 : rocket, roquette | oz, bag, bunch
+baby arugula ~3 | oz, bag, package
+kale ~2 : curly kale | bunch, oz, bag
+lacinato kale ~4 : tuscan kale, dinosaur kale, cavolo nero | bunch, oz
+baby kale ~4 | oz, package
+swiss chard ~3 : chard, rainbow chard, silverbeet | bunch, lb
+collard greens ~3 : collards | bunch, lb, bag
+mustard greens ~4 | bunch, lb
+turnip greens ~5 | bunch, lb
+dandelion greens ~5 | bunch
+beet greens ~5 | bunch
+watercress ~4 : cress | bunch, oz
+endive ~4 : belgian endive | count, head
+radicchio ~4 | head, count
+escarole ~5 | head, count
+frisee ~5 : curly endive | head, count
+mache ~5 : lamb's lettuce | oz, package
+mizuna ~5 | oz, bag
+microgreens ~4 | oz, package
+salad kit ~3 : salad kits, chopped salad kit | package, bag
+caesar salad kit ~4 | package, bag
+coleslaw mix ~2 : slaw mix, shredded cabbage, coleslaw | bag, oz
+broccoli slaw ~3 : broccoli coleslaw mix | bag, oz
+
+# ── Mushrooms ────────────────────────────────────────────────────────────────────────────────
+@units oz, lb, package
+mushrooms ~1 : white mushrooms, button mushrooms, white button mushrooms
+cremini mushrooms ~2 : baby bella mushrooms, baby bellas, crimini mushrooms, baby portobello mushrooms, brown mushrooms, chestnut mushrooms
+portobello mushrooms ~3 : portobello mushroom caps, portobellos, portabella mushrooms
+shiitake mushrooms ~3 : shiitakes
+oyster mushrooms ~4
+enoki mushrooms ~4 : enoki
+king oyster mushrooms ~4 : king trumpet mushrooms
+maitake mushrooms ~5 : hen of the woods
+chanterelle mushrooms ~5 : chanterelles
+morel mushrooms ~5 : morels
+lion's mane mushrooms ~5
+mixed mushrooms ~4 : wild mushrooms
+
+# ── Fresh herbs ──────────────────────────────────────────────────────────────────────────────
+@units bunch, oz, package
+cilantro ~1 : coriander leaves, fresh coriander, chinese parsley, coriander leaf
+parsley ~2 : curly parsley
+flat-leaf parsley ~2 : italian parsley, flat leaf parsley
+basil ~1 : sweet basil, basil leaves
+thai basil ~4
+mint ~2 : mint leaves, spearmint
+dill ~2
+chives ~2
+fresh rosemary ~2
+fresh thyme ~2
+fresh oregano ~3
+fresh sage ~3
+fresh tarragon ~4
+fresh marjoram ~5
+fresh bay leaves ~5
+lemongrass ~3 : lemon grass, lemongrass stalks | count, bunch, oz
+kaffir lime leaves ~4 : makrut lime leaves, lime leaves | oz, package
+curry leaves ~5 | oz, package
+chervil ~5
+lemon thyme ~5
+lemon balm ~5
+sorrel ~5
+shiso leaves ~5 : shiso, perilla leaves
+culantro ~5
+epazote ~5
+herbs ~4 : fresh herbs
+microherbs ~5 | oz, package
+
+# ── Prepared and cut produce ─────────────────────────────────────────────────────────────────
+@units package, oz, lb
+guacamole ~3 | oz, package
+pico de gallo ~3 : salsa fresca | oz, package
+hummus ~2 | oz, package
+cauliflower rice ~3 : riced cauliflower | bag, oz
+zucchini noodles ~4 : zoodles, spiralized zucchini | package, oz
+stir fry vegetables ~3 : stir-fry vegetable mix, stir fry mix | bag, oz
+fruit salad ~4 : cut fruit | package, oz
+fruit tray ~5 | package, count
+veggie tray ~4 : vegetable tray, crudites | package, count
+mirepoix ~5 | package, oz
+butternut squash cubes ~5 : cubed butternut squash | package, oz

@@ -1,0 +1,220 @@
+# Snacks: chips, crackers, nuts and seeds, dried fruit, candy, cookies, popcorn, bars, jerky.
+@units bag, oz, box, package
+@tier 3
+
+# ── Chips, crackers, salty snacks ────────────────────────────────────────────────────────────
+potato chips ~1 : chips, crisps, lay's, kettle chips, potato crisps | bag, oz
+tortilla chips ~1 : tostitos, corn tortilla chips, restaurant style tortilla chips, tortilla chip | bag, oz
+corn chips ~3 : fritos
+doritos ~2 : nacho cheese doritos, cool ranch doritos, plain doritos
+cheetos ~2 : cheese puffs, cheese curls, flamin hot cheetos
+pita chips ~3 : stacy's pita chips
+bagel chips ~4
+pretzels ~2 : pretzel twists, mini pretzels, pretzel sticks, pretzel rods, snyder's pretzels | bag, oz
+pretzel crisps ~4
+popcorn ~2 : popped popcorn, bagged popcorn, skinny pop, smartfood | bag, oz, box
+microwave popcorn ~2 : microwavable popcorn, popcorn bags | box, count, bag
+popcorn kernels ~3 : popping corn, unpopped popcorn | jar, bag, oz, lb
+kettle corn ~4
+caramel popcorn ~5 : caramel corn
+pringles ~3
+veggie straws ~4 : veggie chips
+plantain chips ~5
+sweet potato chips ~5
+rice crackers ~4 : senbei, rice snacks
+rice cakes ~3 : mini rice cakes, rice cake
+seaweed snacks ~3 : roasted seaweed, seaweed snack, gimme seaweed, roasted seaweed snacks
+pork rinds ~4 : chicharrones, chicharron, cracklins
+crackers ~1 | box, oz, package
+goldfish crackers ~2 : goldfish
+cheez-its ~2 : cheez its, cheez it, cheese crackers
+saltine crackers ~2 : saltines, soda crackers, premium saltines
+ritz crackers ~2 : ritz, butter crackers, buttery round crackers
+graham crackers ~2 : graham cracker squares, honey graham crackers | box, package
+wheat thins ~3
+triscuits ~3 : triscuit
+club crackers ~4
+water crackers ~4 : table water crackers, carr's crackers
+oyster crackers ~4
+animal crackers ~3
+peanut butter crackers ~4 : lance crackers, sandwich crackers, toast chee
+whole wheat crackers ~5 : wheat crackers
+nut thins ~5 : almond crackers
+crispbread ~5 : wasa, rye crispbread, knackebrod
+flatbread crackers ~5 : lavash crackers
+papadums ~5 : papad, poppadoms, papadam
+nacho cheese ~4 : nacho cheese sauce, cheese sauce | jar, can, oz
+cheese dip ~4 : queso, queso dip, salsa con queso, white cheese dip | jar, oz
+bean dip ~5 | can, jar, oz
+snack mix ~3 : chex mix, party mix, gardetto's
+trail mix ~2
+wasabi peas ~5
+corn nuts ~5
+cheese crisps ~5 : parmesan crisps, whisps
+
+# ── Nuts and seeds ───────────────────────────────────────────────────────────────────────────
+@units oz, lb, bag, cup
+mixed nuts ~2 : nuts, deluxe mixed nuts | oz, can, jar, bag
+almonds ~1 : whole almonds, raw almonds, roasted almonds
+sliced almonds ~3
+slivered almonds ~3 : blanched slivered almonds
+blanched almonds ~5
+marcona almonds ~5
+walnuts ~2 : walnut halves, walnut pieces, english walnuts
+black walnuts ~5
+pecans ~2 : pecan halves, pecan pieces
+candied pecans ~5 : glazed pecans, praline pecans
+candied walnuts ~5 : glazed walnuts
+cashews ~2 : roasted cashews, salted roasted cashews, cashew halves, cashew pieces, salted cashews
+peanuts ~2 : roasted peanuts, dry roasted peanuts, salted peanuts, unsalted peanuts, cocktail peanuts, peanuts in shell
+honey roasted peanuts ~4
+pistachios ~2 : pistachio nuts, unsalted pistachios, shelled pistachios, roasted pistachios
+macadamia nuts ~3 : macadamias
+hazelnuts ~3 : filberts
+pine nuts ~3 : pignoli, pinon nuts
+brazil nuts ~4
+chestnuts ~4 : roasted chestnuts
+sunflower seeds ~3 : sunflower kernels, dry roasted salted sunflower seeds, roasted salted sunflower seeds, shelled sunflower seeds
+pumpkin seeds ~3 : pepitas, roasted pumpkin seeds, roasted unsalted pumpkin seeds
+chia seeds ~3 : chia | oz, bag, tbsp
+flaxseed ~4 : flax seeds, whole flaxseed, flaxseeds | oz, bag, tbsp
+hemp seeds ~4 : hemp hearts, shelled hemp seeds | oz, bag, tbsp
+soy nuts ~5 : roasted soybeans
+tiger nuts ~5
+candied nuts ~5 : glazed nuts, candied almonds
+
+# ── Dried fruit ──────────────────────────────────────────────────────────────────────────────
+@units oz, bag, box, cup
+raisins ~1 : seedless raisins, raisin box, sun-maid raisins
+golden raisins ~4 : sultanas, sultana raisins
+currants ~5 : dried currants, zante currants
+dried cranberries ~2 : craisins, dried sweetened cranberries, sweetened dried cranberries
+dried apricots ~3
+dried mango ~3 : dried mango slices
+prunes ~3 : dried plums, pitted prunes
+dried cherries ~4 : dried tart cherries
+dried figs ~4
+dried blueberries ~4
+dried apples ~4 : apple chips, dried apple rings
+banana chips ~4 : dried banana chips
+dried pineapple ~5
+dried strawberries ~5
+dried peaches ~5
+dried pears ~5
+dried fruit ~3 : dried mixed fruit, mixed dried fruit
+freeze-dried strawberries ~4 : freeze dried strawberries
+freeze-dried fruit ~4 : freeze dried fruit
+goji berries ~5 : wolfberries
+dried barberries ~5 : barberries
+coconut chips ~5 : toasted coconut chips
+fruit leather ~4 : fruit roll-ups, fruit rollups, fruit by the foot | box, package
+fruit snacks ~2 : gummy fruit snacks, welch's fruit snacks, fruit gummies | box, package
+
+# ── Cookies and sweet snacks ─────────────────────────────────────────────────────────────────
+@units package, box, oz
+cookies ~1
+chocolate chip cookies ~2 : chips ahoy
+oreos ~2 : oreo cookies, oreo, chocolate sandwich cookies, double stuf oreos
+golden oreos ~5 : vanilla sandwich cookies
+nutter butters ~4 : nutter butter cookies, peanut butter sandwich cookies
+sugar cookies ~4
+oatmeal cookies ~4 : oatmeal raisin cookies
+peanut butter cookies ~5
+shortbread cookies ~4 : shortbread, walkers shortbread
+vanilla wafers ~3 : nilla wafers, vanilla wafer cookies
+ginger snaps ~4 : gingersnap cookies, gingersnaps
+fig newtons ~4 : fig bars
+biscotti ~4
+ladyfingers ~4 : savoiardi, lady fingers
+wafer cookies ~5 : wafers, chocolate wafer cookies, wafer bars
+digestive biscuits ~5 : digestives, chocolate digestive biscuits
+butter cookies ~5 : danish butter cookies
+amaretti cookies ~5 : amaretti
+macarons ~5
+macaroons ~5 : coconut macaroons
+graham cracker sticks ~5
+teddy grahams ~4
+granola bars ~2 : granola bar, nature valley bars, chewy granola bars | box, count
+protein bars ~2 : protein bar, quest bars, rxbar, rx bars, kind protein bars | box, count
+nut bars ~4 : kind bars, kind bar, fruit and nut bars | box, count
+clif bars ~4 : clif bar, energy bars, energy bar | box, count
+larabars ~5 : larabar | box, count
+cereal bars ~4 : nutri-grain bars, breakfast bars, nutrigrain bars | box, count
+rice krispies treats ~3 : rice krispie treats, rice crispy treats | box, count
+pop-tarts ~2 : pop tarts, poptarts, toaster pastries, toaster pastry | box, count
+snack cakes ~4 : little debbie, little debbie snacks, twinkies, zebra cakes, oatmeal creme pies, swiss rolls, honey buns | box, count
+brownie bites ~5 | package, count
+muffin bites ~5 | package
+pudding cups ~3 : snack pack, pudding snack cups | package, count
+jello cups ~4 : gelatin cups, jell-o cups | package, count
+ice cream cones ~4 : ice cream cone, waffle cones, waffle cone, sugar cones, cake cones | box, package
+
+# ── Candy and chocolate ──────────────────────────────────────────────────────────────────────
+@units bag, oz, package
+chocolate bars ~2 | count, oz, package
+dark chocolate bar ~4 : dark chocolate, dark chocolate bars | count, oz
+milk chocolate bar ~4 : milk chocolate, milk chocolate bars | count, oz
+candy ~2 : candies, sweets
+candy bars ~3 : candy bar | count, package
+gummy bears ~3 : gummies, gummy candy, haribo, gummi bears
+gummy worms ~4 : gummi worms, sour gummy worms
+sour patch kids ~4 : sour candy
+swedish fish ~5
+skittles ~4
+starburst ~4 : starburst candies
+m&m's ~3 : m&ms, m and ms, mms, candy coated chocolate pieces, mini m&ms, peanut m&ms
+reese's peanut butter cups ~3 : peanut butter cups, reese's cups, reeses, reese's, miniature peanut butter cups
+reese's pieces ~5 : reeses pieces
+snickers ~4 : snickers bar, snickers bars
+kit kat ~4 : kit kats, kitkat
+twix ~4
+hershey's kisses ~4 : hersheys kisses, hershey kisses, hersheys kisses brand milk chocolates
+hershey bar ~4 : hershey's chocolate bar, hershey's bar
+milky way ~5 : milky way bar
+butterfinger ~5 : butterfinger candy bar
+heath bar ~5 : toffee bar candy
+almond joy ~5 : almond joy bar
+mounds ~5 : mounds bar
+3 musketeers ~5 : three musketeers
+york peppermint patties ~5 : peppermint patties, york patties
+andes mints ~5
+junior mints ~5
+tootsie rolls ~5 : tootsie roll
+jelly beans ~4
+licorice ~4 : twizzlers, red licorice, licorice twists, black licorice, red vines
+lollipops ~4 : suckers, dum dums
+hard candy ~4 : jolly ranchers, jolly rancher
+breath mints ~3 : altoids, tic tacs, mints tin
+peppermint candy ~5 : starlight mints, peppermints
+gum ~3 : chewing gum, sugar free gum, bubble gum | package, count
+caramels ~4 : caramel candy, caramel candies, caramel, werther's
+toffee ~5 : english toffee
+fudge ~5
+truffles ~5 : chocolate truffles, lindt truffles, lindor
+marshmallow peeps ~5 : peeps, marshmallow chicks, marshmallow bunnies
+candy corn ~5
+candy canes ~5 : candy cane
+cotton candy ~5
+chocolate covered raisins ~5 : raisinets
+chocolate covered almonds ~5
+chocolate covered pretzels ~5 : yogurt covered pretzels
+chocolate covered espresso beans ~5 : chocolate covered coffee beans
+malted milk balls ~5 : whoppers
+nerds ~5 : nerds candy
+airheads ~5
+laffy taffy ~5 : taffy, salt water taffy
+chocolate eggs ~5 : cadbury eggs, cadbury mini eggs
+spice drops ~5 : gumdrops, gum drops
+jujubes ~5 : jujyfruits
+sour candy belts ~5 : sour belts
+nougat ~5
+halva ~5 : halvah
+
+# ── Jerky and meat snacks ────────────────────────────────────────────────────────────────────
+@units bag, oz, package
+beef jerky ~2 : jerky, jack link's
+turkey jerky ~5
+meat sticks ~4 : slim jims, slim jim, beef sticks, meat snack sticks
+biltong ~5
+salami snacks ~5 : salami sticks
+cheese and crackers ~5 : cheese and cracker packs, lunchables

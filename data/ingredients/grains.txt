@@ -1,0 +1,200 @@
+# Grains & pasta: rice, pasta, noodles, oats, quinoa, couscous, cereal, dried beans and lentils, boxed sides.
+@units lb, oz, box, bag, cup
+@tier 3
+
+# ── Rice ─────────────────────────────────────────────────────────────────────────────────────
+@units lb, bag, cup, kg
+rice ~1
+white rice ~1 : long grain white rice, long grain rice, enriched white rice
+brown rice ~2 : long grain brown rice, whole grain brown rice
+jasmine rice ~1 : thai jasmine rice
+basmati rice ~2 : indian basmati rice
+arborio rice ~3 : risotto rice, arborrio rice, carnaroli rice
+sushi rice ~3 : calrose rice, japanese rice
+short grain rice ~4
+medium grain rice ~4
+wild rice ~3 : wild rice blend
+black rice ~5 : forbidden rice
+red rice ~5
+sticky rice ~4 : glutinous rice, sweet rice
+parboiled rice ~5 : converted rice, uncle ben's rice
+instant rice ~3 : minute rice, instant white rice, quick cooking rice | box, oz
+instant brown rice ~5 | box, oz
+microwave rice ~3 : ready rice, rice cups, rice pouch, microwaveable rice, 90 second rice | package, count, oz
+spanish rice ~4 : mexican rice, spanish rice mix | box, package
+yellow rice ~4 : saffron rice, vigo yellow rice | box, package
+rice pilaf ~4 : rice pilaf mix, rice-a-roni, rice a roni, rice sides | box, package
+
+# ── Pasta ────────────────────────────────────────────────────────────────────────────────────
+@units box, lb, oz
+pasta ~1 : dry pasta, dried pasta, noodles
+spaghetti ~1 : spaghetti noodles, spaghetti pasta
+penne ~1 : penne pasta, penne rigate
+elbow macaroni ~2 : macaroni, elbow pasta, elbows, elbow noodles, macaroni noodles
+rotini ~2 : rotini pasta, corkscrew pasta, spirals
+fusilli ~3 : fusilli pasta
+farfalle ~2 : bow tie pasta, bowtie pasta, bow ties, farfalle pasta
+rigatoni ~2 : rigatoni pasta
+linguine ~2 : linguini, linguine pasta
+fettuccine ~2 : fettuccini, fettuccine pasta, fettucine
+angel hair pasta ~2 : angel hair, capellini
+thin spaghetti ~4 : spaghettini
+lasagna noodles ~2 : lasagne noodles, lasagna sheets, lasagna pasta, lasagne sheets, lasagna
+oven-ready lasagna noodles ~4 : oven ready lasagne noodles, no boil lasagna noodles
+ziti ~3
+orzo ~2 : risoni, orzo pasta
+pasta shells ~3 : shells, medium shells, conchiglie, shell pasta, small shells
+jumbo pasta shells ~4 : jumbo shells, stuffing shells
+ditalini ~4
+orecchiette ~4
+pappardelle ~4
+tagliatelle ~4
+bucatini ~4
+gemelli ~4
+cavatappi ~4 : cellentani
+cavatelli ~5
+campanelle ~5
+radiatori ~5
+mostaccioli ~5
+manicotti ~4 : manicotti shells
+cannelloni ~5
+vermicelli ~4 : vermicelli pasta
+pastina ~5 : stelline, acini de pepe
+alphabet pasta ~5
+tortellini ~3 : refrigerated tortellini | package, oz
+cheese tortellini ~3 : refrigerated cheese tortellini, dried cheese tortellini | package, oz
+ravioli ~3 : cheese ravioli, refrigerated ravioli | package, oz
+gnocchi ~3 : potato gnocchi | package, lb
+fresh pasta ~4 : refrigerated pasta | package, oz
+whole wheat pasta ~3 : whole grain pasta, whole wheat spaghetti, whole wheat penne
+gluten-free pasta ~4 : gluten free pasta, gf pasta, rice pasta, brown rice pasta
+chickpea pasta ~4 : banza, chickpea spaghetti, chickpea penne, chickpea rotini
+lentil pasta ~5 : red lentil pasta
+protein pasta ~5 : barilla protein plus
+tricolor pasta ~5 : tri-color rotini, veggie pasta
+
+# ── Noodles ──────────────────────────────────────────────────────────────────────────────────
+@units package, oz, lb
+egg noodles ~2 : wide egg noodles, extra wide egg noodles, egg noodle | package, bag, oz
+ramen noodles ~2 : ramen, instant ramen, instant noodles, top ramen, maruchan, ramen packets | package, count, box
+cup noodles ~4 : cup of noodles, cup noodle, noodle cups | count, package
+rice noodles ~3 : pad thai noodles, rice stick noodles, pho noodles, rice sticks
+rice vermicelli ~4 : vermicelli rice noodles, bun noodles
+udon noodles ~3 : udon
+soba noodles ~3 : soba, buckwheat noodles
+lo mein noodles ~3 : chinese egg noodles, lo mein
+chow mein noodles ~4 : crispy chow mein noodles, fried noodles
+glass noodles ~4 : cellophane noodles, mung bean noodles, bean thread noodles, sweet potato noodles, japchae noodles, sweet potato vermicelli
+shirataki noodles ~5 : konjac noodles, miracle noodles, shirataki pasta
+yakisoba noodles ~5 : yakisoba
+hokkien noodles ~5
+somen noodles ~5 : somen
+kelp noodles ~5
+
+# ── Boxed sides and meals ────────────────────────────────────────────────────────────────────
+@units box, oz, package
+mac and cheese ~1 : macaroni and cheese, boxed mac and cheese, kraft mac and cheese, kraft dinner, box mac and cheese, mac n cheese
+hamburger helper ~4
+pasta sides ~5 : knorr pasta sides
+instant mashed potatoes ~3 : instant potatoes, potato flakes, instant potatoes flakes, idahoan
+scalloped potatoes mix ~5 : boxed scalloped potatoes, au gratin potatoes
+stuffing mix ~3 : stove top, stuffing, stove top stuffing, boxed stuffing
+couscous ~2 : instant couscous, dry couscous
+pearl couscous ~3 : israeli couscous, dry israeli couscous
+whole wheat couscous ~5
+taco kit ~5 : taco dinner kit, old el paso kit
+
+# ── Whole grains and hot cereal ──────────────────────────────────────────────────────────────
+@units lb, oz, bag, cup
+quinoa ~2 : white quinoa
+red quinoa ~5
+black quinoa ~5
+tricolor quinoa ~5 : rainbow quinoa
+oats ~1 : rolled oats, old-fashioned oats, old fashioned oats, oatmeal, quaker oats | oz, lb, cup, box
+quick oats ~3 : quick cooking oats, quick-cooking oats, 1 minute oats | oz, lb, cup, box
+steel cut oats ~3 : irish oats, steel-cut oats | oz, lb, cup
+instant oatmeal ~2 : oatmeal packets, instant oatmeal packets, flavored oatmeal | box, package, count
+overnight oats ~5 | count, package
+grits ~3 : quick grits, quick cooking grits, instant grits, corn grits, hominy grits
+polenta ~4 : dry polenta, instant polenta
+prepared polenta ~5 : polenta tube | package
+cream of wheat ~4 : farina | box, oz
+cream of rice ~5 | box
+barley ~3 : pearl barley, pearled barley
+farro ~4
+bulgur ~4 : bulgur wheat, bulghur, burghul
+millet ~5
+freekeh ~5
+buckwheat ~5 : buckwheat groats, kasha
+amaranth ~5
+teff ~5
+spelt ~5 : spelt berries
+wheat berries ~5 : wheatberries
+kamut ~5
+sorghum ~5
+grain blend ~5 : ancient grains, grain medley
+
+# ── Cereal ───────────────────────────────────────────────────────────────────────────────────
+@units box, oz
+cereal ~1 : breakfast cereal, cold cereal
+cheerios ~2 : honey nut cheerios, multigrain cheerios
+frosted flakes ~2 : frosties
+corn flakes ~2 : cornflakes
+raisin bran ~3
+rice krispies ~3 : rice krispies cereal, crisp rice cereal, rice crispies
+cinnamon toast crunch ~2 : cinnamon toast crunch cereal
+lucky charms ~3 : lucky charms cereal
+froot loops ~3 : froot loops cereal, fruit loops
+cap'n crunch ~3 : captain crunch, capn crunch, crunch berries
+honey bunches of oats ~3
+special k ~4
+life cereal ~4
+cocoa puffs ~4 : cocoa puffs cereal
+cocoa pebbles ~4 : cocoa pebbles cereal
+fruity pebbles ~4 : fruity pebbles cereal
+cocoa krispies ~5 : cocoa krispies cereal
+chex cereal ~4 : rice chex, corn chex, wheat chex, chex, wheat chex cereal
+kix ~5
+golden grahams ~4
+apple jacks ~4
+frosted mini wheats ~3 : mini wheats, mini-wheats
+shredded wheat ~4 : shredded wheat cereal
+grape nuts ~4 : grape nuts cereal
+bran flakes ~4
+all bran ~5 : all bran cereal, all-bran
+puffed rice ~5 : puffed rice cereal
+reese's puffs ~4 : reeses puffs
+trix ~5
+wheaties ~5
+kashi cereal ~5 : kashi go
+granola ~2 | oz, bag, cup
+muesli ~4 | oz, bag, cup
+
+# ── Dried beans and lentils ──────────────────────────────────────────────────────────────────
+@units lb, bag, oz, cup
+dried beans ~4 : dry beans, bagged beans
+dried black beans ~3 : dry black beans
+dried pinto beans ~3 : dry pinto beans
+dried kidney beans ~4 : dried red kidney beans
+dried chickpeas ~4 : dried garbanzo beans, dry chickpeas
+dried navy beans ~4
+dried great northern beans ~4
+dried white beans ~4 : dried cannellini beans
+dried lima beans ~5 : dried baby lima beans
+dried black-eyed peas ~4 : dried blackeyed peas
+dried split peas ~4 : split peas, green split peas
+yellow split peas ~4
+lentils ~2 : dry lentils, dried lentils
+red lentils ~3 : masoor dal, split red lentils
+green lentils ~4 : french lentils, puy lentils, french green lentils, dried green lentils
+brown lentils ~4 : dried brown lentils
+black lentils ~5 : beluga lentils, dried black lentils
+chana dal ~5 : split chickpeas, bengal gram
+moong dal ~5 : split mung beans, yellow moong dal
+urad dal ~5 : black gram, split urad dal
+toor dal ~5 : split pigeon peas, arhar dal, tuvar dal
+mung beans ~5 : dried mung beans
+adzuki beans ~5 : azuki beans
+dried fava beans ~5
+dried soybeans ~5
+15 bean soup mix ~5 : bean soup mix

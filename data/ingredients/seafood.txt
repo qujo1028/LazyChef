@@ -1,0 +1,71 @@
+# Seafood: fresh and smoked fish and shellfish (canned fish lives in canned.txt, breaded frozen in frozen.txt).
+@units lb, oz, count
+@tier 3
+salmon ~1 : salmon fillets, salmon fillet, atlantic salmon, fresh salmon | lb, oz, count
+sockeye salmon ~4 : wild salmon, red salmon | lb, oz
+coho salmon ~5 | lb, oz
+king salmon ~5 : chinook salmon | lb, oz
+salmon steaks ~5 : salmon steak | lb, count
+smoked salmon ~2 : lox, nova lox, cold smoked salmon | oz, package
+shrimp ~1 : prawns, raw shrimp, peeled shrimp, deveined shrimp | lb, oz, bag
+cooked shrimp ~3 : cocktail shrimp, shrimp cocktail | lb, oz, bag
+jumbo shrimp ~3 : colossal shrimp | lb, bag
+tiger shrimp ~4 : tiger prawns | lb, bag
+baby shrimp ~4 : salad shrimp, bay shrimp | lb, oz, bag
+tilapia ~2 : tilapia fillets | lb, count, bag
+cod ~2 : cod fillets, atlantic cod, cod loins | lb, count
+tuna steaks ~3 : ahi tuna, ahi tuna steak, yellowfin tuna, fresh tuna, sushi grade tuna, tuna steak | lb, count
+halibut ~3 : halibut fillets, halibut steaks | lb, count
+haddock ~4 : haddock fillets | lb, count
+mahi mahi ~3 : mahi mahi fillets, mahi, dorado | lb, count
+swordfish ~4 : swordfish steaks | lb, count
+catfish ~3 : catfish fillets, farm raised catfish fillets | lb, count
+trout ~3 : rainbow trout, trout fillets, rainbow trout fillets, steelhead trout | lb, count
+sea bass ~3 : seabass, sea bass fillets, seabass fillets, chilean sea bass, chilean seabass, black bass, striped bass | lb, count
+branzino ~4 : european sea bass, european seabass, bronzino | lb, count
+red snapper ~4 : snapper, snapper fillets, red snapper fillets | lb, count
+grouper ~4 : grouper fillets | lb, count
+flounder ~4 : flounder fillets, fluke | lb, count
+sole ~4 : sole fillets, dover sole, lemon sole | lb, count
+pollock ~4 : alaska pollock | lb, count
+whitefish ~4 : whitefish fillets, white fish, white fish fillets | lb, count
+arctic char ~5 | lb, count
+mackerel ~4 : mackerel fillets | lb, count
+swai ~5 : pangasius, basa | lb, count
+perch ~5 | lb, count
+walleye ~5 | lb, count
+rockfish ~5 : pacific rockfish | lb, count
+barramundi ~5 | lb, count
+monkfish ~5 | lb, count
+fresh sardines ~5 | lb, count
+fish fillets ~3 | lb, count, bag
+fish ~3 | lb, count
+scallops ~2 : sea scallops, dry scallops | lb, oz
+bay scallops ~4 | lb, oz
+crab ~3 : crabs | lb, count
+crab meat ~3 : crabmeat, lump crab meat, lump crabmeat, jumbo lump crab | oz, lb, can
+crab legs ~3 : snow crab legs, king crab legs, snow crab clusters | lb
+dungeness crab ~5 | count, lb
+soft shell crab ~5 : soft shell crabs | count
+lobster ~3 : whole lobster, live lobster | count, lb
+lobster tails ~3 : lobster tail | count, lb
+lobster meat ~5 | oz, lb
+mussels ~3 : blue mussels | lb, bag
+clams ~3 : littleneck clams, manila clams, steamer clams | lb, count, bag
+oysters ~3 : shucked oysters, fresh oysters | count, lb
+squid ~4 : calamari, squid tubes, calamari rings | lb, oz
+octopus ~4 : baby octopus | lb
+crawfish ~4 : crayfish, crawdads, crawfish tails | lb
+langostino ~5 : langostino tails, langoustines | lb, oz
+imitation crab ~3 : surimi, crab sticks, krab, imitation crab meat | oz, package
+smoked trout ~4 | oz, package
+smoked whitefish ~5 | oz, package
+smoked mackerel ~5 | oz, package
+pickled herring ~5 : herring in wine sauce | jar, oz
+herring ~5 : herring fillets | lb, oz
+caviar ~5 | oz, jar
+salmon roe ~5 : ikura, salmon caviar | oz, jar
+eel ~5 : unagi | lb, oz, package
+poke ~5 : ahi poke | lb, oz
+sushi ~4 : sushi rolls | package, count
+seafood mix ~5 : mixed seafood, frutti di mare | lb, bag

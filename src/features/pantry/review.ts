@@ -35,6 +35,11 @@ export function draftFromResolved(item: ResolvedItem, key: string): ReviewDraft 
   }
 }
 
+/** Drafts for one preview; `batch` keeps keys unique across previews. */
+export function draftsFromResolved(items: readonly ResolvedItem[], batch: string | number): ReviewDraft[] {
+  return items.map((item, index) => draftFromResolved(item, `${batch}-${index}`))
+}
+
 export function formatQuantityInput(quantity: number | null): string {
   return quantity === null ? "" : String(Math.round(quantity * 1000) / 1000)
 }

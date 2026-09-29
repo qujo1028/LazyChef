@@ -1,0 +1,153 @@
+# Fixes for Spoonacular rows (data/spoonacular/ingredients-with-possible-units.csv) that the curated
+# lists don't name and the build files wrongly. Names are Spoonacular's, exactly as in the CSV.
+#   name => category        file the row under this category
+#   name -> curated name    fold the row into that entry (its id is kept; its name becomes an alias)
+#   name ~tier              set the tier (combinable: "name => spices ~5")
+# Review with: node scripts/build-ingredient-library.mjs --list other   (or any category, or "merged")
+
+# ── Same thing as a curated entry, under another name ────────────────────────────────────────
+cream -> heavy cream
+sliced chicken breast -> chicken deli meat
+chicken breast meat -> chicken breast
+boneless skin on chicken breast -> chicken breast
+boneless skin on chicken breast halves -> chicken breast
+bone in chicken breast halves -> bone-in chicken breast
+bone in skin on chicken breast halves -> bone-in chicken breast
+bone in skinless chicken thighs -> bone-in chicken thighs
+bone in turkey breast -> turkey breast
+bone in skinless turkey breast -> turkey breast
+bone in skin on turkey breast -> turkey breast
+boneless turkey breast -> turkey breast
+boneless skinless turkey breast -> turkey breast
+boneless skin on turkey breast -> turkey breast
+80 percent lean ground beef -> ground chuck
+85 percent lean ground beef -> lean ground beef
+90 percent lean ground beef -> lean ground beef
+95 percent lean ground beef -> lean ground beef
+93 percent lean ground turkey -> ground turkey
+carbiquick -> baking mix
+evaporated cane juice -> sugar
+hibiscus -> dried hibiscus
+mangold -> swiss chard
+walla walla -> sweet onions
+
+# ── Everyday rows no curated entry names: rank them like staples in autocomplete ─────────────
+lemon juice ~2
+lime juice ~3
+coffee ~2
+orange juice ~2
+apple juice ~3
+
+# ── Produce: fruit, vegetables and leaves the rules don't know ───────────────────────────────
+aji amarillo => produce
+amla => produce
+betel leaves => produce
+black currants => produce
+black nightshade => produce
+chickpea leaves => produce
+cluster bean => produce
+elderflower => produce
+falsa => produce
+flacourtia => produce
+fresh cayenne pepper => produce
+fresh fenugreek leaves => produce
+ginger juice => produce
+ginseng root => produce
+katuk => produce
+lambsquarters => produce
+langsat => produce
+limonia => produce
+lollo rosso => produce
+loquat => produce
+mitsuba => produce
+neem leaves => produce
+palmyra => produce
+pawpaw => produce
+pointed pepper => produce
+ramson => produce
+rosehips => produce
+runner beans => produce
+sunflower shoots => produce
+sword beans => produce
+tinda => produce
+wax chilies => produce
+winged bean => produce
+
+# ── Meat and seafood ─────────────────────────────────────────────────────────────────────────
+foie gras => meat
+liver cheese => meat
+tengra => seafood
+
+# ── Dairy ────────────────────────────────────────────────────────────────────────────────────
+nabulsi => dairy
+
+# ── Frozen ───────────────────────────────────────────────────────────────────────────────────
+veggie crumbles => frozen
+veggie sausage patties => frozen
+
+# ── Grains ───────────────────────────────────────────────────────────────────────────────────
+fresine => grains
+legumes => grains
+pasta salad mix => grains
+ready to serve asian fried rice => grains
+soybeans => grains
+
+# ── Baking ───────────────────────────────────────────────────────────────────────────────────
+chia egg => baking ~5
+chocolate glaze => baking
+clear glaze => baking
+creme de menthe baking pieces => baking
+egg replacer => baking
+ener g egg replacer => baking
+ez sweetz => baking
+fiori di sicilia => baking
+flax egg => baking ~5
+glucose syrup => baking
+mincemeat => baking
+minute tapioca => baking
+peppermint crunch => baking
+quick cooking tapioca => baking
+red glaze => baking
+sago => baking
+soy lecithin granules => baking
+tapioca => baking
+whipped cream stabilizer => baking
+yeast water => baking
+
+# ── Canned and jarred ────────────────────────────────────────────────────────────────────────
+ackee => canned
+brine => canned
+chipotle chile puree => canned
+guava shells => canned
+mango pulp => canned
+sprats => canned
+sweet potato puree => canned
+
+# ── Oils, fats and condiments ────────────────────────────────────────────────────────────────
+spice paste => condiments
+turmeric paste => condiments
+chicken fat => condiments
+chicken schmaltz => condiments
+fat of choice => condiments ~5
+goose fat => condiments
+schmaltz => condiments
+turkey fat => condiments
+
+# ── Spices ───────────────────────────────────────────────────────────────────────────────────
+alum => spices
+
+# ── Snacks ───────────────────────────────────────────────────────────────────────────────────
+cheez whiz => snacks
+tri color tortilla chipps => snacks
+
+# ── Drinks ───────────────────────────────────────────────────────────────────────────────────
+falernum syrup => beverages
+guinness => beverages
+orgeat syrup => beverages
+punt e mes => beverages
+simple syrup => beverages
+southern comfort => beverages
+tennessee honey => beverages
+
+# ── Other: meat substitutes that aren't sold frozen ──────────────────────────────────────────
+vegetarian chicken deli slices => other

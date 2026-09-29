@@ -1,0 +1,238 @@
+# Baking: flour, sugar, sweeteners, leaveners, yeast, cocoa, chocolate chips, extracts, starches, mixes.
+@units lb, oz, cup, bag, g
+@tier 3
+
+# ── Flour and meal ───────────────────────────────────────────────────────────────────────────
+@units lb, cup, kg, g
+all-purpose flour ~1 : flour, ap flour, all purpose flour, plain flour, white flour, unbleached all purpose flour, unbleached flour, bleached flour
+bread flour ~2 : strong flour, high gluten flour
+whole wheat flour ~2 : wholemeal flour, whole grain flour
+white whole wheat flour ~4
+whole wheat pastry flour ~5
+cake flour ~3
+pastry flour ~4
+self-rising flour ~3 : self raising flour
+00 flour ~4 : tipo 00 flour, pizza flour, doppio zero flour
+almond flour ~2 : blanched almond flour, almond meal flour
+almond meal ~4
+coconut flour ~3
+oat flour ~4
+rice flour ~4 : white rice flour
+brown rice flour ~5
+sweet rice flour ~5 : glutinous rice flour, mochiko
+gluten-free flour ~3 : gluten free all purpose flour, gluten free flour mix, gluten free flour, gf flour, 1 to 1 flour, cup4cup
+chickpea flour ~4 : besan, gram flour, garbanzo bean flour
+cassava flour ~5
+tapioca flour ~4 : tapioca starch
+buckwheat flour ~5
+rye flour ~5
+spelt flour ~5
+semolina ~4 : semolina flour, durum semolina, durum flour
+atta flour ~5 : atta, chapati flour, whole wheat atta
+wondra flour ~5 : instant flour
+masa harina ~3 : masa, corn masa flour, maseca, masa flour, instant corn masa
+masarepa ~5 : harina pan, pan flour, precooked corn meal
+cornmeal ~2 : yellow cornmeal, corn meal, fine cornmeal, stone ground cornmeal
+white cornmeal ~5
+corn flour ~5
+vital wheat gluten ~5 : wheat gluten
+wheat germ ~5
+flaxseed meal ~5 : ground flaxseed, ground flax, flax meal, milled flaxseed
+psyllium husk ~5 : psyllium husks, psyllium husk powder
+
+# ── Sugar and sweeteners ─────────────────────────────────────────────────────────────────────
+@units lb, cup, bag, kg, g
+sugar ~1 : granulated sugar, white sugar, cane sugar, table sugar, pure cane sugar
+brown sugar ~1 : light brown sugar, golden brown sugar, packed brown sugar
+dark brown sugar ~3
+powdered sugar ~1 : confectioners sugar, confectioners' sugar, icing sugar, 10x sugar
+raw sugar ~4 : turbinado sugar, sugar in the raw, demerara sugar
+coconut sugar ~4 : coconut palm sugar
+superfine sugar ~5 : caster sugar, castor sugar, baker's sugar
+sugar cubes ~5 : sugar cube | box, count
+muscovado sugar ~5 : dark muscovado sugar
+palm sugar ~5
+jaggery ~5 : gur
+piloncillo ~5 : panela
+maple sugar ~5
+molasses ~3 : blackstrap molasses, unsulfured molasses, dark molasses, treacle | bottle, jar, fl oz, cup
+corn syrup ~3 : light corn syrup, karo syrup, karo | bottle, fl oz, cup
+dark corn syrup ~5 | bottle, fl oz, cup
+golden syrup ~5 : lyle's golden syrup | bottle, fl oz, cup
+stevia ~4 : stevia packets, liquid stevia, truvia | oz, box, package
+splenda ~4 : sucralose, splenda packets | oz, box, package
+sugar substitute ~4 : sweetener, artificial sweetener, sweetener packets, no calorie sweetener, equal sweetener, sweet'n low | box, package, oz
+monk fruit sweetener ~4 : monk fruit, lakanto | oz, bag, cup
+erythritol ~5 | oz, bag, cup
+allulose ~5 | oz, bag, cup
+swerve ~5 : swerve sweetener | oz, bag, cup
+xylitol ~5 | oz, bag
+
+# ── Leaveners, starches, thickeners ──────────────────────────────────────────────────────────
+@units oz, box, tsp, tbsp
+baking powder ~1 : double acting baking powder | oz, can, tsp, tbsp
+baking soda ~1 : bicarbonate of soda, sodium bicarbonate, bicarb, bicarb soda, arm and hammer baking soda | oz, box, tsp, tbsp
+active dry yeast ~2 : yeast, dry yeast, yeast packets, fleischmann's yeast | package, oz, jar, tsp
+instant yeast ~3 : rapid rise yeast, quick rise yeast, bread machine yeast, fast acting yeast | package, oz, jar, tsp
+fresh yeast ~5 : cake yeast, compressed yeast | oz, package
+sourdough starter ~5 | jar, oz, cup
+cream of tartar ~4 | oz, jar, tsp
+cornstarch ~1 : corn starch, cornflour | oz, box, tbsp, cup
+potato starch ~4 | oz, box, tbsp
+arrowroot ~5 : arrowroot powder, arrowroot starch | oz, jar, tbsp
+xanthan gum ~5 | oz, bag, tsp
+guar gum ~5 | oz, bag, tsp
+gelatin ~3 : unflavored gelatin, gelatine, knox gelatin, gelatin packets, powdered gelatin | package, box, oz
+sheet gelatin ~5 : gelatin sheets, leaf gelatin | package
+pectin ~5 : fruit pectin, sure-jell, liquid pectin, powdered pectin | box, package
+meringue powder ~5 | oz, jar
+agar agar ~5 : agar, agar powder | oz, package
+citric acid ~5 | oz, jar
+
+# ── Extracts, colors, decorations ────────────────────────────────────────────────────────────
+@units fl oz, bottle, tsp, tbsp
+vanilla extract ~1 : vanilla, pure vanilla extract, pure vanilla
+imitation vanilla ~5 : artificial vanilla, vanilla flavoring, imitation vanilla extract
+vanilla bean paste ~5 : vanilla paste
+vanilla beans ~4 : vanilla bean, vanilla pods | count, package
+almond extract ~3
+peppermint extract ~4
+lemon extract ~4
+orange extract ~5
+coconut extract ~5
+maple extract ~5 : maple flavoring
+rum extract ~5
+banana extract ~5
+rose water ~5 : rosewater
+orange blossom water ~5 : orange flower water
+food coloring ~3 : food color, food colouring, gel food coloring, food dye, liquid food coloring | bottle, oz, package
+sprinkles ~2 : jimmies, rainbow sprinkles, colored sprinkles, chocolate sprinkles, sprinkle mix | oz, jar, bottle
+nonpareils ~5 : colored nonpareils | oz, jar
+sanding sugar ~5 : coarse sugar, colored sugar, decorating sugar | oz, jar
+pearl sugar ~5 | oz, bag
+edible glitter ~5 : luster dust | oz, jar
+candy eyes ~5 : candy eyeballs | oz, package
+fondant ~5 | oz, lb, package
+
+# ── Chocolate and cocoa ──────────────────────────────────────────────────────────────────────
+@units oz, bag, cup
+chocolate chips ~1 : semisweet chocolate chips, semi-sweet chocolate chips, semi sweet chocolate chips, chocolate morsels, choc chips
+milk chocolate chips ~3
+dark chocolate chips ~3 : bittersweet chocolate chips
+white chocolate chips ~3 : white chips, vanilla chips
+mini chocolate chips ~4 : mini semisweet chocolate chips, mini chips
+butterscotch chips ~4 : butterscotch morsels
+peanut butter chips ~4 : peanut butter morsels
+cinnamon chips ~5
+chocolate chunks ~4 : chocolate chunk
+baking chocolate ~3 : unsweetened baking chocolate, unsweetened chocolate, baker's chocolate, baking chocolate bar | oz, box
+semisweet chocolate ~4 : semi-sweet baking chocolate, semisweet baking chocolate | oz, box
+bittersweet chocolate ~4 : bittersweet baking chocolate | oz, box
+white chocolate ~4 : white baking chocolate, white chocolate bar | oz, box
+german sweet chocolate ~5 : german chocolate | oz, box
+cocoa powder ~2 : unsweetened cocoa powder, cocoa, baking cocoa, hershey's cocoa, unsweetened cocoa | oz, can, cup, tbsp
+dutch-process cocoa ~4 : dutch processed cocoa powder, dutch cocoa, dark cocoa powder, special dark cocoa, unsweetened dutch processed cocoa powder | oz, can, cup
+cacao powder ~5 : raw cacao powder | oz, bag
+cacao nibs ~5 : cocoa nibs | oz, bag
+candy melts ~4 : melting wafers, melting chocolate, wilton candy melts | oz, bag
+almond bark ~5 : vanilla almond bark, chocolate almond bark | oz, package
+allergy-friendly chocolate chips ~5 : enjoy life chocolate chips, dairy-free chocolate chips
+carob chips ~5 | oz, bag
+couverture chocolate ~5 : couverture | oz, bag
+
+# ── Marshmallows, coconut, nuts for baking, fillings ─────────────────────────────────────────
+@units oz, bag, cup
+marshmallows ~2 : large marshmallows, jumbo marshmallows
+mini marshmallows ~3 : miniature marshmallows
+marshmallow creme ~4 : marshmallow fluff, marshmallow cream, fluff | jar, oz
+shredded coconut ~2 : sweetened shredded coconut, sweetened coconut, sweetened coconut flakes, coconut flakes, flaked coconut, angel flake coconut
+unsweetened coconut ~4 : unsweetened shredded coconut, unsweetened coconut flakes, desiccated coconut, dried coconut
+toffee bits ~5 : heath bits, toffee pieces, english toffee bits
+caramel bits ~5 : caramel baking bits
+candied fruit ~5 : glace fruit, fruitcake mix
+candied ginger ~5 : crystallized ginger
+maraschino cherries ~3 : cocktail cherries, luxardo cherries | jar, oz
+almond paste ~5 | oz, can
+marzipan ~5 | oz, package
+graham cracker crumbs ~4 : graham crumbs | box, oz, cup
+cookie crumbs ~5 : oreo crumbs | box, oz
+pie filling ~4 : fruit pie filling | can, oz
+cherry pie filling ~4 | can, oz
+apple pie filling ~4 | can, oz
+blueberry pie filling ~5 | can, oz
+pumpkin pie filling ~4 : pumpkin pie mix | can, oz
+
+# ── Shortening and fats for baking ───────────────────────────────────────────────────────────
+@units oz, lb, can, cup
+shortening ~3 : vegetable shortening, crisco, butter flavored shortening
+lard ~4 : manteca, pork lard
+evaporated milk ~2 : evaporated whole milk, carnation evaporated milk | can, oz, cup
+sweetened condensed milk ~2 : condensed milk, eagle brand, sweetened condensed skim milk | can, oz, cup
+powdered milk ~4 : dry milk, nonfat dry milk powder, milk powder, dried milk, instant milk | oz, box, cup
+buttermilk powder ~5 | oz, can
+malted milk powder ~5 : malt powder, malted milk | oz, jar
+
+# ── Mixes ────────────────────────────────────────────────────────────────────────────────────
+@units box, oz
+cake mix ~2 : boxed cake mix, box cake mix
+yellow cake mix ~3
+chocolate cake mix ~3 : devil's food cake mix, devils food cake mix
+white cake mix ~4
+funfetti cake mix ~4 : confetti cake mix
+red velvet cake mix ~4
+spice cake mix ~5
+lemon cake mix ~5
+strawberry cake mix ~5
+angel food cake mix ~5
+carrot cake mix ~5 : carrot quickbread mix
+gluten-free cake mix ~5
+brownie mix ~2 : boxed brownie mix, fudge brownie mix
+cookie mix ~4 : sugar cookie mix, chocolate chip cookie mix, peanut butter cookie mix
+muffin mix ~3 : blueberry muffin mix
+cornbread mix ~3 : jiffy corn muffin mix, corn muffin mix, jiffy mix, cornmeal mix
+banana bread mix ~5 : quick bread mix
+cheesecake mix ~5 : no bake cheesecake mix
+pancake mix ~1 : pancake and waffle mix, waffle mix, pancake batter mix, bisquick pancake mix, krusteaz pancake mix
+baking mix ~3 : bisquick, all purpose baking mix, carbquick
+biscuit mix ~4
+pizza dough mix ~5 : pizza crust mix
+bread mix ~5 : bread machine mix
+tempura batter mix ~5 : tempura mix, tempura batter
+fish fry mix ~5 : fish fry, seafood breading
+pudding mix ~3 : instant pudding, jell-o pudding, instant pudding mix, pudding powder
+instant vanilla pudding mix ~4 : vanilla pudding mix, vanilla instant pudding
+instant chocolate pudding mix ~4 : chocolate pudding mix, chocolate instant pudding
+cheesecake pudding mix ~5 : instant cheesecake pudding mix
+butterscotch pudding mix ~5
+banana pudding mix ~5
+jello ~3 : jell-o, gelatin mix, flavored gelatin, gelatin dessert
+strawberry jello ~4 : strawberry gelatin, strawberry flavored gelatin
+lime jello ~5 : lime gelatin, lime flavored gelatin
+cherry jello ~5 : cherry gelatin, cherry flavored gelatin
+orange jello ~5 : orange gelatin, orange flavored gelatin
+raspberry jello ~5 : raspberry gelatin, raspberry flavored gelatin
+lemon jello ~5 : lemon gelatin, lemon flavored gelatin
+sugar-free jello ~5 : sugar free gelatin
+custard powder ~5 : bird's custard
+frosting ~3 : icing, canned frosting, store-bought frosting | can, oz
+chocolate frosting ~4 : chocolate icing | can, oz
+vanilla frosting ~4 : white frosting, vanilla icing | can, oz
+cream cheese frosting ~4 | can, oz
+decorating icing ~5 : writing icing, icing tubes, decorating gel | package, oz
+royal icing mix ~5 | oz
+
+# ── Crusts, crumbs, coatings ─────────────────────────────────────────────────────────────────
+@units box, oz, package
+pie crust ~3 : refrigerated pie crust, pie crusts, pillsbury pie crust, unbaked pie crust, refrigerated pie dough, pie dough, pie dough rounds, refrigerated pie crusts
+graham cracker crust ~4 : graham cracker pie crust, graham crust
+chocolate cookie crust ~5 : oreo pie crust, chocolate crumb crust
+tart shells ~5 : tartlet shells, mini tart shells, dessert shells
+bread crumbs ~2 : breadcrumbs, plain bread crumbs, dry bread crumbs | oz, can, cup
+italian bread crumbs ~3 : italian seasoned breadcrumbs, seasoned breadcrumbs, seasoned bread crumbs, italian breadcrumbs | oz, can, cup
+panko ~2 : panko breadcrumbs, panko bread crumbs, japanese breadcrumbs, panko crumbs | oz, box, cup
+whole wheat bread crumbs ~5 : whole wheat breadcrumbs
+gluten-free bread crumbs ~5 : gluten free breadcrumbs, gluten free panko
+cracker meal ~5 : cracker crumbs
+matzo meal ~5
+corn flake crumbs ~5
+shake and bake ~5 : seasoned coating mix, breading mix

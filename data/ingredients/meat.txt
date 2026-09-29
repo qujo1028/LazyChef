@@ -1,0 +1,178 @@
+# Meat: beef, pork, lamb, poultry, bacon, sausage, deli meats, ground meat.
+@units lb, oz, package
+@tier 3
+
+# ── Chicken ──────────────────────────────────────────────────────────────────────────────────
+chicken breast ~1 : chicken breasts, boneless skinless chicken breast, boneless skinless chicken breast halves, boneless chicken breast, boneless chicken breast halves, chicken breast halves, chicken breast fillets, bsc breast | lb, oz, count
+bone-in chicken breast ~4 : split chicken breast, bone in skin on chicken breast | lb, count
+chicken thighs ~1 : boneless skinless chicken thighs, boneless chicken thighs, chicken thigh fillets, chicken thigh | lb, oz, count, package
+bone-in chicken thighs ~3 : bone in skin on chicken thighs, skin-on chicken thighs | lb, count, package
+chicken wings ~2 : wings, party wings, chicken wingettes | lb, package, count
+chicken drumsticks ~2 : skinless chicken drumsticks | lb, package, count
+chicken drumettes ~5 | lb, package
+chicken legs ~3 : chicken leg | lb, package, count
+chicken leg quarters ~4 : leg quarters | lb, package, count
+chicken tenders ~2 : chicken tenderloins, chicken tenderloin | lb, package
+whole chicken ~2 : roasting chicken, fryer chicken, roaster chicken | count, lb
+chicken ~2 : chicken pieces, cut up chicken | lb, package, count
+rotisserie chicken ~2 : roast chicken, roasted chicken, cooked rotisserie chicken | count, lb
+ground chicken ~3 : chicken mince | lb, package
+chicken cutlets ~3 : chicken cutlet, thin sliced chicken breast, chicken scallopini | lb, package
+chicken sausage ~3 : chicken sausages, chicken apple sausage | package, lb
+chicken livers ~4 : chicken liver | lb, oz
+chicken gizzards ~5 : gizzards | lb
+chicken hearts ~5 | lb
+chicken feet ~5 : chicken paws | lb
+chicken thigh meat ~5
+shredded chicken ~4 : pulled chicken | lb, oz, package
+grilled chicken strips ~4 : grilled chicken, cooked chicken strips | package, oz
+cornish hens ~4 : cornish game hens, game hens | count, lb
+
+# ── Turkey and other poultry ─────────────────────────────────────────────────────────────────
+ground turkey ~1 : turkey mince | lb, package
+turkey breast ~3 : turkey breast roast | lb, count
+whole turkey ~3 : turkey | lb, count
+turkey tenderloin ~4 : turkey tenderloins | lb, package
+turkey cutlets ~4 : turkey breast cutlets | lb, package
+turkey legs ~4 : turkey drumsticks, turkey leg | lb, count
+turkey wings ~5 | lb, package
+turkey necks ~5 | lb
+turkey bacon ~3 | package, oz
+turkey sausage ~4 : turkey sausages | package, lb
+turkey burgers ~4 : turkey patties | package, count, lb
+deli turkey ~1 : sliced turkey, turkey deli meat, turkey lunch meat, turkey breast deli, oven roasted turkey, smoked turkey | lb, oz, package
+duck ~4 : whole duck | lb, count
+duck breast ~4 : duck breasts | lb, count
+duck legs ~5 : duck leg | lb, count
+quail ~5 | count, lb
+goose ~5 | lb, count
+
+# ── Beef ─────────────────────────────────────────────────────────────────────────────────────
+ground beef ~1 : hamburger meat, hamburger, beef mince, ground hamburger | lb, package
+lean ground beef ~3 : extra lean ground beef, 90/10 ground beef | lb, package
+ground chuck ~3 : 80/20 ground beef | lb, package
+ground sirloin ~4 | lb, package
+ground round ~5 | lb, package
+beef stew meat ~2 : stew meat, stewing beef, beef cubes, beef for stew, stew beef | lb, package
+chuck roast ~2 : beef chuck roast, pot roast, chuck pot roast, beef roast | lb
+beef shoulder roast ~5 | lb
+rump roast ~4 : bottom round roast | lb
+eye of round roast ~5 : eye round | lb
+top round ~5 : top round roast | lb
+brisket ~3 : beef brisket | lb
+ribeye steak ~2 : ribeye, rib eye steak, rib-eye, ribeye steaks, delmonico steak | lb, count
+new york strip steak ~3 : strip steak, ny strip, new york strip, strip loin steak, kansas city strip | lb, count
+sirloin steak ~2 : top sirloin steak, top sirloin, sirloin | lb, count
+sirloin tip ~5 : sirloin tip steak, sirloin tip roast | lb
+filet mignon ~3 : beef tenderloin steak, tenderloin steak, beef filet | lb, count
+beef tenderloin ~4 : tenderloin roast, whole tenderloin | lb
+flank steak ~3 | lb
+skirt steak ~3 : outside skirt, inside skirt | lb
+flat iron steak ~4 | lb
+hanger steak ~4 | lb
+tri-tip ~4 : tri tip, tri tip roast, tri tip steak | lb
+t-bone steak ~4 : t bone | lb, count
+porterhouse steak ~4 : porterhouse | lb, count
+cube steak ~4 : cubed steak, minute steak | lb, package
+round steak ~5 | lb
+london broil ~4 | lb
+chuck steak ~4 : boneless chuck steak | lb
+denver steak ~5 | lb
+picanha ~5 : top sirloin cap, coulotte | lb
+steak ~2 : steaks, beef steak | lb, count
+short ribs ~3 : beef short ribs, boneless beef short ribs, flanken ribs | lb
+beef ribs ~4 : beef back ribs | lb
+prime rib ~4 : standing rib roast, rib roast | lb
+beef shank ~5 | lb
+oxtail ~5 : oxtails | lb
+beef liver ~5 | lb
+beef tongue ~5 | lb
+marrow bones ~5 : beef marrow bones, soup bones | lb
+shaved steak ~4 : shaved beef, philly steak meat, thin sliced beef | lb, package
+carne asada ~4 : carne asada meat | lb
+beef patties ~4 : hamburger patties, burger patties | package, count, lb
+corned beef ~4 : corned beef brisket | lb
+roast beef ~2 : sliced roast beef, deli roast beef | lb, oz, package
+pastrami ~4 | lb, oz, package
+veal ~5 | lb
+veal cutlets ~5 : veal scallopini, veal cutlet | lb
+ground veal ~5 | lb
+bison ~5 | lb
+ground bison ~4 : bison burger | lb, package
+venison ~5 : deer meat | lb
+ground venison ~5 | lb
+
+# ── Pork ─────────────────────────────────────────────────────────────────────────────────────
+pork chops ~1 : pork chop, bone-in pork chops, bone in pork chops, center cut pork chops | lb, count, package
+boneless pork chops ~3 : boneless pork loin chops, pork loin chops | lb, count, package
+pork tenderloin ~2 : pork tenderloins, pork fillet | lb, count
+pork loin ~3 : pork loin roast, boneless pork loin | lb
+pork shoulder ~2 : pork butt, boston butt, pork shoulder roast, boneless pork shoulder, picnic roast | lb
+ground pork ~3 : pork mince | lb, package
+pork ribs ~3 : country style ribs, country style pork ribs | lb
+baby back ribs ~3 : back ribs, pork back ribs | lb, count
+spare ribs ~4 : pork spare ribs, st louis ribs, st. louis style ribs | lb
+pork belly ~3 : pork belly slices | lb
+pork steaks ~5 : pork steak, pork shoulder steaks | lb
+pork cutlets ~5 : pork cutlet, pork escalopes | lb
+pork stew meat ~5 : pork cubes | lb
+ham ~2 : whole ham, bone-in ham | lb, oz, package
+spiral ham ~4 : spiral sliced ham, honey baked ham, holiday ham | lb, count
+ham steak ~4 : ham steaks | lb, count
+deli ham ~2 : ham slices, ham lunch meat, black forest ham, honey ham, smoked ham | lb, oz, package
+cubed ham ~5 : ham cubes | oz, package
+ham hocks ~4 : ham hock, smoked ham hock, smoked ham hocks | lb, count
+bacon ~1 : bacon strips | package, lb, oz, slice
+thick-cut bacon ~3 : thick cut bacon, thick sliced bacon | package, lb, slice
+center cut bacon ~5 | package, lb
+applewood smoked bacon ~5 | package, lb
+canadian bacon ~3 : back bacon | package, oz, slice
+pancetta ~3 : cubed pancetta, diced pancetta | oz, package
+prosciutto ~3 : prosciutto di parma | oz, package
+salt pork ~5 | lb, oz
+fatback ~5 | lb
+
+# ── Sausage, hot dogs, deli ──────────────────────────────────────────────────────────────────
+sausage ~2 : sausages, pork sausage | lb, package
+italian sausage ~2 : sweet italian sausage, mild italian sausage, hot italian sausage, italian sausages | lb, package
+breakfast sausage ~2 : breakfast sausage links, sausage links, sausage patties, breakfast links, pork sausage links | package, lb, count
+ground sausage ~3 : bulk sausage, ground pork sausage, jimmy dean sausage | lb, package
+bratwurst ~3 : brats, bratwursts | package, count, lb
+kielbasa ~3 : polish sausage, polska kielbasa | package, lb
+andouille sausage ~4 : andouille | package, lb
+smoked sausage ~3 : smoked sausages | package, lb
+chorizo ~3 : mexican chorizo, pork chorizo, chorizo sausages | lb, package
+spanish chorizo ~4 : dry chorizo, cured chorizo | oz, package
+chinese sausage ~5 : lap cheong | package, oz
+hot dogs ~1 : hot dog, franks, frankfurters, wieners, frank | package, count
+beef hot dogs ~3 : beef franks, all beef hot dogs | package, count
+cocktail sausages ~4 : little smokies, lil smokies | package, oz
+pepperoni ~2 : pepperoni slices, sliced pepperoni | oz, package
+salami ~2 : genoa salami, hard salami, sliced salami | oz, lb, package
+bologna ~3 : baloney | lb, oz, package
+deli meat ~3 : lunch meat, cold cuts, lunchmeat, sliced deli meat, luncheon meat | lb, oz, package
+chicken deli meat ~4 : deli chicken | lb, oz, package
+mortadella ~4 | lb, oz
+capicola ~4 : capocollo, coppa, gabagool | oz, package
+soppressata ~4 | oz, package
+charcuterie ~4 : charcuterie meats, antipasto meats | package, oz
+liverwurst ~5 : braunschweiger | oz, package
+guanciale ~5 | oz, lb
+speck ~5 | oz, package
+jamon serrano ~5 : serrano ham | oz, package
+
+# ── Lamb, goat, other ────────────────────────────────────────────────────────────────────────
+lamb ~3 : mutton | lb
+lamb chops ~3 : lamb chop, lamb loin chops, lamb rib chops | lb, count
+ground lamb ~3 : lamb mince | lb, package
+leg of lamb ~4 : lamb leg | lb
+rack of lamb ~4 : lamb rack | lb, count
+lamb shanks ~4 : lamb shank | lb, count
+lamb shoulder ~4 | lb
+lamb stew meat ~5 : lamb cubes | lb
+goat meat ~5 : goat | lb
+rabbit ~5 | lb, count
+gyro meat ~5 : gyros meat | lb, package
+pulled pork ~4 : bbq pulled pork | lb, package
+carnitas ~5 | lb, package
+meat ~4 | lb, package

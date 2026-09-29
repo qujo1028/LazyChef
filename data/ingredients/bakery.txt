@@ -1,0 +1,103 @@
+# Bakery: bread, rolls, buns, bagels, tortillas, pita, naan, pastries.
+@units loaf, slice, count
+@tier 3
+bread ~1 : sandwich bread, sliced bread, loaf of bread
+white bread ~1 : white sandwich bread
+whole wheat bread ~1 : wheat bread, whole grain bread
+multigrain bread ~2 : multi-grain bread, seeded bread
+sourdough bread ~2 : sourdough, sourdough loaf
+rye bread ~3 : jewish rye, seeded rye
+pumpernickel bread ~4 : pumpernickel
+italian bread ~3
+french bread ~2
+baguette ~2 : baguettes, french baguette
+ciabatta ~3 : ciabatta bread, ciabatta loaf
+focaccia ~3 : focaccia bread
+brioche ~3 : brioche bread, brioche loaf
+challah ~4 : challah bread
+potato bread ~3
+cinnamon raisin bread ~3 : raisin bread
+sprouted grain bread ~4 : ezekiel bread
+gluten-free bread ~3 : gf bread
+keto bread ~5 : low carb bread
+hawaiian bread ~4 : king's hawaiian bread, sweet bread
+texas toast bread ~5
+crusty bread ~4 : artisan bread, country bread
+banana bread ~4 | loaf, count
+cornbread ~4 | count, package
+zucchini bread ~5 | loaf, count
+
+@units count, package
+bagels ~1 : bagel, plain bagels
+everything bagels ~3 : everything bagel
+cinnamon raisin bagels ~4
+blueberry bagels ~4 : blueberry bagel
+mini bagels ~4 : mini bagel
+bagel thins ~4
+english muffins ~2 : english muffin
+croissants ~2 : croissant, butter croissants
+hamburger buns ~1 : burger buns, hamburger rolls
+hot dog buns ~1 : hot dog rolls
+brioche buns ~2 : brioche burger buns, brioche bun
+pretzel buns ~4 : pretzel rolls, pretzel roll
+slider buns ~3 : slider rolls, mini buns
+hawaiian rolls ~2 : king's hawaiian rolls, hawaiian sweet rolls, hawaiian roll, sweet rolls
+dinner rolls ~2 : rolls, yeast dinner rolls, soft rolls
+sub rolls ~3 : hoagie rolls, sub buns, sub bun, hero rolls, sandwich rolls, sandwich bun, grinder rolls
+kaiser rolls ~4 : kaiser roll
+ciabatta rolls ~4 : ciabatta roll, ciabatta sandwich roll
+crusty rolls ~4 : crusty roll
+potato rolls ~4 : potato roll, martin's potato rolls
+onion rolls ~5 : onion roll
+bolillos ~5 : bolillo rolls
+sandwich thins ~3 : sandwich thin, thin buns
+flour tortillas ~1 : tortillas, tortilla, flour tortilla
+corn tortillas ~1 : corn tortilla, white corn tortillas
+whole wheat tortillas ~3 : whole wheat tortilla, whole grain tortillas
+low-carb tortillas ~4 : low carb tortilla, keto tortillas
+street taco tortillas ~4 : street tacos tortillas, mini tortillas
+burrito tortillas ~3 : burrito size tortillas
+wraps ~3 : wrap, sandwich wraps
+spinach wraps ~5 : spinach wrap, spinach tortillas
+taco shells ~2 : hard taco shells | box, count
+tostadas ~4 : tostada shells, tostada shell | package, count
+pita bread ~2 : pita, pitas, pita pockets
+naan ~2 : naan bread, garlic naan
+lavash ~4 : lavash bread
+flatbread ~3 : flatbreads, flat bread
+pizza crust ~3 : prepared pizza crust, pizza crusts, pizza shells, boboli
+pizza dough ~2 : fresh pizza dough | count, package, lb
+crescent rolls ~3 : crescent roll dough, refrigerated crescent rolls, pillsbury crescent rolls | can, package
+biscuit dough ~4 : refrigerated biscuits, canned biscuits, grands biscuits | can, package
+biscuits ~3 : buttermilk biscuits
+cinnamon rolls ~3 : cinnamon roll, cinnamon buns | can, package, count
+muffins ~2
+blueberry muffins ~4
+donuts ~2 : doughnuts | count, box
+bear claws ~5
+danish ~4 : danishes, danish pastry
+pastries ~4 : pastry
+scones ~4
+cake ~3 : cakes
+birthday cake ~4
+cupcakes ~3
+pie ~4 : pies
+apple pie ~4
+pumpkin pie ~5
+cheesecake ~4
+brownies ~4
+pound cake ~4
+angel food cake ~4
+breadsticks ~4 : soft breadsticks
+croissant rolls ~5
+roti ~4 : chapati, chapatis
+paratha ~5 : parathas
+injera ~5
+arepas ~5 : arepa
+matzo ~4 : matzah, matzo crackers, matzos
+bread bowls ~5
+hot cross buns ~5
+panettone ~5
+king cake ~5
+bao buns ~5 : steamed buns, bao
+tortilla wraps ~5

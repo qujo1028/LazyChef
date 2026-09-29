@@ -1,0 +1,197 @@
+# Canned & jarred: beans, tomatoes, broth and stock, soups, tomato paste, canned fish and meat,
+# canned vegetables and fruit, pickles, olives, jarred pasta sauces.
+@units can, oz, jar
+@tier 3
+
+# ── Beans ────────────────────────────────────────────────────────────────────────────────────
+@units can, oz
+black beans ~1 : canned black beans
+kidney beans ~2 : red kidney beans, canned kidney beans, canned red kidney beans, dark red kidney beans
+pinto beans ~2 : canned pinto beans
+chickpeas ~2 : garbanzo beans, garbanzos, canned chickpeas, chick peas, canned garbanzo beans
+cannellini beans ~2 : white kidney beans, canned cannellini beans, canned white kidney beans
+great northern beans ~3 : canned great northern beans
+navy beans ~3 : canned navy beans
+white beans ~3 : canned white beans
+butter beans ~4 : canned butter beans
+lima beans ~4 : canned lima beans, canned baby limas beans, baby lima beans
+black-eyed peas ~3 : blackeyed peas, black eyed peas, canned blackeyed peas, cowpeas
+cranberry beans ~5 : borlotti beans, canned borlotti beans, canned cranberry beans
+fava beans ~5 : broad beans, canned fava beans
+pigeon peas ~5 : gandules, canned pigeon peas
+mixed beans ~5 : three bean salad, bean medley
+refried beans ~2 : refried pinto beans, refried black beans
+baked beans ~2 : bush's baked beans, vegetarian baked beans
+pork and beans ~4
+chili beans ~4 : chili beans in sauce
+canned beans ~3 : beans, can of beans
+canned lentils ~5
+canned soybeans ~5
+hominy ~4 : white hominy, canned hominy, pozole corn
+
+# ── Tomatoes ─────────────────────────────────────────────────────────────────────────────────
+@units can, oz
+diced tomatoes ~1 : canned diced tomatoes, petite diced tomatoes, tinned tomatoes, no salt added diced tomatoes
+crushed tomatoes ~1 : canned crushed tomatoes, concentrated crushed tomatoes
+canned tomatoes ~2 : whole peeled tomatoes, canned whole tomatoes, peeled tomatoes, tomatoes in juice
+tomato sauce ~1 : canned tomato sauce | can, oz, cup
+tomato paste ~1 : tomato paste tube, double concentrated tomato paste, tomato concentrate | can, oz, tbsp
+tomato puree ~3 : passata, strained tomatoes, tomato purée | can, jar, oz
+fire-roasted tomatoes ~3 : fire roasted diced tomatoes
+diced tomatoes with green chilies ~3 : rotel, ro-tel, tomatoes and green chiles
+stewed tomatoes ~3 : cajun stewed tomatoes, italian stewed tomatoes
+san marzano tomatoes ~4 : san marzano
+sun-dried tomatoes ~3 : sun dried tomatoes, sundried tomatoes, oil packed sun dried tomatoes, sun-dried tomatoes in oil | jar, oz
+sun-dried tomato paste ~5 : sundried tomato paste | jar, oz
+
+# ── Broth, stock, soup ───────────────────────────────────────────────────────────────────────
+@units carton, can, cup, qt, oz
+chicken broth ~1 : chicken stock, low sodium chicken broth, low sodium chicken stock, canned chicken broth, fat free chicken broth
+beef broth ~1 : beef stock, low sodium beef broth, canned beef broth
+vegetable broth ~1 : vegetable stock, veggie broth, veggie stock, low sodium vegetable broth
+bone broth ~3 : chicken bone broth, beef bone broth
+broth ~3 : stock, low sodium broth
+turkey broth ~5 : turkey stock
+fish stock ~5 : seafood stock, fish broth
+mushroom broth ~5
+pho broth ~5
+clam juice ~5 | bottle, oz
+@units can, oz
+soup ~3 : canned soup, soups
+chicken noodle soup ~2
+tomato soup ~2 : condensed tomato soup, cream of tomato soup
+cream of mushroom soup ~2 : condensed cream of mushroom soup
+cream of chicken soup ~2 : condensed cream of chicken soup
+cream of celery soup ~4 : condensed cream of celery soup
+cream of potato soup ~5
+french onion soup ~4 : condensed french onion soup, onion soup
+cheddar cheese soup ~5 : cheese soup
+clam chowder ~4 : new england clam chowder
+chicken and rice soup ~5
+vegetable soup ~4 : vegetable beef soup
+minestrone soup ~5 : minestrone
+lentil soup ~5
+split pea soup ~5
+black bean soup ~5
+chicken tortilla soup ~5
+potato soup ~5
+chunky soup ~4 : progresso soup, campbell's chunky
+chili ~3 : canned chili, chili con carne, chili with beans, chili without beans, hormel chili
+beef stew ~4 : canned beef stew, dinty moore
+spaghettios ~4 : spaghetti-os
+ravioli in sauce ~5 : chef boyardee, canned ravioli, beef ravioli
+gravy ~3 : jarred gravy, canned gravy, beef gravy, brown gravy | jar, can, oz
+chicken gravy ~4 : turkey gravy | jar, can, oz
+au jus ~5 | jar, package
+
+# ── Fish and meat ────────────────────────────────────────────────────────────────────────────
+canned tuna ~1 : tuna, tuna fish, tuna packed in water, chunk light tuna, light tuna, tuna in water, solid white tuna, solid white tuna packed in water, albacore tuna, canned albacore tuna | can, oz, package
+tuna in oil ~4 : oil packed tuna, tuna in olive oil, albacore tuna packed in oil | can, jar, oz
+tuna pouches ~4 : tuna pouch, tuna packets | package, count
+canned salmon ~3 : pink salmon | can, oz
+canned chicken ~3 : canned chicken breast, chunk chicken | can, oz
+sardines ~3 : canned sardines, tinned sardines, sardines in oil | can, oz
+sardines in tomato sauce ~5 | can, oz
+anchovies ~3 : canned anchovies, anchovy fillets, anchovies in olive oil, anchovies in extra virgin olive oil | can, jar, oz
+canned mackerel ~5 | can
+canned crab ~5 | can
+canned clams ~5 | can
+smoked oysters ~5 | can
+kippers ~5 : kipper snacks | can
+spam ~3 | can
+vienna sausages ~5 | can
+corned beef hash ~5 | can
+canned corned beef ~5 | can
+deviled ham ~5 | can
+
+# ── Vegetables ───────────────────────────────────────────────────────────────────────────────
+@units can, oz
+canned corn ~2 : corn niblets, whole kernel corn, niblets
+creamed corn ~3 : cream style corn, cream-style corn
+mexicorn ~5 : fiesta corn
+canned green beans ~2 : cut green beans, french style green beans
+canned peas ~4
+canned peas and carrots ~5
+canned carrots ~5
+canned mixed vegetables ~4 : veg-all, veg all
+canned potatoes ~5
+canned mushrooms ~4 : mushroom pieces and stems
+canned spinach ~5
+canned beets ~5
+pickled beets ~5 | jar, can
+canned asparagus ~5
+canned pumpkin ~2 : pumpkin puree, pure pumpkin, libby's pumpkin
+canned sweet potatoes ~5 : canned yams
+artichoke hearts ~3 : canned artichoke hearts, quartered artichoke hearts, artichoke bottoms | can, jar, oz
+marinated artichoke hearts ~4 : marinated artichokes | jar, oz
+hearts of palm ~4 : palm hearts
+water chestnuts ~3 : canned water chestnuts, sliced water chestnuts
+bamboo shoots ~4 : canned bamboo shoots
+baby corn ~4 : canned baby corn
+canned bean sprouts ~5
+green chiles ~2 : diced green chiles, canned green chiles, chopped green chiles, hatch green chiles
+chipotle peppers in adobo ~3 : chipotles in adobo, canned chipotle chiles in adobo, chipotle chiles, canned chipotle chile, chipotle chiles in adobo, chipotle in adobo, chipotle peppers
+roasted red peppers ~2 : roasted peppers, jarred roasted red peppers, fire roasted peppers | jar, oz
+pimientos ~4 : pimento, pimiento, pimentos, diced pimientos | jar, oz
+piquillo peppers ~5 : piquillo pepper | jar, oz
+canned jackfruit ~5 : young green jackfruit
+straw mushrooms ~5
+grape leaves ~5 : vine leaves, dolmas, stuffed grape leaves | jar, oz
+preserved lemons ~5 : preserved lemon | jar
+
+# ── Pickles, olives, peppers ─────────────────────────────────────────────────────────────────
+@units jar, oz
+pickles ~1 : dill pickles, pickle spears, pickle chips, dill pickle spears, kosher dill pickles, dill pickle slices, kosher dill sandwich slices, sandwich pickles
+bread and butter pickles ~4 : sweet pickles, bread & butter pickles
+gherkins ~4 : cornichons, sweet gherkins
+pickled jalapeños ~3 : pickled jalapenos, jarred jalapenos, nacho jalapenos, jalapeno slices | jar, can, oz
+pepperoncini ~4 : peperoncini, pepperoncini peppers, greek peppers
+banana pepper rings ~4 : pickled banana peppers
+cherry peppers ~5 : hot cherry peppers, hot cherry pepper
+giardiniera ~5 : hot giardiniera, italian giardiniera
+pickled onions ~5 : pickled red onions
+pickled ginger ~4 : gari, sushi ginger
+pickled vegetables ~5 : pickled carrots, escabeche
+sauerkraut ~3 : kraut | jar, can, oz, bag
+kimchi ~3 : kimchee, cabbage kimchi | jar, oz
+olives ~2 : jarred olives, mixed olives
+black olives ~2 : sliced black olives, pitted black olives, canned black olives | can, oz
+green olives ~3 : manzanilla olives, pimento stuffed olives, pimento stuffed green olives, spanish olives, stuffed olives
+kalamata olives ~3 : kalamata, greek olives
+castelvetrano olives ~5
+oil cured olives ~5 : oil cured black olives
+capers ~3 : nonpareil capers, caper berries | jar, oz, tbsp
+
+# ── Fruit ────────────────────────────────────────────────────────────────────────────────────
+@units can, oz, jar
+applesauce ~2 : apple sauce, unsweetened applesauce | jar, cup, oz
+applesauce cups ~3 : applesauce pouches, apple sauce cups, gogo squeez | package, count
+fruit cups ~3 : fruit cup, diced peaches cups, mixed fruit cups, mandarin orange cups | package, count
+fruit cocktail ~4 : canned fruit cocktail
+canned peaches ~3 : peaches in syrup, peach halves
+canned pears ~4 : pears in juice, pear halves
+mandarin oranges ~3 : canned mandarin oranges, mandarin orange sections
+canned pineapple ~3 : pineapple chunks, pineapple tidbits, crushed pineapple, pineapple rings, pineapple in juice, pineapple with juice, pineapple slices
+canned cherries ~5 : jarred sour cherries
+canned fruit ~4 : tropical fruit
+lychees in syrup ~5 : canned lychees
+cranberry sauce ~3 : jellied cranberry sauce, whole cranberry sauce, whole berry cranberry sauce
+coconut milk ~1 : canned coconut milk, full fat coconut milk, unsweetened coconut milk | can, oz, cup
+light coconut milk ~4 : lite coconut milk, reduced fat coconut milk | can, oz
+coconut cream ~3 | can, oz
+cream of coconut ~4 : coco lopez | can, oz
+creamed coconut ~5 : coconut butter block | oz
+
+# ── Jarred pasta sauces ──────────────────────────────────────────────────────────────────────
+@units jar, oz, cup
+pasta sauce ~1 : spaghetti sauce, jarred pasta sauce, ragu, prego, red sauce, meat sauce
+marinara sauce ~1 : marinara, rao's marinara
+tomato basil sauce ~4 : tomato and basil sauce
+arrabbiata sauce ~4 : arrabbiata
+vodka sauce ~3 : tomato vodka sauce
+alfredo sauce ~2 : alfredo, jarred alfredo sauce
+pizza sauce ~2 | jar, can, oz
+enchilada sauce ~2 : red enchilada sauce | can, oz
+green enchilada sauce ~4 : verde enchilada sauce | can, oz
+sloppy joe sauce ~4 : manwich | can, oz
+bolognese sauce ~5 : bolognese | jar, oz

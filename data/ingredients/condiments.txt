@@ -1,0 +1,262 @@
+# Oils & condiments: oils, vinegars, sauces, dressings, ketchup, mustard, mayo, soy and hot sauce,
+# nut butters, jam, honey, syrups, salad toppings.
+@units bottle, oz, fl oz, tbsp
+@tier 3
+
+# ── Table condiments ─────────────────────────────────────────────────────────────────────────
+ketchup ~1 : catsup, tomato ketchup, heinz ketchup
+yellow mustard ~1 : mustard, american mustard, french's mustard | bottle, oz, tsp, tbsp
+dijon mustard ~1 : dijon, grey poupon | jar, oz, tsp, tbsp
+whole grain mustard ~3 : grainy mustard, coarse grain mustard, whole grain dijon mustard, stone ground mustard, seeded mustard | jar, oz, tsp
+spicy brown mustard ~3 : brown mustard, deli mustard | bottle, jar, oz
+honey mustard ~3 : honey dijon mustard, honey dijon
+english mustard ~5 : hot mustard, chinese hot mustard | jar, oz
+creole mustard ~5
+mayonnaise ~1 : mayo, hellmann's, best foods mayonnaise, real mayonnaise | jar, oz, tbsp, cup
+light mayonnaise ~4 : light mayo, reduced fat mayonnaise | jar, oz
+olive oil mayo ~5 : mayo with olive oil | jar, oz
+vegan mayo ~5 : vegan mayonnaise, vegenaise, eggless mayo | jar, oz
+japanese mayo ~4 : kewpie mayo, kewpie | bottle, oz
+miracle whip ~3 : salad dressing spread | jar, oz
+aioli ~4 : garlic aioli | jar, oz
+sriracha mayo ~4 : spicy mayo, spicy mayonnaise | bottle, oz
+chipotle mayo ~5 | bottle, oz
+pickle relish ~2 : relish, sweet relish, sweet pickle relish, dill relish, hot dog relish | jar, oz, tbsp
+hot sauce ~1 : frank's red hot, franks red hot, cholula, louisiana hot sauce, valentina, pepper sauce | bottle, fl oz, tsp
+tabasco sauce ~3 : tabasco | bottle, fl oz, tsp
+green hot sauce ~5 : green tabasco | bottle, fl oz
+sriracha ~2 : sriracha sauce, rooster sauce, huy fong sriracha | bottle, oz, tbsp
+buffalo sauce ~3 : buffalo wing sauce, wing sauce | bottle, oz
+barbecue sauce ~1 : bbq sauce, barbeque sauce, bar-b-q sauce, sweet baby ray's | bottle, oz, cup
+steak sauce ~3 : a1 sauce, a1, a.1. sauce, hp sauce | bottle, oz
+worcestershire sauce ~2 : worcestershire, worcester sauce, lea and perrins | bottle, fl oz, tsp, tbsp
+tartar sauce ~3 : tartare sauce | jar, bottle, oz
+cocktail sauce ~3 : shrimp cocktail sauce | jar, bottle, oz
+horseradish ~3 : prepared horseradish | jar, oz, tbsp
+horseradish sauce ~4 : creamy horseradish | jar, bottle, oz
+wasabi ~4 : wasabi paste, wasabi powder | oz, package
+fry sauce ~5 | bottle, oz
+comeback sauce ~5 | bottle, oz
+burger sauce ~5 : special sauce, big mac sauce | bottle, oz
+
+# ── Asian sauces and pastes ──────────────────────────────────────────────────────────────────
+soy sauce ~1 : soya sauce, shoyu, kikkoman soy sauce | bottle, fl oz, tbsp
+low-sodium soy sauce ~3 : lower sodium soy sauce, reduced sodium soy sauce, lite soy sauce, less sodium soy sauce, lower sodium shoyu | bottle, fl oz, tbsp
+light soy sauce ~5 : thin soy sauce | bottle, fl oz, tbsp
+dark soy sauce ~5 : black soy sauce | bottle, fl oz, tbsp
+sweet soy sauce ~5 : kecap manis | bottle, fl oz
+tamari ~3 : gluten-free soy sauce, gluten free tamari | bottle, fl oz, tbsp
+coconut aminos ~4 | bottle, fl oz, tbsp
+liquid aminos ~5 : braggs liquid aminos, bragg liquid aminos | bottle, fl oz
+teriyaki sauce ~2 : teriyaki, teriyaki marinade | bottle, oz
+hoisin sauce ~3 : hoisin | bottle, jar, oz
+oyster sauce ~3 | bottle, oz
+fish sauce ~2 : thai fish sauce, nam pla, nuoc mam, red boat fish sauce | bottle, fl oz, tbsp
+sweet chili sauce ~3 : thai sweet chili sauce, sweet chilli sauce | bottle, oz
+chili garlic sauce ~3 : chili garlic paste | jar, oz, tsp
+chili crisp ~3 : chili onion crunch, lao gan ma, spicy chili crisp, crunchy chili oil | jar, oz
+chili oil ~4 : hot chili oil, chilli oil | bottle, jar, oz
+gochujang ~3 : korean chili paste, gochujang paste, korean red pepper paste | jar, oz, tbsp
+doenjang ~5 : korean soybean paste, seasoned soybean paste | jar, oz
+ssamjang ~5 | jar, oz
+korean bbq sauce ~4 : bulgogi sauce, korean bbq marinade, galbi sauce | bottle, oz
+sambal oelek ~4 : sambal, chili paste, chile paste | jar, oz, tsp
+doubanjiang ~5 : chili bean paste, broad bean paste, toban djan | jar, oz
+black bean sauce ~5 : black bean garlic sauce, fermented black beans, douchi | jar, oz
+miso ~3 : miso paste | oz, package, tbsp
+white miso ~4 : shiro miso, yellow miso, sweet miso | oz, package, tbsp
+red miso ~5 : aka miso | oz, package, tbsp
+curry paste ~3 : thai curry paste | jar, oz, tbsp
+red curry paste ~4 : thai red curry paste | jar, oz, tbsp
+green curry paste ~4 : thai green curry paste | jar, oz, tbsp
+yellow curry paste ~5 | jar, oz, tbsp
+massaman curry paste ~5 | jar, oz
+curry sauce ~5 : simmer sauce, tikka masala sauce, butter chicken sauce, korma sauce | jar, oz
+peanut sauce ~4 : satay sauce | bottle, jar, oz
+ponzu ~4 : ponzu sauce | bottle, fl oz
+mirin ~3 : aji mirin, sweet rice wine | bottle, fl oz, tbsp
+rice wine ~4 : shaoxing wine, chinese rice wine, shaoxing cooking wine, cooking rice wine | bottle, fl oz
+sake cooking wine ~5 : cooking sake, ryorishu | bottle, fl oz
+plum sauce ~5 | jar, oz
+duck sauce ~4 : sweet and sour sauce | jar, bottle, oz
+katsu sauce ~5 : tonkatsu sauce | bottle, oz
+eel sauce ~5 : unagi sauce | bottle, oz
+yum yum sauce ~4 : hibachi sauce | bottle, oz
+stir fry sauce ~4 : general tso sauce, orange sauce | bottle, oz
+szechuan sauce ~5 | bottle, oz
+xo sauce ~5 | jar, oz
+furikake ~4 : rice seasoning | jar, oz
+tahini ~3 : tahina, sesame paste, sesame tahini | jar, oz, tbsp
+harissa ~4 : harissa paste | jar, oz
+tamarind paste ~4 : tamarind concentrate, tamarind pulp | jar, oz
+shrimp paste ~5 : belacan, terasi | jar, oz
+garlic paste ~5 : garlic puree | jar, oz
+ginger paste ~5 : ginger puree | jar, oz
+ginger garlic paste ~5 | jar, oz
+anchovy paste ~5 | oz, package
+tomato pesto ~5 : sundried tomato pesto, red pesto | jar, oz
+mole ~4 : mole sauce, mole paste, dona maria mole | jar, oz
+sofrito ~4 : recaito | jar, oz
+adobo sauce ~5 | can, jar, oz
+achiote paste ~5 : annatto paste | package, oz
+
+# ── Salsa, pesto, dips on the shelf ──────────────────────────────────────────────────────────
+salsa ~1 : jarred salsa, chunky salsa, pace salsa, medium salsa, mild salsa, hot salsa, picante sauce | jar, oz, cup
+salsa verde ~3 : green salsa, tomatillo salsa | jar, oz
+chipotle salsa ~5 | jar, oz
+mango salsa ~5 | jar, oz
+pesto ~2 : basil pesto, green pesto, pesto sauce | jar, oz, tbsp
+chimichurri ~4 | jar, oz
+bruschetta topping ~5 : bruschetta | jar, oz
+olive tapenade ~5 : tapenade | jar, oz
+chutney ~4 : mango chutney | jar, oz
+mint chutney ~5 : cilantro chutney, green chutney | jar, oz
+tamarind chutney ~5 | jar, oz
+mint jelly ~5 : mint sauce | jar, oz
+
+# ── Dressings ────────────────────────────────────────────────────────────────────────────────
+@units bottle, fl oz, oz, tbsp
+salad dressing ~2 : dressing, bottled dressing
+ranch dressing ~1 : ranch, hidden valley ranch, buttermilk ranch
+italian dressing ~2 : zesty italian dressing
+caesar dressing ~2 : caesar salad dressing, creamy caesar
+balsamic vinaigrette ~2 : balsamic dressing
+blue cheese dressing ~3 : bleu cheese dressing
+thousand island dressing ~3 : thousand island
+honey mustard dressing ~4
+french dressing ~4
+catalina dressing ~4
+greek dressing ~4 : greek vinaigrette
+sesame ginger dressing ~4 : asian sesame dressing
+asian dressing ~4 : asian salad dressing
+raspberry vinaigrette ~4
+red wine vinaigrette ~5
+poppyseed dressing ~5 : poppy seed dressing
+green goddess dressing ~5
+russian dressing ~5
+vinaigrette ~4 : house vinaigrette, italian vinaigrette
+coleslaw dressing ~4 : slaw dressing
+light salad dressing ~5 : light dressing, lite dressing
+
+# ── Oils and sprays ──────────────────────────────────────────────────────────────────────────
+@units bottle, fl oz, cup, tbsp, l
+olive oil ~1 : pure olive oil, regular olive oil
+extra virgin olive oil ~1 : evoo, extra-virgin olive oil, virgin olive oil
+light olive oil ~4 : extra light olive oil
+vegetable oil ~1 : cooking oil, salad oil, frying oil, veg oil
+canola oil ~1 : rapeseed oil, expeller pressed canola oil
+avocado oil ~2
+coconut oil ~2 : virgin coconut oil, refined coconut oil | jar, oz, tbsp, cup
+sesame oil ~2 : toasted sesame oil, dark sesame oil, asian sesame oil
+peanut oil ~3
+corn oil ~4
+sunflower oil ~4
+safflower oil ~5
+grapeseed oil ~4 : grape seed oil
+walnut oil ~5
+truffle oil ~4 : white truffle oil, black truffle oil
+infused oil ~5 : flavored oil, garlic oil, basil oil, garlic infused oil
+flaxseed oil ~5 : flax oil
+mct oil ~5
+palm oil ~5 : red palm oil
+mustard oil ~5
+soybean oil ~5
+rice bran oil ~5
+cooking spray ~1 : pam, nonstick cooking spray, non-stick spray, vegetable oil cooking spray, canola oil spray, baking spray, cooking oil spray | can, oz
+olive oil spray ~3 : olive oil cooking spray | can, oz
+avocado oil spray ~5 | can, oz
+butter flavored cooking spray ~5 : butter spray | can, oz
+ghee ~3 : clarified butter, desi ghee | jar, oz, tbsp
+duck fat ~5 | jar, oz
+bacon grease ~5 : bacon drippings, bacon fat | jar, oz
+
+# ── Vinegars and cooking wines ───────────────────────────────────────────────────────────────
+@units bottle, fl oz, cup, tbsp
+white vinegar ~1 : distilled white vinegar, vinegar, distilled vinegar, white distilled vinegar
+apple cider vinegar ~1 : cider vinegar, acv, bragg apple cider vinegar
+balsamic vinegar ~1 : balsamic
+aged balsamic vinegar ~5
+red wine vinegar ~2
+white wine vinegar ~3 : wine vinegar
+rice vinegar ~2 : rice wine vinegar, unseasoned rice vinegar
+seasoned rice vinegar ~4 : sushi vinegar
+sherry vinegar ~4
+champagne vinegar ~5
+malt vinegar ~4
+white balsamic vinegar ~5 : golden balsamic
+black vinegar ~5 : chinkiang vinegar, chinese black vinegar
+coconut vinegar ~5
+balsamic glaze ~3 : balsamic reduction, glaze of balsamic
+cooking wine ~4 : red cooking wine, white cooking wine, holland house cooking wine
+cooking sherry ~4 : sherry cooking wine
+marsala cooking wine ~5 : marsala wine
+pomegranate molasses ~5 | bottle, fl oz
+verjus ~5 : verjuice
+
+# ── Nut butters and spreads ──────────────────────────────────────────────────────────────────
+@units jar, oz, tbsp
+peanut butter ~1 : creamy peanut butter, smooth peanut butter, pb, jif, skippy | jar, oz, tbsp, cup
+crunchy peanut butter ~2 : chunky peanut butter, extra crunchy peanut butter
+natural peanut butter ~3 : all natural peanut butter
+powdered peanut butter ~4 : pb2, peanut butter powder
+almond butter ~2 : creamy almond butter
+cashew butter ~4
+sunflower seed butter ~4 : sunbutter, sun butter, sunflower butter
+nut butter ~4 : mixed nut butter
+nutella ~2 : chocolate hazelnut spread, hazelnut spread, hazelnut cocoa spread
+cookie butter ~4 : biscoff spread, speculoos spread, biscoff cookie butter
+jam ~2 : preserves, fruit spread, jams
+jelly ~2 : jellies
+strawberry jam ~1 : strawberry preserves, strawberry jelly, strawberry spread
+grape jelly ~1 : grape jam, concord grape jelly
+raspberry jam ~2 : raspberry preserves, seedless raspberry jam, raspberry jelly
+apricot jam ~3 : apricot preserves
+blackberry jam ~4 : blackberry preserves, seedless blackberry jam
+blueberry jam ~4 : blueberry preserves, blueberry jelly
+cherry jam ~4 : cherry preserves
+peach preserves ~4 : peach jam
+orange marmalade ~3 : marmalade
+fig jam ~4 : fig preserves, fig spread
+pepper jelly ~4 : jalapeno jelly, hot pepper jelly, red pepper jelly
+apple butter ~4
+apple jelly ~5
+pineapple preserves ~5 : pineapple jam
+plum preserves ~5 : plum jam
+lingonberry jam ~5 : lingonberry preserves
+red currant jelly ~5 : currant jelly
+lemon curd ~4
+dulce de leche ~4 : cajeta, caramel spread | can, jar, oz
+marmite ~5 : vegemite, yeast extract
+
+# ── Honey and syrups ─────────────────────────────────────────────────────────────────────────
+@units bottle, fl oz, cup, tbsp
+honey ~1 : clover honey, liquid honey, runny honey, clear honey, wildflower honey, local honey | oz, bottle, jar, tbsp
+manuka honey ~5 | jar, oz
+hot honey ~4 : mike's hot honey | bottle, oz
+honeycomb ~5 | oz
+maple syrup ~1 : pure maple syrup, real maple syrup
+pancake syrup ~2 : syrup, table syrup, aunt jemima syrup, mrs butterworth's, log cabin syrup, breakfast syrup
+sugar-free syrup ~4 : sugar free syrup, sugar free pancake syrup, sugar-free pancake syrup
+agave nectar ~3 : agave, agave syrup
+chocolate syrup ~2 : hershey's syrup, chocolate sauce | bottle, oz, tbsp
+caramel sauce ~3 : caramel syrup, caramel topping | bottle, jar, oz
+hot fudge ~4 : hot fudge sauce, fudge sauce, fudge topping, fudge ice cream topping | jar, oz
+strawberry syrup ~5 : strawberry topping, strawberry sauce | bottle, oz
+ice cream topping ~5 : sundae topping, magic shell, shell topping | bottle, jar, oz
+date syrup ~5 : silan | bottle, oz
+brown rice syrup ~5 | jar, oz
+coffee syrup ~4 : flavoring syrup, torani, vanilla syrup, flavored syrup | bottle, fl oz
+
+# ── Marinades and salad toppings ─────────────────────────────────────────────────────────────
+@units bottle, oz
+marinade ~4 : meat marinade
+mojo marinade ~5 : mojo criollo
+jerk marinade ~5 : jerk sauce
+liquid smoke ~5
+browning sauce ~5 : kitchen bouquet, gravy master
+croutons ~3 : seasoned croutons, salad croutons | bag, oz
+bacon bits ~4 : real bacon bits, real bacon pieces, bacon crumbles, imitation bacon bits | jar, oz
+crispy fried onions ~3 : french fried onions, fried onions, crispy onions, french's fried onions | can, oz
+salad toppers ~5 : salad topping, salad crunchies | bag, oz
+wonton strips ~5 : crispy wonton strips | bag, oz
+tortilla strips ~5 : crispy tortilla strips | bag, oz
