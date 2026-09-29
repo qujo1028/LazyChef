@@ -46,3 +46,24 @@ Then: `npm test`, `npm run test:db`, `npm run typecheck`, `npm run lint`, `npm r
 - Production: https://lazychef-gamma.vercel.app (Vercel project `lazychef`, team `quinn2212-7879s-projects`; `vercel.json` sets the framework to nextjs). Deploy from commit `47739f4`.
 - The user runs `npx vercel@latest deploy --prod`, because the auto-mode permission checker blocks Claude from running production deploys.
 - User to do: in Supabase, under Authentication → URL Configuration, set Site URL to https://lazychef-gamma.vercel.app and add `https://lazychef-gamma.vercel.app/**` to Redirect URLs (keep localhost).
+
+## Phase 3: recipe suggestions (2026-09-29, branch `claude/nice-shannon-yjvi7b`)
+Built:
+- Migration `20260929000100_recipes.sql`: `spoonacular_cache` (per household, max 1 hour, written only through
+  `put_spoonacular_cache()`) and `spoonacular_usage` (one row per UTC day, written only through
+  `record_spoonacular_usage()`). 7 new PGlite tests (35 total).
+- `src/lib/spoonacular/recipes.ts` + `recipe-shapes.ts`: findByIngredients (no filters), complexSearch (meal type /
+  cook time filters), recipe information.
+- `src/features/recipes/`: have/need matching (`match.ts`: ids, normalized names, library entries, "brown rice"
+  covers "rice", staples count, "ran out" doesn't), the shared cache with a daily-points guard (`cache.ts`, stops new
+  searches under 3 points left), filters in the URL, and "add missing to the shopping list" (`actions.ts`, `list.ts`).
+- Pages: `/recipes` (Make now, Almost there with 1 to 3 missing, filters) and `/recipes/[id]` (have/need checklist,
+  add to list, steps, source link).
+- The pantry's parseIngredients calls now record usage too.
+
+Still to do:
+- Done 2026-09-29: the user applied the migration in the SQL Editor, and all 4 migrations are now recorded in
+  `supabase_migrations.schema_migrations`. `SPOONACULAR_API_KEY` is set in Vercel (production + preview). A redeploy
+  put this branch on production before the PR merged, so merge it to keep `main` in sync.
+- Browser check with a real account once the migration is live.
+- Phase 4: the shopping list screen (recipe items already land in `shopping_list_items` with recipe id/title).

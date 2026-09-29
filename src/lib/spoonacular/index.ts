@@ -13,3 +13,15 @@ export {
   type ParseIngredientsResult,
   type SpoonacularIngredient,
 } from "./parse-ingredients"
+export {
+  findRecipesByIngredients,
+  getRecipeInformation,
+  MEAL_TYPES,
+  searchRecipes,
+  type MealType,
+  type RecipeDetail,
+  type RecipeIngredient,
+  type RecipeList,
+  type RecipeSearch,
+  type RecipeSummary,
+} from "./recipes"
