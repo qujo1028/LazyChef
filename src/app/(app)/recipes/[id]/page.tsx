@@ -6,6 +6,7 @@ import { notFound } from "next/navigation"
 import { EmptyState } from "@/components/empty-state"
 import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { CookSheet } from "@/features/recipes/components/cook-sheet"
 import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { getRecipeDetail } from "@/features/recipes/queries"
@@ -49,7 +50,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
     )
   }
 
-  const { recipe, ingredients, onList } = result
+  const { recipe, ingredients, onList, cook } = result
   const listKeys = new Set(onList.keys)
   const listIds = new Set(onList.ids)
   const lines: ChecklistLine[] = ingredients.map((ingredient, index) => ({
@@ -90,6 +91,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
           </span>
         </h2>
         <IngredientChecklist recipeId={recipe.id} lines={lines} />
+        <CookSheet recipeId={recipe.id} title={recipe.title} lines={cook} />
       </section>
 
       {recipe.steps.length > 0 ? (

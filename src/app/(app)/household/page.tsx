@@ -73,7 +73,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
               households={memberships.map((m) => ({ id: m.household.id, name: m.household.name }))}
             />
           ) : null}
-          <Button asChild variant="outline">
+          <Button asChild variant="outline" className="h-auto min-h-11 py-2 whitespace-normal">
             <Link href="/onboarding">
               <Plus />
               Create or join another household

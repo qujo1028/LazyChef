@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from
 import { toast } from "sonner"
 
 import { useHouseholdChanges } from "@/features/household/components/household-channel"
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { displayName } from "@/features/pantry/display"
 
 import { setChecked } from "../actions"

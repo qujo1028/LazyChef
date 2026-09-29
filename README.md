@@ -3,6 +3,21 @@
 A shared pantry, shopping list and recipe finder for one household. Mobile-first.
 Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtime) and Spoonacular.
 
+## What it does
+
+- **Pantry**: type or paste what you have ("2 lbs chicken breast, milk"). Items get categories from a
+  built-in ingredient library, expiry dates, "−1" / "Used some", staples that are always on hand, and a
+  "Ran out" section.
+- **Recipes**: "Make now" (you have everything) and "Almost there" (1 to 3 things missing), filtered by
+  meal and cook time. Spoonacular results are cached per household for an hour, and a daily points guard
+  keeps the free plan (50 points a day) from running out.
+- **I cooked this**: on a recipe, review what comes out of the pantry (converted to each item's unit, or
+  "check this" when units don't convert), then take it all out at once, with Undo. Anything that ran out
+  can go straight onto the list.
+- **Shopping list**: grouped by aisle, check off with one tap at the store, then "Put away" moves it all
+  into the pantry, topping up what's already there.
+- **Activity**: who added, used, cooked and restocked what. Everything above updates live for housemates.
+
 ## Setup
 
 1. `npm install`
@@ -63,7 +78,9 @@ Authentication → Emails → Templates:
 | `npm run dev` | Dev server on port 3000 |
 | `npm run build` | Production build |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
+| `npm test` | Unit tests (Vitest) for the pure logic: parsing, units, matching, list and pantry state |
 | `npm run test:db` | Runs the migrations in PGlite and tests the access rules (no Docker needed) |
+| `npm run ingredients` | Rebuilds the ingredient library (`-- --check` to verify it's up to date) |
 | `npm run db:types` | Regenerates `src/types/database.ts` from the live schema (needs `npx supabase login` once) |
 
 ## How it fits together
@@ -75,4 +92,9 @@ Authentication → Emails → Templates:
 - `supabase/migrations/`: the schema. Every table a household shares is guarded by `private.is_member()`.
   Creating, joining and leaving households only happen through Postgres functions.
 - Realtime: triggers broadcast row changes to a private `household:<id>` channel, which only members can
-  subscribe to.
+  subscribe to. The pantry and list keep their client state with `src/lib/row-state.ts` (newest row wins,
+  deleted ids stay deleted).
+- Server actions re-check the session and validate input with zod; client calls go through
+  `src/lib/call-action.ts`, so a dropped connection shows a toast instead of the error screen.
+- Multi-row changes are single Postgres functions (`add_pantry_items`, `complete_shopping_trip`,
+  `cook_recipe`), so each shows up as one entry in the activity feed.

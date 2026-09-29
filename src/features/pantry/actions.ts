@@ -152,8 +152,12 @@ export async function updateItem(id: string, fields: PantryItemFields): Promise<
   return { item: data }
 }
 
-/** Changes the amount relative to what's there now (so housemates' changes compose). Never below 0. */
-export async function adjustQuantity(id: string, delta: number): Promise<ActionResult<{ quantity: number }>> {
+/**
+ * Changes the amount relative to what's there now (so housemates' changes compose). Never
+ * below 0. Returns the whole updated row, with its new updated_at, so the list keeps it
+ * over an older server render that arrives later.
+ */
+export async function adjustQuantity(id: string, delta: number): Promise<ActionResult<{ item: PantryItem }>> {
   const parsedId = itemId.safeParse(id)
   if (!parsedId.success) return { error: firstIssue(parsedId.error) }
   const parsedDelta = z
@@ -171,12 +175,15 @@ export async function adjustQuantity(id: string, delta: number): Promise<ActionR
     p_delta: parsedDelta.data,
   })
   if (error) return { error: dbError("adjust_pantry_quantity", error) }
-  // null when the item is gone (or not visible to us). Numerics can arrive as strings.
+  // null when the item is gone (or not visible to us).
   if (data === null || data === undefined) return { error: REMOVED }
-  const quantity = Number(data)
+
+  const { data: item, error: readError } = await supabase.from("pantry_items").select().eq("id", parsedId.data).maybeSingle()
+  if (readError) return { error: dbError("Reading the item", readError) }
+  if (!item) return { error: REMOVED }
 
   revalidatePath("/pantry")
-  return { quantity }
+  return { item }
 }
 
 export async function deleteItem(id: string): Promise<ActionResult> {

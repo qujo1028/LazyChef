@@ -19,13 +19,13 @@ export function AppHeader({
         <BrandMark className="size-8 rounded-lg" />
         <Link
           href="/household"
-          className="flex min-w-0 flex-1 items-center gap-1 font-semibold"
+          className="flex min-h-11 min-w-0 flex-1 items-center gap-1 font-semibold"
           aria-label={`Household settings for ${householdName}`}
         >
           <span className="truncate">{householdName}</span>
           <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
         </Link>
-        <Link href="/household" aria-label="Your account">
+        <Link href="/household" aria-label="Your account" className="-mr-1.5 inline-flex size-11 shrink-0 items-center justify-center rounded-full">
           <UserAvatar name={displayName} src={avatarUrl} className="size-8" />
         </Link>
       </div>

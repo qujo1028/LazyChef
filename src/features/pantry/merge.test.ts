@@ -166,9 +166,17 @@ describe("planAdditions", () => {
       expect(plan).toMatchObject({ entries: [], alreadyOnHand: 1 })
     })
 
-    it("are added when the same thing ran out", () => {
-      const plan = planAdditions([line("milk", null)], [have("a", "milk", 0, "cup")], deps)
-      expect(plan.entries).toEqual([expect.objectContaining({ name: "milk", quantity: null })])
+    it("bring back a ran-out row as untracked instead of adding a second one", () => {
+      const plan = planAdditions([line("milk", null, "count", { expires_on: "2026-10-09" })], [have("a", "milk", 0, "cup")], deps)
+      expect(plan.entries).toEqual([{ merge_into: "a", untrack: true, expires_on: "2026-10-09" }])
+      expect(plan.outcomes).toEqual([{ type: "merge", into: "a" }])
+      expect(plan).toMatchObject({ added: 1, toppedUp: 0, alreadyOnHand: 0 })
+    })
+
+    it("count a brought-back row as on hand for later lines", () => {
+      const plan = planAdditions([line("eggs", null), line("egg", null)], [have("e", "eggs", 0)], deps)
+      expect(plan.entries).toEqual([{ merge_into: "e", untrack: true, expires_on: null }])
+      expect(plan.alreadyOnHand).toBe(1)
     })
 
     it("are skipped when repeated in the same batch", () => {

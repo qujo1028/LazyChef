@@ -1,9 +1,11 @@
 "use client"
 
 import { useFormStatus } from "react-dom"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { signInWithGoogle } from "@/features/auth/actions"
+import { actionError, callAction } from "@/lib/call-action"
 
 function GoogleLogo() {
   return (
@@ -28,7 +30,12 @@ function Submit() {
 
 export function GoogleButton({ next }: { next: string }) {
   return (
-    <form action={signInWithGoogle}>
+    <form
+      action={async (formData) => {
+        const error = actionError(await callAction(() => signInWithGoogle(formData)))
+        if (error) toast.error(error)
+      }}
+    >
       <input type="hidden" name="next" value={next} />
       <Submit />
     </form>

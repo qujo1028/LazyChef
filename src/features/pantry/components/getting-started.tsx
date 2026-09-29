@@ -14,7 +14,7 @@ import { addStaples } from "../actions"
 import { displayName } from "../display"
 import { describeAdditions } from "../merge"
 import { COMMON_STAPLES } from "../staples"
-import { callAction } from "./call-action"
+import { callAction } from "@/lib/call-action"
 
 /**
  * The empty pantry: what this is, a big "Add food" button, and one-tap kitchen basics.

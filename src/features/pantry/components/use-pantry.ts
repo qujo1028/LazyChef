@@ -18,7 +18,7 @@ import {
   type QuantityOverrides,
 } from "../pantry-state"
 import type { PantryItem } from "../types"
-import { callAction } from "./call-action"
+import { callAction } from "@/lib/call-action"
 
 export type AdjustOptions = {
   /** After the server confirms, with the new amount. */
@@ -72,10 +72,11 @@ export function usePantry({
       setOverrides((current) => beginAdjust(current, id, (item.quantity ?? 0) + delta))
       startTransition(async () => {
         const result = await callAction(() => adjustQuantity(id, delta))
-        if (result.error === undefined) apply({ type: "patch", id, fields: { quantity: result.quantity } })
+        // The full row carries the new updated_at, so an older snapshot can't win over it.
+        if (result.error === undefined) apply({ type: "upsert", item: result.item })
         setOverrides((current) => endAdjust(current, id))
         if (result.error !== undefined) toast.error(result.error)
-        else options.onDone?.(result.quantity)
+        else options.onDone?.(Number(result.item.quantity ?? 0))
       })
     },
     [apply],

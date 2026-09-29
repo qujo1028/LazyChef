@@ -7,7 +7,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { ReviewList } from "@/features/pantry/components/review-list"
 import { describeAdditions, type ExistingItem } from "@/features/pantry/merge"
 import { draftsToItems, type ReviewDraft } from "@/features/pantry/review"

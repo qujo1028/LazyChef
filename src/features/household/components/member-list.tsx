@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
 import { removeMember } from "@/features/household/actions"
+import { callAction } from "@/lib/call-action"
 
 type Member = {
   userId: string
@@ -52,7 +53,7 @@ export function MemberList({
                 confirmLabel="Remove"
                 successMessage={`${member.displayName} removed`}
                 destructive
-                onConfirm={() => removeMember(householdId, member.userId)}
+                onConfirm={() => callAction(() => removeMember(householdId, member.userId))}
               />
             ) : null}
           </li>

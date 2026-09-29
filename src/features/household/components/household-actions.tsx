@@ -2,10 +2,18 @@
 
 import { Check, LogOut } from "lucide-react"
 import { useTransition } from "react"
+import { toast } from "sonner"
 
 import { ConfirmButton } from "@/components/confirm-button"
 import { Button } from "@/components/ui/button"
-import { leaveHousehold, switchHousehold } from "@/features/household/actions"
+import { dismissPendingInvite, leaveHousehold, switchHousehold } from "@/features/household/actions"
+import { actionError, callAction } from "@/lib/call-action"
+
+/** Opens a household; a failed call becomes a toast instead of the error screen. */
+async function open(householdId: string) {
+  const error = actionError(await callAction(() => switchHousehold(householdId)))
+  if (error) toast.error(error)
+}
 
 export function LeaveHouseholdButton({
   householdId,
@@ -19,7 +27,7 @@ export function LeaveHouseholdButton({
   return (
     <ConfirmButton
       trigger={
-        <Button variant="destructive" className="w-full">
+        <Button variant="destructive" className="h-11 w-full">
           <LogOut />
           Leave household
         </Button>
@@ -32,7 +40,7 @@ export function LeaveHouseholdButton({
       }
       confirmLabel={lastMember ? "Leave and delete" : "Leave"}
       destructive
-      onConfirm={() => leaveHousehold(householdId)}
+      onConfirm={() => callAction(() => leaveHousehold(householdId))}
     />
   )
 }
@@ -40,7 +48,7 @@ export function LeaveHouseholdButton({
 export function OpenHouseholdButton({ householdId, label }: { householdId: string; label: string }) {
   const [pending, startTransition] = useTransition()
   return (
-    <Button size="lg" className="w-full" disabled={pending} onClick={() => startTransition(() => switchHousehold(householdId))}>
+    <Button size="lg" className="w-full" disabled={pending} onClick={() => startTransition(() => open(householdId))}>
       {pending ? "Opening…" : label}
     </Button>
   )
@@ -62,9 +70,9 @@ export function HouseholdSwitcher({
           <li key={h.id}>
             <Button
               variant={active ? "secondary" : "outline"}
-              className="w-full justify-between"
+              className="h-11 w-full justify-between"
               disabled={active || pending}
-              onClick={() => startTransition(() => switchHousehold(h.id))}
+              onClick={() => startTransition(() => open(h.id))}
             >
               <span className="truncate">{h.name}</span>
               {active ? <Check className="text-primary" /> : <span className="text-xs text-muted-foreground">Switch</span>}
@@ -73,5 +81,21 @@ export function HouseholdSwitcher({
         )
       })}
     </ul>
+  )
+}
+
+/** "Not now" on a pending invite. */
+export function DismissInviteButton() {
+  return (
+    <form
+      action={async () => {
+        const error = actionError(await callAction(dismissPendingInvite))
+        if (error) toast.error(error)
+      }}
+    >
+      <Button type="submit" variant="ghost" className="h-11 w-full text-muted-foreground">
+        Not now
+      </Button>
+    </form>
   )
 }

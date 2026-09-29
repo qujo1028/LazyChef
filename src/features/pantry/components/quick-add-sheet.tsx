@@ -14,7 +14,7 @@ import { addItems, previewItems } from "../actions"
 import { describeAdditions } from "../merge"
 import type { SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftsToItems, type ReviewDraft } from "../review"
-import { callAction } from "./call-action"
+import { callAction } from "@/lib/call-action"
 import { IngredientCombobox } from "./ingredient-combobox"
 import { ReviewList, SpoonacularNote } from "./review-list"
 

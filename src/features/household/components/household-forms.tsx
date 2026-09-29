@@ -14,10 +14,11 @@ import {
   updateDisplayName,
   type ActionState,
 } from "@/features/household/actions"
+import { withConnectionErrors } from "@/lib/call-action"
 import { formatInviteCode, normalizeInviteCode } from "@/lib/invite"
 
 export function CreateHouseholdForm() {
-  const [state, action, pending] = useActionState<ActionState, FormData>(createHousehold, undefined)
+  const [state, action, pending] = useActionState<ActionState, FormData>(withConnectionErrors(createHousehold), undefined)
   return (
     <form action={action} className="grid gap-4">
       <Field>
@@ -33,7 +34,7 @@ export function CreateHouseholdForm() {
 }
 
 export function JoinHouseholdForm({ defaultCode = "" }: { defaultCode?: string }) {
-  const [state, action, pending] = useActionState<ActionState, FormData>(joinHousehold, undefined)
+  const [state, action, pending] = useActionState<ActionState, FormData>(withConnectionErrors(joinHousehold), undefined)
   const [code, setCode] = useState(defaultCode ? formatInviteCode(normalizeInviteCode(defaultCode)) : "")
 
   function handleChange(value: string) {
@@ -74,7 +75,7 @@ function useSavedToast(state: ActionState, message: string) {
 }
 
 export function RenameHouseholdForm({ householdId, name }: { householdId: string; name: string }) {
-  const [state, action, pending] = useActionState<ActionState, FormData>(renameHousehold, undefined)
+  const [state, action, pending] = useActionState<ActionState, FormData>(withConnectionErrors(renameHousehold), undefined)
   useSavedToast(state, "Household renamed")
   return (
     <form action={action} className="grid gap-3">
@@ -94,7 +95,7 @@ export function RenameHouseholdForm({ householdId, name }: { householdId: string
 }
 
 export function DisplayNameForm({ displayName }: { displayName: string }) {
-  const [state, action, pending] = useActionState<ActionState, FormData>(updateDisplayName, undefined)
+  const [state, action, pending] = useActionState<ActionState, FormData>(withConnectionErrors(updateDisplayName), undefined)
   useSavedToast(state, "Name updated")
   return (
     <form action={action} className="grid gap-3">

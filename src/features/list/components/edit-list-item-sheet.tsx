@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { CategorySelect, UnitSelect } from "@/features/pantry/components/selects"
 import { categoryLabel, displayName } from "@/features/pantry/display"
 

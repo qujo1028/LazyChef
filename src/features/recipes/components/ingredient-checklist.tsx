@@ -6,7 +6,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { callAction } from "@/features/pantry/components/call-action"
+import { callAction } from "@/lib/call-action"
 import { displayName } from "@/features/pantry/display"
 import { cn } from "@/lib/utils"
 
@@ -68,14 +68,15 @@ export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lin
           const id = `ingredient-${line.index}`
           const onList = isOnList(line)
           return (
-            <li key={line.index} className="flex min-h-12 items-center gap-3 px-3.5 py-2.5">
+            <li key={line.index} className="flex min-h-14 items-center gap-3 px-3.5 py-2.5">
               {line.status === "need" && !onList ? (
                 <Checkbox
                   id={id}
                   checked={selected.has(line.index)}
                   onCheckedChange={(value) => toggle(line.index, value === true)}
                   aria-label={`Add ${line.name} to the shopping list`}
-                  className="size-5"
+                  // 20px box, 44px hit area (the row's label toggles it too).
+                  className="size-5 after:-inset-3"
                 />
               ) : (
                 <span
