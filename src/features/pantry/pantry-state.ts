@@ -1,28 +1,29 @@
-// Pure: the pantry list's client state. Items keyed by id, changed by server
-// responses, housemates' live row changes and optimistic updates alike.
+// Pure: the pantry list's client state, on top of the shared row state in
+// src/lib/row-state.ts, plus the pantry's own in-flight amount overrides.
+import {
+  applyRowChange,
+  indexRows,
+  initialRowState,
+  reduceRows,
+  rowChangeFromBroadcast,
+  toNumber,
+  type RowBroadcast,
+  type RowChange,
+  type RowState,
+  type RowSync,
+  type Rows,
+} from "@/lib/row-state"
+
 import type { PantryItem } from "./types"
 
-export type PantryItems = ReadonlyMap<string, PantryItem>
+export { SYNC_GRACE_MS } from "@/lib/row-state"
 
-export type PantryChange =
-  /** A full row from the server or a live broadcast. Ignored if it's older than what we have. */
-  | { type: "upsert"; item: PantryItem }
-  /** Some fields of an item we already have (an optimistic edit, or an action's result). */
-  | { type: "patch"; id: string; fields: Partial<PantryItem> }
-  | { type: "remove"; id: string }
+export type PantryItems = Rows<PantryItem>
+
+export type PantryChange = RowChange<PantryItem>
 
 /** A row change broadcast by the database (see useHouseholdChanges). */
-export type PantryBroadcast = {
-  operation: "INSERT" | "UPDATE" | "DELETE"
-  record: PantryItem | null
-  oldRecord: PantryItem | null
-}
-
-function toNumber(value: number | string | null | undefined): number | null {
-  if (value === null || value === undefined) return null
-  const number = Number(value)
-  return Number.isFinite(number) ? number : null
-}
+export type PantryBroadcast = RowBroadcast<PantryItem>
 
 /** Postgres numerics can arrive as strings (JSON), the list wants numbers. */
 export function normalizeItem(item: PantryItem): PantryItem {
@@ -33,107 +34,32 @@ export function normalizeItem(item: PantryItem): PantryItem {
 }
 
 export function indexItems(items: Iterable<PantryItem>): Map<string, PantryItem> {
-  const map = new Map<string, PantryItem>()
-  for (const item of items) map.set(item.id, normalizeItem(item))
-  return map
-}
-
-function time(iso: string): number {
-  const ms = Date.parse(iso)
-  return Number.isNaN(ms) ? 0 : ms
+  return indexRows(items, normalizeItem)
 }
 
 /** Returns `items` itself when nothing changes, so React can skip the re-render. */
 export function applyPantryChange(items: PantryItems, change: PantryChange): PantryItems {
-  switch (change.type) {
-    case "upsert": {
-      const item = normalizeItem(change.item)
-      const current = items.get(item.id)
-      // A late broadcast must not undo a newer row we already have.
-      if (current && time(current.updated_at) > time(item.updated_at)) return items
-      const next = new Map(items)
-      next.set(item.id, item)
-      return next
-    }
-    case "patch": {
-      const current = items.get(change.id)
-      if (!current) return items
-      const next = new Map(items)
-      next.set(change.id, normalizeItem({ ...current, ...change.fields }))
-      return next
-    }
-    case "remove": {
-      if (!items.has(change.id)) return items
-      const next = new Map(items)
-      next.delete(change.id)
-      return next
-    }
-  }
+  return applyRowChange(items, change, normalizeItem)
 }
 
 /** A broadcast as a change for this household's list, or null if it isn't one. */
 export function changeFromBroadcast(broadcast: PantryBroadcast, householdId: string): PantryChange | null {
-  if (broadcast.operation === "DELETE") {
-    const old = broadcast.oldRecord
-    if (!old || (old.household_id && old.household_id !== householdId)) return null
-    return { type: "remove", id: old.id }
-  }
-  const record = broadcast.record
-  if (!record || record.household_id !== householdId) return null
-  return { type: "upsert", item: record }
+  return rowChangeFromBroadcast(broadcast, householdId)
 }
 
-/**
- * The list's state: the items, plus ids we know were deleted. Ids are never reused, so a
- * deleted id showing up again can only be a stale snapshot or a late broadcast.
- */
-export type PantryState = { items: PantryItems; deleted: ReadonlySet<string> }
+/** The list's state: the items, plus ids we know were deleted (see RowState). */
+export type PantryState = RowState<PantryItem>
 
 /** A fresh server render of the whole pantry. `fetchedAt` is when it was read (ms). */
-export type PantrySync = { type: "sync"; items: readonly PantryItem[]; fetchedAt: number }
-
-/**
- * Rows only we have are kept if they changed this close to (or after) the snapshot:
- * they probably arrived live while it was being read. Older ones were deleted.
- */
-export const SYNC_GRACE_MS = 10_000
+export type PantrySync = RowSync<PantryItem>
 
 export function initialPantryState(items: Iterable<PantryItem>): PantryState {
-  return { items: indexItems(items), deleted: new Set() }
-}
-
-/** Server snapshots merged with what we already know; newer rows win either way. */
-function syncItems(state: PantryState, sync: PantrySync): PantryItems {
-  const next = new Map<string, PantryItem>()
-  for (const raw of sync.items) {
-    if (state.deleted.has(raw.id)) continue
-    const item = normalizeItem(raw)
-    const mine = state.items.get(item.id)
-    next.set(item.id, mine && time(mine.updated_at) > time(item.updated_at) ? mine : item)
-  }
-  for (const [id, mine] of state.items) {
-    if (!next.has(id) && time(mine.updated_at) > sync.fetchedAt - SYNC_GRACE_MS) next.set(id, mine)
-  }
-  return next
+  return initialRowState(items, normalizeItem)
 }
 
 /** Returns `state` itself when nothing changes. */
 export function reducePantry(state: PantryState, change: PantryChange | PantrySync): PantryState {
-  switch (change.type) {
-    case "sync":
-      return { ...state, items: syncItems(state, change) }
-    case "remove": {
-      const items = applyPantryChange(state.items, change)
-      if (items === state.items && state.deleted.has(change.id)) return state
-      return { items, deleted: new Set(state.deleted).add(change.id) }
-    }
-    case "upsert":
-    case "patch": {
-      if (change.type === "upsert" && state.deleted.has(change.item.id)) return state
-      const items = applyPantryChange(state.items, change)
-      return items === state.items ? state : { ...state, items }
-    }
-  }
+  return reduceRows(state, change, normalizeItem)
 }
 
 /**

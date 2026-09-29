@@ -27,8 +27,19 @@ export type MergeDeps = {
   convert: (quantity: number, from: string, to: string) => number | null
 }
 
+/** What happened to one incoming line. */
+export type LineOutcome =
+  /** A new pantry row (possibly shared with earlier lines of the same thing). */
+  | { type: "insert" }
+  /** Tops up this existing item. */
+  | { type: "merge"; into: string }
+  /** No amount, and it's already on hand: skipped. */
+  | { type: "on-hand" }
+
 export type AdditionPlan = {
   entries: PlanEntry[]
+  /** One per incoming line, in order. */
+  outcomes: LineOutcome[]
   /** New pantry rows. */
   added: number
   /** Existing rows that get more. */
@@ -68,6 +79,7 @@ export function planAdditions(
   const inserts: { key: string; entry: InsertEntry }[] = []
   const merges = new Map<string, MergeEntry>()
   const entries: PlanEntry[] = []
+  const outcomes: LineOutcome[] = []
   let alreadyOnHand = 0
 
   for (const line of incoming) {
@@ -79,8 +91,10 @@ export function planAdditions(
       const onHand =
         current.some(({ item, key: k }) => same(k, item.ingredient_id) && item.quantity !== 0) ||
         inserts.some(({ key: k, entry }) => same(k, entry.ingredient_id) && entry.quantity !== 0)
-      if (onHand) alreadyOnHand++
-      else insert(key, line)
+      if (onHand) {
+        alreadyOnHand++
+        outcomes.push({ type: "on-hand" })
+      } else insert(key, line)
       continue
     }
 
@@ -111,6 +125,7 @@ export function planAdditions(
         merges.set(target.item.id, entry)
         entries.push(entry)
       }
+      outcomes.push({ type: "merge", into: target.item.id })
       continue
     }
 
@@ -129,6 +144,7 @@ export function planAdditions(
       }
       entry.expires_on = earliest(entry.expires_on, line.expires_on)
       entry.is_staple ||= line.is_staple
+      outcomes.push({ type: "insert" })
       continue
     }
 
@@ -147,9 +163,10 @@ export function planAdditions(
     }
     inserts.push({ key, entry })
     entries.push(entry)
+    outcomes.push({ type: "insert" })
   }
 
-  return { entries, added: inserts.length, toppedUp: merges.size, alreadyOnHand }
+  return { entries, outcomes, added: inserts.length, toppedUp: merges.size, alreadyOnHand }
 }
 
 /** Category fixes to remember for the household: one per normalized name, last wins. */
@@ -167,7 +184,7 @@ export function categoryOverrides(
 }
 
 /** "Added 5 items, topped up 2" (and "1 was already on hand"). */
-export function describeAdditions({ added, toppedUp, alreadyOnHand }: Omit<AdditionPlan, "entries">): string {
+export function describeAdditions({ added, toppedUp, alreadyOnHand }: Pick<AdditionPlan, "added" | "toppedUp" | "alreadyOnHand">): string {
   const parts: string[] = []
   if (added) parts.push(`added ${added} ${added === 1 ? "item" : "items"}`)
   if (toppedUp) parts.push(`topped up ${toppedUp}`)

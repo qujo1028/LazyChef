@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleOff, LoaderCircle, Trash2 } from "lucide-react"
+import { CircleOff, ListPlus, LoaderCircle, Trash2 } from "lucide-react"
 import { useId, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -10,6 +10,8 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+
+import { addPantryItemToList } from "@/features/list/components/add-to-list"
 
 import { deleteItem, updateItem } from "../actions"
 import { expiryInfo, timeAgo } from "../dates"
@@ -139,7 +141,9 @@ function EditItemContent({
         return
       }
       apply({ type: "upsert", item: result.item })
-      toast.success(`Moved ${item.name.trim()} to Ran out`)
+      toast.success(`Moved ${item.name.trim()} to Ran out`, {
+        action: { label: "Add to list", onClick: () => void addPantryItemToList(before) },
+      })
     })
   }
 
@@ -193,6 +197,19 @@ function EditItemContent({
                 We ran out
               </Button>
             ) : null}
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="h-12 justify-start"
+              onClick={() => {
+                close()
+                void addPantryItemToList(item)
+              }}
+            >
+              <ListPlus className="size-5" aria-hidden />
+              Add to shopping list
+            </Button>
 
             <form id={formId} onSubmit={save} className="grid grid-cols-1 gap-5" noValidate>
               <Field data-invalid={shownErrors.name ? true : undefined}>

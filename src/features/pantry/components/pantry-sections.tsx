@@ -1,6 +1,6 @@
 "use client"
 
-import { AlarmClock, ChevronRight, Infinity as InfinityIcon } from "lucide-react"
+import { AlarmClock, ChevronRight, Infinity as InfinityIcon, ListPlus } from "lucide-react"
 import { useId, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -15,6 +15,7 @@ import type { PantryItem } from "../types"
 type RowActions = {
   onOpen: (item: PantryItem) => void
   onUseOne: (item: PantryItem) => void
+  onAddToList: (item: PantryItem) => void
 }
 
 /** The grouped list: expiring soon, one card per category, staples as chips, then "Ran out". */
@@ -128,6 +129,7 @@ function ItemRow({
   muted,
   onOpen,
   onUseOne,
+  onAddToList,
 }: RowActions & { item: PantryItem; today: string; showEmoji: boolean; muted: boolean }) {
   const name = displayName(item.name)
   const expiry = expiryInfo(item.expires_on, today)
@@ -155,6 +157,16 @@ function ItemRow({
           className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border bg-background text-sm font-semibold tabular-nums transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-muted dark:border-input dark:bg-input/30"
         >
           −1
+        </button>
+      ) : null}
+      {item.quantity === 0 && !item.is_staple ? (
+        <button
+          type="button"
+          onClick={() => onAddToList(item)}
+          aria-label={`Add ${name} to the shopping list`}
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border bg-background text-primary transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-muted dark:border-input dark:bg-input/30"
+        >
+          <ListPlus className="size-5" aria-hidden />
         </button>
       ) : null}
     </li>

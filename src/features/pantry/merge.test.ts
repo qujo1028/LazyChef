@@ -55,6 +55,7 @@ describe("planAdditions", () => {
           ingredient_id: 5062,
         },
       ],
+      outcomes: [{ type: "insert" }],
       added: 1,
       toppedUp: 0,
       alreadyOnHand: 0,
@@ -157,7 +158,7 @@ describe("planAdditions", () => {
   describe("lines without an amount", () => {
     it("are skipped when the same thing is untracked already", () => {
       const plan = planAdditions([line("salt", null)], [have("a", "salt", null)], deps)
-      expect(plan).toEqual({ entries: [], added: 0, toppedUp: 0, alreadyOnHand: 1 })
+      expect(plan).toEqual({ entries: [], outcomes: [{ type: "on-hand" }], added: 0, toppedUp: 0, alreadyOnHand: 1 })
     })
 
     it("are skipped when the same thing is tracked and in stock", () => {
@@ -191,6 +192,23 @@ describe("planAdditions", () => {
     const plan = planAdditions([line("sugar", 0.1, "cup"), line("sugar", 0.2, "cup")], [], deps)
     expect(plan.entries[0]).toMatchObject({ quantity: 0.3 })
     expect(roundQuantity(1 / 3)).toBe(0.3333)
+  })
+})
+
+describe("planAdditions outcomes", () => {
+  it("says what happened to each line, in order", () => {
+    const plan = planAdditions(
+      [line("chicken", 1, "lb"), line("salt", null), line("rice", 2, "cup"), line("rice", 1, "cup")],
+      [have("c", "chicken", 0.5, "lb"), have("s", "salt", null)],
+      deps,
+    )
+    expect(plan.outcomes).toEqual([
+      { type: "merge", into: "c" },
+      { type: "on-hand" },
+      { type: "insert" },
+      { type: "insert" },
+    ])
+    expect(plan.added).toBe(1)
   })
 })
 

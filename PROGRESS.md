@@ -67,3 +67,26 @@ Still to do:
   put this branch on production before the PR merged, so merge it to keep `main` in sync.
 - Browser check with a real account once the migration is live.
 - Phase 4: the shopping list screen (recipe items already land in `shopping_list_items` with recipe id/title).
+
+## Phase 4: the shared shopping list (2026-09-29, branch `claude/nice-shannon-yjvi7b`)
+No database changes (the list migration was already live). Built:
+- `/list`: lines grouped by aisle in store order, a count in the header, "In the cart" (who checked it), an empty
+  state, `loading.tsx` and `error.tsx`.
+- Quick add (`list-quick-add.tsx`): the pantry's parser + ingredient combobox; adds right away with Undo. Categories
+  come from the household's fixes, then the ingredient library (no Spoonacular points). Repeats top up an unchecked
+  line (`src/features/list/plan.ts`).
+- Checking off: optimistic with Undo, live for housemates (`use-list.ts`, checked overrides in `list-state.ts`).
+- Edit sheet: name, amount/unit, aisle, note; delete with Undo.
+- Put away: the pantry's review cards with expiry dates and "Adds to your …" hints (`put-away.ts`, `planAdditions`
+  now returns per-line `outcomes`), then `complete_shopping_trip`. ✕ on a card clears it without adding it;
+  "Clear without adding" clears everything checked.
+- Pantry: "Add to shopping list" in the edit sheet and on "Ran out" rows, plus an action on the "Moved to Ran out" toast.
+- Recipes: "Add missing to list" now goes through the same planner, so it tops up instead of skipping.
+- Refactors: the pantry's list state now sits on a generic `src/lib/row-state.ts`; pantry zod schemas and
+  `dbError`/`saveCategoryOverrides` moved to `schemas.ts` / `server-helpers.ts` so the list reuses them.
+
+Checked in a browser at 375px with two throwaway accounts in their own test household (all deleted afterwards).
+Add, top-up, check/undo, edit, delete, put away (4 lb chicken in the pantry after topping up 1 lb), and ran out →
+list → clear without adding all worked, with no horizontal scroll. Live sync couldn't be checked here: the
+sandbox's browser can't open the Supabase Realtime websocket. It uses the same channel as the pantry, so check it on
+two phones after deploy.

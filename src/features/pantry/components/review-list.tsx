@@ -24,12 +24,15 @@ export function ReviewList({
   today,
   showErrors,
   disabled,
+  hints,
 }: {
   drafts: readonly ReviewDraft[]
   onChange: (drafts: ReviewDraft[]) => void
   today: string
   showErrors: boolean
   disabled?: boolean
+  /** A note per draft key, e.g. "Adds to your chicken breast (1 lb now)". */
+  hints?: ReadonlyMap<string, string>
 }) {
   return (
     <ul className="grid grid-cols-1 gap-3" aria-label="Items to add">
@@ -40,6 +43,7 @@ export function ReviewList({
           today={today}
           showErrors={showErrors}
           disabled={disabled}
+          hint={hints?.get(draft.key)}
           onChange={(next) => onChange(drafts.map((d) => (d.key === draft.key ? next : d)))}
           onRemove={() => onChange(drafts.filter((d) => d.key !== draft.key))}
         />
@@ -53,6 +57,7 @@ function ReviewItemCard({
   today,
   showErrors,
   disabled,
+  hint,
   onChange,
   onRemove,
 }: {
@@ -60,6 +65,7 @@ function ReviewItemCard({
   today: string
   showErrors: boolean
   disabled?: boolean
+  hint?: string
   onChange: (draft: ReviewDraft) => void
   onRemove: () => void
 }) {
@@ -97,6 +103,12 @@ function ReviewItemCard({
         </Button>
       </div>
       {errors.name ? <FieldError id={`${id}-name-error`}>{errors.name}</FieldError> : null}
+      {hint ? (
+        <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-primary">
+          <Info className="size-3.5 shrink-0" aria-hidden />
+          {hint}
+        </p>
+      ) : null}
 
       <div className="flex flex-wrap items-center gap-2">
         <Input
