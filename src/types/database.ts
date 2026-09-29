@@ -347,36 +347,26 @@ export type Database = {
           cache_key: string
           created_at: string
           expires_at: string
-          household_id: string
           response: Json
         }
         Insert: {
           cache_key: string
           created_at?: string
-          expires_at: string
-          household_id: string
+          expires_at?: string
           response: Json
         }
         Update: {
           cache_key?: string
           created_at?: string
           expires_at?: string
-          household_id?: string
           response?: Json
         }
-        Relationships: [
-          {
-            foreignKeyName: "spoonacular_cache_household_id_fkey"
-            columns: ["household_id"]
-            isOneToOne: false
-            referencedRelation: "households"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       spoonacular_usage: {
         Row: {
           day: string
+          exhausted_at: string | null
           points_left: number | null
           points_used: number
           requests: number
@@ -384,6 +374,7 @@ export type Database = {
         }
         Insert: {
           day: string
+          exhausted_at?: string | null
           points_left?: number | null
           points_used?: number
           requests?: number
@@ -391,6 +382,7 @@ export type Database = {
         }
         Update: {
           day?: string
+          exhausted_at?: string | null
           points_left?: number | null
           points_used?: number
           requests?: number
@@ -450,13 +442,26 @@ export type Database = {
         Args: { p_household_id: string }
         Returns: undefined
       }
+      purge_spoonacular_cache: {
+        Args: never
+        Returns: number
+      }
       put_spoonacular_cache: {
-        Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
+        Args: { p_cache_key: string; p_response: Json; p_ttl_seconds?: number }
         Returns: string
       }
       record_spoonacular_usage: {
-        Args: { p_points_left: number | null; p_points_used: number }
-        Returns: undefined
+        Args: {
+          p_estimated_cost?: number | null
+          p_exhausted?: boolean
+          p_points_left: number | null
+          p_points_used: number | null
+        }
+        Returns: {
+          exhausted: boolean
+          points_left: number | null
+          points_used: number
+        }[]
       }
       regenerate_invite_code: {
         Args: { p_household_id: string }

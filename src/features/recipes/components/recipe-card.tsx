@@ -30,9 +30,17 @@ export function RecipeCard({ recipe }: { recipe: Suggestion }) {
             {recipe.have.length} from your pantry
           </p>
           {recipe.need.length > 0 ? (
-            <p className="line-clamp-2 text-sm">
-              <span className="font-medium text-amber-700 dark:text-amber-400">Need:</span> {list(recipe.need)}
-            </p>
+            <div className="flex flex-wrap items-center gap-1">
+              <span className="text-xs font-medium text-amber-700 dark:text-amber-400">Missing:</span>
+              {recipe.need.map((name) => (
+                <span
+                  key={name}
+                  className="max-w-full truncate rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-900 dark:bg-amber-950 dark:text-amber-200"
+                >
+                  {displayName(name)}
+                </span>
+              ))}
+            </div>
           ) : null}
           {recipe.usesExpiring.length > 0 ? (
             <p className="inline-flex items-center gap-1 text-xs text-amber-700 dark:text-amber-400">

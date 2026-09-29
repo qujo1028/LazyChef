@@ -1,16 +1,13 @@
 import "server-only"
 
 import { SpoonacularError, spoonacularFetch, type SpoonacularQuota } from "./client"
+import { complexSearchCost, findByIngredientsCost, type ComplexSearchOptions } from "./cost"
 import { toRecipeDetail, toRecipeSummary, type RecipeDetail, type RecipeSummary } from "./recipe-shapes"
 
 export type { RecipeDetail, RecipeIngredient, RecipeSummary } from "./recipe-shapes"
 
-// Costs (free plan, 50 points a day):
-//   findByIngredients: 1 point + 0.01 per recipe returned
-//   complexSearch:     1 point + 0.01 per recipe, + 0.025 per recipe for fillIngredients
-//                      and another 0.025 for addRecipeInformation
-//   information:       1 point
-// Callers cache results (up to the 1 hour the terms allow) so housemates share them.
+// Costs are in ./cost.ts (free plan, 50 points a day). Callers cache results for up to
+// the 1 hour the terms allow, shared by every household.
 
 /** Spoonacular's own meal types (the complexSearch `type` parameter). */
 export const MEAL_TYPES = [
@@ -56,6 +53,21 @@ export type RecipeSearch = {
 }
 
 /**
+ * complexSearch add-ons: fillIngredients gives used/missed lists (needed to sort into
+ * "Make now" and "Almost there"), addRecipeInformation gives the cook time for the cards.
+ * No instructions: the recipe page loads those. Each costs 0.025 per result.
+ */
+export const SEARCH_ADD_ONS = { fillIngredients: true, addRecipeInformation: true } as const satisfies ComplexSearchOptions
+
+/** What findRecipesByIngredients(…, number) costs at most. */
+export const findCost = findByIngredientsCost
+
+/** What searchRecipes({ number }) costs at most. */
+export function searchCost(number: number): number {
+  return complexSearchCost(number, SEARCH_ADD_ONS)
+}
+
+/**
  * GET /recipes/complexSearch for when meal type or time filters are on (findByIngredients
  * can't filter). Sorted by fewest missing ingredients; `includeIngredients` only ranks,
  * it doesn't require every one of them.
@@ -63,8 +75,7 @@ export type RecipeSearch = {
 export async function searchRecipes({ ingredients, type, maxReadyTime, number = 30 }: RecipeSearch): Promise<RecipeList> {
   const query: Record<string, string | number | boolean> = {
     includeIngredients: ingredients.join(","),
-    fillIngredients: true,
-    addRecipeInformation: true,
+    ...SEARCH_ADD_ONS,
     ignorePantry: true,
     sort: "min-missing-ingredients",
     number,

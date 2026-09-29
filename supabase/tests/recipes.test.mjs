@@ -3,96 +3,123 @@ import { before, describe, test } from "node:test"
 
 import { assertRejects, createTestDb } from "./harness.mjs"
 
-describe("spoonacular cache and usage", () => {
-  let t, alex, blair, casey, maple, caseyHome
+describe("spoonacular cache and usage (server only)", () => {
+  let t, alex, maple
 
-  const put = (user, household, key, response, ttl) =>
-    t.as(user, async () =>
-      (await t.q("select public.put_spoonacular_cache($1, $2, $3, $4) as expires", [household, key, JSON.stringify(response), ttl ?? null]))[0]
-        .expires,
+  /** Run fn with the server's secret key (service_role). */
+  async function asServer(fn) {
+    await t.db.exec("set role service_role")
+    try {
+      return await fn()
+    } finally {
+      await t.db.exec("reset role")
+    }
+  }
+
+  const put = (key, response, ttl) =>
+    asServer(async () =>
+      (await t.q("select public.put_spoonacular_cache($1, $2, $3) as expires", [key, JSON.stringify(response), ttl ?? null]))[0].expires,
     )
-  const read = (user, household) =>
-    t.as(user, () =>
-      t.q("select cache_key, response from public.spoonacular_cache where household_id = $1 order by cache_key", [household]),
+  const record = (used, left, estimate = null, exhausted = false) =>
+    asServer(async () =>
+      (
+        await t.q(
+          "select points_used::float8 as used, points_left::float8 as left, exhausted from public.record_spoonacular_usage($1, $2, $3, $4)",
+          [used, left, estimate, exhausted],
+        )
+      )[0],
     )
-  const usage = () =>
-    t.q("select day, points_used::float8 as used, points_left::float8 as left, requests from public.spoonacular_usage")
+  const keys = () => t.q("select cache_key from public.spoonacular_cache order by cache_key").then((rows) => rows.map((r) => r.cache_key))
 
   before(async () => {
     t = await createTestDb()
     alex = await t.createUser("a@test.dev", { full_name: "Alex" })
-    blair = await t.createUser("b@test.dev", { full_name: "Blair" })
-    casey = await t.createUser("c@test.dev", { full_name: "Casey" })
     maple = await t.as(alex, async () => (await t.q("select public.create_household('Maple') as id"))[0].id)
-    const [{ invite_code }] = await t.q("select invite_code from public.households where id = $1", [maple])
-    await t.as(blair, () => t.q("select public.join_household($1)", [invite_code]))
-    caseyHome = await t.as(casey, async () => (await t.q("select public.create_household('Casey Home') as id"))[0].id)
+    assert.ok(maple)
   })
 
-  test("housemates share cached responses; other households can't see them", async () => {
-    await put(alex, maple, "find:abc", [{ id: 1, title: "Soup" }])
-    assert.deepEqual(await read(blair, maple), [{ cache_key: "find:abc", response: [{ id: 1, title: "Soup" }] }])
-    assert.deepEqual(await read(casey, maple), [])
+  test("the server writes and reads one cache shared by every household", async () => {
+    await put("find:abc", [{ id: 1, title: "Soup" }])
+    const rows = await asServer(() => t.q("select cache_key, response from public.spoonacular_cache"))
+    assert.deepEqual(rows, [{ cache_key: "find:abc", response: [{ id: 1, title: "Soup" }] }])
+    await put("find:abc", [{ id: 2, title: "Stew" }])
+    const [row] = await asServer(() => t.q("select response from public.spoonacular_cache where cache_key = 'find:abc'"))
+    assert.deepEqual(row.response, [{ id: 2, title: "Stew" }])
   })
 
-  test("writing again replaces the entry", async () => {
-    await put(blair, maple, "find:abc", [{ id: 2, title: "Stew" }])
-    assert.deepEqual(await read(alex, maple), [{ cache_key: "find:abc", response: [{ id: 2, title: "Stew" }] }])
+  test("signed-in people and anon can't read, write or call anything", async () => {
+    for (const user of [alex, null]) {
+      await t.as(user, async () => {
+        await assertRejects(() => t.q("select * from public.spoonacular_cache"), /permission denied/)
+        await assertRejects(() => t.q("select * from public.spoonacular_usage"), /permission denied/)
+        await assertRejects(
+          () => t.q("insert into public.spoonacular_cache (cache_key, response) values ('x', '{}')"),
+          /permission denied/,
+        )
+        await assertRejects(() => t.q("select public.put_spoonacular_cache('x', '{}'::jsonb)"), /permission denied/)
+        await assertRejects(() => t.q("select public.purge_spoonacular_cache()"), /permission denied/)
+        await assertRejects(() => t.q("select * from public.record_spoonacular_usage(1, 49)"), /permission denied/)
+      })
+    }
   })
 
   test("entries last at most an hour, whatever the caller asks for", async () => {
     const [{ now }] = await t.q("select now() as now")
-    const long = new Date(await put(alex, maple, "info:1", { id: 1 }, 999999))
+    const long = new Date(await put("info:1", { id: 1 }, 999999))
     assert.ok(long - new Date(now) <= 3600_000 + 1000)
-    const short = new Date(await put(alex, maple, "info:2", { id: 2 }, 60))
+    const short = new Date(await put("info:2", { id: 2 }, 60))
     assert.ok(short - new Date(now) <= 61_000)
+    // Even the table owner can't store something for longer.
+    await assertRejects(
+      () =>
+        t.q("insert into public.spoonacular_cache (cache_key, response, expires_at) values ('long', '{}', now() + interval '2 hours')"),
+      /spoonacular_cache_one_hour/,
+    )
   })
 
-  test("expired entries are cleared on the next write", async () => {
+  test("expired entries are purged on the next write, or on demand", async () => {
     await t.q("update public.spoonacular_cache set created_at = now() - interval '2 hours', expires_at = now() - interval '1 hour' where cache_key = 'info:1'")
-    await put(alex, maple, "info:3", { id: 3 })
-    const keys = (await read(alex, maple)).map((r) => r.cache_key)
-    assert.ok(!keys.includes("info:1"))
-    assert.ok(keys.includes("info:3"))
+    await put("info:3", { id: 3 })
+    assert.ok(!(await keys()).includes("info:1"))
+    assert.ok((await keys()).includes("info:3"))
+
+    await t.q("update public.spoonacular_cache set created_at = now() - interval '2 hours', expires_at = now() - interval '1 hour' where cache_key = 'info:2'")
+    const [{ purged }] = await asServer(() => t.q("select public.purge_spoonacular_cache() as purged"))
+    assert.equal(purged, 1)
+    assert.ok(!(await keys()).includes("info:2"))
   })
 
-  test("only members write, and only through the function", async () => {
-    await t.as(casey, () =>
-      assertRejects(() => t.q("select public.put_spoonacular_cache($1, 'x', '{}'::jsonb)", [maple]), /not in that household/),
-    )
-    await t.as(alex, () =>
-      assertRejects(
-        () => t.q("insert into public.spoonacular_cache (household_id, cache_key, response, expires_at) values ($1, 'y', '{}', now())", [maple]),
-        /permission denied/,
-      ),
-    )
-    await t.as(alex, () =>
-      assertRejects(() => t.q("update public.spoonacular_cache set expires_at = now() + interval '1 year'"), /permission denied/),
-    )
-    await t.as(null, () =>
-      assertRejects(() => t.q("select public.put_spoonacular_cache($1, 'z', '{}'::jsonb)", [maple]), /permission denied/),
-    )
-    // Casey's own household works.
-    await put(casey, caseyHome, "find:x", [])
-    assert.equal((await read(casey, caseyHome)).length, 1)
+  test("usage keeps the highest used and lowest left for the UTC day, whatever order requests finish in", async () => {
+    await record(3.5, 46.5)
+    const row = await record(2, 48)
+    assert.deepEqual(row, { used: 3.5, left: 46.5, exhausted: false })
+    const [{ requests }] = await t.q("select requests from public.spoonacular_usage")
+    assert.equal(requests, 2)
   })
 
-  test("usage keeps the highest used and lowest left for the day, whatever order requests finish in", async () => {
-    await t.as(alex, () => t.q("select public.record_spoonacular_usage(3.5, 46.5)"))
-    await t.as(casey, () => t.q("select public.record_spoonacular_usage(2, 48)"))
-    const [row] = await usage()
-    assert.equal(row.used, 3.5)
-    assert.equal(row.left, 46.5)
-    assert.equal(row.requests, 2)
-    // Everyone signed in can read it; nobody can write it directly.
-    assert.equal((await t.as(blair, () => t.q("select * from public.spoonacular_usage"))).length, 1)
-    await t.as(blair, () =>
-      assertRejects(() => t.q("update public.spoonacular_usage set points_left = 50"), /permission denied/),
-    )
+  test("without quota headers, the estimated cost is added", async () => {
+    const row = await record(null, null, 1.4)
+    assert.equal(row.used, 4.9)
+    assert.ok(Math.abs(row.left - 45.1) < 1e-9)
   })
 
-  test("usage rejects nonsense and anonymous callers", async () => {
-    await t.as(alex, () => assertRejects(() => t.q("select public.record_spoonacular_usage(-1, 10)"), /don't look right/))
-    await t.as(null, () => assertRejects(() => t.q("select public.record_spoonacular_usage(1, 10)"), /permission denied/))
+  test("a 402 marks the day as used up", async () => {
+    const row = await record(null, null, null, true)
+    assert.equal(row.left, 0)
+    assert.equal(row.exhausted, true)
+    // Later headers can't bring points back for the day.
+    assert.equal((await record(10, 40)).left, 0)
+  })
+
+  test("old usage rows are purged after 30 days", async () => {
+    await t.q("insert into public.spoonacular_usage (day, points_used) values ((now() at time zone 'utc')::date - 31, 50)")
+    await asServer(() => t.q("select public.purge_spoonacular_cache()"))
+    const days = await t.q("select day from public.spoonacular_usage")
+    assert.equal(days.length, 1)
+  })
+
+  test("usage rejects nonsense", async () => {
+    await asServer(() => assertRejects(() => t.q("select * from public.record_spoonacular_usage(-1, 10)"), /don't look right/))
+    await asServer(() => assertRejects(() => t.q("select * from public.record_spoonacular_usage(null, null, 5000)"), /don't look right/))
   })
 })

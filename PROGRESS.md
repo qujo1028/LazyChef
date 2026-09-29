@@ -120,3 +120,30 @@ To do:
 - Apply `20260930000100_cook_mode.sql` to the live DB (ask), then test "I cooked this" end to end with a
   throwaway account.
 - Check live sync on two phones (the sandbox browser can't open the Realtime websocket).
+
+## Phase 3 follow-up: shared server-only Spoonacular cache (2026-09-29, branch `recipes`)
+Phase 3 was already on `main` (PR #1), so this branch brings it in line with the updated spec instead of
+rebuilding it:
+- **Migration `20261002000100_spoonacular_server_cache.sql`** (not applied yet, ask first): `spoonacular_cache`
+  is now one table for every household, keyed by `cache_key`, max 1 hour, closed to anon/authenticated (RLS on,
+  no policies, no grants). Only the server reads and writes it, with `SUPABASE_SECRET_KEY` (service_role).
+  `spoonacular_usage` is server-only too, gains `exhausted_at` (set on a 402), and
+  `record_spoonacular_usage()` adds our cost estimate when quota headers are missing.
+  `purge_spoonacular_cache()` deletes expired rows (and usage older than 30 days); it runs on every cache write.
+  9 PGlite tests in `supabase/tests/recipes.test.mjs`. Numbered after the live `20261001000100_saved_recipes`.
+- `src/lib/spoonacular/cost.ts`: point costs for every endpoint we use, plus the UTC reset time (tested).
+- `src/features/recipes/cache-core.ts`: cache keys (sorted normalized pantry names + filters), the daily guard
+  (keeps 3 points back for searches, 1 for opening a recipe), 402 → "resting until tomorrow", and an
+  in-memory store for when the secret key isn't set. `cache.ts` wires it to Supabase with an in-memory backup.
+- Matching: salt and pepper (all spellings, via the ingredient library) now never count as missing, like water.
+  Bell peppers and pepper flakes still do.
+- complexSearch (filters) asks for 20 results instead of 40 (2.2 points instead of 4.4), without instructions.
+- Cards show "Missing: x, y" chips, and cook times from recipes already opened in the last hour (free).
+- `/recipes`: Make now / Almost there tabs, a "resting until tomorrow" state, friendlier "no key" copy.
+- `/recipes/[id]`: ingredients split into You need (with "Add missing to list") and You have ✓, a marked
+  Phase 5 "I cooked this" section, a source link (falls back to Spoonacular's page), and "Powered by Spoonacular".
+
+Heads up: the Phase 6 branch (`claude/nice-shannon-yjvi7b`) still uses the old per-household cache
+(`cachedRecipeDetails` in `cache.ts`). Whichever merges second has to port that to `getCacheStore()`
+(`getMany` + `put`). Apply the migration at the same time as deploying code that uses the new cache,
+because the old code can't read or write the cache once it's applied.

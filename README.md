@@ -9,8 +9,9 @@ Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtim
   built-in ingredient library, expiry dates, "−1" / "Used some", staples that are always on hand, and a
   "Ran out" section.
 - **Recipes**: "Make now" (you have everything) and "Almost there" (1 to 3 things missing), filtered by
-  meal and cook time. Spoonacular results are cached per household for an hour, and a daily points guard
-  keeps the free plan (50 points a day) from running out.
+  meal and cook time. Spoonacular results are cached for an hour in one server-only cache shared by every
+  household, and a daily points record keeps the free plan (50 points a day, reset at midnight UTC) from
+  running out: when it's used up, the page says searches are resting until tomorrow.
 - **I cooked this**: on a recipe, review what comes out of the pantry (converted to each item's unit, or
   "check this" when units don't convert), then take it all out at once, with Undo. Anything that ran out
   can go straight onto the list.
@@ -60,8 +61,14 @@ Authentication → Emails → Templates:
    `vercel.json` tells Vercel it's a Next.js app.
 2. Project → Settings → Environment Variables (names only; values come from Supabase):
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: all environments.
-   - `SUPABASE_SECRET_KEY`: Production and Preview, marked Sensitive.
-   - `SPOONACULAR_API_KEY`: optional. Without it, adding food uses the built-in ingredient library only.
+   - `SUPABASE_SECRET_KEY`: Production and Preview, marked Sensitive. The server uses it to read and write
+     the Spoonacular cache and usage tables, which signed-in users can't touch. Without it, each server
+     instance keeps its own in-memory cache instead.
+   - `SPOONACULAR_API_KEY`: Production and Preview, marked Sensitive. Get it from
+     [spoonacular.com/food-api/console](https://spoonacular.com/food-api/console) → Profile → API Key, then
+     Vercel → Project → Settings → Environment Variables → Add, and redeploy. Without it, the Recipes tab
+     says recipes aren't set up yet, and adding food uses the built-in ingredient library only. Never put it
+     in a `NEXT_PUBLIC_` variable.
    - `NEXT_PUBLIC_SITE_URL`: optional, e.g. `https://lazychef-gamma.vercel.app`. Only used when a request
      doesn't say which host it came from.
 3. `npx vercel@latest deploy --prod`
@@ -96,5 +103,10 @@ Authentication → Emails → Templates:
   deleted ids stay deleted).
 - Server actions re-check the session and validate input with zod; client calls go through
   `src/lib/call-action.ts`, so a dropped connection shows a toast instead of the error screen.
+- Spoonacular (`src/lib/spoonacular/`, server only): costs are in `cost.ts`. `src/features/recipes/cache.ts`
+  keeps responses for at most an hour in `spoonacular_cache` (keyed by the sorted pantry names plus
+  filters, or the recipe id) and the day's points in `spoonacular_usage`, both through the secret key.
+  Only recipe id, title and image are kept longer (on shopping list lines). Every page shows a
+  "Powered by Spoonacular" credit, and recipes link to their source.
 - Multi-row changes are single Postgres functions (`add_pantry_items`, `complete_shopping_trip`,
   `cook_recipe`), so each shows up as one entry in the activity feed.

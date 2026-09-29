@@ -28,7 +28,7 @@ export type AddToListSummary = { added: number; toppedUp: number; alreadyOnList:
 /**
  * Adds some of a recipe's ingredient lines to the shopping list, tagged with the recipe.
  * Ingredients already on the list (and not yet checked off) aren't added twice. The
- * recipe comes from the household's cache, so the client can't make up ingredients.
+ * recipe comes from the server's cache, so the client can't make up ingredients.
  */
 export async function addRecipeIngredientsToList(
   recipeId: number,
@@ -37,10 +37,11 @@ export async function addRecipeIngredientsToList(
   const parsed = input.safeParse({ recipeId, lines })
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Pick something to add." }
 
-  const { household } = await requireHousehold()
+  // Signed in and in a household (the recipe itself isn't household data).
+  await requireHousehold()
   let recipe
   try {
-    recipe = (await getRecipe(household.id, parsed.data.recipeId)).value
+    recipe = (await getRecipe(parsed.data.recipeId)).value
   } catch (error) {
     if (error instanceof SpoonacularError) return { error: error.message }
     console.error("Loading the recipe failed:", error)

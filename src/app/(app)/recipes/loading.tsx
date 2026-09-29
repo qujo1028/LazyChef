@@ -12,8 +12,8 @@ export default function RecipesLoading() {
           <Skeleton key={i} className="h-10 shrink-0 rounded-full" style={{ width: `${w * 4}px` }} />
         ))}
       </div>
+      <Skeleton className="h-[52px] w-full rounded-xl" />
       <div className="grid gap-2.5">
-        <Skeleton className="h-5 w-32" />
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="flex gap-3 rounded-xl border p-2.5">
             <Skeleton className="size-24 shrink-0 rounded-lg" />
