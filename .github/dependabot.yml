@@ -8,6 +8,11 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    # Major versions (Next, React, TypeScript, ESLint...) change APIs and config; upgrade those
+    # on purpose, in their own branch, not from a weekly bot PR.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       minor-and-patch:
         update-types: [minor, patch]
