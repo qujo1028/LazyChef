@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ArrowLeft, CircleAlert, Clock, ExternalLink, KeyRound, Users } from "lucide-react"
+import { ArrowLeft, CircleAlert, Clock, ExternalLink, KeyRound, MoonStar, Users } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -11,6 +11,7 @@ import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/comp
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { SaveButton } from "@/features/recipes/components/save-button"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
+import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -29,13 +30,25 @@ function BackLink() {
   )
 }
 
-export default async function RecipePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function RecipePage({ params }: PageProps<"/recipes/[id]">) {
   const recipeId = parseId((await params).id)
   if (recipeId === null) notFound()
 
   const { household } = await requireHousehold()
   const [result, savedIds] = await Promise.all([getRecipeDetail(household.id, recipeId), getSavedIds(household.id)])
   if (result.status === "not-found") notFound()
+
+  if (result.status === "resting") {
+    return (
+      <>
+        <BackLink />
+        <EmptyState icon={MoonStar} title="Recipe searches are resting until tomorrow">
+          We&apos;ve used today&apos;s free Spoonacular lookups, and nobody opened this recipe in the last hour. It&apos;ll
+          open again after midnight UTC.
+        </EmptyState>
+      </>
+    )
+  }
 
   if (result.status === "no-key" || result.status === "error") {
     return (
@@ -45,7 +58,9 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
           icon={result.status === "no-key" ? KeyRound : CircleAlert}
           title={result.status === "no-key" ? "Recipes aren't set up yet" : "Couldn't load this recipe"}
         >
-          {result.status === "no-key" ? "The app needs a Spoonacular API key to show recipes." : result.problem.message}
+          {result.status === "no-key"
+            ? "Recipes need a Spoonacular key, which hasn't been added yet."
+            : `${result.problem.message} Try again in a bit.`}
         </EmptyState>
       </>
     )
@@ -125,12 +140,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
           Full recipe{recipe.sourceName ? ` on ${recipe.sourceName}` : ""} <ExternalLink className="size-4" aria-hidden />
         </a>
       ) : null}
-      <p className="text-center text-xs text-muted-foreground">
-        Recipe data from{" "}
-        <a href="https://spoonacular.com/food-api" target="_blank" rel="noreferrer" className="underline underline-offset-2">
-          Spoonacular
-        </a>
-      </p>
+      <SpoonacularCredit>{recipe.sourceName ? `Recipe by ${recipe.sourceName}` : null}</SpoonacularCredit>
     </article>
   )
 }

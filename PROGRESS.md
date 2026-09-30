@@ -148,3 +148,30 @@ Known limits:
 Tested with a throwaway household on the live DB (then deleted): saving from cards, the recipe page and
 the cook done screen, unsaving, the Saved match and cook history, a trip logged as "bought 3 items", every
 Stats section, and "add to list" from Most bought. No overflow or small tap targets at 320/375 px, light and dark.
+
+## Shared server-only Spoonacular cache (2026-09-30, from branch `recipes`, merged onto main)
+Brought over from the `recipes` branch. main already had recipes, cook mode, saved recipes and ingredient
+emoji, so only the parts that improve on it came across:
+- **Migration `20261002000100_spoonacular_server_cache.sql`** (not applied yet, ask first): `spoonacular_cache`
+  is now one table for every household, keyed by `cache_key`, max 1 hour, closed to anon/authenticated (RLS on,
+  no policies, no grants). Only the server reads and writes it, with `SUPABASE_SECRET_KEY` (service_role).
+  `spoonacular_usage` is server-only too, gains `exhausted_at` (set on a 402), and
+  `record_spoonacular_usage()` adds our cost estimate when quota headers are missing.
+  `purge_spoonacular_cache()` deletes expired rows (and usage older than 30 days) on every cache write.
+- `src/lib/spoonacular/cost.ts`: point costs for every endpoint, plus the UTC reset time (tested).
+- `src/features/recipes/cache-core.ts`: cache keys (sorted normalized pantry names + filters, so households
+  with the same food share results), the daily guard (3 points kept back for searches, 1 for opening a
+  recipe), 402 → "resting until tomorrow", and an in-memory store for when the secret key isn't set.
+  `cache.ts` wires it to Supabase with the in-memory store as backup.
+- The Saved tab's `cachedRecipeDetails` now uses the shared store (`getMany`, one `informationBulk`, `put` per
+  recipe) with the same guard, so a saved recipe someone else opened in the last hour is free.
+- Matching: salt and pepper (all spellings) never count as missing, like water. Bell peppers still do.
+- complexSearch (filters) asks for 20 results instead of 40 (2.2 points instead of 4.4).
+- "Resting until tomorrow" states on `/recipes` and `/recipes/[id]`, a "Powered by Spoonacular" credit, and
+  recipe source links fall back to Spoonacular's page.
+- Left out (main already does these): the branch's Make now / Almost there tabs, the You need / You have
+  checklist split, and "Missing:" chips on cards.
+
+Deploy note: apply the migration right around when this reaches production. Code already on main can't
+read or write the new cache (it logs errors and runs without the cache or the points guard), and the new
+code falls back to an in-memory cache until the migration is there.
