@@ -10,6 +10,7 @@ import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
+import { RecipeTabs } from "@/features/recipes/components/recipe-tabs"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { filtersHref, hasFilters, NO_FILTERS, parseFilters, type RecipeFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
@@ -18,32 +19,22 @@ import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
 
-function Section({
-  title,
-  description,
+function RecipeList({
   recipes,
   savedIds,
+  empty,
 }: {
-  title: string
-  description: string
   recipes: Suggestion[]
   savedIds: ReadonlySet<number>
+  empty: string
 }) {
-  if (recipes.length === 0) return null
+  if (recipes.length === 0) return <p className="px-1 py-6 text-center text-sm text-muted-foreground">{empty}</p>
   return (
-    <section className="grid grid-cols-1 gap-2.5">
-      <div>
-        <h2 className="font-semibold">
-          {title} <span className="font-normal text-muted-foreground">· {recipes.length}</span>
-        </h2>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
-      <ul className="grid grid-cols-1 gap-2.5">
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
-        ))}
-      </ul>
-    </section>
+    <ul className="grid grid-cols-1 gap-2.5">
+      {recipes.map((recipe) => (
+        <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
+      ))}
+    </ul>
   )
 }
 
@@ -141,15 +132,30 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
           )}
         </EmptyState>
       ) : (
-        <>
-          <Section title="Make now" description="You have everything for these." recipes={result.makeNow} savedIds={savedIds} />
-          <Section
-            title="Almost there"
-            description="Just 1 to 3 things away."
-            recipes={result.almostThere}
-            savedIds={savedIds}
-          />
-        </>
+        <RecipeTabs
+          tabs={[
+            {
+              id: "make-now",
+              label: "Make now",
+              count: result.makeNow.length,
+              panel: (
+                <RecipeList
+                  recipes={result.makeNow}
+                  savedIds={savedIds}
+                  empty="Nothing you can make with just what's here yet. Check Almost there."
+                />
+              ),
+            },
+            {
+              id: "almost-there",
+              label: "Almost there",
+              count: result.almostThere.length,
+              panel: (
+                <RecipeList recipes={result.almostThere} savedIds={savedIds} empty="Nothing 1 to 3 things away right now." />
+              ),
+            },
+          ]}
+        />
       )}
       <SpoonacularCredit>
         {result.status === "ok" ? `Found ${minutesAgo(result.savedAt)} · refreshes hourly${pointsLeft(result.usage)}` : null}
