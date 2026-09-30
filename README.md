@@ -85,6 +85,26 @@ Authentication → Emails → Templates:
 5. Google sign-in: the authorized redirect URI stays `https://<project-ref>.supabase.co/auth/v1/callback`.
    Add the production URL to Authorized JavaScript origins.
 
+## If a key leaks or something looks wrong
+
+This repo is public, so never commit `.env.local` or paste keys into issues or PRs. If a secret does
+get out, or you see activity you don't recognize:
+
+1. **Supabase secret key**: Supabase → Project Settings → API Keys → create a new secret key, put it
+   in Vercel (`SUPABASE_SECRET_KEY`, Production and Preview) and `.env.local`, redeploy, then delete
+   the old key. It bypasses every access rule, so do this first.
+2. **Spoonacular key**: spoonacular.com/food-api/console → Profile → regenerate, then update
+   `SPOONACULAR_API_KEY` in Vercel and `.env.local` and redeploy.
+3. **Sign everyone out**: Supabase → Authentication → Users → sign out each user (or rotate the JWT
+   secret under Project Settings → JWT Keys, which signs out everyone at once).
+4. **Invite codes**: on the Household page, tap "Reset code" for each household, so old links stop
+   working.
+5. **Look around**: Vercel → Logs and Supabase → Logs for the time window, the Supabase security
+   advisor, and GitHub → Security for Dependabot and CodeQL alerts.
+
+The publishable key (`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) is public by design; the database's
+access rules are what protect the data.
+
 ## Scripts
 
 | Command | What it does |
