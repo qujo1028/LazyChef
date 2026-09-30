@@ -14,6 +14,7 @@ import {
   updatePassword,
   type AuthFormState,
 } from "@/features/auth/actions"
+import { PASSWORD_HINT, PASSWORD_MIN_LENGTH } from "@/features/auth/schemas"
 import { withConnectionErrors } from "@/lib/call-action"
 
 export function LoginForm({ next, initialError }: { next: string; initialError?: string }) {
@@ -65,8 +66,8 @@ export function SignupForm({ next }: { next: string }) {
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input id="password" name="password" type="password" autoComplete="new-password" minLength={8} required />
-          <FieldDescription>At least 8 characters.</FieldDescription>
+          <Input id="password" name="password" type="password" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required />
+          <FieldDescription>{PASSWORD_HINT}</FieldDescription>
         </Field>
       </FieldGroup>
       <FormMessage error={state?.error} />
@@ -99,8 +100,8 @@ export function ResetPasswordForm() {
     <form action={action} className="grid gap-5">
       <Field>
         <FieldLabel htmlFor="password">New password</FieldLabel>
-        <Input id="password" name="password" type="password" autoComplete="new-password" minLength={8} required />
-        <FieldDescription>At least 8 characters.</FieldDescription>
+        <Input id="password" name="password" type="password" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required />
+        <FieldDescription>{PASSWORD_HINT}</FieldDescription>
       </Field>
       <FormMessage error={state?.error} />
       <Button type="submit" size="lg" disabled={pending}>
