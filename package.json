@@ -13,6 +13,7 @@
     "test:db": "node --test \"supabase/tests/*.test.mjs\"",
     "db:types": "supabase gen types typescript --project-id gldppemwlecnbarxamcb > src/types/database.ts",
     "ingredients": "node scripts/build-ingredient-library.mjs",
+    "recipes:import": "node scripts/import-themealdb.mjs",
     "test": "vitest run"
   },
   "dependencies": {

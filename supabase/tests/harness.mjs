@@ -23,7 +23,7 @@ const SUPABASE_STANDINS = `
   alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 
   create schema auth;
-  grant usage on schema auth to anon, authenticated;
+  grant usage on schema auth to anon, authenticated, service_role;
   create table auth.users (
     id uuid primary key default gen_random_uuid(),
     email text,

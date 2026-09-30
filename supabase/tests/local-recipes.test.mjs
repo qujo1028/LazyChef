@@ -6,8 +6,18 @@ import { assertRejects, createTestDb } from "./harness.mjs"
 describe("local recipes", () => {
   let t, alex, blair, casey, maple, caseyHome, omelette, curry, shakshuka, pancakes
 
+  /** Run fn with the server's secret key (service_role), as the importer does. */
+  async function asServer(fn) {
+    await t.db.exec("set role service_role")
+    try {
+      return await fn()
+    } finally {
+      await t.db.exec("reset role")
+    }
+  }
+
   /** What the importer does with the secret key: upsert on (source, source_id). */
-  const importMeal = async (sourceId, title, ingredients, extra = {}) => {
+  const importMeal = (sourceId, title, ingredients, extra = {}) => asServer(async () => {
     const [{ id }] = await t.q(
       `insert into public.recipes (source, source_id, title, meal_types, ready_in_minutes, instructions, image_url, source_url)
        values ('themealdb', $1, $2, $3, $4, $5, $6, $7)
@@ -32,7 +42,7 @@ describe("local recipes", () => {
       )
     }
     return id
-  }
+  })
 
   const saveOwn = (user, household, recipe, ingredients, recipeId = null) =>
     t.as(user, async () => {
