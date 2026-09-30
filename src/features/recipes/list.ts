@@ -7,7 +7,8 @@ import { normalizeUnit } from "@/lib/units"
 
 type Options = {
   category: (ingredient: RecipeIngredient) => Category
-  recipe: { id: number; title: string }
+  /** Spoonacular's id (null for our own recipes) and the title. */
+  recipe: { id: number | null; title: string }
 }
 
 function round(n: number) {

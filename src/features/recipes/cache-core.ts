@@ -50,10 +50,12 @@ export function cacheKey(kind: string, parts: readonly (string | number | null)[
  */
 export function suggestionsCacheKey(names: readonly string[], filters: RecipeFilters): string {
   const keys = [...new Set(names.map(normalizeIngredientName).filter(Boolean))].sort()
-  const filtered = filters.type !== null || filters.maxTime !== null
-  return filtered
-    ? cacheKey("search", [...keys, `type=${filters.type ?? ""}`, `time=${filters.maxTime ?? ""}`])
-    : cacheKey("find", keys)
+  const filtered = filters.type !== null || filters.maxTime !== null || filters.query !== null
+  if (!filtered) return cacheKey("find", keys)
+  const parts = [...keys, `type=${filters.type ?? ""}`, `time=${filters.maxTime ?? ""}`]
+  // Searches are keyed by the words too (same words, any case or spacing).
+  if (filters.query !== null) parts.push(`q=${filters.query.toLowerCase().replace(/\s+/g, " ")}`)
+  return cacheKey("search", parts)
 }
 
 export function recipeCacheKey(recipeId: number): string {

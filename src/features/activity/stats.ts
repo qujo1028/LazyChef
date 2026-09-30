@@ -21,7 +21,7 @@ export const TOP_RECIPES = 5
 export const TOP_ITEMS = 8
 
 export type WeekCount = { start: string; count: number }
-export type TopRecipe = { id: number | null; title: string; count: number; lastAt: string }
+export type TopRecipe = { id: string | null; title: string; count: number; lastAt: string }
 export type TopItem = { name: string; count: number }
 export type PersonStats = { actorId: string | null; cooks: number; trips: number; itemsBought: number }
 

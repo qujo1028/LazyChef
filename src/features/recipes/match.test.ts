@@ -9,7 +9,9 @@ import {
   MAX_QUERY_NAMES,
   pantrySearchNames,
   sortSuggestions,
+  spoonacularMatchable,
   toSuggestion,
+  type PantryIndex,
 } from "./match"
 
 const TODAY = "2026-09-29"
@@ -27,6 +29,8 @@ function ing(name: string, id: number | null = null): RecipeIngredient {
 function recipe(id: number, used: RecipeIngredient[], missed: RecipeIngredient[], title = `Recipe ${id}`): RecipeSummary {
   return { id, title, image: null, readyInMinutes: null, servings: null, used, missed }
 }
+
+const suggest = (index: PantryIndex, r: RecipeSummary) => toSuggestion(index, spoonacularMatchable(r))
 
 describe("pantrySearchNames", () => {
   it("sends what's available, soonest-expiring first, once per ingredient", () => {
@@ -87,7 +91,7 @@ describe("basics", () => {
   const index = buildPantryIndex([item("eggs"), item("bell pepper", { quantity: 0 })], TODAY)
 
   it("water, salt and pepper never count as missing", () => {
-    const s = toSuggestion(
+    const s = suggest(
       index,
       recipe(1, [ing("eggs")], [ing("water"), ing("salt"), ing("black pepper"), ing("salt and pepper to taste"), ing("coarse salt"), ing("freshly ground black pepper")]),
     )
@@ -95,7 +99,7 @@ describe("basics", () => {
   })
 
   it("but bell peppers and pepper flakes do", () => {
-    const s = toSuggestion(index, recipe(1, [ing("eggs")], [ing("bell pepper"), ing("red pepper flakes")]))
+    const s = suggest(index, recipe(1, [ing("eggs")], [ing("bell pepper"), ing("red pepper flakes")]))
     expect(s.need).toEqual(["bell pepper", "red pepper flakes"])
   })
 })
@@ -113,10 +117,10 @@ describe("make now vs almost there", () => {
       recipe(3, [ing("eggs")], [ing("milk"), ing("flour"), ing("sugar")]),
       recipe(4, [ing("eggs")], [ing("milk"), ing("flour"), ing("sugar"), ing("vanilla")]),
     ])
-    expect(makeNow.map((r) => r.id)).toEqual([1])
+    expect(makeNow.map((r) => r.id)).toEqual(["1"])
     expect(almostThere.map((r) => [r.id, r.need])).toEqual([
-      [2, ["butter"]],
-      [3, ["milk", "flour", "sugar"]],
+      ["2", ["butter"]],
+      ["3", ["milk", "flour", "sugar"]],
     ])
   })
 })
@@ -140,13 +144,13 @@ describe("suggestions", () => {
   )
 
   it("rescues ingredients Spoonacular missed but the pantry has", () => {
-    const s = toSuggestion(index, recipe(1, [ing("eggs")], [ing("soy sauce"), ing("scallions"), ing("water")]))
+    const s = suggest(index, recipe(1, [ing("eggs")], [ing("soy sauce"), ing("scallions"), ing("water")]))
     expect(s.have).toEqual(["eggs", "soy sauce"])
     expect(s.need).toEqual(["scallions"])
   })
 
   it("notes expiring food the recipe uses", () => {
-    const s = toSuggestion(index, recipe(1, [ing("spinach"), ing("egg")], []))
+    const s = suggest(index, recipe(1, [ing("spinach"), ing("egg")], []))
     expect(s.usesExpiring).toEqual(["spinach"])
   })
 
@@ -160,7 +164,7 @@ describe("suggestions", () => {
       recipe(6, [ing("rice")], [ing("x")]),
       recipe(2, [ing("eggs")], []),
     ])
-    expect(result.makeNow.map((s) => s.id)).toEqual([3, 2])
-    expect(result.almostThere.map((s) => s.id)).toEqual([6, 1])
+    expect(result.makeNow.map((s) => s.id)).toEqual(["3", "2"])
+    expect(result.almostThere.map((s) => s.id)).toEqual(["6", "1"])
   })
 })

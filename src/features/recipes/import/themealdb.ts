@@ -43,10 +43,7 @@ export type ImportResult = {
   unmatched: Map<string, number>
 }
 
-/** TheMealDB's page for a meal, for the credit link. */
-export function mealDbUrl(sourceId: string): string {
-  return `https://www.themealdb.com/meal/${encodeURIComponent(sourceId)}`
-}
+export { mealDbUrl } from "../ref"
 
 function text(value: unknown): string {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : ""

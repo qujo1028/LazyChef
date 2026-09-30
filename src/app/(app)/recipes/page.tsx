@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ChefHat, CircleAlert, KeyRound, MoonStar, Plus, Sparkles } from "lucide-react"
+import { ChefHat, CircleAlert, MoonStar, Plus, Search, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/empty-state"
@@ -10,11 +10,13 @@ import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
+import { RecipeSearch } from "@/features/recipes/components/recipe-search"
 import { RecipeTabs } from "@/features/recipes/components/recipe-tabs"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
-import { filtersHref, hasFilters, NO_FILTERS, parseFilters, type RecipeFilters } from "@/features/recipes/filters"
+import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
+import { filtersHref, hasFilters, NO_FILTERS, parseFilters, parseMore, type RecipeFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
-import { getRecipeSuggestions, getSavedIds } from "@/features/recipes/queries"
+import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
@@ -25,7 +27,7 @@ function RecipeList({
   empty,
 }: {
   recipes: Suggestion[]
-  savedIds: ReadonlySet<number>
+  savedIds: ReadonlySet<string>
   empty: string
 }) {
   if (recipes.length === 0) return <p className="px-1 py-6 text-center text-sm text-muted-foreground">{empty}</p>
@@ -61,10 +63,85 @@ function ClearFilters({ filters }: { filters: RecipeFilters }) {
   )
 }
 
+/**
+ * What Spoonacular added, or why it didn't: a line under the results. With nothing local
+ * to show, the page shows a full empty state instead (see SpoonacularEmpty).
+ */
+function SpoonacularNote({ part, filters }: { part: SpoonacularPart; filters: RecipeFilters }) {
+  if (part.status === "skipped") {
+    return (
+      <Button asChild variant="outline" size="lg" className="h-12 w-full text-base">
+        <Link href={filtersHref(filters, { more: true })} scroll={false}>
+          <Sparkles aria-hidden /> Show more ideas
+        </Link>
+      </Button>
+    )
+  }
+  if (part.status === "ok") return null
+  const text =
+    part.status === "resting"
+      ? `More ideas from Spoonacular are resting until tomorrow (in ${hoursUntil(part.resetsAt)}).`
+      : part.status === "no-key"
+        ? "More ideas need a Spoonacular key, which hasn't been added yet."
+        : `Couldn't get more ideas from Spoonacular right now. ${part.problem.message}`
+  return <p className="text-center text-xs text-muted-foreground">{text}</p>
+}
+
+function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: RecipeFilters }) {
+  if (part.status === "resting") {
+    return (
+      <EmptyState icon={MoonStar} title="Recipe searches are resting until tomorrow">
+        <p>
+          None of our own recipes fit, and we&apos;ve used today&apos;s free Spoonacular searches. New ones start again in{" "}
+          {hoursUntil(part.resetsAt)} (midnight UTC).
+        </p>
+        {hasFilters(filters) ? (
+          <p className="mt-2">
+            <ClearFilters filters={filters} />
+          </p>
+        ) : null}
+      </EmptyState>
+    )
+  }
+  if (part.status === "error") {
+    return (
+      <EmptyState icon={CircleAlert} title="Couldn't find recipes right now">
+        {part.problem.message} Try again in a bit.
+      </EmptyState>
+    )
+  }
+  return (
+    <EmptyState icon={filters.query ? Search : Sparkles} title={filters.query ? `Nothing called “${filters.query}”` : "No matches yet"}>
+      {hasFilters(filters) ? (
+        <>
+          Nothing fits with what you have. <ClearFilters filters={filters} />
+        </>
+      ) : (
+        "Add a few more things to your pantry and you'll start seeing ideas."
+      )}
+    </EmptyState>
+  )
+}
+
+function Credits({ recipes, part }: { recipes: Suggestion[]; part: SpoonacularPart }) {
+  const mealDb = recipes.some((recipe) => recipe.source === "themealdb")
+  const spoonacular = part.status === "ok" && recipes.some((recipe) => recipe.source === "spoonacular")
+  return (
+    <div className="grid gap-1">
+      {mealDb ? <TheMealDbCredit /> : null}
+      {spoonacular && part.status === "ok" ? (
+        <SpoonacularCredit>{`Found ${minutesAgo(part.savedAt)} · refreshes hourly${pointsLeft(part.usage)}`}</SpoonacularCredit>
+      ) : null}
+    </div>
+  )
+}
+
 export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
   const { household } = await requireHousehold()
-  const filters = parseFilters(await searchParams)
-  const [result, savedIds] = await Promise.all([getRecipeSuggestions(household.id, filters), getSavedIds(household.id)])
+  const params = await searchParams
+  const filters = parseFilters(params)
+  const more = parseMore(params)
+  const [result, savedIds] = await Promise.all([getRecipeIdeas(household.id, filters, more), getSavedIds(household.id)])
 
   const heading = (
     <>
@@ -77,8 +154,9 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     return (
       <>
         {heading}
+        <RecipeSearch filters={filters} />
         <EmptyState icon={ChefHat} title="Add some food first">
-          <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back.</p>
+          <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back, or search for a recipe above.</p>
           <Button asChild size="lg" className="mt-4 h-12 w-full text-base">
             <Link href="/pantry/add">
               <Plus aria-hidden /> Add food
@@ -89,48 +167,22 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     )
   }
 
-  if (result.status === "no-key") {
-    return (
-      <>
-        {heading}
-        <EmptyState icon={KeyRound} title="Recipes are almost ready">
-          Recipe ideas need a Spoonacular key, which hasn&apos;t been added yet. Your pantry and list work fine in the
-          meantime.
-        </EmptyState>
-      </>
-    )
-  }
+  const shown = result.mode === "search" ? result.results : [...result.makeNow, ...result.almostThere]
 
   return (
     <>
       {heading}
+      <RecipeSearch filters={filters} />
       <RecipeFilterBar filters={filters} />
-      {result.status === "resting" ? (
-        <EmptyState icon={MoonStar} title="Recipe searches are resting until tomorrow">
-          <p>
-            We&apos;ve used today&apos;s free Spoonacular searches. New ones start again in {hoursUntil(result.resetsAt)}
-            {" "}(midnight UTC). Recipes anyone opened in the last hour still open fine.
-          </p>
-          {hasFilters(filters) ? (
-            <p className="mt-2">
-              Searches without filters from the last hour may still be saved. <ClearFilters filters={filters} />
-            </p>
-          ) : null}
-        </EmptyState>
-      ) : result.status === "error" ? (
-        <EmptyState icon={CircleAlert} title="Couldn't find recipes right now">
-          {result.problem.message} Try again in a bit.
-        </EmptyState>
-      ) : result.makeNow.length + result.almostThere.length === 0 ? (
-        <EmptyState icon={Sparkles} title="No matches yet">
-          {hasFilters(filters) ? (
-            <>
-              Nothing fits those filters with what you have. <ClearFilters filters={filters} />
-            </>
-          ) : (
-            "Add a few more things to your pantry and you'll start seeing ideas."
-          )}
-        </EmptyState>
+      {shown.length === 0 ? (
+        <SpoonacularEmpty part={result.spoonacular} filters={filters} />
+      ) : result.mode === "search" ? (
+        <section className="grid gap-2.5" aria-label="Search results">
+          <h2 className="font-semibold">
+            Results <span className="font-normal text-muted-foreground">· {result.results.length}</span>
+          </h2>
+          <RecipeList recipes={result.results} savedIds={savedIds} empty="" />
+        </section>
       ) : (
         <RecipeTabs
           tabs={[
@@ -157,9 +209,13 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
           ]}
         />
       )}
-      <SpoonacularCredit>
-        {result.status === "ok" ? `Found ${minutesAgo(result.savedAt)} · refreshes hourly${pointsLeft(result.usage)}` : null}
-      </SpoonacularCredit>
+      {shown.length > 0 ? <SpoonacularNote part={result.spoonacular} filters={filters} /> : null}
+      <Button asChild variant="ghost" size="lg" className="h-12 w-full text-base">
+        <Link href="/recipes/new">
+          <Plus aria-hidden /> Add your own recipe
+        </Link>
+      </Button>
+      <Credits recipes={shown} part={result.spoonacular} />
     </>
   )
 }
