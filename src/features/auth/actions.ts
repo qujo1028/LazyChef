@@ -4,13 +4,13 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
+import { newPassword } from "@/features/auth/schemas"
 import { safeNext } from "@/lib/safe-next"
 import { createClient } from "@/lib/supabase/server"
 
 export type AuthFormState = { error?: string; notice?: string; email?: string } | undefined
 
 const email = z.email("Enter a valid email address.")
-const newPassword = z.string().min(8, "Use at least 8 characters.")
 
 /** "https://host[:port]" if `value` is an http(s) URL, else null (e.g. Origin: null). */
 function httpOrigin(value: string | null | undefined) {
@@ -56,7 +56,8 @@ function friendlyAuthError(message: string) {
     [/already registered|already exists/i, "There's already an account with that email. Try signing in."],
     [/email address not authorized/i, "Couldn't send the confirmation email. Supabase's built-in mailer only reaches your Supabase team (see README → Email)."],
     [/rate limit/i, "Too many attempts. Wait a few minutes and try again."],
-    [/password should be/i, "Pick a longer password (at least 8 characters)."],
+    [/password should be at least/i, "Pick a longer password (at least 8 characters)."],
+    [/password should contain/i, "Use an uppercase letter, a lowercase letter, a number and a symbol."],
   ]
   return known.find(([pattern]) => pattern.test(message))?.[1] ?? message
 }
