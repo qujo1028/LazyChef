@@ -1,6 +1,6 @@
 "use client"
 
-import { LoaderCircle, Pencil } from "lucide-react"
+import { LoaderCircle, Pencil, ScanBarcode } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -9,20 +9,31 @@ import { FormMessage } from "@/components/form-message"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { parseLines } from "@/lib/ingredients/parse-line"
+import { barcodeMemories, type ScanPackage } from "@/features/barcodes/memory"
+import { ScanToAddSheet, type ScannedLine } from "@/features/barcodes/components/scan-to-add-sheet"
+import { parseLine, parseLines } from "@/lib/ingredients/parse-line"
 
 import { addItems, previewItems } from "../actions"
 import { describeAdditions } from "../merge"
 import type { SpoonacularStatus } from "../resolve-core"
-import { draftsFromResolved, draftsToItems, type ReviewDraft } from "../review"
+import { draftsFromResolved, draftToItem, draftsToItems, type ReviewDraft } from "../review"
 import { callAction } from "@/lib/call-action"
 import { ReviewList, SpoonacularNote } from "./review-list"
 import { useToday } from "./use-clock"
 
 const PLACEHOLDER = ["2 lbs chicken breast", "1 dozen eggs", "milk", "3 cans black beans", "a bunch of cilantro"].join("\n")
 
-/** /pantry/add: paste or type a whole haul, check it, add it in one go. */
-export function BulkAddForm({ defaultText, serverToday }: { defaultText: string; serverToday: string }) {
+/** /pantry/add: paste, type or scan a whole haul, check it, add it in one go. */
+export function BulkAddForm({
+  defaultText,
+  serverToday,
+  startScanning = false,
+}: {
+  defaultText: string
+  serverToday: string
+  /** Open the barcode scanner right away (?scan=1, from the quick add sheet). */
+  startScanning?: boolean
+}) {
   const id = useId()
   const router = useRouter()
   const today = useToday(serverToday)
@@ -33,13 +44,22 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
   const [showErrors, setShowErrors] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+  const [scanning, setScanning] = useState(startScanning)
+  // Scanned lines (as parseLine reads them) → their barcode, and each code's package size.
+  const scannedLines = useRef(new Map<string, string>())
+  const packages = useRef(new Map<string, ScanPackage>())
 
   const count = useMemo(() => (text.trim() ? parseLines(text).length : 0), [text])
   const drafts = review?.drafts ?? []
 
   function preview(event: React.FormEvent) {
     event.preventDefault()
+    runPreview(text)
+  }
+
+  function runPreview(text: string) {
     if (pending) return
+    const count = text.trim() ? parseLines(text).length : 0
     if (count === 0) {
       setError("Type what you bought first, one item per line.")
       textareaRef.current?.focus()
@@ -54,7 +74,11 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
       }
       batch.current += 1
       setShowErrors(false)
-      setReview({ drafts: draftsFromResolved(result.items, batch.current), spoonacular: result.spoonacular })
+      const drafts = draftsFromResolved(result.items, batch.current).map((draft, i) => {
+        const barcode = scannedLines.current.get(result.items[i].raw)
+        return barcode ? { ...draft, barcode } : draft
+      })
+      setReview({ drafts, spoonacular: result.spoonacular })
       window.scrollTo({ top: 0 })
     })
   }
@@ -68,7 +92,12 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
       return
     }
     startTransition(async () => {
-      const result = await callAction(() => addItems(items))
+      const scanned = drafts.flatMap((draft) => {
+        const item = draft.barcode ? draftToItem(draft) : null
+        return item && draft.barcode ? [{ code: draft.barcode, name: item.name, quantity: item.quantity, unit: item.unit }] : []
+      })
+      const barcodes = barcodeMemories(scanned, packages.current)
+      const result = await callAction(() => addItems(items, barcodes))
       if (result.error !== undefined) {
         toast.error(result.error)
         return
@@ -78,6 +107,20 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
       // button stays disabled until /pantry shows instead of re-enabling mid-navigation.
       startTransition(() => router.replace("/pantry"))
     })
+  }
+
+  /** Scans go into the box as lines ("24 eggs"), then straight to the review. */
+  function addScanned(lines: ScannedLine[]) {
+    if (lines.length === 0) return
+    for (const scan of lines) {
+      const raw = parseLine(scan.line)?.raw
+      if (raw) scannedLines.current.set(raw, scan.code)
+      packages.current.set(scan.code, { quantity: scan.quantity, unit: scan.unit })
+    }
+    const next = [text.trimEnd(), ...lines.map((scan) => scan.line)].filter(Boolean).join("\n")
+    setText(next)
+    setError(null)
+    runPreview(next)
   }
 
   function editText() {
@@ -120,6 +163,11 @@ export function BulkAddForm({ defaultText, serverToday }: { defaultText: string;
 
   return (
     <form onSubmit={preview} className="grid grid-cols-1 gap-3" noValidate>
+      <Button type="button" variant="outline" size="lg" className="h-12 text-base" onClick={() => setScanning(true)} disabled={pending}>
+        <ScanBarcode aria-hidden />
+        Scan barcodes
+      </Button>
+      <ScanToAddSheet open={scanning} onOpenChange={setScanning} onDone={addScanned} />
       <Label htmlFor={`${id}-text`}>What did you get?</Label>
       <Textarea
         ref={textareaRef}

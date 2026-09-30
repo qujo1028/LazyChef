@@ -1,6 +1,6 @@
 "use client"
 
-import { ListChecks, PackageCheck, ShoppingCart } from "lucide-react"
+import { ListChecks, PackageCheck, ScanBarcode, ShoppingCart } from "lucide-react"
 import { useId, useMemo, useRef, useState } from "react"
 
 import { EmptyState } from "@/components/empty-state"
@@ -17,6 +17,7 @@ import { EditListItemSheet } from "./edit-list-item-sheet"
 import { ListQuickAdd } from "./list-quick-add"
 import { ListRow } from "./list-row"
 import { PutAwaySheet } from "./put-away-sheet"
+import { ScanToCheckSheet } from "./scan-to-check-sheet"
 import { useList } from "./use-list"
 
 export function ListView({
@@ -37,7 +38,8 @@ export function ListView({
   serverToday: string
 }) {
   const today = useToday(serverToday)
-  const { items, apply, toggle } = useList({ householdId, viewerId, serverItems, fetchedAt })
+  const { items, apply, toggle, setItemChecked } = useList({ householdId, viewerId, serverItems, fetchedAt })
+  const [scanning, setScanning] = useState(false)
   const sections = useMemo(() => groupList(items.values()), [items])
   const [editing, setEditing] = useState<{ id: string; open: boolean } | null>(null)
   const [putAway, setPutAway] = useState({ open: false, session: 0 })
@@ -60,8 +62,23 @@ export function ListView({
 
   return (
     <>
-      <PageHeading title="Shopping list" description={listSummary(sections.toBuyCount, sections.inCart.length)} />
+      <div className="flex items-start justify-between gap-3">
+        <PageHeading title="Shopping list" description={listSummary(sections.toBuyCount, sections.inCart.length)} />
+        {sections.toBuyCount > 0 ? (
+          <Button variant="outline" className="h-11 shrink-0" onClick={() => setScanning(true)}>
+            <ScanBarcode aria-hidden />
+            Scan
+          </Button>
+        ) : null}
+      </div>
       <ListQuickAdd />
+      <ScanToCheckSheet
+        open={scanning}
+        onOpenChange={setScanning}
+        items={items}
+        setItemChecked={setItemChecked}
+        apply={apply}
+      />
 
       {empty ? (
         <EmptyState icon={ListChecks} title="Nothing on the list yet">

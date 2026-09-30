@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, LoaderCircle } from "lucide-react"
+import { ArrowRight, LoaderCircle, ScanBarcode } from "lucide-react"
 import Link from "next/link"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -193,14 +193,24 @@ export function QuickAddSheet({
                   {count} items. You can check them all before they&apos;re added.
                 </p>
               ) : null}
-              <Link
-                href={text.trim() ? `/pantry/add?text=${encodeURIComponent(text.trim())}` : "/pantry/add"}
-                onClick={() => onOpenChange(false)}
-                className="inline-flex min-h-11 items-center gap-1 justify-self-start rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-              >
-                Adding a lot? Just went shopping
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
+              <div className="flex flex-wrap items-center justify-between gap-x-4">
+                <Link
+                  href={text.trim() ? `/pantry/add?text=${encodeURIComponent(text.trim())}` : "/pantry/add"}
+                  onClick={() => onOpenChange(false)}
+                  className="inline-flex min-h-11 items-center gap-1 rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                >
+                  Adding a lot? Just went shopping
+                  <ArrowRight className="size-4" aria-hidden />
+                </Link>
+                <Link
+                  href="/pantry/add?scan=1"
+                  onClick={() => onOpenChange(false)}
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                >
+                  <ScanBarcode className="size-4" aria-hidden />
+                  Scan barcodes
+                </Link>
+              </div>
             </form>
           </>
         )}

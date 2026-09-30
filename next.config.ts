@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
         ],
       },
+      {
+        // The barcode reader's .wasm: its file name carries the version, so it never changes.
+        source: "/vendor/zxing/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
     ]
   },
 }

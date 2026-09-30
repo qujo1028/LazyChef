@@ -17,6 +17,8 @@ export type ReviewDraft = {
   ingredientId: number | null
   /** The resolved name; renaming drops the ingredient id. */
   resolvedName: string
+  /** Set when it came from a barcode scan, so the code can be remembered under the final name. */
+  barcode?: string
 }
 
 export function draftFromResolved(item: ResolvedItem, key: string): ReviewDraft {

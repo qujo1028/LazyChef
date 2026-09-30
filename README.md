@@ -15,6 +15,9 @@ Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtim
 - **I cooked this**: on a recipe, review what comes out of the pantry (converted to each item's unit, or
   "check this" when units don't convert), then take it all out at once, with Undo. Anything that ran out
   can go straight onto the list.
+- **Barcode scanning**: scan a whole grocery haul into the pantry (names come from Open Food Facts, cleaned up
+  to "24 eggs"), or scan things into the cart at the store to check them off the list. Each household
+  remembers what it calls a barcode, so the second scan is instant.
 - **Shopping list**: grouped by aisle, check off with one tap at the store, then "Put away" moves it all
   into the pantry, topping up what's already there.
 - **Saved recipes**: a heart on any recipe saves it for the whole household. The Saved tab shows which ones you
@@ -86,7 +89,7 @@ Authentication → Emails → Templates:
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Dev server on port 3000 |
+| `npm run dev` | Dev server on port 3000 (first copies the barcode reader's `.wasm` into `public/vendor/`) |
 | `npm run build` | Production build |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
 | `npm test` | Unit tests (Vitest) for the pure logic: parsing, units, matching, list and pantry state |

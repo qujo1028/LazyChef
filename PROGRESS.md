@@ -175,3 +175,36 @@ emoji, so only the parts that improve on it came across:
 Deploy note: apply the migration right around when this reaches production. Code already on main can't
 read or write the new cache (it logs errors and runs without the cache or the points guard), and the new
 code falls back to an in-memory cache until the migration is there.
+
+## Phase 7: barcode scanning (2026-09-30, branch `claude/nice-shannon-yjvi7b`)
+Built:
+- **Migration `20261003000100_household_barcodes.sql`** (not applied yet, ask first): `household_barcodes`
+  (household, code, name, one package's quantity + unit, saved_by stamped by a trigger). Members only (RLS);
+  anon has no access. 5 PGlite tests (`supabase/tests/barcodes.test.mjs`), 54 total.
+- **Scanner** (`src/features/barcodes/components/barcode-scanner.tsx`): full-height sheet, the camera pinned
+  at the top, a "type the code" box, and the scan list below. The phone's own BarcodeDetector when it reads
+  grocery codes (Chrome on Android), otherwise ZXing in WebAssembly (iPhone Safari), loaded only when the
+  scanner opens, from our own site: `scripts/copy-zxing-wasm.mjs` copies it to `public/vendor/zxing/` before
+  `dev`/`build` (gitignored, versioned file name, cached for a year; the proxy skips `/vendor/`). The same
+  code again within 2.5 s is ignored, so a carton held in view counts once. Flashlight toggle when the
+  camera has one; clear messages when the camera is blocked or missing.
+- **Lookup** (`lookupBarcode`): the household's remembered name first, then Open Food Facts (free, no key, no
+  Spoonacular points; credited in the scanner). `src/lib/barcode/product.ts` turns a product into a pantry
+  line: the ingredient library's name only when its words (and the product's last word) are in the product
+  name ("Kirkland Signature Large Brown Eggs" → eggs, but "Zesty Ranch Crunchers" isn't ranch dressing), the
+  brand and printed size stripped, the package size parsed ("18 oz (510 g)", "400 g ℮", "2 x 200 g").
+  Codes are validated (check digit) and UPC-A / UPC-E / GTIN-14 normalized to one 13-digit form.
+- **Pantry**: "Scan barcodes" on Add groceries and in the quick add sheet (`/pantry/add?scan=1`). Scans become
+  lines ("24 eggs") in the box and go straight to the usual review. On Add, each scanned item's barcode is
+  remembered under the name it was added as (one package's amount, not two cartons' worth). Unknown products
+  can be named by hand.
+- **List**: "Scan" on the shopping list. A scan checks off the matching unchecked line (same name, or "milk"
+  for "whole milk", or "eggs" for "brown eggs"), with Undo; anything not on the list can be added and checked
+  off in one tap.
+- Tested in headless Chromium with a fake camera showing real EAN-13 barcodes (the ZXing path, as on iPhone):
+  camera scan, typed code, bad code, unknown product named by hand, review and add, list check-off and
+  add-and-check. 320/375 px, light and dark. Test household deleted afterwards.
+
+To do:
+- Apply `20261003000100_household_barcodes.sql` (ask). Until then scanning works but nothing is remembered.
+- Try it on a real iPhone and Android phone (the camera itself can't be tested here).
