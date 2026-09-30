@@ -43,3 +43,6 @@ next-env.d.ts
 
 # copied from node_modules by scripts/copy-zxing-wasm.mjs
 /public/vendor/zxing/
+
+# TheMealDB import previews (npm run recipes:import -- --dry-run)
+/data/themealdb/

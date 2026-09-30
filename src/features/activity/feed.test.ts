@@ -9,6 +9,7 @@ vi.mock("@/lib/units", () => ({
 }))
 
 import {
+  cookedRecipe,
   describeItem,
   describeUpdate,
   groupActivity,
@@ -171,6 +172,16 @@ describe("cooked entries", () => {
   it("still reads as cooking for a single item", () => {
     const [entry] = groupActivity([row({ action: "cooked", itemName: "eggs", quantity: 2, batchId: 10, details })])
     expect(summarizeEntry(entry)).toMatchObject({ verb: "cooked", object: "Chicken Tikka Masala", grouped: true })
+  })
+
+  it("knows which recipe it was, from Spoonacular or our own library", () => {
+    expect(cookedRecipe({ action: "cooked", details })).toEqual({ id: "715538", title: "Chicken Tikka Masala" })
+    const local = "3f2504e0-4f89-41d3-9a0c-0305e82c3301"
+    expect(cookedRecipe({ action: "cooked", details: { local_recipe_id: local, recipe_title: "Pancakes" } })).toEqual({
+      id: local,
+      title: "Pancakes",
+    })
+    expect(cookedRecipe({ action: "cooked", details: { local_recipe_id: "../x", recipe_title: "Odd" } })).toEqual({ id: null, title: "Odd" })
   })
 })
 

@@ -32,11 +32,14 @@ type Done = { results: CookResult[]; undone: boolean }
 export function CookSheet({
   recipeId,
   title,
+  image = null,
   lines,
   saved,
 }: {
-  recipeId: number
+  recipeId: string
   title: string
+  /** Spoonacular's photo, kept with a bookmark if it's saved from here. */
+  image?: string | null
   lines: CookLine[]
   /** Whether the household already saved it (the done screen offers to otherwise). */
   saved: boolean
@@ -71,6 +74,7 @@ export function CookSheet({
               key={session}
               recipeId={recipeId}
               title={title}
+              image={image}
               lines={lines}
               saved={saved}
               close={() => setOpen(false)}
@@ -91,12 +95,14 @@ function plural(n: number, word: string) {
 function CookContent({
   recipeId,
   title,
+  image,
   lines,
   saved,
   close,
 }: {
-  recipeId: number
+  recipeId: string
   title: string
+  image: string | null
   lines: CookLine[]
   saved: boolean
   close: () => void
@@ -158,6 +164,7 @@ function CookContent({
       <CookDone
         recipeId={recipeId}
         title={title}
+        image={image}
         saved={saved}
         done={done}
         pending={pending}
@@ -287,14 +294,16 @@ function CookLineCard({
 function CookDone({
   recipeId,
   title,
+  image,
   saved,
   done,
   pending,
   onUndo,
   close,
 }: {
-  recipeId: number
+  recipeId: string
   title: string
+  image: string | null
   saved: boolean
   done: Done
   pending: boolean
@@ -312,7 +321,7 @@ function CookDone({
 
   function save() {
     startSaving(async () => {
-      const result = await callAction(() => saveRecipe(recipeId, title))
+      const result = await callAction(() => saveRecipe(recipeId, title, image))
       if (result.error !== undefined) {
         toast.error(result.error)
         return

@@ -3,6 +3,7 @@ import { SectionTabs } from "@/components/section-tabs"
 const TABS = [
   { href: "/recipes", label: "Ideas" },
   { href: "/recipes/saved", label: "Saved" },
+  { href: "/recipes/ours", label: "Ours" },
 ] as const
 
 export function RecipesTabs({ current }: { current: (typeof TABS)[number]["href"] }) {

@@ -148,14 +148,23 @@ export function describeUpdate(row: Pick<ActivityRow, "action" | "itemName" | "d
 
 const ACTION_ORDER: ActivityAction[] = ["cooked", "shopped", "added", "restocked", "used", "updated", "removed"]
 
-/** The recipe a "cooked" row came from (cook_recipe puts it in `details`). */
-export function cookedRecipe(row: Pick<ActivityRow, "action" | "details">): { id: number | null; title: string } | null {
+/**
+ * The recipe a "cooked" row came from (cook_recipe puts it in `details`). `id` is its ref:
+ * Spoonacular's id as a string, or our recipe's uuid (see src/features/recipes/ref.ts).
+ */
+export function cookedRecipe(row: Pick<ActivityRow, "action" | "details">): { id: string | null; title: string } | null {
   if (row.action !== "cooked") return null
   const details = row.details
   if (!details || typeof details !== "object" || Array.isArray(details)) return null
   const title = typeof details.recipe_title === "string" ? details.recipe_title.trim() : ""
   if (!title) return null
-  return { id: typeof details.recipe_id === "number" ? details.recipe_id : null, title }
+  const id =
+    typeof details.recipe_id === "number"
+      ? String(details.recipe_id)
+      : typeof details.local_recipe_id === "string" && /^[0-9a-f-]{36}$/i.test(details.local_recipe_id)
+        ? details.local_recipe_id
+        : null
+  return { id, title }
 }
 
 function itemsLabel(count: number) {

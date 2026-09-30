@@ -4,15 +4,17 @@ import { cookedRecipe } from "@/features/activity/feed"
 import { dayLabel } from "@/features/activity/time"
 import type { Json } from "@/types/database"
 
+import type { RecipeSource } from "./ref"
+
 /** A "cooked" activity row, as loaded for history. */
 export type CookedRow = { batch_id: number | string; details: Json; created_at: string }
 
 export type CookHistory = { count: number; lastAt: string }
 
 /** How many times each recipe was cooked (one cook = one batch) and when last. */
-export function cookHistory(rows: readonly CookedRow[]): Map<number, CookHistory> {
+export function cookHistory(rows: readonly CookedRow[]): Map<string, CookHistory> {
   const seen = new Set<string>()
-  const history = new Map<number, CookHistory>()
+  const history = new Map<string, CookHistory>()
   for (const row of rows) {
     const recipe = cookedRecipe({ action: "cooked", details: row.details })
     if (!recipe || recipe.id === null) continue
@@ -37,7 +39,9 @@ export type SavedMatch = {
 }
 
 export type SavedRecipe = {
-  id: number
+  /** Its ref: Spoonacular's id or our uuid (see ref.ts). */
+  id: string
+  source: RecipeSource
   title: string
   image: string | null
   readyInMinutes: number | null
@@ -66,7 +70,7 @@ export function canMakeNow(recipe: Pick<SavedRecipe, "match">): boolean {
   return recipe.match !== null && recipe.match.need.length === 0
 }
 
-const newest = (a: SavedRecipe, b: SavedRecipe) => Date.parse(b.savedAt) - Date.parse(a.savedAt) || a.id - b.id
+const newest = (a: SavedRecipe, b: SavedRecipe) => Date.parse(b.savedAt) - Date.parse(a.savedAt) || a.id.localeCompare(b.id)
 
 export function sortSaved(recipes: readonly SavedRecipe[], sort: SavedSort): SavedRecipe[] {
   const sorted = [...recipes]

@@ -4,6 +4,7 @@ import { cookHistory, historyLabel, parseSavedSort, sortSaved, type SavedRecipe 
 
 const tikka = { recipe_id: 715538, recipe_title: "Chicken Tikka Masala" }
 const candy = { recipe_id: 649036, recipe_title: "Korean Candy Chicken" }
+const LOCAL = "3f2504e0-4f89-41d3-9a0c-0305e82c3301"
 
 describe("cookHistory", () => {
   it("counts one cook per batch and keeps the latest time", () => {
@@ -14,17 +15,20 @@ describe("cookHistory", () => {
       { batch_id: 9, details: candy, created_at: "2026-09-25T12:00:00Z" },
       { batch_id: 10, details: {}, created_at: "2026-09-25T12:00:00Z" },
       { batch_id: 11, details: { recipe_title: "No id" }, created_at: "2026-09-25T12:00:00Z" },
+      { batch_id: 12, details: { local_recipe_id: LOCAL, recipe_title: "Pancakes" }, created_at: "2026-09-26T09:00:00Z" },
     ])
     expect(Object.fromEntries(history)).toEqual({
       715538: { count: 2, lastAt: "2026-09-28T19:00:00Z" },
       649036: { count: 1, lastAt: "2026-09-25T12:00:00Z" },
+      [LOCAL]: { count: 1, lastAt: "2026-09-26T09:00:00Z" },
     })
   })
 })
 
 function saved(id: number, savedAt: string, extra: Partial<SavedRecipe> = {}): SavedRecipe {
   return {
-    id,
+    id: String(id),
+    source: "spoonacular",
     title: `Recipe ${id}`,
     image: null,
     readyInMinutes: null,
@@ -47,13 +51,13 @@ describe("sortSaved", () => {
   const ids = (list: SavedRecipe[]) => list.map((r) => r.id)
 
   it("puts what you can make first, unknown matches last", () => {
-    expect(ids(sortSaved(recipes, "ready"))).toEqual([5, 3, 4, 1, 2])
+    expect(ids(sortSaved(recipes, "ready"))).toEqual(["5", "3", "4", "1", "2"])
   })
   it("sorts by newest", () => {
-    expect(ids(sortSaved(recipes, "recent"))).toEqual([5, 4, 3, 2, 1])
+    expect(ids(sortSaved(recipes, "recent"))).toEqual(["5", "4", "3", "2", "1"])
   })
   it("sorts by most cooked, then most recently cooked", () => {
-    expect(ids(sortSaved(recipes, "cooked"))).toEqual([3, 4, 2, 5, 1])
+    expect(ids(sortSaved(recipes, "cooked"))).toEqual(["3", "4", "2", "5", "1"])
   })
   it("reads the sort from the URL", () => {
     expect(parseSavedSort("cooked")).toBe("cooked")

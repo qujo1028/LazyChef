@@ -26,10 +26,13 @@ describe("suggestionsCacheKey", () => {
   it("changes with the pantry and with the filters", () => {
     const base = suggestionsCacheKey(["eggs", "rice"], NO_FILTERS)
     expect(suggestionsCacheKey(["eggs", "rice", "milk"], NO_FILTERS)).not.toBe(base)
-    const breakfast = suggestionsCacheKey(["eggs", "rice"], { type: "breakfast", maxTime: null })
+    const breakfast = suggestionsCacheKey(["eggs", "rice"], { type: "breakfast", maxTime: null, query: null })
     expect(breakfast).toMatch(/^search:/)
-    expect(suggestionsCacheKey(["eggs", "rice"], { type: "breakfast", maxTime: 30 })).not.toBe(breakfast)
-    expect(suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: 30 })).not.toBe(breakfast)
+    expect(suggestionsCacheKey(["eggs", "rice"], { type: "breakfast", maxTime: 30, query: null })).not.toBe(breakfast)
+    expect(suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: 30, query: null })).not.toBe(breakfast)
+    const curry = suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: "Chicken Curry" })
+    expect(curry).not.toBe(base)
+    expect(suggestionsCacheKey(["rice", "eggs"], { type: null, maxTime: null, query: "chicken curry" })).toBe(curry)
   })
 
   it("recipe details are keyed by id", () => {

@@ -8,6 +8,7 @@ import type { RecipeIngredient, RecipeSummary } from "@/lib/spoonacular/recipe-s
 
 import { daysBetween, EXPIRING_SOON_DAYS } from "../pantry/dates"
 import type { PantryItem } from "../pantry/types"
+import type { RecipeSource } from "./ref"
 
 export type PantryRow = Pick<PantryItem, "name" | "quantity" | "ingredient_id" | "is_staple" | "expires_on">
 
@@ -21,7 +22,7 @@ export const MAX_QUERY_NAMES = 60
  * Taken as always there, like Spoonacular's own ignorePantry: water, salt and pepper never
  * count as missing. Normalized names (see normalizeIngredientName). Not "bell pepper".
  */
-const BASICS = new Set([
+export const BASICS: ReadonlySet<string> = new Set([
   "water",
   "ice",
   "ice water",
@@ -168,7 +169,9 @@ export function checkIngredients(index: PantryIndex, ingredients: readonly Recip
 }
 
 export type Suggestion = {
-  id: number
+  /** The recipe's ref: Spoonacular's numeric id or our uuid (see ref.ts). */
+  id: string
+  source: RecipeSource
   title: string
   image: string | null
   readyInMinutes: number | null
@@ -186,7 +189,22 @@ function ingredientKey(ingredient: RecipeIngredient) {
   return ingredient.id !== null ? `id:${ingredient.id}` : `name:${normalizeIngredientName(ingredient.name)}`
 }
 
-export function toSuggestion(index: PantryIndex, recipe: RecipeSummary): Suggestion {
+/** A recipe to match: its ingredients, split into what a search already said is used and the rest. */
+export type MatchableRecipe = {
+  id: string
+  source: RecipeSource
+  title: string
+  image: string | null
+  readyInMinutes: number | null
+  used: readonly RecipeIngredient[]
+  missed: readonly RecipeIngredient[]
+}
+
+export function spoonacularMatchable(recipe: RecipeSummary): MatchableRecipe {
+  return { ...recipe, id: String(recipe.id), source: "spoonacular" }
+}
+
+export function toSuggestion(index: PantryIndex, recipe: MatchableRecipe): Suggestion {
   const have = new Map<string, string>()
   const need = new Map<string, string>()
   const expiring = new Set<string>()
@@ -207,6 +225,7 @@ export function toSuggestion(index: PantryIndex, recipe: RecipeSummary): Suggest
 
   return {
     id: recipe.id,
+    source: recipe.source,
     title: recipe.title,
     image: recipe.image,
     readyInMinutes: recipe.readyInMinutes,
@@ -227,7 +246,7 @@ export function sortSuggestions(index: PantryIndex, recipes: readonly RecipeSumm
   for (const recipe of recipes) {
     if (seen.has(recipe.id)) continue
     seen.add(recipe.id)
-    const suggestion = toSuggestion(index, recipe)
+    const suggestion = toSuggestion(index, spoonacularMatchable(recipe))
     if (suggestion.have.length > 0 && suggestion.need.length <= MAX_MISSING) all.push(suggestion)
   }
   const byUsefulness = (a: Suggestion, b: Suggestion) =>

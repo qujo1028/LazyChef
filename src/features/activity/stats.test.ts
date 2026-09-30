@@ -71,7 +71,7 @@ describe("computeStats", () => {
       ["Korean Candy Chicken", 2],
       ["Old soup", 1],
     ])
-    expect(stats.topRecipes[0]).toMatchObject({ id: 715538, lastAt: "2026-09-29T18:00:00Z" })
+    expect(stats.topRecipes[0]).toMatchObject({ id: "715538", lastAt: "2026-09-29T18:00:00Z" })
   })
 
   it("counts trips and what gets bought most (case-insensitive)", () => {

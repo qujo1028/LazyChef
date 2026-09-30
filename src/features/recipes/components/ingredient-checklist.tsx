@@ -22,6 +22,8 @@ export type ChecklistLine = {
   status: IngredientStatus
   pantryName: string | null
   onList: boolean
+  /** "To serve" and the like: listed, but not picked for the shopping list by default. */
+  optional?: boolean
 }
 
 function plural(n: number, word: string) {
@@ -29,11 +31,13 @@ function plural(n: number, word: string) {
 }
 
 /** The recipe's ingredients split into "You need" (with boxes to add to the list) and "You have". */
-export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lines: ChecklistLine[] }) {
+export function IngredientChecklist({ recipeId, lines }: { recipeId: string; lines: ChecklistLine[] }) {
   const [added, setAdded] = useState<ReadonlySet<number>>(() => new Set())
   const isOnList = (line: ChecklistLine) => line.onList || added.has(line.index)
   const addable = lines.filter((line) => line.status === "need" && !isOnList(line))
-  const [selected, setSelected] = useState<ReadonlySet<number>>(() => new Set(addable.map((line) => line.index)))
+  const [selected, setSelected] = useState<ReadonlySet<number>>(
+    () => new Set(addable.filter((line) => !line.optional).map((line) => line.index)),
+  )
   const [pending, startTransition] = useTransition()
 
   const chosen = addable.filter((line) => selected.has(line.index)).map((line) => line.index)
@@ -95,7 +99,11 @@ export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lin
                   )}
                   <label htmlFor={onList ? undefined : id} className="grid min-w-0 flex-1 gap-0.5">
                     <span className="text-sm leading-snug">{line.original}</span>
-                    {onList ? <span className="text-xs text-muted-foreground">On the shopping list</span> : null}
+                    {onList ? (
+                      <span className="text-xs text-muted-foreground">On the shopping list</span>
+                    ) : line.optional ? (
+                      <span className="text-xs text-muted-foreground">Optional</span>
+                    ) : null}
                   </label>
                 </li>
               )

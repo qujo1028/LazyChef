@@ -5,8 +5,10 @@ import { displayName } from "@/features/pantry/display"
 
 import { canMakeNow, type SavedRecipe } from "../saved"
 import { CookedLabel } from "./cooked-label"
+import { recipeHref } from "../ref"
 import { RecipeImage } from "./recipe-image"
 import { SaveButton } from "./save-button"
+import { SourceTag } from "./source-tag"
 
 function MatchLine({ recipe }: { recipe: SavedRecipe }) {
   const { match } = recipe
@@ -32,12 +34,13 @@ export function SavedRecipeCard({ recipe, serverNow }: { recipe: SavedRecipe; se
   return (
     <li className="relative min-w-0">
       <Link
-        href={`/recipes/${recipe.id}`}
+        href={recipeHref(recipe.id)}
         className="flex gap-3 rounded-xl border bg-card p-2.5 transition-colors outline-none hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-muted"
       >
         <RecipeImage src={recipe.image} className="size-24 shrink-0 rounded-lg" />
         <div className="grid min-w-0 content-start gap-1 py-0.5">
           <h3 className="line-clamp-2 pr-9 leading-snug font-semibold">{recipe.title}</h3>
+          <SourceTag source={recipe.source} />
           <MatchLine recipe={recipe} />
           <p className="text-xs text-muted-foreground">
             {recipe.readyInMinutes ? (
@@ -50,7 +53,13 @@ export function SavedRecipeCard({ recipe, serverNow }: { recipe: SavedRecipe; se
           </p>
         </div>
       </Link>
-      <SaveButton recipeId={recipe.id} title={recipe.title} saved className="absolute top-1 right-1" />
+      <SaveButton
+        recipeId={recipe.id}
+        title={recipe.title}
+        image={recipe.source === "spoonacular" ? recipe.image : null}
+        saved
+        className="absolute top-1 right-1"
+      />
     </li>
   )
 }

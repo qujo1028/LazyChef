@@ -177,7 +177,8 @@ export function IngredientCombobox({
   )
 }
 
-function SuggestionOption({
+/** One row of the suggestion list (also used by the recipe form's ingredient box). */
+export function SuggestionOption({
   id,
   entry,
   query,

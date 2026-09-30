@@ -17,8 +17,9 @@ const supabase = origin(process.env.NEXT_PUBLIC_SUPABASE_URL)
 /**
  * Content-Security-Policy. Scripts and styles only from this site (Next.js and next-themes
  * need inline ones; nonces would force every page to render per request). Data goes only
- * to this site and Supabase (including the realtime websocket). Images come from here,
- * Spoonacular and Google profile photos. Vercel Analytics and Speed Insights are served
+ * to this site and Supabase (including the realtime websocket and recipe photo uploads).
+ * Images come from here, Spoonacular, TheMealDB (linked, not copied), household recipe photos
+ * (signed Supabase Storage URLs) and Google profile photos. Vercel Analytics and Speed Insights are served
  * from this site's own /_vercel path.
  */
 const csp = [
@@ -26,7 +27,9 @@ const csp = [
   // wasm-unsafe-eval: the barcode reader (ZXing, WebAssembly) on phones without a built-in one.
   `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://img.spoonacular.com https://spoonacular.com https://*.googleusercontent.com",
+  ["img-src 'self' data: blob: https://img.spoonacular.com https://spoonacular.com https://www.themealdb.com", supabase, "https://*.googleusercontent.com"]
+    .filter(Boolean)
+    .join(" "),
   "font-src 'self' data:",
   ["connect-src 'self'", supabase, supabase?.replace(/^http/, "ws"), isDev ? "ws://localhost:*" : null]
     .filter(Boolean)
