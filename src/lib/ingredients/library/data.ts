@@ -1149,7 +1149,7 @@ egg rolls|5|3|260||frozen egg rolls
 egg whites|4|3|261|1124|liquid egg whites,carton egg whites|93833
 egg yolks|4|5|57|1125
 eggnog|4|4|262|1057
-eggplant|0|2|12|11209|aubergine,globe eggplant
+eggplant|0|2|12|11209|aubergine,globe eggplant,egg plant
 eggs|4|1|57|1123|dozen eggs,chicken eggs,brown eggs,white eggs
 elbow macaroni|6|2|33|10120499|macaroni,elbow pasta,elbows,elbow noodles,macaroni noodles|20499
 elderberries|0|4|20|9088

@@ -413,3 +413,10 @@ describe("library data", () => {
     expect(output).toContain("up to date")
   })
 })
+
+describe("eggplant vs eggs", () => {
+  it("reads 'egg plant' (two words) as eggplant, not eggs", () => {
+    for (const name of ["egg plant", "Egg Plants", "eggplants", "aubergine"]) expect(findIngredient(name)?.name).toBe("eggplant")
+    for (const name of ["eggs", "egg", "Large Eggs"]) expect(findIngredient(name)?.name).toBe("eggs")
+  })
+})

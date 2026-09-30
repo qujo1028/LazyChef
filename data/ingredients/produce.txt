@@ -228,7 +228,7 @@ delicata squash ~4 | count, lb
 kabocha squash ~4 : kabocha | count, lb
 squash ~4 | count, lb
 pumpkin ~3 : pumpkins, pie pumpkin, sugar pumpkin | count, lb
-eggplant ~2 : aubergine, globe eggplant | count, lb
+eggplant ~2 : aubergine, globe eggplant, egg plant | count, lb
 japanese eggplant ~4 : chinese eggplant | count, lb
 chayote ~5 : chayote squash | count, lb
 okra ~3 | lb, oz
