@@ -1,6 +1,6 @@
 // Runs supabase/migrations against PGlite (in-process Postgres) with small
 // stand-ins for the parts of Supabase they touch: roles, auth.users/auth.uid(),
-// realtime.messages/topic()/broadcast_changes(). No Docker needed.
+// realtime.messages/topic()/broadcast_changes(), storage.buckets/objects. No Docker needed.
 //
 // These stand-ins mimic Supabase closely enough to test SQL and RLS logic;
 // the real check is still applying migrations to the hosted project.
@@ -32,6 +32,24 @@ const SUPABASE_STANDINS = `
   create function auth.uid() returns uuid language sql stable as $$
     select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
   $$;
+
+  create schema storage;
+  grant usage on schema storage to anon, authenticated;
+  create table storage.buckets (
+    id text primary key, name text not null, public boolean default false,
+    file_size_limit bigint, allowed_mime_types text[]
+  );
+  create table storage.objects (
+    id uuid primary key default gen_random_uuid(),
+    bucket_id text references storage.buckets (id),
+    name text not null,
+    owner uuid default nullif(current_setting('request.jwt.claim.sub', true), '')::uuid,
+    metadata jsonb,
+    unique (bucket_id, name)
+  );
+  alter table storage.objects enable row level security;
+  grant select, insert, update, delete on storage.objects to authenticated;
+  grant select on storage.buckets to authenticated;
 
   create schema realtime;
   grant usage on schema realtime to authenticated;
