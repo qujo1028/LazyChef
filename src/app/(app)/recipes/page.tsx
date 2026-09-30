@@ -7,15 +7,26 @@ import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
+import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
 import { filtersHref, hasFilters, NO_FILTERS, parseFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
-import { getRecipeSuggestions } from "@/features/recipes/queries"
+import { getRecipeSuggestions, getSavedIds } from "@/features/recipes/queries"
 import type { Usage } from "@/features/recipes/cache"
 
 export const metadata: Metadata = { title: "Recipes" }
 
-function Section({ title, description, recipes }: { title: string; description: string; recipes: Suggestion[] }) {
+function Section({
+  title,
+  description,
+  recipes,
+  savedIds,
+}: {
+  title: string
+  description: string
+  recipes: Suggestion[]
+  savedIds: ReadonlySet<number>
+}) {
   if (recipes.length === 0) return null
   return (
     <section className="grid grid-cols-1 gap-2.5">
@@ -27,7 +38,7 @@ function Section({ title, description, recipes }: { title: string; description: 
       </div>
       <ul className="grid grid-cols-1 gap-2.5">
         {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+          <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
         ))}
       </ul>
     </section>
@@ -56,9 +67,14 @@ function Footer({ savedAt, usage }: { savedAt: string; usage: Usage | null }) {
 export default async function RecipesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { household } = await requireHousehold()
   const filters = parseFilters(await searchParams)
-  const result = await getRecipeSuggestions(household.id, filters)
+  const [result, savedIds] = await Promise.all([getRecipeSuggestions(household.id, filters), getSavedIds(household.id)])
 
-  const heading = <PageHeading title="Recipes" description="What you can cook with what you have." />
+  const heading = (
+    <>
+      <PageHeading title="Recipes" description="What you can cook with what you have." />
+      <RecipesTabs current="/recipes" />
+    </>
+  )
 
   if (result.status === "empty-pantry") {
     return (
@@ -114,8 +130,13 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
         </EmptyState>
       ) : (
         <>
-          <Section title="Make now" description="You have everything for these." recipes={result.makeNow} />
-          <Section title="Almost there" description="Just 1 to 3 things away." recipes={result.almostThere} />
+          <Section title="Make now" description="You have everything for these." recipes={result.makeNow} savedIds={savedIds} />
+          <Section
+            title="Almost there"
+            description="Just 1 to 3 things away."
+            recipes={result.almostThere}
+            savedIds={savedIds}
+          />
         </>
       )}
       {result.status === "ok" ? <Footer savedAt={result.savedAt} usage={result.usage} /> : null}

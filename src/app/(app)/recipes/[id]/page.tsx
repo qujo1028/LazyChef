@@ -9,7 +9,8 @@ import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 import { CookSheet } from "@/features/recipes/components/cook-sheet"
 import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
-import { getRecipeDetail } from "@/features/recipes/queries"
+import { SaveButton } from "@/features/recipes/components/save-button"
+import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -33,7 +34,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   if (recipeId === null) notFound()
 
   const { household } = await requireHousehold()
-  const result = await getRecipeDetail(household.id, recipeId)
+  const [result, savedIds] = await Promise.all([getRecipeDetail(household.id, recipeId), getSavedIds(household.id)])
   if (result.status === "not-found") notFound()
 
   if (result.status === "no-key" || result.status === "error") {
@@ -62,13 +63,17 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
     onList: (ingredient.id !== null && listIds.has(ingredient.id)) || listKeys.has(normalizeIngredientName(ingredient.name)),
   }))
   const have = lines.filter((line) => line.status !== "need").length
+  const saved = savedIds.has(recipe.id)
 
   return (
     <article className="grid grid-cols-1 gap-5">
       <BackLink />
       <RecipeImage src={recipe.image} eager className="aspect-[4/3] w-full rounded-2xl" />
       <header className="grid gap-2">
-        <h1 className="text-2xl leading-tight font-semibold tracking-tight">{recipe.title}</h1>
+        <div className="flex items-start gap-2">
+          <h1 className="min-w-0 flex-1 text-2xl leading-tight font-semibold tracking-tight">{recipe.title}</h1>
+          <SaveButton recipeId={recipe.id} title={recipe.title} saved={saved} variant="outline" className="-mt-0.5 shrink-0" />
+        </div>
         <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
           {recipe.readyInMinutes ? (
             <span className="inline-flex items-center gap-1.5">
@@ -91,7 +96,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
           </span>
         </h2>
         <IngredientChecklist recipeId={recipe.id} lines={lines} />
-        <CookSheet recipeId={recipe.id} title={recipe.title} lines={cook} />
+        <CookSheet recipeId={recipe.id} title={recipe.title} lines={cook} saved={saved} />
       </section>
 
       {recipe.steps.length > 0 ? (

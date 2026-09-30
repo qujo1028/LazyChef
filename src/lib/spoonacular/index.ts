@@ -14,8 +14,11 @@ export {
   type SpoonacularIngredient,
 } from "./parse-ingredients"
 export {
+  BULK_LIMIT,
+  bulkCost,
   findRecipesByIngredients,
   getRecipeInformation,
+  getRecipeInformationBulk,
   MEAL_TYPES,
   searchRecipes,
   type MealType,

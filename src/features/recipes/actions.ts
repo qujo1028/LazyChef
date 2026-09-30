@@ -141,3 +141,44 @@ export async function undoCook(amounts: Deduction[]): Promise<ActionResult> {
   revalidatePath("/activity")
   return {}
 }
+
+const saveInput = z.object({
+  recipeId: z.number().int().positive(),
+  title: z.string().trim().min(1).max(200),
+})
+
+/** Saves a recipe for the whole household. Saving one that's already saved is fine. */
+export async function saveRecipe(recipeId: number, title: string): Promise<ActionResult> {
+  const parsed = saveInput.safeParse({ recipeId, title })
+  if (!parsed.success) return { error: "Couldn't save that recipe." }
+
+  const { household } = await requireHousehold()
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from("saved_recipes")
+    .upsert(
+      { household_id: household.id, recipe_id: parsed.data.recipeId, title: parsed.data.title },
+      { onConflict: "household_id,recipe_id", ignoreDuplicates: true },
+    )
+  if (error) return { error: dbError("saveRecipe", error) }
+
+  revalidatePath("/recipes", "layout")
+  return {}
+}
+
+export async function unsaveRecipe(recipeId: number): Promise<ActionResult> {
+  const parsed = saveInput.shape.recipeId.safeParse(recipeId)
+  if (!parsed.success) return { error: "Couldn't unsave that recipe." }
+
+  const { household } = await requireHousehold()
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from("saved_recipes")
+    .delete()
+    .eq("household_id", household.id)
+    .eq("recipe_id", parsed.data)
+  if (error) return { error: dbError("unsaveRecipe", error) }
+
+  revalidatePath("/recipes", "layout")
+  return {}
+}

@@ -7,6 +7,7 @@ export default function ActivityLoading() {
         <Skeleton className="h-7 w-28" />
         <Skeleton className="h-4 w-52" />
       </div>
+      <Skeleton className="h-13 w-full rounded-xl" />
       <ul className="grid divide-y">
         {[0, 1, 2, 3, 4].map((i) => (
           <li key={i} className="flex gap-3 py-3">
