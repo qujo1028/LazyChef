@@ -154,7 +154,8 @@ export function toRecipeDetail(value: unknown): RecipeDetail | null {
     image: safeUrl(raw.image),
     readyInMinutes: positiveInt(raw.readyInMinutes),
     servings: positiveInt(raw.servings),
-    sourceUrl: safeUrl(raw.sourceUrl),
+    // The original page, or Spoonacular's copy of it when there isn't one.
+    sourceUrl: safeUrl(raw.sourceUrl) ?? safeUrl(raw.spoonacularSourceUrl),
     sourceName: text(raw.sourceName) || text(raw.creditsText) || null,
     summary: stripHtml(raw.summary) || null,
     ingredients: ingredients(raw.extendedIngredients),

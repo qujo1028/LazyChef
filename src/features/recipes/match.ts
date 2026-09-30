@@ -18,10 +18,29 @@ export const MAX_MISSING = 3
 export const MAX_QUERY_NAMES = 60
 
 /**
- * Taken as always there, like Spoonacular's own ignorePantry: nobody shops for water.
- * Normalized names (see normalizeIngredientName).
+ * Taken as always there, like Spoonacular's own ignorePantry: water, salt and pepper never
+ * count as missing. Normalized names (see normalizeIngredientName). Not "bell pepper".
  */
-const BASICS = new Set(["water", "ice", "salt", "table salt", "kosher salt", "sea salt", "ice water", "hot water"])
+const BASICS = new Set([
+  "water",
+  "ice",
+  "ice water",
+  "hot water",
+  "cold water",
+  "warm water",
+  "boiling water",
+  "salt",
+  "table salt",
+  "kosher salt",
+  "sea salt",
+  "pepper",
+  "black pepper",
+  "ground pepper",
+  "ground black pepper",
+  "cracked black pepper",
+  "white pepper",
+  "salt and pepper",
+])
 
 /** Staples and anything with some left (or not tracked). "Ran out" rows don't count. */
 export function isAvailable(item: Pick<PantryRow, "quantity" | "is_staple">): boolean {
@@ -125,7 +144,10 @@ export function findInPantry<T extends PantryRow>(
 }
 
 export function isBasic(ingredient: Pick<RecipeIngredient, "name">): boolean {
-  return BASICS.has(normalizeIngredientName(ingredient.name))
+  if (BASICS.has(normalizeIngredientName(ingredient.name))) return true
+  // "coarse salt", "freshly ground black pepper", "salt and pepper to taste": via the library.
+  const entry = findIngredient(ingredient.name)
+  return entry !== null && BASICS.has(normalizeIngredientName(entry.name))
 }
 
 export type IngredientStatus = "have" | "basic" | "need"

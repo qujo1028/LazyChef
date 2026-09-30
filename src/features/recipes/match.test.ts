@@ -83,6 +83,44 @@ describe("findInPantry", () => {
   })
 })
 
+describe("basics", () => {
+  const index = buildPantryIndex([item("eggs"), item("bell pepper", { quantity: 0 })], TODAY)
+
+  it("water, salt and pepper never count as missing", () => {
+    const s = toSuggestion(
+      index,
+      recipe(1, [ing("eggs")], [ing("water"), ing("salt"), ing("black pepper"), ing("salt and pepper to taste"), ing("coarse salt"), ing("freshly ground black pepper")]),
+    )
+    expect(s.need).toEqual([])
+  })
+
+  it("but bell peppers and pepper flakes do", () => {
+    const s = toSuggestion(index, recipe(1, [ing("eggs")], [ing("bell pepper"), ing("red pepper flakes")]))
+    expect(s.need).toEqual(["bell pepper", "red pepper flakes"])
+  })
+})
+
+describe("make now vs almost there", () => {
+  const index = buildPantryIndex(
+    [item("eggs"), item("rice"), item("soy sauce", { quantity: null }), item("butter", { quantity: 0 })],
+    TODAY,
+  )
+
+  it("0 missing is Make now, 1 to 3 is Almost there, more is dropped; ran-out items count as missing", () => {
+    const { makeNow, almostThere } = sortSuggestions(index, [
+      recipe(1, [ing("eggs"), ing("rice")], [ing("soy sauce"), ing("salt")]),
+      recipe(2, [ing("eggs")], [ing("butter")]),
+      recipe(3, [ing("eggs")], [ing("milk"), ing("flour"), ing("sugar")]),
+      recipe(4, [ing("eggs")], [ing("milk"), ing("flour"), ing("sugar"), ing("vanilla")]),
+    ])
+    expect(makeNow.map((r) => r.id)).toEqual([1])
+    expect(almostThere.map((r) => [r.id, r.need])).toEqual([
+      [2, ["butter"]],
+      [3, ["milk", "flour", "sugar"]],
+    ])
+  })
+})
+
 describe("checkIngredients", () => {
   it("marks have, need, and basics like water", () => {
     const index = buildPantryIndex([item("eggs")], TODAY)

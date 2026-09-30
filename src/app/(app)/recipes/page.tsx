@@ -1,18 +1,20 @@
 import type { Metadata } from "next"
-import { ChefHat, CircleAlert, KeyRound, Plus, Sparkles } from "lucide-react"
+import { ChefHat, CircleAlert, KeyRound, MoonStar, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
+import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
-import { filtersHref, hasFilters, NO_FILTERS, parseFilters } from "@/features/recipes/filters"
+import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
+import { filtersHref, hasFilters, NO_FILTERS, parseFilters, type RecipeFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeSuggestions, getSavedIds } from "@/features/recipes/queries"
-import type { Usage } from "@/features/recipes/cache"
+import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
 
@@ -50,21 +52,25 @@ function minutesAgo(iso: string) {
   return minutes < 1 ? "just now" : `${minutes} min ago`
 }
 
-function Footer({ savedAt, usage }: { savedAt: string; usage: Usage | null }) {
+function hoursUntil(iso: string) {
+  const hours = Math.max(1, Math.ceil((new Date(iso).getTime() - Date.now()) / 3_600_000))
+  return hours === 1 ? "about an hour" : `about ${hours} hours`
+}
+
+function pointsLeft(usage: Usage | null) {
+  return usage?.left !== null && usage?.left !== undefined ? ` · ${Math.floor(usage.left)} of ${DAILY_POINTS} Spoonacular points left today` : ""
+}
+
+function ClearFilters({ filters }: { filters: RecipeFilters }) {
+  if (!hasFilters(filters)) return null
   return (
-    <p className="text-center text-xs text-muted-foreground">
-      Found {minutesAgo(savedAt)} · refreshes hourly
-      {usage?.left !== null && usage?.left !== undefined ? ` · ${Math.floor(usage.left)} of 50 Spoonacular points left today` : ""}
-      <br />
-      Recipes from{" "}
-      <a href="https://spoonacular.com/food-api" className="underline underline-offset-2" target="_blank" rel="noreferrer">
-        Spoonacular
-      </a>
-    </p>
+    <Link href={filtersHref(NO_FILTERS)} className="font-medium text-primary underline underline-offset-2">
+      Clear filters
+    </Link>
   )
 }
 
-export default async function RecipesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
   const { household } = await requireHousehold()
   const filters = parseFilters(await searchParams)
   const [result, savedIds] = await Promise.all([getRecipeSuggestions(household.id, filters), getSavedIds(household.id)])
@@ -96,9 +102,9 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
     return (
       <>
         {heading}
-        <EmptyState icon={KeyRound} title="Recipes aren't set up yet">
-          The app needs a Spoonacular API key (SPOONACULAR_API_KEY) to find recipes. Once it&apos;s added, ideas show
-          up here.
+        <EmptyState icon={KeyRound} title="Recipes are almost ready">
+          Recipe ideas need a Spoonacular key, which hasn&apos;t been added yet. Your pantry and list work fine in the
+          meantime.
         </EmptyState>
       </>
     )
@@ -108,21 +114,27 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
     <>
       {heading}
       <RecipeFilterBar filters={filters} />
-      {result.status === "error" ? (
+      {result.status === "resting" ? (
+        <EmptyState icon={MoonStar} title="Recipe searches are resting until tomorrow">
+          <p>
+            We&apos;ve used today&apos;s free Spoonacular searches. New ones start again in {hoursUntil(result.resetsAt)}
+            {" "}(midnight UTC). Recipes anyone opened in the last hour still open fine.
+          </p>
+          {hasFilters(filters) ? (
+            <p className="mt-2">
+              Searches without filters from the last hour may still be saved. <ClearFilters filters={filters} />
+            </p>
+          ) : null}
+        </EmptyState>
+      ) : result.status === "error" ? (
         <EmptyState icon={CircleAlert} title="Couldn't find recipes right now">
-          {result.problem.message}
-          {result.problem.code === "quota"
-            ? " Recipes you've already opened in the last hour still work."
-            : " Try again in a bit."}
+          {result.problem.message} Try again in a bit.
         </EmptyState>
       ) : result.makeNow.length + result.almostThere.length === 0 ? (
         <EmptyState icon={Sparkles} title="No matches yet">
           {hasFilters(filters) ? (
             <>
-              Nothing fits those filters with what you have.{" "}
-              <Link href={filtersHref(NO_FILTERS)} className="font-medium text-primary underline underline-offset-2">
-                Clear filters
-              </Link>
+              Nothing fits those filters with what you have. <ClearFilters filters={filters} />
             </>
           ) : (
             "Add a few more things to your pantry and you'll start seeing ideas."
@@ -139,7 +151,9 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
           />
         </>
       )}
-      {result.status === "ok" ? <Footer savedAt={result.savedAt} usage={result.usage} /> : null}
+      <SpoonacularCredit>
+        {result.status === "ok" ? `Found ${minutesAgo(result.savedAt)} · refreshes hourly${pointsLeft(result.usage)}` : null}
+      </SpoonacularCredit>
     </>
   )
 }
