@@ -140,7 +140,11 @@ for (let i = 0; i < recipes.length; i += BATCH) {
   const { data, error } = await db
     .from("recipes")
     .upsert(
-      batch.map(({ ingredients: _ingredients, ...recipe }) => ({ ...recipe, household_id: null })),
+      batch.map((recipe) => {
+        const row = { ...recipe, household_id: null }
+        delete row.ingredients
+        return row
+      }),
       { onConflict: "source,source_id" },
     )
     .select("id, source_id")
