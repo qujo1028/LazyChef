@@ -36,8 +36,10 @@ export async function joinHousehold(_prev: ActionState, formData: FormData): Pro
 
   await requireViewer()
   const supabase = await createClient()
-  const { error } = await supabase.rpc("join_household", { p_code: code })
+  const { data, error } = await supabase.rpc("join_household", { p_code: code })
   if (error) return { error: error.message }
+  // A wrong code comes back as null (so the database can count it against the guess limit).
+  if (!data) return { error: "That invite code doesn't match any household." }
 
   ;(await cookies()).delete(PENDING_INVITE_COOKIE)
   redirect("/pantry")

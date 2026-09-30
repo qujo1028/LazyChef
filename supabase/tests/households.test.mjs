@@ -58,7 +58,8 @@ describe("households", () => {
     await t.as(casey, async () => {
       assert.equal((await t.q("select count(*)::int as n from public.profiles"))[0].n, 1)
       assert.equal((await t.q("select * from public.get_invite_preview('ZZZZZZZZ')")).length, 0)
-      await assertRejects(() => t.q("select public.join_household('ZZZZZZZZ')"), /doesn't match/)
+      // A wrong code returns null (see 20261003000100_security_hardening.sql).
+      assert.equal((await t.q("select public.join_household('ZZZZZZZZ') as id"))[0].id, null)
     })
   })
 

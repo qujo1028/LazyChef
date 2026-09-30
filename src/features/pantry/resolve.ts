@@ -7,6 +7,7 @@ import { parseLines } from "@/lib/ingredients/parse-line"
 import { isSpoonacularConfigured, parseIngredients, SpoonacularError } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 import { recordUsage } from "@/features/recipes/cache"
+import { takeRateLimit } from "@/lib/rate-limit"
 
 import {
   buildHouseholdKnowledge,
@@ -23,6 +24,10 @@ export type { ResolveResult, SpoonacularStatus } from "./resolve-core"
 const MAX_PANTRY_ROWS = 2000
 
 async function lookupWithSpoonacular(names: string[]): Promise<SpoonacularLookup> {
+  // Each line costs a point, so each person gets a limited number of lookups an hour.
+  if (!(await takeRateLimit("ingredient_lookup"))) {
+    return { ok: false, error: spoonacularFailureMessage("You've looked up a lot of new foods this hour.") }
+  }
   try {
     const { ingredients, quota } = await parseIngredients(names)
     await recordUsage(quota)

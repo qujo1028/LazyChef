@@ -175,3 +175,20 @@ emoji, so only the parts that improve on it came across:
 Deploy note: apply the migration right around when this reaches production. Code already on main can't
 read or write the new cache (it logs errors and runs without the cache or the points guard), and the new
 code falls back to an in-memory cache until the migration is there.
+
+## Security hardening (2026-09-30, branch `claude/keen-gates-txlzvs`)
+- Headers (`next.config.ts`): Content-Security-Policy (enforced; `'unsafe-inline'` scripts because nonces
+  would force every page to render per request), HSTS (2 years), Permissions-Policy. Checked in a
+  browser on `/login`, `/signup`, `/forgot-password` with a production build: no CSP violations.
+- **Migration `20261003000100_security_hardening.sql`** (not applied yet, ask first):
+  - `private.rate_limits` + `public.take_rate_limit(bucket)`: per person, fixed windows, limits in SQL
+    (recipe_search 15/h, recipe_open 40/h, ingredient_lookup 20/h). Checked only when points would be spent.
+  - Wrong invite codes: 10 per 15 minutes per person, counted inside `get_invite_preview()` and
+    `join_household()`. `join_household()` now returns null for a wrong code instead of raising.
+  - `profiles.avatar_url`: https only (trigger clears anything else; NOT VALID check as a backstop).
+  - 6 PGlite tests (`supabase/tests/security.test.mjs`).
+- The app fails open if the rate-limit check errors (e.g. before the migration is applied); the daily
+  points guard still applies.
+
+Still to do from the security plan: leaked-password protection and password length in Supabase Auth,
+Supabase security advisor, Dependabot/CodeQL, rotating any exposed keys, and an incident checklist.

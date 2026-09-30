@@ -116,4 +116,19 @@ describe("cachedSpoonacular", () => {
     await expect(cachedSpoonacular(store, "find:a", failing, { cost: 1 })).rejects.toMatchObject({ code: "timeout" })
     expect(await store.usage()).toBeNull()
   })
+
+  it("checks the per-person limit only when it would spend points", async () => {
+    const store = memoryStore(() => Date.parse("2026-09-29T12:00:00Z"))
+    const load = vi.fn(async () => ({ value: [1], quota: quota(1.4, 48.6) }))
+    const gate = vi.fn(async () => {})
+    await cachedSpoonacular(store, "find:x", load, { cost: 1.4, beforeSpend: gate })
+    await cachedSpoonacular(store, "find:x", load, { cost: 1.4, beforeSpend: gate })
+    expect(gate).toHaveBeenCalledTimes(1)
+
+    const blocked = vi.fn(async () => {
+      throw new Error("limited")
+    })
+    await expect(cachedSpoonacular(store, "find:y", load, { cost: 1.4, beforeSpend: blocked })).rejects.toThrow("limited")
+    expect(load).toHaveBeenCalledTimes(1)
+  })
 })
