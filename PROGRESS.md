@@ -254,3 +254,13 @@ Not done:
 
 Done 2026-09-30: the import ran with TheMealDB's test key (790 recipes, 8,152 ingredient lines) and the PR
 merged. Re-run `npm run recipes:import -- --write` with a supporter key if you get one (it upserts, no copies).
+
+## Paused idea: recipe preferences (branch `recipe-preferences`, not merged, not applied)
+A household-wide settings page so suggestions skip what you don't want: cuisines you like (none = all),
+hidden meal types (sauces, marinades, drinks by default), "easy" (max ingredients) and "quick" (max minutes,
+kept for recipes with no time listed). Done so far: migration `20261006000100_recipe_preferences.sql`
+(`recipe_preferences` table + new optional filters on `match_local_recipes()`) and PGlite tests
+(`recipe-preferences.test.mjs`, not run yet). Still to do: cuisine groups (map TheMealDB's raw cuisines like
+"Jamaican", "Barbados" to groups like "Caribbean"; Spoonacular's cuisine names as the groups), the
+/recipes/preferences page, wiring prefs into getRecipeIdeas (local RPC + Spoonacular complexSearch `cuisine`,
+post-filter by dishTypes), cache key, database types, tests. Ask before applying the migration.
