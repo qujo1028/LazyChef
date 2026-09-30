@@ -95,5 +95,5 @@ export function useList({
     [setItemChecked],
   )
 
-  return { items, apply, toggle }
+  return { items, apply, toggle, setItemChecked }
 }

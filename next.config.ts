@@ -23,7 +23,8 @@ const supabase = origin(process.env.NEXT_PUBLIC_SUPABASE_URL)
  */
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  // wasm-unsafe-eval: the barcode reader (ZXing, WebAssembly) on phones without a built-in one.
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://img.spoonacular.com https://spoonacular.com https://*.googleusercontent.com",
   "font-src 'self' data:",
@@ -54,8 +55,14 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           // Always HTTPS for two years. Browsers ignore it on http://localhost.
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+          // Camera for this site only: the barcode scanner.
+          { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(), payment=(), usb=()" },
         ],
+      },
+      {
+        // The barcode reader's .wasm: its file name carries the version, so it never changes.
+        source: "/vendor/zxing/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
     ]
   },

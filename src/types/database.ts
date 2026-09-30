@@ -96,6 +96,51 @@ export type Database = {
           },
         ]
       }
+      household_barcodes: {
+        Row: {
+          code: string
+          household_id: string
+          name: string
+          quantity: number | null
+          saved_by: string | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          household_id: string
+          name: string
+          quantity?: number | null
+          saved_by?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          household_id?: string
+          name?: string
+          quantity?: number | null
+          saved_by?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_barcodes_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "household_barcodes_saved_by_fkey"
+            columns: ["saved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_members: {
         Row: {
           household_id: string

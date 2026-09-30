@@ -3,6 +3,9 @@
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
+import { barcodeMemoriesSchema } from "@/features/barcodes/schemas"
+import { rememberBarcodes } from "@/features/barcodes/server"
+import type { BarcodeMemory } from "@/features/barcodes/types"
 import { requireHousehold } from "@/features/household/queries"
 import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
 import { createClient } from "@/lib/supabase/server"
@@ -70,12 +73,17 @@ export async function previewItems(text: string): Promise<ActionResult<ResolveRe
 }
 
 /** Adds reviewed items, topping up matching ones. Returns counts for a toast. */
-export async function addItems(items: NewPantryItem[]): Promise<ActionResult<AddItemsSummary>> {
+export async function addItems(
+  items: NewPantryItem[],
+  /** Scanned items' barcodes, remembered under the names they were added with. */
+  barcodes: BarcodeMemory[] = [],
+): Promise<ActionResult<AddItemsSummary>> {
   const parsed = z.array(newItemSchema).min(1, "Nothing to add.").max(100, "Add up to 100 items at a time.").safeParse(items)
   if (!parsed.success) return { error: firstIssue(parsed.error) }
+  const codes = barcodeMemoriesSchema.safeParse(barcodes)
 
   const { household } = await requireHousehold()
-  return addToPantry(
+  const result = await addToPantry(
     household.id,
     parsed.data.map((item) => ({
       ...item,
@@ -83,6 +91,14 @@ export async function addItems(items: NewPantryItem[]): Promise<ActionResult<Add
       ingredient_id: item.ingredient_id ?? findIngredient(item.name)?.id ?? null,
     })),
   )
+  if (result.error === undefined && codes.success && codes.data.length > 0) {
+    await rememberBarcodes(
+      await createClient(),
+      household.id,
+      codes.data.map((row) => ({ ...row, unit: canonicalUnit(row.unit) })),
+    )
+  }
+  return result
 }
 
 /** One-tap staples (salt, olive oil, …): always on hand, not tracked. Skips ones you have. */

@@ -11,7 +11,10 @@ export const metadata: Metadata = { title: "Add groceries" }
 
 export default async function BulkAddPage({ searchParams }: PageProps<"/pantry/add">) {
   // ?text= carries over what was typed in the quick add sheet.
-  const text = (firstParam((await searchParams).text) ?? "").slice(0, 5000)
+  const params = await searchParams
+  const text = (firstParam(params.text) ?? "").slice(0, 5000)
+  // ?scan=1 comes from "Scan barcodes" in the quick add sheet.
+  const scan = firstParam(params.scan) === "1"
 
   return (
     <>
@@ -24,9 +27,9 @@ export default async function BulkAddPage({ searchParams }: PageProps<"/pantry/a
       </Link>
       <PageHeading
         title="Just went shopping?"
-        description="Type or paste everything you bought. You'll check it all before anything is added."
+        description="Scan, type or paste everything you bought. You'll check it all before anything is added."
       />
-      <BulkAddForm key={text} defaultText={text} serverToday={localDateKey()} />
+      <BulkAddForm key={text} defaultText={text} serverToday={localDateKey()} startScanning={scan} />
     </>
   )
 }
