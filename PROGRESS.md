@@ -231,7 +231,7 @@ To do:
 
 ## Local recipe library (2026-09-30, branch `local-recipes`)
 Built:
-- **Migration `20261005000100_local_recipes.sql`** (NOT applied yet, ask first): `recipes` + `recipe_ingredients`
+- **Migration `20261005000100_local_recipes.sql`** (applied to the live DB 2026-09-30 via the Supabase connector, recorded as 20261005000100): `recipes` + `recipe_ingredients`
   (shared library with `household_id` null, household recipes with it set; unique `(source, source_id)`),
   `save_household_recipe()`, `match_local_recipes()`, the private `recipe-photos` bucket (5 MB, images only,
   members only, `<household>/<file>` paths), `saved_recipes.local_recipe_id` + `image_url`, and `cook_recipe()`
@@ -252,5 +252,5 @@ Not done:
 - Browser check at 320/375 px (ran out of time). Do it after the migration is applied.
 - Shopping list lines from local recipes keep only the recipe title (the list's `recipe_id` is Spoonacular's).
 
-User to do: approve/apply the migration, get a TheMealDB supporter key (add to `.env.local`, not Vercel,
-since only the script uses it), review the dry run, then `npm run recipes:import -- --write`.
+Done 2026-09-30: the import ran with TheMealDB's test key (790 recipes, 8,152 ingredient lines) and the PR
+merged. Re-run `npm run recipes:import -- --write` with a supporter key if you get one (it upserts, no copies).
