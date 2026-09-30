@@ -16,6 +16,19 @@ export default async function JoinPage({ params }: PageProps<"/join/[code]">) {
   await requireViewer()
   const invite = await getInvitePreview(code)
 
+  if (invite === "limited") {
+    return (
+      <CenteredShell>
+        <div className="grid gap-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight">Too many tries</h1>
+          <p className="text-muted-foreground">
+            That&apos;s a lot of invite codes that didn&apos;t match. Wait about 15 minutes, then try the link again.
+          </p>
+        </div>
+      </CenteredShell>
+    )
+  }
+
   if (!invite) {
     return (
       <CenteredShell>

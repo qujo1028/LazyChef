@@ -475,7 +475,7 @@ export type Database = {
       }
       join_household: {
         Args: { p_code: string }
-        Returns: string
+        Returns: string | null
       }
       leave_household: {
         Args: { p_household_id: string }
@@ -509,6 +509,10 @@ export type Database = {
       remove_member: {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
+      }
+      take_rate_limit: {
+        Args: { p_bucket: string }
+        Returns: boolean
       }
     }
     Enums: {

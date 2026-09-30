@@ -10,6 +10,7 @@ import {
 } from "@/lib/spoonacular"
 import { utcDay } from "@/lib/spoonacular/cost"
 import { getServerDb } from "@/lib/spoonacular/server-db"
+import { takeRateLimit } from "@/lib/rate-limit"
 import type { Json } from "@/types/database"
 
 import { isResting, memoryStore, recipeCacheKey, type CacheStore, type Usage } from "./cache-core"
@@ -164,6 +165,7 @@ export async function cachedRecipeDetails(
   const toFetch = missing().slice(0, BULK_LIMIT)
   const cost = bulkCost(toFetch.length)
   if (toFetch.length === 0 || isResting(usage, cost, 1)) return { details, missing: missing(), usage }
+  if (!(await takeRateLimit("recipe_open"))) return { details, missing: missing(), usage }
 
   try {
     const { recipes, quota } = await getRecipeInformationBulk(toFetch)

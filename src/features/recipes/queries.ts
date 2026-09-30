@@ -17,6 +17,7 @@ import {
   type RecipeDetail,
   type RecipeSummary,
 } from "@/lib/spoonacular"
+import { RateLimitedError, requireRateLimit } from "@/lib/rate-limit"
 import { createClient } from "@/lib/supabase/server"
 
 import { cachedRecipeDetails, cachedSpoonacular, getCacheStore, getUsageToday } from "./cache"
@@ -53,6 +54,7 @@ export type SuggestionsResult =
   | ({ status: "ok"; savedAt: string; usage: Usage | null; searched: number } & Suggestions)
 
 function problem(error: unknown, context: string): SpoonacularProblem {
+  if (error instanceof RateLimitedError) return { code: "rate_limit", message: error.message }
   if (error instanceof SpoonacularError) {
     console.warn(`[spoonacular] ${context} failed: ${error.code}${error.status ? ` (${error.status})` : ""}`)
     return { code: error.code, message: error.message }
@@ -106,7 +108,7 @@ export async function getRecipeSuggestions(householdId: string, filters: RecipeF
           : await findRecipesByIngredients(names, FIND_SIZE)
         return { value: recipes, quota }
       },
-      { cost: filtered ? searchCost(SEARCH_SIZE) : findCost(FIND_SIZE) },
+      { cost: filtered ? searchCost(SEARCH_SIZE) : findCost(FIND_SIZE), beforeSpend: () => requireRateLimit("recipe_search") },
     )
     const index = buildPantryIndex(items, today)
     return {
@@ -132,7 +134,7 @@ export const getRecipe = cache(async (recipeId: number) => {
       return { value: recipe, quota }
     },
     // Opening a recipe someone found is worth more than a new search: only keep 1 point back.
-    { cost: recipeInformationCost(), reserve: 1 },
+    { cost: recipeInformationCost(), reserve: 1, beforeSpend: () => requireRateLimit("recipe_open") },
   )
 })
 
