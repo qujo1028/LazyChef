@@ -78,11 +78,23 @@ export async function cachedSpoonacular<T>(
   store: CacheStore,
   key: string,
   load: () => Promise<{ value: T; quota: SpoonacularQuota | null }>,
-  { cost, reserve = RESERVED_POINTS, now = () => new Date() }: { cost: number; reserve?: number; now?: () => Date },
+  {
+    cost,
+    reserve = RESERVED_POINTS,
+    now = () => new Date(),
+    beforeSpend,
+  }: {
+    cost: number
+    reserve?: number
+    now?: () => Date
+    /** Runs on a cache miss, just before spending points (a per-person rate limit). Throw to stop. */
+    beforeSpend?: () => Promise<void>
+  },
 ): Promise<Cached<T>> {
   const [hit, usage] = await Promise.all([store.get(key), store.usage()])
   if (hit) return { value: hit.value as T, savedAt: hit.savedAt, fromCache: true, usage }
   if (isResting(usage, cost, reserve)) throw new SpoonacularError("quota")
+  await beforeSpend?.()
 
   let loaded: { value: T; quota: SpoonacularQuota | null }
   try {

@@ -53,6 +53,23 @@ describe("household barcodes", () => {
     assert.deepEqual(eggs, { code: "041303000526", name: "brown eggs", quantity: 18, unit: "count", saved_by: blair })
   })
 
+  test("members rename a code with a plain update, but can't change the code or its household", async () => {
+    await t.as(alex, () =>
+      t.q("update public.household_barcodes set name = 'large eggs', quantity = 12 where household_id = $1 and code = '041303000526'", [maple]),
+    )
+    const [eggs] = (await codes(alex, maple)).filter((r) => r.code === "041303000526")
+    assert.deepEqual([eggs.name, eggs.quantity, eggs.saved_by], ["large eggs", 12, alex])
+    await t.as(alex, () =>
+      assertRejects(() => t.q("update public.household_barcodes set code = '12345678' where household_id = $1", [maple]), /permission denied/),
+    )
+    await t.as(alex, () =>
+      assertRejects(
+        () => t.q("update public.household_barcodes set household_id = $1 where household_id = $2", [caseyHome, maple]),
+        /permission denied/,
+      ),
+    )
+  })
+
   test("codes must look like barcodes, and saved_by can't be forged", async () => {
     await t.as(alex, () => assertRejects(() => remember(alex, maple, [{ code: "12ab", name: "x", quantity: null, unit: "count" }]), /check constraint/))
     await t.as(alex, () =>

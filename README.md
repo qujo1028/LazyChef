@@ -115,6 +115,12 @@ Authentication → Emails → Templates:
   filters, or the recipe id) and the day's points in `spoonacular_usage`, both through the secret key.
   Only recipe id, title and image are kept longer (on shopping list lines). Every page shows a
   "Powered by Spoonacular" credit, and recipes link to their source.
+- Security: `next.config.ts` sends a Content-Security-Policy (scripts only from this site; data only to
+  this site and Supabase; images from here, Spoonacular and Google photos), HSTS, and frame/permission
+  headers. If you add an image host or API the browser talks to, add it there. Rate limits live in
+  Postgres (`private.rate_limit_rule()`): Spoonacular-spending calls go through `src/lib/rate-limit.ts`,
+  and wrong invite codes are capped inside `get_invite_preview()` / `join_household()`. Avatar URLs
+  must be https (anything else is cleared).
 - Multi-row changes are single Postgres functions (`add_pantry_items`, `complete_shopping_trip`,
   `cook_recipe`), so each shows up as one entry in the activity feed. Cooking and shopping trips are logged
   as their own actions (`cooked`, `shopped`), which is what the Stats page and cook history read.

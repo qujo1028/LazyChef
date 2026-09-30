@@ -176,9 +176,25 @@ Deploy note: apply the migration right around when this reaches production. Code
 read or write the new cache (it logs errors and runs without the cache or the points guard), and the new
 code falls back to an in-memory cache until the migration is there.
 
+## Security hardening (2026-09-30, branch `claude/keen-gates-txlzvs`)
+- Headers (`next.config.ts`): Content-Security-Policy (enforced; `'unsafe-inline'` scripts because nonces
+  would force every page to render per request), HSTS (2 years), Permissions-Policy. Checked in a
+  browser on `/login`, `/signup`, `/forgot-password` with a production build: no CSP violations.
+- **Migration `20261003000100_security_hardening.sql`** (not applied yet, ask first):
+  - `private.rate_limits` + `public.take_rate_limit(bucket)`: per person, fixed windows, limits in SQL
+    (recipe_search 15/h, recipe_open 40/h, ingredient_lookup 20/h). Checked only when points would be spent.
+  - Wrong invite codes: 10 per 15 minutes per person, counted inside `get_invite_preview()` and
+    `join_household()`. `join_household()` now returns null for a wrong code instead of raising.
+  - `profiles.avatar_url`: https only (trigger clears anything else; NOT VALID check as a backstop).
+  - 6 PGlite tests (`supabase/tests/security.test.mjs`).
+- The app fails open if the rate-limit check errors (e.g. before the migration is applied); the daily
+  points guard still applies.
+
+Still to do from the security plan: leaked-password protection and password length in Supabase Auth,
+Supabase security advisor, Dependabot/CodeQL, rotating any exposed keys, and an incident checklist.
 ## Phase 7: barcode scanning (2026-09-30, branch `claude/nice-shannon-yjvi7b`)
 Built:
-- **Migration `20261003000100_household_barcodes.sql`** (not applied yet, ask first): `household_barcodes`
+- **Migration `20261004000100_household_barcodes.sql`** (applied to the live DB 2026-09-30 via the Supabase connector; renumbered after `security_hardening` took 20261003000100): `household_barcodes`
   (household, code, name, one package's quantity + unit, saved_by stamped by a trigger). Members only (RLS);
   anon has no access. 5 PGlite tests (`supabase/tests/barcodes.test.mjs`), 54 total.
 - **Scanner** (`src/features/barcodes/components/barcode-scanner.tsx`): full-height sheet, the camera pinned
@@ -204,7 +220,8 @@ Built:
 - Tested in headless Chromium with a fake camera showing real EAN-13 barcodes (the ZXing path, as on iPhone):
   camera scan, typed code, bad code, unknown product named by hand, review and add, list check-off and
   add-and-check. 320/375 px, light and dark. Test household deleted afterwards.
+- With the security headers from main: the CSP allows `'wasm-unsafe-eval'` (the ZXing reader) and the
+  Permissions-Policy allows `camera=(self)`; both were blocking the scanner.
 
 To do:
-- Apply `20261003000100_household_barcodes.sql` (ask). Until then scanning works but nothing is remembered.
 - Try it on a real iPhone and Android phone (the camera itself can't be tested here).
