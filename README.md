@@ -105,6 +105,26 @@ get out, or you see activity you don't recognize:
 The publishable key (`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) is public by design; the database's
 access rules are what protect the data.
 
+## Recipe library (TheMealDB)
+
+"Make now" and "Almost there" match the pantry against our own recipes first (the shared
+library plus each household's own), in the database, for free. Spoonacular is only asked
+when fewer than 10 local ideas come back, or when someone taps "Show more ideas".
+
+The shared library is imported from [TheMealDB](https://www.themealdb.com) by a script, not the app:
+
+```bash
+THEMEALDB_API_KEY=1 npm run recipes:import -- --dry-run   # writes data/themealdb/preview.json, touches nothing
+npm run recipes:import -- --write                         # upserts into Supabase (safe to re-run)
+```
+
+- `THEMEALDB_API_KEY`: TheMealDB's key. `1` is their test key, for development only; a public
+  app needs a paid supporter key. Server-only, never `NEXT_PUBLIC_`.
+- `--write` also needs `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SECRET_KEY` (the shared library
+  can only be written with the secret key).
+- Images and source links stay TheMealDB's (linked, not copied). Every imported recipe says
+  "From TheMealDB" and links back to its page there, as their terms ask.
+
 ## Scripts
 
 | Command | What it does |

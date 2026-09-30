@@ -228,3 +228,29 @@ Built:
 
 To do:
 - Try it on a real iPhone and Android phone (the camera itself can't be tested here).
+
+## Local recipe library (2026-09-30, branch `local-recipes`)
+Built:
+- **Migration `20261005000100_local_recipes.sql`** (NOT applied yet, ask first): `recipes` + `recipe_ingredients`
+  (shared library with `household_id` null, household recipes with it set; unique `(source, source_id)`),
+  `save_household_recipe()`, `match_local_recipes()`, the private `recipe-photos` bucket (5 MB, images only,
+  members only, `<household>/<file>` paths), `saved_recipes.local_recipe_id` + `image_url`, and `cook_recipe()`
+  with an optional local recipe id. 16 new PGlite tests (`local-recipes.test.mjs`), 77 total. The harness got
+  storage stand-ins. Also applied cleanly to a local Supabase stack (`supabase start`).
+- **Importer** `npm run recipes:import` (`scripts/import-themealdb.mjs`, converter in
+  `src/features/recipes/import/themealdb.ts`, fixture tests). Dry run with the test key: 790 recipes,
+  8,152 ingredient lines, 97% matched to the library (top misses: "oil", "sweetcorn", "hotsauce").
+- **Matching** (`local-match.ts`): the DB counts have/missing by library id or normalized name (pantry names
+  widened so "brown rice" covers "rice"), then the same `toSuggestion` check as Spoonacular results. Ranked by
+  fewest missing, then most pantry items used. Merged local-first, de-duplicated by title.
+- **UI**: title search (`?q=`), source tags, "Show more ideas", an Ours tab, `/recipes/new` and
+  `/recipes/[id]/edit` (parser-backed ingredient box with suggestions, steps, photo resized in the browser),
+  recipe pages for all three sources, hearts for local recipes, Spoonacular bookmarks keep id + title + image.
+- CSP `img-src` now allows `www.themealdb.com` and the Supabase origin (signed photo links).
+
+Not done:
+- Browser check at 320/375 px (ran out of time). Do it after the migration is applied.
+- Shopping list lines from local recipes keep only the recipe title (the list's `recipe_id` is Spoonacular's).
+
+User to do: approve/apply the migration, get a TheMealDB supporter key (add to `.env.local`, not Vercel,
+since only the script uses it), review the dry run, then `npm run recipes:import -- --write`.
