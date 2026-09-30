@@ -190,8 +190,10 @@ code falls back to an in-memory cache until the migration is there.
 - The app fails open if the rate-limit check errors (e.g. before the migration is applied); the daily
   points guard still applies.
 
-Still to do from the security plan: Dependabot/CodeQL, rotating any exposed keys, and an incident
-checklist. Both migrations are live, and the Supabase security advisor was run on 2026-09-30.
+Both migrations are live, and the Supabase security advisor was run on 2026-09-30.
+Done since: Dependabot (weekly npm, monthly Actions), CodeQL (`security-extended`), `npm audit` in CI,
+and an incident checklist in the README. A scan of the full git history found no committed secrets,
+so no keys need rotating. The security plan is finished.
 
 ## Phase 7: barcode scanning (2026-09-30, branch `claude/nice-shannon-yjvi7b`)
 Built:
