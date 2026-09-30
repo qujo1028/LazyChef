@@ -1,7 +1,7 @@
 import "server-only"
 
 import { SpoonacularError, spoonacularFetch, type SpoonacularQuota } from "./client"
-import { complexSearchCost, findByIngredientsCost, type ComplexSearchOptions } from "./cost"
+import { complexSearchCost, findByIngredientsCost, informationBulkCost, type ComplexSearchOptions } from "./cost"
 import { toRecipeDetail, toRecipeSummary, type RecipeDetail, type RecipeSummary } from "./recipe-shapes"
 
 export type { RecipeDetail, RecipeIngredient, RecipeSummary } from "./recipe-shapes"
@@ -97,4 +97,23 @@ export async function getRecipeInformation(id: number): Promise<{ recipe: Recipe
   const recipe = toRecipeDetail(data)
   if (!recipe) throw new SpoonacularError("bad_response", { quota })
   return { recipe, quota }
+}
+
+/** Most recipes per informationBulk call. */
+export const BULK_LIMIT = 25
+
+/** What getRecipeInformationBulk(ids) costs for `count` recipes. */
+export const bulkCost = informationBulkCost
+
+/** GET /recipes/informationBulk (no nutrition). Unknown ids are just left out. */
+export async function getRecipeInformationBulk(
+  ids: readonly number[],
+): Promise<{ recipes: RecipeDetail[]; quota: SpoonacularQuota }> {
+  const valid = [...new Set(ids)].filter((id) => Number.isInteger(id) && id > 0).slice(0, BULK_LIMIT)
+  if (valid.length === 0) return { recipes: [], quota: { request: null, used: null, left: null } }
+  const { data, quota } = await spoonacularFetch<unknown>("/recipes/informationBulk", {
+    query: { ids: valid.join(","), includeNutrition: false },
+  })
+  if (!Array.isArray(data)) throw new SpoonacularError("bad_response", { quota })
+  return { recipes: data.flatMap((raw) => toRecipeDetail(raw) ?? []), quota }
 }

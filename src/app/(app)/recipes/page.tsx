@@ -8,22 +8,31 @@ import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
+import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
 import { RecipeTabs } from "@/features/recipes/components/recipe-tabs"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { filtersHref, hasFilters, NO_FILTERS, parseFilters, type RecipeFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
-import { getRecipeSuggestions } from "@/features/recipes/queries"
+import { getRecipeSuggestions, getSavedIds } from "@/features/recipes/queries"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
 
-function RecipeList({ recipes, empty }: { recipes: Suggestion[]; empty: React.ReactNode }) {
+function RecipeList({
+  recipes,
+  savedIds,
+  empty,
+}: {
+  recipes: Suggestion[]
+  savedIds: ReadonlySet<number>
+  empty: string
+}) {
   if (recipes.length === 0) return <p className="px-1 py-6 text-center text-sm text-muted-foreground">{empty}</p>
   return (
     <ul className="grid grid-cols-1 gap-2.5">
       {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
+        <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
       ))}
     </ul>
   )
@@ -55,9 +64,14 @@ function ClearFilters({ filters }: { filters: RecipeFilters }) {
 export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
   const { household } = await requireHousehold()
   const filters = parseFilters(await searchParams)
-  const result = await getRecipeSuggestions(household.id, filters)
+  const [result, savedIds] = await Promise.all([getRecipeSuggestions(household.id, filters), getSavedIds(household.id)])
 
-  const heading = <PageHeading title="Recipes" description="What you can cook with what you have." />
+  const heading = (
+    <>
+      <PageHeading title="Recipes" description="What you can cook with what you have." />
+      <RecipesTabs current="/recipes" />
+    </>
+  )
 
   if (result.status === "empty-pantry") {
     return (
@@ -127,6 +141,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
               panel: (
                 <RecipeList
                   recipes={result.makeNow}
+                  savedIds={savedIds}
                   empty="Nothing you can make with just what's here yet. Check Almost there."
                 />
               ),
@@ -135,7 +150,9 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
               id: "almost-there",
               label: "Almost there",
               count: result.almostThere.length,
-              panel: <RecipeList recipes={result.almostThere} empty="Nothing 1 to 3 things away right now." />,
+              panel: (
+                <RecipeList recipes={result.almostThere} savedIds={savedIds} empty="Nothing 1 to 3 things away right now." />
+              ),
             },
           ]}
         />

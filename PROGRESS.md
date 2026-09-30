@@ -99,7 +99,7 @@ Built:
   amounts and skip lines. Staples are just listed. Confirming calls `cook_recipe()`, which takes everything out
   in one transaction. Afterwards: a toast with Undo, a done screen with "Add to list" for anything that ran out,
   and the Activity feed shows "X cooked Recipe" with the amounts.
-- **Migration `20260930000100_cook_mode.sql`** (not yet applied to the live DB, ask first): the `cooked` activity
+- **Migration `20260930000100_cook_mode.sql`** (applied to the live DB 2026-09-29 via the Supabase connector): the `cooked` activity
   action, `cook_recipe()` (security invoker, clamps at 0, one batch, recipe in `details`), the activity trigger
   logging "cooked" inside it, and `add_pantry_items` accepting `{"merge_into", "untrack": true}`. 6 new PGlite
   tests (`supabase/tests/cook.test.mjs`), 41 total.
@@ -116,34 +116,62 @@ Built:
   I couldn't open the Vercel Speed Insights dashboard from here (no Vercel token), so real-user numbers still
   need a look.
 
+Tested end to end with a throwaway household on the live DB: deduct, ran-out "Add to list", Undo, and the
+"You cooked Korean Candy Chicken" feed entry all work.
+
 To do:
-- Apply `20260930000100_cook_mode.sql` to the live DB (ask), then test "I cooked this" end to end with a
-  throwaway account.
 - Check live sync on two phones (the sandbox browser can't open the Realtime websocket).
 
-## Phase 3 follow-up: shared server-only Spoonacular cache (2026-09-29, branch `recipes`)
-Phase 3 was already on `main` (PR #1), so this branch brings it in line with the updated spec instead of
-rebuilding it:
+## Phase 6: saved recipes and stats (2026-09-29, branch `claude/nice-shannon-yjvi7b`)
+Built:
+- **Migration `20261001000100_saved_recipes.sql`** (applied to the live DB 2026-09-29 via the Supabase connector):
+  `saved_recipes` (household id, recipe id and title only, per Spoonacular's terms; RLS by membership;
+  `saved_by` stamped by a trigger; broadcast), and the `shopped` activity action: `complete_shopping_trip()`
+  now marks its pantry changes so a trip is logged as one "bought N items" entry, untracked items included.
+  Trips from before the migration stay as added/restocked. 6 new PGlite tests (`saved.test.mjs`), 47 total.
+- **Saved** (`/recipes/saved`, an "Ideas | Saved" toggle on Recipes): a heart on every recipe card and recipe
+  page, shared by the household. Each saved recipe shows "Can make now" or "Have 5 of 7. Need …" against the
+  current pantry, and "Cooked 3 times · last Sep 12" from the activity log. Sort by ready to cook, newest or
+  most cooked. Ingredients come from the hourly cache; anything missing is fetched in one `informationBulk`
+  call (1 point + 0.5 per extra recipe) and cached per recipe, so opening one is free. When points run out
+  the list still shows, without the match.
+- **"Loved it? Save it"** on the "I cooked this" done screen when the recipe isn't saved yet.
+- **Stats** (`/activity/stats`, a "Feed | Stats" toggle on Activity): meals this month vs last, cooking streak,
+  trips and items bought this month, a 12-week meals chart (plain CSS bars), most cooked recipes (link to the
+  recipe), each housemate's meals / trips / items, and most bought items with an "add to list" button. It's
+  computed in the browser (`stats.ts`, unit-tested) so days and weeks follow the viewer's time zone.
+
+Known limits:
+- Undoing a cook doesn't take it back out of the stats or the cook history.
+- Saved and Stats don't update live; they refresh on navigation or after an action.
+
+Tested with a throwaway household on the live DB (then deleted): saving from cards, the recipe page and
+the cook done screen, unsaving, the Saved match and cook history, a trip logged as "bought 3 items", every
+Stats section, and "add to list" from Most bought. No overflow or small tap targets at 320/375 px, light and dark.
+
+## Shared server-only Spoonacular cache (2026-09-30, from branch `recipes`, merged onto main)
+Brought over from the `recipes` branch. main already had recipes, cook mode, saved recipes and ingredient
+emoji, so only the parts that improve on it came across:
 - **Migration `20261002000100_spoonacular_server_cache.sql`** (not applied yet, ask first): `spoonacular_cache`
   is now one table for every household, keyed by `cache_key`, max 1 hour, closed to anon/authenticated (RLS on,
   no policies, no grants). Only the server reads and writes it, with `SUPABASE_SECRET_KEY` (service_role).
   `spoonacular_usage` is server-only too, gains `exhausted_at` (set on a 402), and
   `record_spoonacular_usage()` adds our cost estimate when quota headers are missing.
-  `purge_spoonacular_cache()` deletes expired rows (and usage older than 30 days); it runs on every cache write.
-  9 PGlite tests in `supabase/tests/recipes.test.mjs`. Numbered after the live `20261001000100_saved_recipes`.
-- `src/lib/spoonacular/cost.ts`: point costs for every endpoint we use, plus the UTC reset time (tested).
-- `src/features/recipes/cache-core.ts`: cache keys (sorted normalized pantry names + filters), the daily guard
-  (keeps 3 points back for searches, 1 for opening a recipe), 402 → "resting until tomorrow", and an
-  in-memory store for when the secret key isn't set. `cache.ts` wires it to Supabase with an in-memory backup.
-- Matching: salt and pepper (all spellings, via the ingredient library) now never count as missing, like water.
-  Bell peppers and pepper flakes still do.
-- complexSearch (filters) asks for 20 results instead of 40 (2.2 points instead of 4.4), without instructions.
-- Cards show "Missing: x, y" chips, and cook times from recipes already opened in the last hour (free).
-- `/recipes`: Make now / Almost there tabs, a "resting until tomorrow" state, friendlier "no key" copy.
-- `/recipes/[id]`: ingredients split into You need (with "Add missing to list") and You have ✓, a marked
-  Phase 5 "I cooked this" section, a source link (falls back to Spoonacular's page), and "Powered by Spoonacular".
+  `purge_spoonacular_cache()` deletes expired rows (and usage older than 30 days) on every cache write.
+- `src/lib/spoonacular/cost.ts`: point costs for every endpoint, plus the UTC reset time (tested).
+- `src/features/recipes/cache-core.ts`: cache keys (sorted normalized pantry names + filters, so households
+  with the same food share results), the daily guard (3 points kept back for searches, 1 for opening a
+  recipe), 402 → "resting until tomorrow", and an in-memory store for when the secret key isn't set.
+  `cache.ts` wires it to Supabase with the in-memory store as backup.
+- The Saved tab's `cachedRecipeDetails` now uses the shared store (`getMany`, one `informationBulk`, `put` per
+  recipe) with the same guard, so a saved recipe someone else opened in the last hour is free.
+- Matching: salt and pepper (all spellings) never count as missing, like water. Bell peppers still do.
+- complexSearch (filters) asks for 20 results instead of 40 (2.2 points instead of 4.4).
+- "Resting until tomorrow" states on `/recipes` and `/recipes/[id]`, a "Powered by Spoonacular" credit, and
+  recipe source links fall back to Spoonacular's page.
+- Left out (main already does these): the branch's Make now / Almost there tabs, the You need / You have
+  checklist split, and "Missing:" chips on cards.
 
-Heads up: the Phase 6 branch (`claude/nice-shannon-yjvi7b`) still uses the old per-household cache
-(`cachedRecipeDetails` in `cache.ts`). Whichever merges second has to port that to `getCacheStore()`
-(`getMany` + `put`). Apply the migration at the same time as deploying code that uses the new cache,
-because the old code can't read or write the cache once it's applied.
+Deploy note: apply the migration right around when this reaches production. Code already on main can't
+read or write the new cache (it logs errors and runs without the cache or the points guard), and the new
+code falls back to an in-memory cache until the migration is there.

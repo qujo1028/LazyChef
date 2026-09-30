@@ -266,6 +266,45 @@ export type Database = {
           },
         ]
       }
+      saved_recipes: {
+        Row: {
+          created_at: string
+          household_id: string
+          recipe_id: number
+          saved_by: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          recipe_id: number
+          saved_by?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          recipe_id?: number
+          saved_by?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_recipes_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_recipes_saved_by_fkey"
+            columns: ["saved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shopping_list_items: {
         Row: {
           added_by: string | null
@@ -473,7 +512,7 @@ export type Database = {
       }
     }
     Enums: {
-      activity_action: "added" | "used" | "restocked" | "updated" | "removed" | "cooked"
+      activity_action: "added" | "used" | "restocked" | "updated" | "removed" | "cooked" | "shopped"
       household_role: "owner" | "member"
       item_category:
         | "produce"

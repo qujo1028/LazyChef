@@ -22,7 +22,7 @@ export function RecipeTabs({ tabs }: { tabs: RecipeTab[] }) {
 
   return (
     <div className="grid gap-3">
-      <div role="tablist" aria-label="Recipes" className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1" onKeyDown={onKeyDown}>
+      <div role="tablist" aria-label="Recipe suggestions" className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1" onKeyDown={onKeyDown}>
         {tabs.map((tab) => {
           const selected = tab.id === active
           return (

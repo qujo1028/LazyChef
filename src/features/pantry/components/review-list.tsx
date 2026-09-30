@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import type { SpoonacularStatus } from "../resolve-core"
+import { ingredientEmoji } from "@/lib/ingredients/emoji"
 import { cn } from "@/lib/utils"
 
 import { displayName } from "../display"
@@ -79,6 +80,9 @@ function ReviewItemCard({
   return (
     <li className="grid gap-2 rounded-xl border bg-card p-3" data-vaul-no-drag>
       <div className="flex items-start gap-2">
+        <span className="flex h-11 w-7 shrink-0 items-center justify-center text-xl leading-none" aria-hidden>
+          {ingredientEmoji(draft)}
+        </span>
         <Input
           aria-label="Name"
           value={draft.name}

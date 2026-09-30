@@ -122,7 +122,12 @@ export function resolveActor(
 
 /** Where the amount matters (added/used/restocked): "2 lb chicken breast"; otherwise just the name. */
 export function describeItem(row: Pick<ActivityRow, "action" | "itemName" | "quantity" | "unit">): string {
-  const showAmount = row.action === "added" || row.action === "used" || row.action === "restocked" || row.action === "cooked"
+  const showAmount =
+    row.action === "added" ||
+    row.action === "used" ||
+    row.action === "restocked" ||
+    row.action === "cooked" ||
+    row.action === "shopped"
   const amount = showAmount && row.quantity !== null ? formatQuantity(row.quantity, row.unit ?? "count") : ""
   return amount ? `${amount} ${row.itemName}` : row.itemName
 }
@@ -141,7 +146,7 @@ export function describeUpdate(row: Pick<ActivityRow, "action" | "itemName" | "d
   return null
 }
 
-const ACTION_ORDER: ActivityAction[] = ["cooked", "added", "restocked", "used", "updated", "removed"]
+const ACTION_ORDER: ActivityAction[] = ["cooked", "shopped", "added", "restocked", "used", "updated", "removed"]
 
 /** The recipe a "cooked" row came from (cook_recipe puts it in `details`). */
 export function cookedRecipe(row: Pick<ActivityRow, "action" | "details">): { id: number | null; title: string } | null {
@@ -174,8 +179,9 @@ export type EntrySummary = {
 
 /**
  * The sentence for an entry, minus the actor: one row → "used" + "2 eggs";
- * several → "added" + "12 items"; cooking → "cooked" + the recipe. A shopping trip that tops up some items
- * (added + restocked) still reads "added 12 items"; other mixes read
+ * several → "added" + "12 items"; cooking → "cooked" + the recipe; a shopping trip → "bought" + "12 items".
+ * Older trips (logged before 'shopped' existed) that top up some items (added + restocked) still read
+ * "added 12 items"; other mixes read
  * "used 3 items and removed 1".
  */
 export function summarizeEntry(entry: Pick<ActivityEntry, "rows">): EntrySummary {
@@ -184,6 +190,11 @@ export function summarizeEntry(entry: Pick<ActivityEntry, "rows">): EntrySummary
   const recipe = rows.every((row) => row.action === "cooked") ? cookedRecipe(rows[0]) : null
   if (recipe) {
     return { action: "cooked", verb: "cooked", object: recipe.title, detail: null, grouped: true, mixed: false }
+  }
+  if (rows.every((row) => row.action === "shopped")) {
+    const grouped = rows.length > 1
+    const object = grouped ? itemsLabel(rows.length) : describeItem(rows[0])
+    return { action: "shopped", verb: "bought", object, detail: null, grouped, mixed: false }
   }
   if (rows.length === 1) {
     const [row] = rows

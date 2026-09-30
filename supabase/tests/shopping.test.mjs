@@ -109,7 +109,7 @@ describe("shopping list", () => {
     assert.equal(pantry.find((r) => r.name === "chicken thighs").created_by, blair)
 
     const log = await t.q("select action, batch_id from public.activity_log where household_id = $1 order by id offset $2", [maple, before])
-    assert.deepEqual(log.map((r) => r.action), ["added", "restocked"])
+    assert.deepEqual(log.map((r) => r.action), ["shopped", "shopped"])
     assert.equal(new Set(log.map((r) => r.batch_id)).size, 1)
   })
 

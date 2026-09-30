@@ -1,11 +1,18 @@
 import "server-only"
 
-import type { SpoonacularQuota } from "@/lib/spoonacular"
+import {
+  BULK_LIMIT,
+  bulkCost,
+  getRecipeInformationBulk,
+  SpoonacularError,
+  type RecipeDetail,
+  type SpoonacularQuota,
+} from "@/lib/spoonacular"
 import { utcDay } from "@/lib/spoonacular/cost"
 import { getServerDb } from "@/lib/spoonacular/server-db"
 import type { Json } from "@/types/database"
 
-import { memoryStore, type CacheStore, type Usage } from "./cache-core"
+import { isResting, memoryStore, recipeCacheKey, type CacheStore, type Usage } from "./cache-core"
 
 export { cachedSpoonacular, RESERVED_POINTS, type Cached, type Usage } from "./cache-core"
 
@@ -130,5 +137,49 @@ export async function recordUsage(quota: SpoonacularQuota | null): Promise<void>
     await getCacheStore().record({ quota })
   } catch (error) {
     console.error("Recording Spoonacular usage failed:", error)
+  }
+}
+
+/**
+ * Details for several recipes (the Saved tab): whatever's in the shared cache, plus one
+ * informationBulk call for the rest, saved per recipe so opening one is free. If today's
+ * points can't cover the call (keeping 1 for opening a recipe), or it fails, the rest
+ * come back in `missing` instead of throwing.
+ */
+export async function cachedRecipeDetails(
+  recipeIds: readonly number[],
+): Promise<{ details: Map<number, RecipeDetail>; missing: number[]; usage: Usage | null }> {
+  const ids = [...new Set(recipeIds)]
+  const details = new Map<number, RecipeDetail>()
+  if (ids.length === 0) return { details, missing: [], usage: null }
+
+  const store = getCacheStore()
+  const [hits, usage] = await Promise.all([store.getMany(ids.map(recipeCacheKey)), store.usage()])
+  for (const value of hits.values()) {
+    const recipe = value as RecipeDetail | null
+    if (recipe && typeof recipe.id === "number") details.set(recipe.id, recipe)
+  }
+  const missing = () => ids.filter((id) => !details.has(id))
+
+  const toFetch = missing().slice(0, BULK_LIMIT)
+  const cost = bulkCost(toFetch.length)
+  if (toFetch.length === 0 || isResting(usage, cost, 1)) return { details, missing: missing(), usage }
+
+  try {
+    const { recipes, quota } = await getRecipeInformationBulk(toFetch)
+    const [fresh] = await Promise.all([
+      store.record({ quota, estimate: cost }),
+      ...recipes.map((recipe) => {
+        details.set(recipe.id, recipe)
+        return store.put(recipeCacheKey(recipe.id), recipe)
+      }),
+    ])
+    return { details, missing: missing(), usage: fresh ?? usage }
+  } catch (error) {
+    if (error instanceof SpoonacularError && error.code === "quota") {
+      await store.record({ quota: error.quota, exhausted: true })
+    }
+    console.warn("[spoonacular] saved recipes failed:", error instanceof SpoonacularError ? error.code : error)
+    return { details, missing: missing(), usage }
   }
 }

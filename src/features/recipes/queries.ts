@@ -19,12 +19,21 @@ import {
 } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 
-import { cachedSpoonacular, getCacheStore, getUsageToday } from "./cache"
+import { cachedRecipeDetails, cachedSpoonacular, getCacheStore, getUsageToday } from "./cache"
 import { recipeCacheKey, restingUntil, suggestionsCacheKey, type Usage } from "./cache-core"
 import type { CookLine } from "./cook"
 import { planCook } from "./cook-plan"
 import { hasFilters, type RecipeFilters } from "./filters"
-import { buildPantryIndex, checkIngredients, pantrySearchNames, sortSuggestions, type CheckedIngredient, type Suggestions } from "./match"
+import {
+  buildPantryIndex,
+  checkIngredients,
+  pantrySearchNames,
+  sortSuggestions,
+  toSuggestion,
+  type CheckedIngredient,
+  type Suggestions,
+} from "./match"
+import { cookHistory, type SavedRecipe } from "./saved"
 
 /**
  * How many recipes to ask for. findByIngredients is cheap (40 → 1.4 points). complexSearch
@@ -178,4 +187,78 @@ export async function getRecipeDetail(householdId: string, recipeId: number): Pr
     if (isQuota(error)) return { status: "resting", resetsAt: restingUntil() }
     return { status: "error", problem: problem(error, "recipe details") }
   }
+}
+
+/** Ids of the household's saved recipes, for the hearts. */
+export const getSavedIds = cache(async (householdId: string): Promise<Set<number>> => {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from("saved_recipes").select("recipe_id").eq("household_id", householdId)
+  if (error) throw error
+  return new Set(data.map((row) => Number(row.recipe_id)))
+})
+
+/** Where Spoonacular keeps a recipe's photo, for saved recipes whose details aren't loaded. */
+function fallbackImage(recipeId: number) {
+  return `https://img.spoonacular.com/recipes/${recipeId}-312x231.jpg`
+}
+
+export type SavedRecipesResult = {
+  recipes: SavedRecipe[]
+  /** How many couldn't be matched against the pantry right now. */
+  unmatched: number
+  /** When it was read, so the first render's dates match between server and browser. */
+  fetchedAt: number
+}
+
+/**
+ * The household's saved recipes, each matched against the pantry (from the hourly
+ * cache, or one informationBulk call for the rest) and with its cook history.
+ */
+export async function getSavedRecipes(householdId: string): Promise<SavedRecipesResult> {
+  const supabase = await createClient()
+  const [saved, cooked, items] = await Promise.all([
+    supabase
+      .from("saved_recipes")
+      .select("recipe_id, title, saved_by, created_at")
+      .eq("household_id", householdId)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("activity_log")
+      .select("batch_id, details, created_at")
+      .eq("household_id", householdId)
+      .eq("action", "cooked")
+      .order("created_at", { ascending: false })
+      .limit(5000),
+    getPantryItems(householdId),
+  ])
+  if (saved.error) throw saved.error
+  if (cooked.error) throw cooked.error
+
+  const ids = saved.data.map((row) => Number(row.recipe_id))
+  const { details } = isSpoonacularConfigured()
+    ? await cachedRecipeDetails(ids)
+    : { details: new Map<number, RecipeDetail>() }
+  const history = cookHistory(cooked.data)
+  const index = buildPantryIndex(items, localDateKey())
+
+  const recipes = saved.data.map((row): SavedRecipe => {
+    const id = Number(row.recipe_id)
+    const detail = details.get(id)
+    let match: SavedRecipe["match"] = null
+    if (detail) {
+      const suggestion = toSuggestion(index, { ...detail, used: [], missed: detail.ingredients })
+      match = { have: suggestion.have.length, need: suggestion.need }
+    }
+    return {
+      id,
+      title: row.title,
+      image: detail?.image ?? fallbackImage(id),
+      readyInMinutes: detail?.readyInMinutes ?? null,
+      savedAt: row.created_at,
+      savedBy: row.saved_by,
+      match,
+      history: history.get(id) ?? null,
+    }
+  })
+  return { recipes, unmatched: recipes.filter((recipe) => recipe.match === null).length, fetchedAt: Date.now() }
 }

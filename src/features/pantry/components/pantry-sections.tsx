@@ -4,7 +4,8 @@ import { AlarmClock, ChevronRight, Infinity as InfinityIcon, ListPlus } from "lu
 import { useId, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
-import { CATEGORY_META, type Category } from "@/lib/ingredients/types"
+import { ingredientEmoji } from "@/lib/ingredients/emoji"
+import { CATEGORY_META } from "@/lib/ingredients/types"
 import { cn } from "@/lib/utils"
 
 import { expiryInfo, type ExpiryInfo } from "../dates"
@@ -39,7 +40,7 @@ export function PantrySectionList({
       ) : null}
 
       {sections.categories.map(({ category, items }) => (
-        <Section key={category} title={CATEGORY_META[category].label} icon={<Emoji category={category} />} count={items.length}>
+        <Section key={category} title={CATEGORY_META[category].label} icon={<Emoji emoji={CATEGORY_META[category].emoji} />} count={items.length}>
           <ItemCard items={items} today={today} {...actions} />
         </Section>
       ))}
@@ -58,7 +59,7 @@ export function PantrySectionList({
                   onClick={() => actions.onOpen(item)}
                   className="inline-flex h-11 max-w-full items-center gap-2 rounded-full border bg-card px-4 text-sm font-medium transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-muted"
                 >
-                  <Emoji category={item.category} />
+                  <Emoji emoji={ingredientEmoji(item)} />
                   <span className="truncate">{displayName(item.name)}</span>
                 </button>
               </li>
@@ -98,10 +99,10 @@ function Section({
   )
 }
 
-function Emoji({ category }: { category: Category }) {
+function Emoji({ emoji }: { emoji: string }) {
   return (
     <span className="text-base leading-none" aria-hidden>
-      {(CATEGORY_META[category] ?? CATEGORY_META.other).emoji}
+      {emoji}
     </span>
   )
 }
@@ -140,7 +141,7 @@ function ItemRow({
         onClick={() => onOpen(item)}
         className="flex min-h-14 min-w-0 flex-1 items-center gap-3 py-2 pl-3.5 text-left outline-none hover:bg-muted/50 focus-visible:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset active:bg-muted/60"
       >
-        {showEmoji ? <Emoji category={item.category} /> : null}
+        {showEmoji ? <Emoji emoji={ingredientEmoji(item)} /> : null}
         <span className="grid min-w-0 flex-1 gap-0.5">
           <span className={cn("truncate text-[15px] font-medium", muted && "text-muted-foreground")}>{name}</span>
           <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { PageHeading } from "@/components/page-heading"
+import { ActivityTabs } from "@/features/activity/components/activity-tabs"
 import { ActivityFeed } from "@/features/activity/components/activity-feed"
 import { getActivityFeed } from "@/features/activity/queries"
 import { requireHousehold } from "@/features/household/queries"
@@ -13,7 +14,8 @@ export default async function ActivityPage() {
 
   return (
     <>
-      <PageHeading title="Activity" description="Who added, used and cooked what." />
+      <PageHeading title="Activity" description="Who added, used, cooked and bought what." />
+      <ActivityTabs current="/activity" />
       <ActivityFeed
         key={household.id}
         householdId={household.id}
