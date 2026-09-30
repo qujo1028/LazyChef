@@ -190,8 +190,9 @@ code falls back to an in-memory cache until the migration is there.
 - The app fails open if the rate-limit check errors (e.g. before the migration is applied); the daily
   points guard still applies.
 
-Still to do from the security plan: leaked-password protection and password length in Supabase Auth,
-Supabase security advisor, Dependabot/CodeQL, rotating any exposed keys, and an incident checklist.
+Still to do from the security plan: Dependabot/CodeQL, rotating any exposed keys, and an incident
+checklist. Both migrations are live, and the Supabase security advisor was run on 2026-09-30.
+
 ## Phase 7: barcode scanning (2026-09-30, branch `claude/nice-shannon-yjvi7b`)
 Built:
 - **Migration `20261004000100_household_barcodes.sql`** (applied to the live DB 2026-09-30 via the Supabase connector; renumbered after `security_hardening` took 20261003000100): `household_barcodes`
