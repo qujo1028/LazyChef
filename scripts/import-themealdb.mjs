@@ -53,17 +53,23 @@ for (const file of [".env.local", ".env"]) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-async function fetchJson(url, attempt = 1) {
+/**
+ * GET one TheMealDB endpoint ("search.php?f=a"). The key is part of the URL, so messages
+ * only ever name the endpoint, never the URL.
+ */
+async function fetchJson(base, endpoint, attempt = 1) {
+  let status = null
   try {
-    const response = await fetch(url, { headers: { accept: "application/json" } })
-    if (response.status === 429 || response.status >= 500) throw new Error(`HTTP ${response.status}`)
-    if (!response.ok) fail(`TheMealDB said ${response.status} for ${url.replace(/\/json\/v\d\/[^/]+\//, "/json/…/")}`)
-    return await response.json()
-  } catch (error) {
-    if (attempt >= 4) throw error
-    await sleep(1000 * 2 ** attempt)
-    return fetchJson(url, attempt + 1)
+    const response = await fetch(`${base}/${endpoint}`, { headers: { accept: "application/json" } })
+    status = response.status
+    if (response.ok) return await response.json()
+  } catch {
+    // Network error: retried below.
   }
+  if (status !== null && status !== 429 && status < 500) fail(`TheMealDB said ${status} for ${endpoint}.`)
+  if (attempt >= 4) fail(`Couldn't reach TheMealDB for ${endpoint}${status ? ` (HTTP ${status})` : ""}. Try again later.`)
+  await sleep(1000 * 2 ** attempt)
+  return fetchJson(base, endpoint, attempt + 1)
 }
 
 /** Every meal: search.php?f=<letter> for a to z (the documented way to list them all). */
@@ -75,7 +81,7 @@ async function fetchAllMeals() {
   const delay = Math.max(0, Number(args["delay-ms"]) || 0)
   const meals = []
   for (const letter of "abcdefghijklmnopqrstuvwxyz") {
-    const found = mealsFromResponse(await fetchJson(`${base}/search.php?f=${letter}`))
+    const found = mealsFromResponse(await fetchJson(base, `search.php?f=${letter}`))
     meals.push(...found)
     process.stdout.write(`${letter}:${found.length} `)
     await sleep(delay)
