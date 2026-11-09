@@ -254,3 +254,26 @@ Not done:
 
 Done 2026-09-30: the import ran with TheMealDB's test key (790 recipes, 8,152 ingredient lines) and the PR
 merged. Re-run `npm run recipes:import -- --write` with a supporter key if you get one (it upserts, no copies).
+
+## Account deletion (2026-11-08, branch `claude/app-store-launch-checklist-d68e57`)
+Needed for the App Store (guideline 5.1.1(v)); see `docs/app-store-launch.md` for the rest of the launch list.
+Built:
+- **Migration `20261108000100_account_deletion.sql`** (not applied yet, ask first):
+  - `tidy_household` trigger on `household_members` (after delete): the last member out deletes the household
+    with everything in it, and an ownerless household passes to its longest-standing member. Works however the
+    membership goes, including a user deleted from the Supabase dashboard. `leave_household` is unchanged.
+  - `stamp_recipe` and `stamp_shopping_list_item` kept `created_by` / `checked_by` fixed, which put a deleted
+    user's id back after the foreign key cleared it (the delete failed). They now let go once the profile is gone.
+  - 8 PGlite tests (`supabase/tests/account-deletion.test.mjs`), 85 total.
+- **"Delete account"** on the Household page (You card), with a confirm dialog. `deleteAccount`
+  (`src/features/account/actions.ts`) deletes the auth user with the secret key (`src/lib/supabase/admin.ts`),
+  removes the recipe photos of households that were deleted, clears the session and shows
+  "Your account was deleted." on `/login`. Needs `SUPABASE_SECRET_KEY` (already set in Vercel).
+- Activity entries in shared households stay, shown as "Someone".
+
+Not done:
+- Apply the migration to the live DB **before** this reaches production: without it, deleting an account that
+  checked off a list line or wrote a recipe fails, and solo households are left behind.
+- End-to-end check with a throwaway account once the migration is live (no Docker here for a local stack).
+  Checked so far: typecheck, lint, build, unit + DB tests, and the `/login?deleted=1` message at 375 px.
+- When Sign in with Apple is added, revoke the Apple token on deletion too (Apple requires it).

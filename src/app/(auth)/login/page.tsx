@@ -13,6 +13,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const params = await searchParams
   const next = safeNext(firstParam(params.next))
   const error = firstParam(params.error)
+  const notice = firstParam(params.deleted) === "1" ? "Your account was deleted." : undefined
   const nextQuery = next === "/" ? "" : `?next=${encodeURIComponent(next)}`
 
   return (
@@ -20,7 +21,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       <AuthHeading title="Welcome back" description="Sign in to your household's pantry." />
       <GoogleButton next={next} />
       <OrDivider />
-      <LoginForm next={next} initialError={error} />
+      <LoginForm next={next} initialError={error} initialNotice={notice} />
       <p className="text-center text-sm text-muted-foreground">
         New here?{" "}
         <Link href={`/signup${nextQuery}`} className="font-medium text-foreground underline underline-offset-4">
