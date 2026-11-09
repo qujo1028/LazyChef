@@ -35,8 +35,8 @@ What you need before any of this:
 ## 1. Features Apple requires (missing today)
 
 ### 1.1 🔴 In-app account deletion (Guideline 5.1.1(v))
-**Built (2026-11-08), not live yet:** apply `supabase/migrations/20261108000100_account_deletion.sql` to the
-live database before deploying, then try it with a throwaway account. Details in PROGRESS.md. Still open:
+**Built (2026-11-08); migration applied to the live database.** Try it with a throwaway account once
+it's deployed. Details in PROGRESS.md. Still open:
 revoking the Apple token once Sign in with Apple exists.
 
 Apple requires a way to delete your account inside the app.
@@ -48,7 +48,8 @@ Apple requires a way to delete your account inside the app.
       photos from Storage, clears the session and shows "Your account was deleted." on `/login`.
 - [x] PGlite tests (`supabase/tests/account-deletion.test.mjs`). No type changes needed.
 - [x] Activity entries in shared households stay, shown as "Someone".
-- [ ] Apply the migration to the live database, then test with a throwaway account.
+- [x] Apply the migration to the live database.
+- [ ] Test with a throwaway account once deployed.
 - [ ] Revoke the Apple token on deletion, once Sign in with Apple exists (Apple requires it).
 
 ### 1.2 🔴 Sign in with Apple (Guideline 4.8)

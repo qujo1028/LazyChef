@@ -258,7 +258,7 @@ merged. Re-run `npm run recipes:import -- --write` with a supporter key if you g
 ## Account deletion (2026-11-08, branch `claude/app-store-launch-checklist-d68e57`)
 Needed for the App Store (guideline 5.1.1(v)); see `docs/app-store-launch.md` for the rest of the launch list.
 Built:
-- **Migration `20261108000100_account_deletion.sql`** (not applied yet, ask first):
+- **Migration `20261108000100_account_deletion.sql`** (applied to the live DB 2026-11-08 via the Supabase connector, recorded as 20261108000100; security advisor shows nothing new):
   - `tidy_household` trigger on `household_members` (after delete): the last member out deletes the household
     with everything in it, and an ownerless household passes to its longest-standing member. Works however the
     membership goes, including a user deleted from the Supabase dashboard. `leave_household` is unchanged.
@@ -272,8 +272,8 @@ Built:
 - Activity entries in shared households stay, shown as "Someone".
 
 Not done:
-- Apply the migration to the live DB **before** this reaches production: without it, deleting an account that
-  checked off a list line or wrote a recipe fails, and solo households are left behind.
-- End-to-end check with a throwaway account once the migration is live (no Docker here for a local stack).
+- End-to-end check with a throwaway account (no Docker here for a local stack).
   Checked so far: typecheck, lint, build, unit + DB tests, and the `/login?deleted=1` message at 375 px.
+- The Supabase project was found paused (free plan, a week idle) on 2026-11-08 and restored. Upgrade to Pro
+  before launch, or it will pause again.
 - When Sign in with Apple is added, revoke the Apple token on deletion too (Apple requires it).

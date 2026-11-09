@@ -1,7 +1,7 @@
 -- LazyChef · Account deletion (App Store guideline 5.1.1(v)).
 --
 -- The app deletes an account by deleting the auth user with the secret key
--- (deleteAccount in src/features/auth/actions.ts). auth.users → profiles →
+-- (deleteAccount in src/features/account/actions.ts). auth.users → profiles →
 -- household_members already cascade, and every "who did this" column is
 -- `on delete set null`. This migration covers what those foreign keys don't:
 --
