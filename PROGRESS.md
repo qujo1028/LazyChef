@@ -277,3 +277,20 @@ Not done:
 - The Supabase project was found paused (free plan, a week idle) on 2026-11-08 and restored. Upgrade to Pro
   before launch, or it will pause again.
 - When Sign in with Apple is added, revoke the Apple token on deletion too (Apple requires it).
+
+## iOS and Android app shell (2026-11-09, branch `claude/ios-android-app-production-9561f4`)
+Capacitor 8.5.3 shell around the live site; setup and how it works in `docs/mobile-apps.md`.
+Built:
+- `capacitor.config.ts` (loads https://lazychef-gamma.vercel.app, `CAP_SERVER_URL` overrides for dev),
+  `ios/` and `android/` projects (`app.lazychef`), npm scripts `ios`, `android`, `cap:sync`.
+- Offline screen `native/www/offline.html` (`server.errorPath`), retries when the connection comes back.
+- Google sign-in inside the app: in-app browser tab + `app.lazychef://auth/callback` back into the app
+  (`signInWithGoogle` returns the URL when the form says `native`). Website behaviour unchanged.
+- iOS: camera/photo permission text, link scheme, `ITSAppUsesNonExemptEncryption` = NO, iPhone + portrait only.
+  Android: camera permission, link scheme, portrait only.
+- Checks: typecheck, lint, build, 1,669 unit tests (4 new for the app link). Offline page checked at 375 px.
+
+Not done:
+- Neither app has been built or run: Xcode and Android Studio aren't installed on this Mac.
+- Supabase Redirect URLs still need `app.lazychef://auth/callback**`, then Google sign-in tested in both apps.
+- App icon and splash screen are still Capacitor's defaults.
