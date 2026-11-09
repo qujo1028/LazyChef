@@ -123,9 +123,9 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
       </header>
 
       <section className="grid gap-2.5">
-        <h2 className="font-semibold">
+        <h2 className="font-heading text-lg font-semibold">
           Ingredients{" "}
-          <span className="font-normal text-muted-foreground">
+          <span className="font-sans text-sm font-normal text-muted-foreground">
             · you have {have} of {lines.length}
           </span>
         </h2>
@@ -135,7 +135,7 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
 
       {recipe.steps.length > 0 ? (
         <section className="grid gap-2.5">
-          <h2 className="font-semibold">Steps</h2>
+          <h2 className="font-heading text-lg font-semibold">Steps</h2>
           <ol className="grid gap-3">
             {recipe.steps.map((step, i) => (
               <li key={i} className="flex gap-3 text-sm leading-relaxed">
