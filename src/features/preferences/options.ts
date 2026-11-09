@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // The choices offered in the first-run flow and the "Food preferences" sheet. The values
-// are what the database stores (see supabase/migrations/20261109000100_user_preferences.sql).
+// are what the database stores (see supabase/migrations/20261109164357_user_preferences.sql).
 
 export const DIETS = [
   { value: "none", label: "No restrictions" },
