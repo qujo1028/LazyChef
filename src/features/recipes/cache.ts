@@ -9,7 +9,7 @@ import {
   type SpoonacularQuota,
 } from "@/lib/spoonacular"
 import { utcDay } from "@/lib/spoonacular/cost"
-import { getServerDb } from "@/lib/spoonacular/server-db"
+import { getServerDb } from "@/lib/supabase/service"
 import { takeRateLimit } from "@/lib/rate-limit"
 import type { Json } from "@/types/database"
 

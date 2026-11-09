@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LazyChef</string>
+    <string name="title_activity_main">LazyChef</string>
+    <string name="package_name">com.qujo1028.lazychef</string>
+    <string name="custom_url_scheme">com.qujo1028.lazychef</string>
+</resources>

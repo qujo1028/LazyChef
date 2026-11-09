@@ -11,6 +11,7 @@ import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/compo
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { ProCard } from "@/features/pro/components/pro-card"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Household" }
@@ -37,6 +38,8 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
           </p>
         </div>
       ) : null}
+
+      <ProCard />
 
       <InviteCard householdId={household.id} householdName={household.name} inviteCode={household.inviteCode} isOwner={isOwner} />
 

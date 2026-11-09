@@ -1,7 +1,8 @@
 # LazyChef
 
 A shared pantry, shopping list and recipe finder for one household. Mobile-first.
-Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtime) and Spoonacular.
+Built with Next.js 16, Supabase (auth, Postgres with row-level security, realtime) and Spoonacular,
+with iOS and Android apps (Capacitor) and Pro subscriptions through RevenueCat.
 
 ## What it does
 
@@ -95,15 +96,106 @@ get out, or you see activity you don't recognize:
    the old key. It bypasses every access rule, so do this first.
 2. **Spoonacular key**: spoonacular.com/food-api/console → Profile → regenerate, then update
    `SPOONACULAR_API_KEY` in Vercel and `.env.local` and redeploy.
-3. **Sign everyone out**: Supabase → Authentication → Users → sign out each user (or rotate the JWT
+3. **RevenueCat keys**: RevenueCat → Project settings → API keys → create a new secret key and
+   revoke the old one; for the webhook, set a new Authorization value in RevenueCat and in
+   `REVENUECAT_WEBHOOK_AUTH` at the same time. Update Vercel and `.env.local`, redeploy.
+4. **Sign everyone out**: Supabase → Authentication → Users → sign out each user (or rotate the JWT
    secret under Project Settings → JWT Keys, which signs out everyone at once).
-4. **Invite codes**: on the Household page, tap "Reset code" for each household, so old links stop
+5. **Invite codes**: on the Household page, tap "Reset code" for each household, so old links stop
    working.
-5. **Look around**: Vercel → Logs and Supabase → Logs for the time window, the Supabase security
+6. **Look around**: Vercel → Logs and Supabase → Logs for the time window, the Supabase security
    advisor, and GitHub → Security for Dependabot and CodeQL alerts.
 
 The publishable key (`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) is public by design; the database's
 access rules are what protect the data.
+
+## iOS and Android apps (Capacitor)
+
+The apps in `ios/` and `android/` are native shells around the live site (`capacitor.config.ts`).
+Every page is built on the server, so the web app can't be bundled into the app; instead the app
+opens https://lazychef-gamma.vercel.app and native plugins (RevenueCat for purchases) talk to the
+page through Capacitor's bridge. A web deploy updates the apps too. Without a connection the app
+shows `mobile/www/offline.html`.
+
+You need Xcode (Mac App Store) for iOS and Android Studio for Android.
+
+```bash
+npm run ios        # sync, then open the Xcode project (press Run for the simulator)
+npm run android    # sync, then open Android Studio
+```
+
+- **Against your local dev server:** `CAP_SERVER_URL=http://localhost:3000 npx cap sync`, then run
+  from Xcode / Android Studio. Run plain `npx cap sync` again before a release build so the app
+  points back at production. (An Android emulator reaches your Mac at `http://10.0.2.2:3000`.)
+- **App id:** `com.qujo1028.lazychef` (Xcode bundle id and Android application id). Change it in
+  `capacitor.config.ts`, Xcode and `android/app/build.gradle` together, before the first upload.
+- **Camera text:** the barcode scanner's permission text is in `ios/App/App/Info.plist`
+  (`NSCameraUsageDescription`); Android asks with the `CAMERA` permission in its manifest.
+- After adding a Capacitor plugin: `npm install` it, then `npx cap sync`.
+
+## Pro subscriptions (RevenueCat)
+
+Pro is one entitlement, `pro`, sold as two plans: **Yearly $24.99 with a 3-day free trial**
+(shown first, as the best deal) and **Monthly $4.99**. One subscription covers the whole
+household: everyone in a household has Pro when any member does. Purchases happen in the apps
+(App Store / Google Play); the website shows the same paywall and says to get Pro in the app.
+
+How it fits together:
+- The app signs in to RevenueCat with the Supabase user id (`src/features/pro/purchases.ts`).
+- RevenueCat calls `POST /api/revenuecat/webhook` on every change. The route checks the
+  Authorization header, logs the event once in `revenuecat_events`, then fetches each affected
+  customer from RevenueCat's API and saves their current state in `subscriptions` (so retries and
+  out-of-order events can't leave it wrong).
+- Right after a purchase or restore, the app also asks the server to fetch it (`refreshPro()`),
+  so Pro switches on without waiting for the webhook.
+- The database decides who has Pro: `private.household_is_pro()` (subscriptions plus hand-given
+  comps in `private.pro_comps`), and `get_pro_status()` for the Pro card and paywall.
+
+### Setup
+
+1. **App Store Connect** (Apple Developer account, $99/year): sign the Paid Apps agreement (Business),
+   create the app with bundle id `com.qujo1028.lazychef`, then Subscriptions → one subscription group
+   "LazyChef Pro" with two auto-renewable subscriptions:
+   - `lazychef_pro_yearly`: 1 year, $24.99, plus an Introductory Offer: Free, 3 days.
+   - `lazychef_pro_monthly`: 1 month, $4.99.
+2. **Google Play Console** ($25 once): create the app (`com.qujo1028.lazychef`), then Monetize →
+   Subscriptions → the same two product ids, each with a base plan; add a 3-day free trial offer to
+   the yearly base plan. (Play needs one uploaded build before it lets you add products.)
+3. **RevenueCat** (free until $2,500/month in revenue): create a project, add the App Store app
+   (with an App Store Connect in-app purchase key) and the Play Store app (with a service account),
+   then:
+   - Entitlements → `pro`, attach both products.
+   - Offerings → `default` (current) with the packages **Annual** → yearly and **Monthly** → monthly.
+   - API keys → copy the public `appl_` and `goog_` keys and a **secret** key.
+   - Integrations → Webhooks → URL `https://<your-domain>/api/revenuecat/webhook`, Authorization header
+     value = a long random string (the same value goes in `REVENUECAT_WEBHOOK_AUTH`).
+4. **Environment variables** (Vercel → Settings → Environment Variables, and `.env.local`):
+   `REVENUECAT_SECRET_API_KEY` and `REVENUECAT_WEBHOOK_AUTH` (Production + Preview, Sensitive), and
+   `NEXT_PUBLIC_REVENUECAT_IOS_KEY`, `NEXT_PUBLIC_REVENUECAT_ANDROID_KEY` (all environments). Redeploy.
+   `SUPABASE_SECRET_KEY` must be set too.
+5. Apply `supabase/migrations/20261108000100_subscriptions.sql`.
+
+### Giving someone Pro for free
+
+In the Supabase SQL Editor (the person's id is in Authentication → Users):
+
+```sql
+insert into private.pro_comps (user_id, note) values ('<user id>', 'founder');
+-- with an end date: ... (user_id, note, expires_at) values ('<user id>', 'beta tester', '2027-06-01');
+```
+
+Their whole household gets Pro. Delete the row to take it back.
+
+### Testing purchases
+
+- **Webhook:** RevenueCat → Integrations → Webhooks → "Send test event". It should show 200, and a
+  `TEST` row appears in `revenuecat_events`.
+- **Sandbox purchase (iOS):** add a Sandbox tester in App Store Connect → Users and Access, sign in
+  to it on the device under Settings → App Store → Sandbox Account, run the app from Xcode, open
+  Household → "See what Pro includes", and start the trial. Sandbox time runs fast (a 3-day trial
+  ends in minutes, a year renews every hour), so you'll see renewals and the expiry arrive by webhook.
+- **Check the result:** `select * from subscriptions;` shows the trial, the Household page says
+  "Free trial until …", and housemates see "<name>'s Pro covers everyone in this household."
 
 ## Recipe library (TheMealDB)
 
@@ -135,6 +227,8 @@ npm run recipes:import -- --write                         # upserts into Supabas
 | `npm test` | Unit tests (Vitest) for the pure logic: parsing, units, matching, list and pantry state |
 | `npm run test:db` | Runs the migrations in PGlite and tests the access rules (no Docker needed) |
 | `npm run ingredients` | Rebuilds the ingredient library (`-- --check` to verify it's up to date) |
+| `npm run ios` / `npm run android` | Syncs the Capacitor app and opens it in Xcode / Android Studio |
+| `npm run cap:sync` | Copies `capacitor.config.ts` and plugins into both native projects |
 | `npm run db:types` | Regenerates `src/types/database.ts` from the live schema (needs `npx supabase login` once) |
 
 ## How it fits together

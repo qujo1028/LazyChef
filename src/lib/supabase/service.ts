@@ -4,9 +4,10 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 
 import type { Database } from "@/types/database"
 
-// The Spoonacular cache and usage tables are closed to every signed-in user. Only
-// the server reaches them, with the secret key (service_role, bypasses RLS). Never
-// import this from a client component, and never use it for household data.
+// Server-only tables (the Spoonacular cache and usage, subscriptions, the RevenueCat log)
+// are closed to signed-in users. Only the server reaches them, with the secret key
+// (service_role, bypasses RLS). Never import this from a client component, and never
+// use it for household data.
 
 let client: SupabaseClient<Database> | null | undefined
 

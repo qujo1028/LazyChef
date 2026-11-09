@@ -8,7 +8,8 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Everything except static assets, metadata files (icons, manifest) and public/vendor (the barcode reader).
-    "/((?!_next/static|_next/image|vendor/|favicon.ico|icon|apple-icon|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|wasm)$).*)",
+    // Everything except static assets, metadata files (icons, manifest), public/vendor (the barcode reader)
+    // and the RevenueCat webhook (no session; it checks its own Authorization header).
+    "/((?!_next/static|_next/image|vendor/|api/revenuecat/|favicon.ico|icon|apple-icon|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|wasm)$).*)",
   ],
 }
