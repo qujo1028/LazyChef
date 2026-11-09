@@ -153,8 +153,8 @@ export async function findLocalCandidates(
   const pantry = pantryMatchKeys(items)
   const basics = basicKeys()
   const search = filters.query !== null
-  // A search means you asked for that dish, so it looks through every cuisine.
-  const everydayOnly = !search && !filters.world
+  // Less familiar cuisines only with "Include world recipes", searches included.
+  const everydayOnly = !filters.world
   const { data, error } = await supabase.rpc("match_local_recipes", {
     p_household_id: householdId,
     p_ingredient_ids: pantry.ids,
@@ -168,7 +168,7 @@ export async function findLocalCandidates(
     // more of the pantry, so leave a little room.
     p_max_missing: search ? 100 : 5,
     // Leave room for the less familiar cuisines dropped below.
-    p_limit: search ? 60 : everydayOnly ? LOCAL_CANDIDATES * 2 : LOCAL_CANDIDATES,
+    p_limit: (search ? 60 : LOCAL_CANDIDATES) * (everydayOnly ? 2 : 1),
   })
   if (error) throw error
   return getLocalCards(

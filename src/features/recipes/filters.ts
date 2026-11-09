@@ -22,7 +22,7 @@ export type RecipeFilters = {
   maxTime: TimeFilter | null
   /** Words to look for in recipe titles ("chicken curry"). */
   query: string | null
-  /** Include library recipes from less familiar cuisines (see EVERYDAY_CUISINES). */
+  /** Include library recipes from less familiar cuisines (see EVERYDAY_CUISINES), in ideas and searches. */
   world: boolean
 }
 

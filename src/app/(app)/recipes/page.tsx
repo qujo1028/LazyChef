@@ -114,6 +114,7 @@ function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: R
             <ClearFilters filters={filters} />
           </p>
         ) : null}
+        <WorldHint filters={filters} />
       </EmptyState>
     )
   }
@@ -133,7 +134,20 @@ function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: R
       ) : (
         "Add a few more things to your pantry and you'll start seeing ideas."
       )}
+      <WorldHint filters={filters} />
     </EmptyState>
+  )
+}
+
+/** With world recipes off, an empty result might just be hiding them: offer the switch. */
+function WorldHint({ filters }: { filters: RecipeFilters }) {
+  if (filters.world) return null
+  return (
+    <p className="mt-2">
+      <Link href={filtersHref({ ...filters, world: true })} className="font-medium text-primary underline underline-offset-2">
+        Include world recipes
+      </Link>
+    </p>
   )
 }
 

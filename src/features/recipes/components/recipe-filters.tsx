@@ -88,7 +88,7 @@ export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
             <label htmlFor={worldId} className="grid flex-1 gap-0.5">
               <span className="text-sm font-semibold">Include world recipes</span>
               <span className="text-xs text-muted-foreground">
-                Less familiar cuisines too, like Jamaican, Polish or Syrian. Searches always include them.
+                Less familiar cuisines too, like Jamaican, Polish or Syrian, in ideas and searches.
               </span>
             </label>
             <Switch id={worldId} checked={filters.world} disabled={pending} onCheckedChange={setWorld} />
