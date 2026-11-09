@@ -63,15 +63,17 @@ login).
 - [ ] Button styled per Apple's guidelines, at least as prominent as the Google button.
 
 ### 1.3 🔴 Privacy policy and support pages
-- [ ] A **privacy policy** at a public URL, linked inside the app (sign-up page and Household page) and in
+- [x] A **privacy policy** at a public URL (`/privacy`), linked inside the app (sign-up page and Household page). Still to do: add the URL in
       App Store Connect. It has to say what you collect and why, who you share it with, how long you keep it
       and how to delete it. For LazyChef that's:
   - Supabase (accounts, household data, recipe photos), Vercel (hosting, Web Analytics, Speed Insights),
     Google (sign-in), Apple (sign-in), Spoonacular (pantry ingredient names sent for recipe search and
     ingredient parsing), Open Food Facts (barcodes looked up), Groq (only if the AI features ship).
-- [ ] A **support URL** (a simple page with a contact email works) and a support email.
-- [ ] **Terms of use** (or use Apple's standard EULA; say so in App Store Connect).
-- [ ] Add these as public routes the proxy doesn't send to `/login` (e.g. `/privacy`, `/terms`, `/support`).
+- [x] A **support URL** (`/support`, with FAQs). Still to do: create the support email and set
+      `NEXT_PUBLIC_SUPPORT_EMAIL` in Vercel; until then the pages say the address is coming soon.
+- [x] **Terms of use** (`/terms`, including the clauses Apple requires of a custom EULA). In App Store Connect, set
+      the License Agreement to this page.
+- [x] Add these as public routes the proxy doesn't send to `/login` (`/privacy`, `/terms`, `/support`).
 
 ### 1.4 🔴 Google sign-in inside the app
 Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the current

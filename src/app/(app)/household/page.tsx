@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PartyPopper, Plus } from "lucide-react"
 
+import { LegalLinks } from "@/components/legal/legal-links"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -96,6 +97,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
       </Card>
 
       <LeaveHouseholdButton householdId={household.id} householdName={household.name} lastMember={members.length === 1} />
+      <LegalLinks />
     </>
   )
 }
