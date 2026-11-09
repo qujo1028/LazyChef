@@ -132,7 +132,7 @@ export function BulkAddForm({
     return (
       <div className="grid grid-cols-1 gap-4">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold">
+          <h2 className="font-heading text-base font-semibold">
             {drafts.length === 1 ? "Check 1 item" : `Check ${drafts.length} items`}
           </h2>
           <Button variant="ghost" className="h-11" onClick={editText} disabled={pending}>
