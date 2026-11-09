@@ -5,7 +5,7 @@ import type { RecipeIngredient } from "@/lib/spoonacular/recipe-shapes"
 
 import { basicKeys, LOCAL_CANDIDATES, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "./local-match"
 import type { PantryRow } from "./match"
-import type { RecipeFilters } from "./filters"
+import { EVERYDAY_CUISINES, type RecipeFilters } from "./filters"
 import { mealDbUrl } from "./ref"
 
 // Our own recipe library (TheMealDB imports + household recipes), read as the signed-in
@@ -44,6 +44,7 @@ export async function signedPhotoUrls(supabase: Db, paths: readonly (string | nu
 type RecipeRow = {
   id: string
   source: "themealdb" | "user"
+  cuisine: string | null
   title: string
   image_url: string | null
   photo_path: string | null
@@ -80,15 +81,29 @@ async function ingredientsFor(supabase: Db, ids: readonly string[]): Promise<Map
   return byRecipe
 }
 
-/** Cards (with ingredients and photo links) for these recipes, in the order given. */
-export async function getLocalCards(ids: readonly string[], householdId: string): Promise<LocalRecipeCard[]> {
+const EVERYDAY = new Set<string>(EVERYDAY_CUISINES)
+
+/** Household recipes always count as everyday; library ones by their cuisine (unknown counts too). */
+function isEveryday(row: Pick<RecipeRow, "source" | "cuisine">): boolean {
+  return row.source === "user" || row.cuisine === null || EVERYDAY.has(row.cuisine.trim().toLowerCase())
+}
+
+/**
+ * Cards (with ingredients and photo links) for these recipes, in the order given.
+ * `everydayOnly` drops library recipes from less familiar cuisines (see EVERYDAY_CUISINES).
+ */
+export async function getLocalCards(
+  ids: readonly string[],
+  householdId: string,
+  { everydayOnly = false }: { everydayOnly?: boolean } = {},
+): Promise<LocalRecipeCard[]> {
   if (ids.length === 0) return []
   const supabase = await createClient()
   const recipeResults = await Promise.all(
     chunks(ids, 100).map((part) =>
       supabase
         .from("recipes")
-        .select("id, source, title, image_url, photo_path, ready_in_minutes, household_id")
+        .select("id, source, cuisine, title, image_url, photo_path, ready_in_minutes, household_id")
         .in("id", part)
         // Only the shared library and this household (someone in two households sees the active one).
         .or(`household_id.is.null,household_id.eq.${householdId}`),
@@ -97,7 +112,7 @@ export async function getLocalCards(ids: readonly string[], householdId: string)
   const rows: RecipeRow[] = []
   for (const { data, error } of recipeResults) {
     if (error) throw error
-    rows.push(...data)
+    rows.push(...(everydayOnly ? data.filter(isEveryday) : data))
   }
   const [ingredients, photos] = await Promise.all([
     ingredientsFor(
@@ -138,6 +153,8 @@ export async function findLocalCandidates(
   const pantry = pantryMatchKeys(items)
   const basics = basicKeys()
   const search = filters.query !== null
+  // A search means you asked for that dish, so it looks through every cuisine.
+  const everydayOnly = !search && !filters.world
   const { data, error } = await supabase.rpc("match_local_recipes", {
     p_household_id: householdId,
     p_ingredient_ids: pantry.ids,
@@ -150,12 +167,14 @@ export async function findLocalCandidates(
     // The database's count is by exact keys; the exact check afterwards can only find
     // more of the pantry, so leave a little room.
     p_max_missing: search ? 100 : 5,
-    p_limit: search ? 60 : LOCAL_CANDIDATES,
+    // Leave room for the less familiar cuisines dropped below.
+    p_limit: search ? 60 : everydayOnly ? LOCAL_CANDIDATES * 2 : LOCAL_CANDIDATES,
   })
   if (error) throw error
   return getLocalCards(
     data.map((row) => row.recipe_id),
     householdId,
+    { everydayOnly },
   )
 }
 

@@ -1,10 +1,12 @@
 "use client"
 
-import { Clock, SlidersHorizontal, X } from "lucide-react"
+import { Clock, Globe, SlidersHorizontal, X } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useId, useState, useTransition } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 import { cn } from "@/lib/utils"
 
@@ -48,8 +50,15 @@ function Chip({
 /** "Filters" button that opens a sheet of meal and cook-time options. Each tap applies right away. */
 export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
   const [open, setOpen] = useState(false)
-  const count = (filters.type ? 1 : 0) + (filters.maxTime ? 1 : 0)
+  const [pending, startTransition] = useTransition()
+  const router = useRouter()
+  const worldId = useId()
+  const count = (filters.type ? 1 : 0) + (filters.maxTime ? 1 : 0) + (filters.world ? 1 : 0)
   const close = () => setOpen(false)
+
+  function setWorld(world: boolean) {
+    startTransition(() => router.push(filtersHref({ ...filters, world }), { scroll: false }))
+  }
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -72,8 +81,18 @@ export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
         <div className="mx-auto grid w-full max-w-md gap-5 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           <DrawerHeader className="px-0 text-left">
             <DrawerTitle className="text-lg">Filters</DrawerTitle>
-            <DrawerDescription>Narrow ideas by meal and how long they take.</DrawerDescription>
+            <DrawerDescription>Narrow ideas by meal and time, or widen them to dishes from around the world.</DrawerDescription>
           </DrawerHeader>
+          <div className="flex items-center gap-3 rounded-xl border bg-card p-3.5">
+            <Globe className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+            <label htmlFor={worldId} className="grid flex-1 gap-0.5">
+              <span className="text-sm font-semibold">Include world recipes</span>
+              <span className="text-xs text-muted-foreground">
+                Less familiar cuisines too, like Jamaican, Polish or Syrian. Searches always include them.
+              </span>
+            </label>
+            <Switch id={worldId} checked={filters.world} disabled={pending} onCheckedChange={setWorld} />
+          </div>
           <section className="grid gap-2.5" aria-label="Meal">
             <h3 className="text-sm font-semibold">Meal</h3>
             <div className="flex flex-wrap gap-2">
@@ -119,6 +138,7 @@ export function ActiveFilters({ filters }: { filters: RecipeFilters }) {
   const pills = [
     filters.type ? { label: mealLabel(filters.type), href: filtersHref({ ...filters, type: null }) } : null,
     filters.maxTime ? { label: timeLabel(filters.maxTime), href: filtersHref({ ...filters, maxTime: null }) } : null,
+    filters.world ? { label: "World recipes", href: filtersHref({ ...filters, world: false }) } : null,
   ].filter((pill) => pill !== null)
   if (pills.length === 0) return null
   return (
