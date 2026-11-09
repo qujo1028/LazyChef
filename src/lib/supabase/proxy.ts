@@ -7,7 +7,7 @@ import type { Database } from "@/types/database"
 import { getSupabaseConfig, secureCookies } from "./config"
 
 /** Reachable without signing in. Everything else redirects to /login. */
-const PUBLIC_PATHS = ["/login", "/signup", "/forgot-password", "/auth"]
+const PUBLIC_PATHS = ["/login", "/signup", "/forgot-password", "/auth", "/privacy", "/terms", "/support"]
 /** Signed-in users skip these and go straight to where they were headed. */
 const SIGNED_OUT_ONLY = ["/login", "/signup", "/forgot-password"]
 const INVITE_PATH = /^\/join\/([^/]+)$/
