@@ -134,6 +134,7 @@ export async function getLocalCards(
       title: row.title,
       image: (row.photo_path ? photos.get(row.photo_path) : null) ?? row.image_url,
       readyInMinutes: row.ready_in_minutes,
+      cuisine: row.cuisine,
       ingredients: ingredients.get(row.id) ?? [],
     }
   })

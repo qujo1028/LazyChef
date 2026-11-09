@@ -13,7 +13,7 @@ export function CenteredShell({
   aside?: React.ReactNode
 }) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-10">
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pt-[env(safe-area-inset-top)] pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <header className="flex h-16 items-center justify-between">
         <Link href="/" aria-label="LazyChef home" className="inline-flex min-h-11 items-center">
           <Brand />

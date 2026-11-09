@@ -52,13 +52,18 @@ export function cacheKey(kind: string, parts: readonly (string | number | null)[
 export function suggestionsCacheKey(
   names: readonly string[],
   filters: Pick<RecipeFilters, "type" | "maxTime" | "query">,
+  /** Spoonacular diet and intolerances, when the person has any (see spoonacularDiet). */
+  diet: { diet: string | null; intolerances: readonly string[] } | null = null,
 ): string {
   const keys = [...new Set(names.map(normalizeIngredientName).filter(Boolean))].sort()
-  const filtered = filters.type !== null || filters.maxTime !== null || filters.query !== null
+  const restricted = diet !== null && (diet.diet !== null || diet.intolerances.length > 0)
+  const filtered = filters.type !== null || filters.maxTime !== null || filters.query !== null || restricted
   if (!filtered) return cacheKey("find", keys)
   const parts = [...keys, `type=${filters.type ?? ""}`, `time=${filters.maxTime ?? ""}`]
   // Searches are keyed by the words too (same words, any case or spacing).
   if (filters.query !== null) parts.push(`q=${filters.query.toLowerCase().replace(/\s+/g, " ")}`)
+  // Only added when set, so existing keys (and their cached results) stay the same.
+  if (restricted) parts.push(`diet=${diet.diet ?? ""}`, `intolerances=${[...diet.intolerances].sort().join(",")}`)
   return cacheKey("search", parts)
 }
 

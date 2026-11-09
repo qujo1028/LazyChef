@@ -619,6 +619,41 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          allergies: string[]
+          cuisines: string[]
+          diet: string
+          updated_at: string
+          user_id: string
+          world_recipes: boolean
+        }
+        Insert: {
+          allergies?: string[]
+          cuisines?: string[]
+          diet?: string
+          updated_at?: string
+          user_id: string
+          world_recipes?: boolean
+        }
+        Update: {
+          allergies?: string[]
+          cuisines?: string[]
+          diet?: string
+          updated_at?: string
+          user_id?: string
+          world_recipes?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -728,6 +763,10 @@ export type Database = {
       save_household_recipe: {
         Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json; p_recipe_id: string | null }
         Returns: string
+      }
+      set_my_preferences: {
+        Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
+        Returns: undefined
       }
       take_rate_limit: {
         Args: { p_bucket: string }

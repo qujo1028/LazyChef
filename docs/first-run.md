@@ -44,7 +44,10 @@ and change recipe results straight away.
 
 ## Effect on recipes
 - Diet and allergies hide conflicting recipes from the built-in library, matched on ingredients.
-- Spoonacular searches that already run pass `diet` and `intolerances`. This adds no calls and no points.
+- Spoonacular calls that already run pass `diet` and `intolerances`. This adds no calls. For
+  someone with a diet or allergy, the plain "find by ingredients" call becomes a filtered search.
+  That is still one call, at about 2.2 points instead of 1.4, cached for an hour. Results are
+  also checked against ingredient names.
 - Liked cuisines rank higher in Ideas. `world_recipes` sets the default for the "Include world
   recipes" switch.
 - A "Show all recipes" toggle on the recipes page ignores diet and allergies for that view.

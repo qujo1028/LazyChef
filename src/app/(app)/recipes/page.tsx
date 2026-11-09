@@ -6,6 +6,8 @@ import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
+import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from "@/features/preferences/options"
+import { getMyPreferences } from "@/features/preferences/queries"
 import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
@@ -40,7 +42,7 @@ function SectionHeading({ title, count, hint }: { title: string; count: number; 
   )
 }
 
-function SearchRow({ filters }: { filters: RecipeFilters }) {
+function SearchRow({ filters, prefs }: { filters: RecipeFilters; prefs: FoodPreferences }) {
   return (
     <>
       <div className="flex gap-2">
@@ -50,7 +52,29 @@ function SearchRow({ filters }: { filters: RecipeFilters }) {
         <RecipeFilterButton filters={filters} />
       </div>
       <ActiveFilters filters={filters} />
+      <DietNote filters={filters} prefs={prefs} />
     </>
+  )
+}
+
+/** "Fits your diet: Vegetarian, no Peanut · Show all", or the way back when showing all. */
+function DietNote({ filters, prefs }: { filters: RecipeFilters; prefs: FoodPreferences }) {
+  if (!hasRestrictions(prefs)) return null
+  const parts = [
+    prefs.diet !== "none" ? labelOf(DIETS, prefs.diet) : null,
+    prefs.allergies.length ? `no ${prefs.allergies.map((a) => labelOf(ALLERGIES, a).toLowerCase()).join(", ")}` : null,
+  ].filter(Boolean)
+  return (
+    <p className="-mt-2 text-sm text-muted-foreground">
+      {filters.all ? "Showing all recipes. " : `Fits your preferences: ${parts.join(", ")}. `}
+      <Link
+        href={filtersHref({ ...filters, all: !filters.all })}
+        scroll={false}
+        className="font-medium text-primary underline underline-offset-2"
+      >
+        {filters.all ? "Use my preferences" : "Show all"}
+      </Link>
+    </p>
   )
 }
 
@@ -165,11 +189,15 @@ function Credits({ recipes, part }: { recipes: Suggestion[]; part: SpoonacularPa
 }
 
 export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
-  const { household } = await requireHousehold()
+  const [{ household }, prefs] = await Promise.all([requireHousehold(), getMyPreferences()])
   const params = await searchParams
-  const filters = parseFilters(params)
+  const filters = parseFilters(params, { worldDefault: prefs.worldRecipes })
   const more = parseMore(params)
-  const [result, savedIds] = await Promise.all([getRecipeIdeas(household.id, filters, more), getSavedIds(household.id)])
+  const recipePrefs = { diet: !filters.all && hasRestrictions(prefs) ? prefs : null, cuisines: prefs.cuisines }
+  const [result, savedIds] = await Promise.all([
+    getRecipeIdeas(household.id, filters, more, recipePrefs),
+    getSavedIds(household.id),
+  ])
 
   const heading = (
     <>
@@ -182,7 +210,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     return (
       <>
         {heading}
-        <SearchRow filters={filters} />
+        <SearchRow filters={filters} prefs={prefs} />
         <EmptyState icon={ChefHat} title="Add some food first">
           <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back, or search for a recipe above.</p>
           <Button asChild size="lg" className="mt-4 h-12 w-full text-base">
@@ -200,7 +228,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
   return (
     <>
       {heading}
-      <SearchRow filters={filters} />
+      <SearchRow filters={filters} prefs={prefs} />
       {shown.length === 0 ? (
         <SpoonacularEmpty part={result.spoonacular} filters={filters} />
       ) : result.mode === "search" ? (
