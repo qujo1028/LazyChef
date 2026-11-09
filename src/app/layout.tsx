@@ -68,7 +68,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         <ThemeProvider>
           {children}
-          <Toaster position="top-center" />
+          {/* Below the status bar and camera cutout in the iOS app and home-screen web app. */}
+          <Toaster
+            position="top-center"
+            offset={{ top: "calc(24px + env(safe-area-inset-top))" }}
+            mobileOffset={{ top: "calc(16px + env(safe-area-inset-top))" }}
+          />
         </ThemeProvider>
         <NativeAppBridge />
         <Analytics />

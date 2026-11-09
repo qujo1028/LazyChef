@@ -288,9 +288,14 @@ Built:
   (`signInWithGoogle` returns the URL when the form says `native`). Website behaviour unchanged.
 - iOS: camera/photo permission text, link scheme, `ITSAppUsesNonExemptEncryption` = NO, iPhone + portrait only.
   Android: camera permission, link scheme, portrait only.
-- Checks: typecheck, lint, build, 1,669 unit tests (4 new for the app link). Offline page checked at 375 px.
+- Status bar spacing: sign-in, sign-up, onboarding and invite pages (and their loading/error screens) and toasts
+  now leave room for the status bar and camera cutout. The tab pages' header already did.
+- Checks: typecheck, lint, build, 1,665 unit tests (4 new for the app link). Built and run on the iPhone 17 Pro
+  simulator (iOS 26.5): live site loads, offline screen shows, Google opens in an in-app sheet.
 
 Not done:
-- Neither app has been built or run: Xcode and Android Studio aren't installed on this Mac.
-- Supabase Redirect URLs still need `app.lazychef://auth/callback**`, then Google sign-in tested in both apps.
+- Android app not built: Android Studio isn't installed (the user chose not to install it for now).
+- Google sign-in is turned off in Supabase (Auth → Providers). Turn it on with a Google OAuth client, then test it
+  in the app. Supabase Site URL and Redirect URLs were fixed on 2026-11-09.
+- Tab pages (Pantry, List…) not checked in the simulator: needs a signed-in account.
 - App icon and splash screen are still Capacitor's defaults.
