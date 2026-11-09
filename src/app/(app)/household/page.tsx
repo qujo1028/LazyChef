@@ -5,6 +5,7 @@ import { PartyPopper, Plus } from "lucide-react"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DeleteAccountButton } from "@/features/account/components/delete-account-button"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
 import { HouseholdSwitcher, LeaveHouseholdButton } from "@/features/household/components/household-actions"
 import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/components/household-forms"
@@ -90,6 +91,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
         <CardContent className="grid gap-4">
           <DisplayNameForm displayName={profile?.display_name ?? ""} />
           <SignOutButton />
+          <DeleteAccountButton />
         </CardContent>
       </Card>
 
