@@ -48,7 +48,11 @@ export function cacheKey(kind: string, parts: readonly (string | number | null)[
  * filters. Order and spelling ("Eggs" vs "egg") don't matter, so a new expiry date or a
  * re-sort doesn't cost a search, and two households with the same food share results.
  */
-export function suggestionsCacheKey(names: readonly string[], filters: RecipeFilters): string {
+/** Only what Spoonacular is asked counts: "world recipes" is about our library, not theirs. */
+export function suggestionsCacheKey(
+  names: readonly string[],
+  filters: Pick<RecipeFilters, "type" | "maxTime" | "query">,
+): string {
   const keys = [...new Set(names.map(normalizeIngredientName).filter(Boolean))].sort()
   const filtered = filters.type !== null || filters.maxTime !== null || filters.query !== null
   if (!filtered) return cacheKey("find", keys)

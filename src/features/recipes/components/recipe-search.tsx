@@ -14,6 +14,7 @@ export function RecipeSearch({ filters }: { filters: RecipeFilters }) {
     <form action="/recipes" method="get" role="search" className="relative">
       {filters.type ? <input type="hidden" name="type" value={filters.type} /> : null}
       {filters.maxTime ? <input type="hidden" name="time" value={filters.maxTime} /> : null}
+      {filters.world ? <input type="hidden" name="world" value="1" /> : null}
       <label htmlFor="recipe-search" className="sr-only">
         Search recipes
       </label>

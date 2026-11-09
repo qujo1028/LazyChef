@@ -7,6 +7,7 @@ import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
+import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { getOurRecipes, getSavedIds } from "@/features/recipes/queries"
 
@@ -39,11 +40,11 @@ export default async function OurRecipesPage() {
           them.
         </EmptyState>
       ) : (
-        <ul className="grid grid-cols-1 gap-2.5">
+        <RecipeGrid>
           {recipes.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
           ))}
-        </ul>
+        </RecipeGrid>
       )}
     </>
   )

@@ -9,9 +9,10 @@ import { requireHousehold } from "@/features/household/queries"
 import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
-import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
+import { ActiveFilters, RecipeFilterButton } from "@/features/recipes/components/recipe-filters"
 import { RecipeSearch } from "@/features/recipes/components/recipe-search"
-import { RecipeTabs } from "@/features/recipes/components/recipe-tabs"
+import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
+import { ShowMoreGrid } from "@/features/recipes/components/show-more-grid"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { filtersHref, hasFilters, NO_FILTERS, parseFilters, parseMore, type RecipeFilters } from "@/features/recipes/filters"
@@ -21,22 +22,35 @@ import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
 
-function RecipeList({
-  recipes,
-  savedIds,
-  empty,
-}: {
-  recipes: Suggestion[]
-  savedIds: ReadonlySet<string>
-  empty: string
-}) {
-  if (recipes.length === 0) return <p className="px-1 py-6 text-center text-sm text-muted-foreground">{empty}</p>
+/** How many "Almost there" ideas show before "Show all". */
+const ALMOST_THERE_PREVIEW = 6
+
+function cards(recipes: Suggestion[], savedIds: ReadonlySet<string>) {
+  return recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />)
+}
+
+function SectionHeading({ title, count, hint }: { title: string; count: number; hint?: string }) {
   return (
-    <ul className="grid grid-cols-1 gap-2.5">
-      {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} saved={savedIds.has(recipe.id)} />
-      ))}
-    </ul>
+    <div className="grid gap-0.5">
+      <h2 className="font-heading text-xl font-semibold">
+        {title} <span className="font-sans text-sm font-normal text-muted-foreground tabular-nums">· {count}</span>
+      </h2>
+      {hint ? <p className="text-sm text-muted-foreground">{hint}</p> : null}
+    </div>
+  )
+}
+
+function SearchRow({ filters }: { filters: RecipeFilters }) {
+  return (
+    <>
+      <div className="flex gap-2">
+        <div className="min-w-0 flex-1">
+          <RecipeSearch filters={filters} />
+        </div>
+        <RecipeFilterButton filters={filters} />
+      </div>
+      <ActiveFilters filters={filters} />
+    </>
   )
 }
 
@@ -100,6 +114,7 @@ function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: R
             <ClearFilters filters={filters} />
           </p>
         ) : null}
+        <WorldHint filters={filters} />
       </EmptyState>
     )
   }
@@ -119,7 +134,20 @@ function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: R
       ) : (
         "Add a few more things to your pantry and you'll start seeing ideas."
       )}
+      <WorldHint filters={filters} />
     </EmptyState>
+  )
+}
+
+/** With world recipes off, an empty result might just be hiding them: offer the switch. */
+function WorldHint({ filters }: { filters: RecipeFilters }) {
+  if (filters.world) return null
+  return (
+    <p className="mt-2">
+      <Link href={filtersHref({ ...filters, world: true })} className="font-medium text-primary underline underline-offset-2">
+        Include world recipes
+      </Link>
+    </p>
   )
 }
 
@@ -154,7 +182,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     return (
       <>
         {heading}
-        <RecipeSearch filters={filters} />
+        <SearchRow filters={filters} />
         <EmptyState icon={ChefHat} title="Add some food first">
           <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back, or search for a recipe above.</p>
           <Button asChild size="lg" className="mt-4 h-12 w-full text-base">
@@ -172,42 +200,31 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
   return (
     <>
       {heading}
-      <RecipeSearch filters={filters} />
-      <RecipeFilterBar filters={filters} />
+      <SearchRow filters={filters} />
       {shown.length === 0 ? (
         <SpoonacularEmpty part={result.spoonacular} filters={filters} />
       ) : result.mode === "search" ? (
-        <section className="grid gap-2.5" aria-label="Search results">
-          <h2 className="font-semibold">
-            Results <span className="font-normal text-muted-foreground">· {result.results.length}</span>
-          </h2>
-          <RecipeList recipes={result.results} savedIds={savedIds} empty="" />
+        <section className="grid gap-3" aria-label="Search results">
+          <SectionHeading title="Results" count={result.results.length} />
+          <RecipeGrid>{cards(result.results, savedIds)}</RecipeGrid>
         </section>
       ) : (
-        <RecipeTabs
-          tabs={[
-            {
-              id: "make-now",
-              label: "Make now",
-              count: result.makeNow.length,
-              panel: (
-                <RecipeList
-                  recipes={result.makeNow}
-                  savedIds={savedIds}
-                  empty="Nothing you can make with just what's here yet. Check Almost there."
-                />
-              ),
-            },
-            {
-              id: "almost-there",
-              label: "Almost there",
-              count: result.almostThere.length,
-              panel: (
-                <RecipeList recipes={result.almostThere} savedIds={savedIds} empty="Nothing 1 to 3 things away right now." />
-              ),
-            },
-          ]}
-        />
+        <>
+          <section className="grid gap-3" aria-label="Make now">
+            <SectionHeading
+              title="Make now"
+              count={result.makeNow.length}
+              hint={result.makeNow.length === 0 ? "Nothing you can make with just what's here yet." : "You have everything for these."}
+            />
+            {result.makeNow.length > 0 ? <RecipeGrid>{cards(result.makeNow, savedIds)}</RecipeGrid> : null}
+          </section>
+          {result.almostThere.length > 0 ? (
+            <section className="grid gap-3" aria-label="Almost there">
+              <SectionHeading title="Almost there" count={result.almostThere.length} hint="One to three things away." />
+              <ShowMoreGrid items={cards(result.almostThere, savedIds)} initial={ALMOST_THERE_PREVIEW} />
+            </section>
+          ) : null}
+        </>
       )}
       {shown.length > 0 ? <SpoonacularNote part={result.spoonacular} filters={filters} /> : null}
       <Button asChild variant="ghost" size="lg" className="h-12 w-full text-base">
