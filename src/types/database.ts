@@ -505,6 +505,10 @@ export type Database = {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
       }
+      take_rate_limit: {
+        Args: { p_bucket: string }
+        Returns: boolean
+      }
     }
     Enums: {
       activity_action: "added" | "used" | "restocked" | "updated" | "removed" | "cooked" | "shopped"

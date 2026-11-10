@@ -58,7 +58,9 @@ describe("households", () => {
     await t.as(casey, async () => {
       assert.equal((await t.q("select count(*)::int as n from public.profiles"))[0].n, 1)
       assert.equal((await t.q("select * from public.get_invite_preview('ZZZZZZZZ')")).length, 0)
-      await assertRejects(() => t.q("select public.join_household('ZZZZZZZZ')"), /doesn't match/)
+      // A wrong code returns null (and counts the miss) instead of raising,
+      // so the rate-limit counter isn't rolled back by the exception.
+      assert.equal((await t.q("select public.join_household('ZZZZZZZZ') as id"))[0].id, null)
     })
   })
 
