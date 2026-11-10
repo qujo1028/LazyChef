@@ -134,3 +134,13 @@ export function scanLine(scan: Pick<ScannedProduct, "name" | "quantity" | "unit"
   const name = scan.name.replace(/[,;•]+/g, " ").replace(/\s+/g, " ").trim()
   return scan.quantity === null ? name : `${formatQuantity(scan.quantity, scan.unit)} ${name}`
 }
+
+/** A product name someone typed or edited: one line, no list separators, lowercase, at most 80 characters. */
+export function cleanScanName(text: string) {
+  return text
+    .replace(/[,;•]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .slice(0, 80)
+}

@@ -1,6 +1,7 @@
 import type { EmailOtpType } from "@supabase/supabase-js"
-import { NextResponse, type NextRequest } from "next/server"
+import { after, NextResponse, type NextRequest } from "next/server"
 
+import { storeAppleRefreshToken } from "@/features/auth/apple-tokens"
 import { safeNext } from "@/lib/safe-next"
 import { createClient } from "@/lib/supabase/server"
 
@@ -20,8 +21,16 @@ export async function GET(request: NextRequest) {
   if (!providerError) {
     const supabase = await createClient()
     if (code) {
-      const { error } = await supabase.auth.exchangeCodeForSession(code)
-      if (!error) return NextResponse.redirect(new URL(next, origin))
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+      if (!error) {
+        // Sign in with Apple's web page: keep Apple's refresh token, when Supabase passes one on,
+        // so deleting the account can revoke it. Runs after the redirect is sent.
+        if (searchParams.get("provider") === "apple" && data.session?.provider_refresh_token) {
+          const { user, provider_refresh_token: token } = data.session
+          after(() => storeAppleRefreshToken(user.id, token))
+        }
+        return NextResponse.redirect(new URL(next, origin))
+      }
     } else if (tokenHash && type) {
       const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
       if (!error) {

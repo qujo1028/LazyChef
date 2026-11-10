@@ -2,8 +2,8 @@ import "server-only"
 
 import { createClient } from "@/lib/supabase/server"
 
-/** Buckets the app server checks before spending Spoonacular points. Limits live in the database. */
-export type RateLimitBucket = "recipe_search" | "recipe_open" | "ingredient_lookup"
+/** Buckets the app server checks before spending Spoonacular points or AI calls. Limits live in the database. */
+export type RateLimitBucket = "recipe_search" | "recipe_open" | "ingredient_lookup" | "ai"
 
 /** Postgres error code for "too many tries" (invite codes). */
 export const RATE_LIMITED_CODE = "LZ429"

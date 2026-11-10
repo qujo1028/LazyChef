@@ -5,6 +5,7 @@ import Link from "next/link"
 import { PageHeading } from "@/components/page-heading"
 import { BulkAddForm } from "@/features/pantry/components/bulk-add-form"
 import { localDateKey } from "@/features/pantry/dates"
+import { isAiAvailable } from "@/lib/llm/ai"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Add groceries" }
@@ -29,7 +30,13 @@ export default async function BulkAddPage({ searchParams }: PageProps<"/pantry/a
         title="Just went shopping?"
         description="Scan, type or paste everything you bought. You'll check it all before anything is added."
       />
-      <BulkAddForm key={text} defaultText={text} serverToday={localDateKey()} startScanning={scan} />
+      <BulkAddForm
+        key={text}
+        defaultText={text}
+        serverToday={localDateKey()}
+        startScanning={scan}
+        aiAvailable={isAiAvailable()}
+      />
     </>
   )
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { isAppleSignInEnabled } from "@/features/auth/apple"
+import { AppleButton } from "@/features/auth/components/apple-button"
 import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { LoginForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
@@ -13,12 +15,19 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const params = await searchParams
   const next = safeNext(firstParam(params.next))
   const error = firstParam(params.error)
-  const notice = firstParam(params.deleted) === "1" ? "Your account was deleted." : undefined
+  const deleted = firstParam(params.deleted)
+  const notice =
+    deleted === "apple"
+      ? "Your account was deleted. To also remove LazyChef from your Apple ID, open Settings, tap your name, then Sign-In & Security → Sign in with Apple → LazyChef → Stop Using Apple ID."
+      : deleted === "1"
+        ? "Your account was deleted."
+        : undefined
   const nextQuery = next === "/" ? "" : `?next=${encodeURIComponent(next)}`
 
   return (
     <>
       <AuthHeading title="Welcome back" description="Sign in to your household's pantry." />
+      {isAppleSignInEnabled() && <AppleButton next={next} />}
       <GoogleButton next={next} />
       <OrDivider />
       <LoginForm next={next} initialError={error} initialNotice={notice} />

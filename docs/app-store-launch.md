@@ -53,7 +53,12 @@ Apple requires a way to delete your account inside the app.
 - [x] Activity entries in shared households stay, shown as "Someone".
 - [x] Apply the migration to the live database.
 - [ ] Test with a throwaway account once deployed.
-- [ ] Revoke the Apple token on deletion, once Sign in with Apple exists (Apple requires it).
+- [ ] Revoke the Apple token on deletion (Apple requires it). **Code built, dormant**
+      (`src/features/auth/apple-tokens.ts`, migration `20261110082750_apple_refresh_tokens.sql`, applied to the live database 2026-11-10):
+      native Apple sign-in trades its authorization code for a refresh token, stored server-only;
+      `deleteAccount` revokes it before deleting the user. Turns on once `APPLE_TEAM_ID`, `APPLE_KEY_ID`,
+      `APPLE_PRIVATE_KEY` (.p8 contents) and `APPLE_CLIENT_ID` (`app.lazychef`) are set. Then test: sign in with Apple, delete the account, check Settings → Apple ID → Sign in with
+      Apple no longer lists LazyChef.
 
 ### 1.2 🔴 Sign in with Apple (Guideline 4.8)
 You offer "Continue with Google", so you must also offer Sign in with Apple (or an equivalent privacy-focused
@@ -83,7 +88,8 @@ Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the c
 `signInWithGoogle` redirect (`src/features/auth/actions.ts`) will fail inside the app.
 - [x] Open the OAuth flow in an in-app browser tab and come back via the `app.lazychef://` link
       (built 2026-11-09). Still to do: add `app.lazychef://auth/callback**` to Supabase Redirect URLs and test.
-      Later, `ASWebAuthenticationSession` or native Google Sign-In removes iOS's "Open in LazyChef?" prompt.
+      iOS builds with the LazyChef auth plugin now use `ASWebAuthenticationSession` (no "Open in LazyChef?"
+      prompt); Android and older iOS builds keep the in-app browser tab (`src/lib/native-oauth.ts`).
 - [ ] Publish the Google OAuth app (it's in "Testing", which only lets listed test users sign in). Google
       needs the privacy policy URL and a homepage on a domain you own for that.
 

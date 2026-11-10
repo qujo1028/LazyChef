@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { isAppleSignInEnabled } from "@/features/auth/apple"
+import { AppleButton } from "@/features/auth/components/apple-button"
 import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { SignupForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
@@ -24,6 +26,7 @@ export default async function SignupPage({ searchParams }: PageProps<"/signup">)
             : "One pantry and one shopping list for everyone you live with."
         }
       />
+      {isAppleSignInEnabled() && <AppleButton next={next} />}
       <GoogleButton next={next} />
       <OrDivider />
       <SignupForm next={next} />

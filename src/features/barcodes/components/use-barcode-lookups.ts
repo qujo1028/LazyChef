@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { cleanScanName } from "@/lib/barcode/product"
 import { callAction } from "@/lib/call-action"
 
 import { lookupBarcode } from "../actions"
@@ -71,7 +72,7 @@ export function useBarcodeLookups({ onFound }: { onFound?: (key: number, hit: Sc
   /** A code the database didn't know, named by hand. */
   const name = useCallback(
     (key: number, code: string, typed: string) => {
-      const clean = typed.replace(/[,;•]+/g, " ").replace(/\s+/g, " ").trim().toLowerCase().slice(0, 80)
+      const clean = cleanScanName(typed)
       if (!clean) return
       const hit: ScanHit = { code, source: "household", name: clean, quantity: null, unit: "count", label: clean, line: clean }
       update(key, { key, code, status: "found", hit })
@@ -80,8 +81,21 @@ export function useBarcodeLookups({ onFound }: { onFound?: (key: number, hit: Sc
     [update],
   )
 
+  /** A found code renamed in place (its name tidied): every row with that code, and later scans of it. */
+  const rename = useCallback((code: string, scan: Pick<ScanHit, "name" | "quantity" | "unit" | "line">) => {
+    const renamed = (hit: ScanHit): ScanHit => ({ ...hit, ...scan, tidy: false })
+    setRows((current) => current.map((r) => (r.status === "found" && r.code === code ? { ...r, hit: renamed(r.hit) } : r)))
+    const cached = answers.current.get(code)
+    if (cached) {
+      answers.current.set(
+        code,
+        cached.then((result) => ("found" in result && result.found ? { ...result, hit: renamed(result.hit) } : result)),
+      )
+    }
+  }, [])
+
   const remove = useCallback((key: number) => setRows((current) => current.filter((r) => r.key !== key)), [])
   const clear = useCallback(() => setRows([]), [])
 
-  return { rows, setRows, scan, retry, name, remove, clear }
+  return { rows, setRows, scan, retry, name, rename, remove, clear }
 }
