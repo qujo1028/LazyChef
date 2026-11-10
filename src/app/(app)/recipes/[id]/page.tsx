@@ -16,6 +16,8 @@ import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-cre
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
 import { parseRecipeRef } from "@/features/recipes/ref"
+import { IngredientsWithSwaps } from "@/features/recipes/substitutions/components/ingredients-with-swaps"
+import { isAiAvailable } from "@/lib/llm/ai"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -129,7 +131,16 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
             · you have {have} of {lines.length}
           </span>
         </h2>
-        <IngredientChecklist recipeId={recipe.ref} lines={lines} />
+        {isAiAvailable() ? (
+          <IngredientsWithSwaps
+            recipeId={recipe.ref}
+            title={recipe.title}
+            lines={lines}
+            sendCopy={recipe.source === "spoonacular"}
+          />
+        ) : (
+          <IngredientChecklist recipeId={recipe.ref} lines={lines} />
+        )}
         <CookSheet recipeId={recipe.ref} title={recipe.title} image={image} lines={cook} saved={saved} />
       </section>
 

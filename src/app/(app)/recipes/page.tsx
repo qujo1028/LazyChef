@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from "@/features/preferences/options"
 import { getMyPreferences } from "@/features/preferences/queries"
+import { AiIdeaCard } from "@/features/recipes/ai-idea/ai-idea-card"
 import type { Usage } from "@/features/recipes/cache-core"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
@@ -20,6 +21,7 @@ import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { filtersHref, hasFilters, NO_FILTERS, parseFilters, parseMore, type RecipeFilters } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
+import { isAiAvailable } from "@/lib/llm/ai"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
@@ -254,6 +256,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
           ) : null}
         </>
       )}
+      {result.mode === "ideas" && isAiAvailable() ? <AiIdeaCard /> : null}
       {shown.length > 0 ? <SpoonacularNote part={result.spoonacular} filters={filters} /> : null}
       <Button asChild variant="ghost" size="lg" className="h-12 w-full text-base">
         <Link href="/recipes/new">

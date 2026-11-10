@@ -3,6 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation"
 
+import { revokeAppleTokens } from "@/features/auth/apple-tokens"
 import { requireViewer } from "@/features/household/queries"
 import { PHOTO_BUCKET } from "@/features/recipes/local"
 import { getAdminClient } from "@/lib/supabase/admin"
@@ -16,7 +17,7 @@ const FAILED = "Couldn't delete your account. Try again in a minute."
  * auth user does the rest in the database (supabase/migrations/*_account_deletion.sql):
  * households they were alone in are deleted, shared ones pass to the next owner and keep
  * their data with the person's name taken off. Then this removes the deleted households'
- * recipe photos, which live in Storage, and signs out.
+ * recipe photos, which live in Storage, and signs out. Apple tokens are revoked first.
  */
 export async function deleteAccount(): Promise<{ error: string } | undefined> {
   const viewer = await requireViewer()
@@ -33,6 +34,10 @@ export async function deleteAccount(): Promise<{ error: string } | undefined> {
     return { error: FAILED }
   }
 
+  // Apple requires revoking Sign in with Apple tokens. The stored token is deleted with
+  // the user, so this goes first; it never fails the deletion.
+  const apple = await revokeAppleTokens(viewer.id)
+
   const { error } = await admin.auth.admin.deleteUser(viewer.id)
   if (error) {
     console.error("deleteAccount: deleting the auth user failed", error.message)
@@ -45,7 +50,9 @@ export async function deleteAccount(): Promise<{ error: string } | undefined> {
   )
   // The user is gone, so only clear this browser's session cookies.
   await supabase.auth.signOut({ scope: "local" })
-  redirect("/login?deleted=1")
+  // Apple asks apps to tell people how to remove the app from their Apple ID when it couldn't be
+  // revoked for them (TN3194).
+  redirect(apple.usedApple && !apple.revoked ? "/login?deleted=apple" : "/login?deleted=1")
 }
 
 /** Photos are stored as "<household id>/<file>". Only households that no longer exist lose theirs. */

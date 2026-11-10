@@ -1,10 +1,11 @@
 "use client"
 
-import { LoaderCircle, Pencil, ScanBarcode } from "lucide-react"
+import { Info, LoaderCircle, Pencil, ScanBarcode, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
+import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
 import { FormMessage } from "@/components/form-message"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -14,8 +15,10 @@ import { ScanToAddSheet, type ScannedLine } from "@/features/barcodes/components
 import { parseLine, parseLines } from "@/lib/ingredients/parse-line"
 
 import { addItems, previewItems } from "../actions"
+import { previewItemsWithAi } from "../ai/actions"
+import { MAX_AI_TEXT } from "../ai/split-text"
 import { describeAdditions } from "../merge"
-import type { SpoonacularStatus } from "../resolve-core"
+import type { ResolveResult, SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftToItem, draftsToItems, type ReviewDraft } from "../review"
 import { callAction } from "@/lib/call-action"
 import { ReviewList, SpoonacularNote } from "./review-list"
@@ -28,9 +31,12 @@ export function BulkAddForm({
   defaultText,
   serverToday,
   startScanning = false,
+  aiAvailable = false,
 }: {
   defaultText: string
   serverToday: string
+  /** Offer "Use AI to split this" (only when the AI assistant is set up). */
+  aiAvailable?: boolean
   /** Open the barcode scanner right away (?scan=1, from the quick add sheet). */
   startScanning?: boolean
 }) {
@@ -40,7 +46,12 @@ export function BulkAddForm({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const batch = useRef(0)
   const [text, setText] = useState(defaultText)
-  const [review, setReview] = useState<{ drafts: ReviewDraft[]; spoonacular: SpoonacularStatus } | null>(null)
+  const [review, setReview] = useState<{
+    drafts: ReviewDraft[]
+    spoonacular: SpoonacularStatus
+    /** Set when "Use AI to split this" made the review. */
+    ai?: { used: boolean; note: string | null }
+  } | null>(null)
   const [showErrors, setShowErrors] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
@@ -51,10 +62,23 @@ export function BulkAddForm({
 
   const count = useMemo(() => (text.trim() ? parseLines(text).length : 0), [text])
   const drafts = review?.drafts ?? []
+  const { ensureConsent, dialog: aiDialog } = useAiConsent("the text you typed")
 
   function preview(event: React.FormEvent) {
     event.preventDefault()
     runPreview(text)
+  }
+
+  /** Shows the review for resolved items; scanned lines keep their barcode. */
+  function showReview(result: ResolveResult, ai?: { used: boolean; note: string | null }) {
+    batch.current += 1
+    setShowErrors(false)
+    const drafts = draftsFromResolved(result.items, batch.current).map((draft, i) => {
+      const barcode = scannedLines.current.get(result.items[i].raw)
+      return barcode ? { ...draft, barcode } : draft
+    })
+    setReview({ drafts, spoonacular: result.spoonacular, ai })
+    window.scrollTo({ top: 0 })
   }
 
   function runPreview(text: string) {
@@ -68,18 +92,52 @@ export function BulkAddForm({
     setError(null)
     startTransition(async () => {
       const result = await callAction(() => previewItems(text))
-      if (result.error !== undefined) {
-        setError(result.error)
-        return
-      }
-      batch.current += 1
-      setShowErrors(false)
-      const drafts = draftsFromResolved(result.items, batch.current).map((draft, i) => {
-        const barcode = scannedLines.current.get(result.items[i].raw)
-        return barcode ? { ...draft, barcode } : draft
-      })
-      setReview({ drafts, spoonacular: result.spoonacular })
-      window.scrollTo({ top: 0 })
+      if (result.error !== undefined) return void setError(result.error)
+      showReview(result)
+    })
+  }
+
+  /**
+   * Same review as runPreview, but the AI splits the typed text first. Scanned lines are already
+   * one item each and are matched to their barcode by their exact text, so they skip the AI.
+   */
+  async function splitWithAi() {
+    if (pending) return
+    const lines = text.split("\n")
+    const isScanned = (line: string) => {
+      const raw = parseLine(line)?.raw
+      return raw !== undefined && scannedLines.current.has(raw)
+    }
+    const scanned = lines.filter((line) => line.trim() && isScanned(line)).join("\n")
+    const typed = lines.filter((line) => !isScanned(line)).join("\n").trim()
+    if (!typed) {
+      if (scanned) return runPreview(scanned)
+      setError("Type or paste what you bought first.")
+      textareaRef.current?.focus()
+      return
+    }
+    if (typed.length > MAX_AI_TEXT) {
+      setError(`The AI can split up to ${MAX_AI_TEXT.toLocaleString("en-US")} characters at a time. Shorten it or tap Review.`)
+      return
+    }
+    if (!(await ensureConsent())) return
+    setError(null)
+    startTransition(async () => {
+      const [ai, fromScans] = await Promise.all([
+        callAction(() => previewItemsWithAi(typed)),
+        scanned ? callAction(() => previewItems(scanned)) : null,
+      ])
+      if (ai.error !== undefined) return void setError(ai.error)
+      if (fromScans && fromScans.error !== undefined) return void setError(fromScans.error)
+      // "Edit list" then shows the AI's split, one item per line, with the scanned lines kept as they were.
+      if (ai.usedAi) setText([ai.text, scanned].filter(Boolean).join("\n"))
+      showReview(
+        {
+          items: [...ai.items, ...(fromScans?.items ?? [])],
+          spoonacular: fromScans?.spoonacular.error ? fromScans.spoonacular : ai.spoonacular,
+        },
+        { used: ai.usedAi, note: ai.note },
+      )
     })
   }
 
@@ -140,6 +198,18 @@ export function BulkAddForm({
             Edit list
           </Button>
         </div>
+        {review.ai?.used ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <AiLabel>Split by AI</AiLabel>
+            <span className="text-xs text-muted-foreground">Check the amounts and names before adding.</span>
+          </div>
+        ) : null}
+        {review.ai?.note ? (
+          <p className="flex gap-2 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground" role="status">
+            <Info className="mt-px size-3.5 shrink-0" aria-hidden />
+            {review.ai.note}
+          </p>
+        ) : null}
         <SpoonacularNote status={review.spoonacular} />
         <ReviewList
           drafts={drafts}
@@ -196,6 +266,25 @@ export function BulkAddForm({
         {pending ? <LoaderCircle className="animate-spin" aria-hidden /> : null}
         {pending ? "Reading your list…" : count > 1 ? `Review ${count} items` : "Review"}
       </Button>
+      {aiAvailable ? (
+        <>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="h-12 text-base"
+            onClick={() => void splitWithAi()}
+            disabled={pending}
+          >
+            <Sparkles aria-hidden />
+            Use AI to split this
+          </Button>
+          <p className="px-1 text-xs text-muted-foreground">
+            For messy notes like “2 lbs chicken and a dozen eggs plus milk”. You&apos;ll still check everything.
+          </p>
+          {aiDialog}
+        </>
+      ) : null}
     </form>
   )
 }
