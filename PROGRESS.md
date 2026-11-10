@@ -299,3 +299,35 @@ Not done:
   in the app. Supabase Site URL and Redirect URLs were fixed on 2026-11-09.
 - Tab pages (Pantry, List…) not checked in the simulator: needs a signed-in account.
 - App icon and splash screen are still Capacitor's defaults.
+
+## iOS audit fixes, native sign-in, AI features (2026-11-10, branch `claude/lazychef-code-terminal-469696`)
+iOS (Phase 1):
+- Real app icon (light, dark, tinted) and cream/dark launch screen, drawn from the site's logo by
+  `scripts/build-native-images.mjs` (re-run after logo changes). Replaces Capacitor's placeholders.
+- `PrivacyInfo.xcprivacy`; one bridge view controller at launch (storyboard keys removed from Info.plist);
+  dynamic web view background (no cream flash in dark mode); trimmed AppDelegate.
+- Google sign-in return link handled on cold launch too (`App.getLaunchUrl()`, once per link).
+- Links to other sites open in an in-app browser sheet (`native-external-links.tsx`).
+Sign-in (Phase 2):
+- `LazyChefAuth` plugin (`ios/App/App/LazyChefAuthPlugin.swift`, `src/lib/native-auth.ts`): Google via
+  ASWebAuthenticationSession (no "Open in LazyChef?" prompt); older builds/Android keep the browser tab.
+- Sign in with Apple built but off until `NEXT_PUBLIC_APPLE_SIGN_IN=1` (owner not in the Apple Developer
+  Program yet; no entitlement added). Steps in `docs/mobile-apps.md`.
+- Apple token revocation on account deletion, dormant until the APPLE_* env vars are set. Web sign-ins keep
+  Supabase's provider refresh token when given; otherwise deletion shows how to remove LazyChef from the Apple ID.
+- Migration `20261110082750_apple_refresh_tokens.sql` applied to the live DB 2026-11-10.
+AI (Groq, `GROQ_API_KEY` set locally and in Vercel Production/Preview on 2026-11-10):
+- Shared: `src/lib/llm/ai.ts` (`askAiJson`, hourly 'ai' limit), `src/components/ai/ai-consent.tsx` (per-feature
+  consent, guideline 5.1.2; `AiLabel`), Groq in the privacy policy.
+- Quick-add from text (pantry bulk add), recipe idea from the pantry (Recipes), tidy scanned names (scanner),
+  substitutions (recipe detail).
+- Migration `20261110082751_ai_rate_limit.sql` applied to the live DB 2026-11-10. It keeps the `pro_sync` bucket
+  from the subscriptions migration, which is live but not on main yet: when that branch merges, make sure its
+  migration doesn't redefine these functions without `ai`.
+Checks: typecheck, lint, build, 1,769 unit tests, 94 DB tests; /code-review findings fixed.
+
+Not done:
+- No Xcode build in this session (sandbox blocks SwiftPM); Swift only type-checked against a Capacitor stub.
+  Run `npm run ios` and test: launch screen, dark mode, Google sign-in (warm and cold), outside links.
+- AI features not tried against the real Groq API or in a browser.
+- Quick-add isn't on the shopping list (no review step there); list scan sheet has no "Tidy name".

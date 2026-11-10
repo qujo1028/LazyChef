@@ -81,6 +81,11 @@ export default function PrivacyPage() {
             recipes and understand ingredient amounts. It doesn&apos;t receive your name, email or household.
           </li>
           <li>
+            <strong>Groq</strong> (an AI service), only when you use an AI feature and agree to it first: it receives
+            what that feature needs, such as text you type, item and product names in your pantry, or a recipe&apos;s
+            ingredients. It doesn&apos;t receive your name, email or household.
+          </li>
+          <li>
             <strong>Open Food Facts</strong> receives the barcodes you scan, to look up the product. The lookup comes
             from our servers, not your device.
           </li>

@@ -4,8 +4,10 @@ import { requireHousehold } from "@/features/household/queries"
 import type { ActionResult } from "@/features/pantry/types"
 import { fetchOffProduct, OpenFoodFactsError } from "@/lib/barcode/open-food-facts"
 import { normalizeBarcode, productToScan, scanLine } from "@/lib/barcode/product"
+import { isAiAvailable } from "@/lib/llm/ai"
 import { createClient } from "@/lib/supabase/server"
 
+import { looksMessy } from "./ai/heuristic"
 import { barcodeMemorySchema } from "./schemas"
 import { rememberBarcodes } from "./server"
 import type { BarcodeMemory, LookupResult } from "./types"
@@ -38,7 +40,9 @@ export async function lookupBarcode(input: string): Promise<ActionResult<LookupR
     const product = await fetchOffProduct(code)
     const scan = product ? productToScan(product) : null
     if (!scan) return { found: false, code }
-    return { found: true, hit: { code, source: "openfoodfacts", ...scan, line: scanLine(scan) } }
+    // Offer "Tidy name with AI" only for messy names, so the AI quota goes where it helps.
+    const tidy = isAiAvailable() && looksMessy({ name: scan.name, printed: scan.label, brands: product?.brands })
+    return { found: true, hit: { code, source: "openfoodfacts", ...scan, line: scanLine(scan), ...(tidy ? { tidy } : {}) } }
   } catch (lookupError) {
     console.warn("[openfoodfacts] lookup failed:", lookupError instanceof OpenFoodFactsError ? lookupError.message : lookupError)
     return { error: "Couldn't look that up right now. Type it in instead." }
