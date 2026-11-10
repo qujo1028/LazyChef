@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { z } from "zod"
 
 import { newPassword } from "@/features/auth/schemas"
+import { nativeCallbackUrl } from "@/lib/native-callback"
 import { safeNext } from "@/lib/safe-next"
 import { createClient } from "@/lib/supabase/server"
 
@@ -110,17 +111,25 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   redirect(next)
 }
 
-export async function signInWithGoogle(formData: FormData) {
+/**
+ * On the website this redirects to Google. In the iOS/Android app (`native` in the form) it
+ * returns Google's URL instead, for the app to open in an in-app browser tab, and Supabase
+ * sends the user back through the app link (see src/lib/native-callback.ts).
+ */
+export async function signInWithGoogle(formData: FormData): Promise<{ url?: string; error?: string }> {
   const next = safeNext(formData.get("next"))
+  const native = formData.get("native") === "1"
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: callbackUrl(await siteOrigin(), next) },
+    options: { redirectTo: native ? nativeCallbackUrl(next) : callbackUrl(await siteOrigin(), next) },
   })
   if (error || !data.url) {
-    const message = error?.message ?? "Google sign-in isn't available right now."
-    redirect(`/login?error=${encodeURIComponent(friendlyAuthError(message))}`)
+    const message = friendlyAuthError(error?.message ?? "Google sign-in isn't available right now.")
+    if (native) return { error: message }
+    redirect(`/login?error=${encodeURIComponent(message)}`)
   }
+  if (native) return { url: data.url }
   redirect(data.url)
 }
 

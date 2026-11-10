@@ -12,6 +12,9 @@ Legend: 🔴 Apple will reject without it · 🟠 needed to work properly in the
 
 **Recommended: Capacitor shell that loads the live site, plus native features.**
 
+**Started 2026-11-09:** the shell, offline screen and in-app Google sign-in are set up; see
+[mobile-apps.md](mobile-apps.md).
+
 - The app can't be a static export: it depends on server actions, server-rendered pages and server-only keys
   (Spoonacular, Supabase secret key). So the native app should load `https://<your domain>` (Capacitor
   `server.url`) and keep Vercel as the backend.
@@ -78,15 +81,15 @@ login).
 ### 1.4 🔴 Google sign-in inside the app
 Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the current
 `signInWithGoogle` redirect (`src/features/auth/actions.ts`) will fail inside the app.
-- [ ] Use native Google Sign-In (Capacitor plugin + an iOS OAuth client in Google Cloud) and
-      `signInWithIdToken`, **or** open the OAuth flow in `ASWebAuthenticationSession` and come back via a
-      deep link.
+- [x] Open the OAuth flow in an in-app browser tab and come back via the `app.lazychef://` link
+      (built 2026-11-09). Still to do: add `app.lazychef://auth/callback**` to Supabase Redirect URLs and test.
+      Later, `ASWebAuthenticationSession` or native Google Sign-In removes iOS's "Open in LazyChef?" prompt.
 - [ ] Publish the Google OAuth app (it's in "Testing", which only lets listed test users sign in). Google
       needs the privacy policy URL and a homepage on a domain you own for that.
 
 ### 1.5 🔴 Permission prompts (Info.plist)
-- [ ] `NSCameraUsageDescription`: "LazyChef uses the camera to scan barcodes on groceries."
-- [ ] `NSPhotoLibraryUsageDescription`: for recipe photos (`src/features/recipes/components/photo-field.tsx`).
+- [x] `NSCameraUsageDescription`: "LazyChef uses the camera to scan barcodes on groceries."
+- [x] `NSPhotoLibraryUsageDescription`: for recipe photos (`src/features/recipes/components/photo-field.tsx`).
 - [ ] Push permission asked at a sensible moment (not on first launch), with a short explanation first.
 
 ### 1.6 🔴 Privacy manifest and App Privacy labels
@@ -95,7 +98,7 @@ Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the c
 - [ ] App Privacy "nutrition label" in App Store Connect. Likely answers: contact info (email, name), user
       content (photos, recipes, pantry), identifiers (user ID), usage data (Vercel Analytics). All
       "linked to you", none "used for tracking". No tracking means no App Tracking Transparency prompt.
-- [ ] Export compliance: the app only uses standard HTTPS, so set `ITSAppUsesNonExemptEncryption` to `NO`.
+- [x] Export compliance: the app only uses standard HTTPS, so set `ITSAppUsesNonExemptEncryption` to `NO`.
 
 ---
 
@@ -111,7 +114,7 @@ Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the c
 - [ ] 🟠 **Real email sending.** Supabase's built-in mailer only reaches your own Supabase team, 2 emails an
       hour (see README → Email). Set up custom SMTP (Resend, Postmark, SES…) on your domain, or password
       resets and email sign-up won't work for real users.
-- [ ] 🟠 **Offline / no-connection screen.** With a remote URL, no signal means a blank white screen. Show a
+- [x] 🟠 **Offline / no-connection screen** (done 2026-11-09; offline caching of the list still open). With a remote URL, no signal means a blank white screen. Show a
       native "You're offline" view with a retry button. Grocery stores are bad-signal zones, so consider
       caching the shopping list for read and check-off offline.
 - [ ] 🟠 **External links** open in an in-app browser (SFSafariViewController), not inside your web view:

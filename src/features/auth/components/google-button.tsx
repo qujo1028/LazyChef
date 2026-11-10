@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { signInWithGoogle } from "@/features/auth/actions"
 import { actionError, callAction } from "@/lib/call-action"
+import { isNativeApp } from "@/lib/native-app"
 
 function GoogleLogo() {
   return (
@@ -32,8 +33,15 @@ export function GoogleButton({ next }: { next: string }) {
   return (
     <form
       action={async (formData) => {
-        const error = actionError(await callAction(() => signInWithGoogle(formData)))
-        if (error) toast.error(error)
+        // In the app, Google's page opens in an in-app browser tab (Google blocks web views).
+        if (isNativeApp()) formData.set("native", "1")
+        const result = await callAction(() => signInWithGoogle(formData))
+        const error = actionError(result)
+        if (error) return void toast.error(error)
+        if (result && "url" in result && result.url) {
+          const { Browser } = await import("@capacitor/browser")
+          await Browser.open({ url: result.url, presentationStyle: "popover" })
+        }
       }}
     >
       <input type="hidden" name="next" value={next} />
