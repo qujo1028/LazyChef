@@ -100,6 +100,8 @@ export type LocalRecipeCard = {
   title: string
   image: string | null
   readyInMinutes: number | null
+  /** As stored ("Italian", "France"); null for most household recipes. */
+  cuisine?: string | null
   ingredients: readonly LocalIngredient[]
 }
 

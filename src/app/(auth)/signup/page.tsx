@@ -6,6 +6,7 @@ import { AppleButton } from "@/features/auth/components/apple-button"
 import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { SignupForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
+import { FirstRunSummary } from "@/features/preferences/components/first-run-summary"
 import { safeNext } from "@/lib/safe-next"
 import { firstParam } from "@/lib/search-params"
 
@@ -26,6 +27,7 @@ export default async function SignupPage({ searchParams }: PageProps<"/signup">)
             : "One pantry and one shopping list for everyone you live with."
         }
       />
+      {invited ? null : <FirstRunSummary />}
       {isAppleSignInEnabled() && <AppleButton next={next} />}
       <GoogleButton next={next} />
       <OrDivider />

@@ -24,6 +24,21 @@ describe("recipe filters", () => {
     expect(hasFilters({ type: null, maxTime: null, query: null, world: true })).toBe(false)
   })
 
+  it("falls back to the person's world recipes default, and links say only what differs", () => {
+    const on = parseFilters({}, { worldDefault: true })
+    expect(on.world).toBe(true)
+    expect(filtersHref(on)).toBe("/recipes")
+    expect(filtersHref({ ...on, world: false })).toBe("/recipes?world=0")
+    expect(parseFilters({ world: "0" }, { worldDefault: true }).world).toBe(false)
+  })
+
+  it("reads and keeps Show all recipes", () => {
+    const all = parseFilters({ all: "1", q: "soup" })
+    expect(all.all).toBe(true)
+    expect(filtersHref(all)).toBe("/recipes?q=soup&all=1")
+    expect(parseFilters({ all: "yes" }).all).toBeUndefined()
+  })
+
   it("cleans up searches", () => {
     expect(parseFilters({ q: "  chicken   curry " }).query).toBe("chicken curry")
     expect(parseFilters({ q: "   " }).query).toBeNull()
