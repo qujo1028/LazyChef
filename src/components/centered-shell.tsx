@@ -13,6 +13,7 @@ export function CenteredShell({
   aside?: React.ReactNode
 }) {
   return (
+    // Safe-area padding keeps the header clear of the status bar in the iOS app and home-screen web app.
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pt-[env(safe-area-inset-top)] pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <header className="flex h-16 items-center justify-between">
         <Link href="/" aria-label="LazyChef home" className="inline-flex min-h-11 items-center">
