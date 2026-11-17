@@ -331,3 +331,19 @@ Not done:
   Run `npm run ios` and test: launch screen, dark mode, Google sign-in (warm and cold), outside links.
 - AI features not tried against the real Groq API or in a browser.
 - Quick-add isn't on the shopping list (no review step there); list scan sheet has no "Tidy name".
+
+## Live-only migrations recovered (2026-11-16, branch `claude/recover-live-migrations`)
+Two migrations had been applied to the live database from the `pantry-monetization-audit` worktree but were in no
+pushed branch (the second wasn't committed at all). Copied here unchanged; both match what Supabase recorded
+(md5 of `schema_migrations.statements` equals the files):
+- `20261108000200_subscriptions.sql`: `subscriptions`, `revenuecat_events`, `private.pro_comps`,
+  `get_pro_status()`, and the `pro_sync` rate-limit bucket. `20261110082751_ai_rate_limit.sql` runs after it and
+  keeps both `pro_sync` and `ai` (checked on the live DB).
+- `20261109000100_extended_recipes.sql`: `recipes.extended` (244 TheMealDB recipes flagged) and
+  `match_local_recipes(..., p_extended boolean default false)`. Main's 10-argument calls still work.
+- Their PGlite tests (`subscriptions.test.mjs`, `extended-recipes.test.mjs`) and the matching `database.ts` types.
+  110 DB tests pass.
+
+Not brought over (still only in that worktree): the RevenueCat app code, the paywall, the "Extended search" UI,
+and `src/features/recipes/import/extended.ts`. Re-running `npm run recipes:import` from main leaves the
+`extended` flags as they are (the importer doesn't write that column), but newly imported recipes won't be flagged.
