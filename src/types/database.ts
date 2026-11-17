@@ -391,6 +391,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           cuisine: string | null
+          extended: boolean
           household_id: string | null
           id: string
           image_url: string | null
@@ -410,6 +411,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
+          extended?: boolean
           household_id?: string | null
           id?: string
           image_url?: string | null
@@ -429,6 +431,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
+          extended?: boolean
           household_id?: string | null
           id?: string
           image_url?: string | null
@@ -460,6 +463,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      revenuecat_events: {
+        Row: {
+          app_user_id: string | null
+          environment: string | null
+          event_at: string | null
+          id: string
+          payload: Json
+          received_at: string
+          type: string
+        }
+        Insert: {
+          app_user_id?: string | null
+          environment?: string | null
+          event_at?: string | null
+          id: string
+          payload: Json
+          received_at?: string
+          type: string
+        }
+        Update: {
+          app_user_id?: string | null
+          environment?: string | null
+          event_at?: string | null
+          id?: string
+          payload?: Json
+          received_at?: string
+          type?: string
+        }
+        Relationships: []
       }
       saved_recipes: {
         Row: {
@@ -640,6 +673,56 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          billing_issue_at: string | null
+          expires_at: string | null
+          has_entitlement: boolean
+          is_sandbox: boolean
+          management_url: string | null
+          period_type: string | null
+          product_id: string | null
+          store: string | null
+          synced_at: string
+          user_id: string
+          will_renew: boolean
+        }
+        Insert: {
+          billing_issue_at?: string | null
+          expires_at?: string | null
+          has_entitlement?: boolean
+          is_sandbox?: boolean
+          management_url?: string | null
+          period_type?: string | null
+          product_id?: string | null
+          store?: string | null
+          synced_at?: string
+          user_id: string
+          will_renew?: boolean
+        }
+        Update: {
+          billing_issue_at?: string | null
+          expires_at?: string | null
+          has_entitlement?: boolean
+          is_sandbox?: boolean
+          management_url?: string | null
+          period_type?: string | null
+          product_id?: string | null
+          store?: string | null
+          synced_at?: string
+          user_id?: string
+          will_renew?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -690,6 +773,21 @@ export type Database = {
           member_count: number
         }[]
       }
+      get_pro_status: {
+        Args: { p_household_id: string }
+        Returns: {
+          billing_issue_at: string | null
+          expires_at: string | null
+          household_pro: boolean
+          management_url: string | null
+          me_pro: boolean
+          me_source: string | null
+          period_type: string | null
+          sponsor_name: string | null
+          store: string | null
+          will_renew: boolean | null
+        }[]
+      }
       join_household: {
         Args: { p_code: string }
         Returns: string | null
@@ -700,6 +798,7 @@ export type Database = {
       }
       match_local_recipes: {
         Args: {
+          p_extended?: boolean
           p_household_id: string
           p_ignore_ids?: number[]
           p_ignore_keys?: string[]
