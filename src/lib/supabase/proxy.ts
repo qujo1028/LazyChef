@@ -1,15 +1,16 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
+import { TOUR_COOKIE } from "@/lib/first-run"
 import { PENDING_INVITE_COOKIE } from "@/lib/invite"
 import { safeNext } from "@/lib/safe-next"
 import type { Database } from "@/types/database"
 import { getSupabaseConfig, secureCookies } from "./config"
 
 /** Reachable without signing in. Everything else redirects to /login. */
-const PUBLIC_PATHS = ["/login", "/signup", "/forgot-password", "/auth", "/privacy", "/terms", "/support"]
+const PUBLIC_PATHS = ["/welcome", "/login", "/signup", "/forgot-password", "/auth", "/privacy", "/terms", "/support"]
 /** Signed-in users skip these and go straight to where they were headed. */
-const SIGNED_OUT_ONLY = ["/login", "/signup", "/forgot-password"]
+const SIGNED_OUT_ONLY = ["/welcome", "/login", "/signup", "/forgot-password"]
 const INVITE_PATH = /^\/join\/([^/]+)$/
 
 function matches(pathname: string, paths: string[]) {
@@ -51,7 +52,10 @@ export async function updateSession(request: NextRequest) {
   if (!signedIn && !matches(pathname, PUBLIC_PATHS)) {
     const invite = pathname.match(INVITE_PATH)?.[1]
     const target = request.nextUrl.clone()
-    target.pathname = invite ? "/signup" : "/login"
+    // First visit to the front door: the welcome tour. Invite links skip it and go
+    // straight to sign-up; deep links go to sign-in.
+    const firstVisit = pathname === "/" && !request.cookies.has(TOUR_COOKIE)
+    target.pathname = invite ? "/signup" : firstVisit ? "/welcome" : "/login"
     target.search = ""
     if (pathname !== "/") target.searchParams.set("next", `${pathname}${search}`)
 

@@ -4,6 +4,7 @@ import { cache } from "react"
 
 import { getPantryItems } from "@/features/pantry/queries"
 import { localDateKey } from "@/features/pantry/dates"
+import { spoonacularDiet } from "@/features/preferences/diet"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 import {
   findCost,
@@ -48,6 +49,7 @@ import {
   type Suggestions,
 } from "./match"
 import type { RecipeRef, RecipeSource } from "./ref"
+import { likesCuisine, localFits, preferCuisines, spoonacularFits, type RecipePrefs } from "./prefs"
 import { cookHistory, type SavedRecipe } from "./saved"
 
 /**
@@ -111,10 +113,15 @@ async function withCachedTimes(recipes: RecipeSummary[]): Promise<RecipeSummary[
 async function spoonacularRecipes(
   names: string[],
   filters: RecipeFilters,
+  prefs: RecipePrefs,
 ): Promise<{ part: SpoonacularPart; recipes: RecipeSummary[] }> {
   if (!isSpoonacularConfigured()) return { part: { status: "no-key" }, recipes: [] }
-  const filtered = hasFilters(filters)
-  const key = suggestionsCacheKey(names, filters)
+  // findByIngredients can't filter by diet, so a diet or allergy makes it a search: the
+  // same single call, a little dearer (searchCost vs findCost), and still cached an hour.
+  const diet = prefs.diet ? spoonacularDiet(prefs.diet) : null
+  const restricted = diet !== null && (diet.diet !== null || diet.intolerances.length > 0)
+  const filtered = hasFilters(filters) || restricted
+  const key = suggestionsCacheKey(names, filters, diet)
   try {
     const result = await cachedSpoonacular<RecipeSummary[]>(
       getCacheStore(),
@@ -126,6 +133,8 @@ async function spoonacularRecipes(
               type: filters.type,
               maxReadyTime: filters.maxTime,
               query: filters.query,
+              diet: diet?.diet ?? null,
+              intolerances: diet?.intolerances ?? [],
               number: SEARCH_SIZE,
             })
           : await findRecipesByIngredients(names, FIND_SIZE)
@@ -133,7 +142,7 @@ async function spoonacularRecipes(
       },
       { cost: filtered ? searchCost(SEARCH_SIZE) : findCost(FIND_SIZE), beforeSpend: () => requireRateLimit("recipe_search") },
     )
-    const recipes = await withCachedTimes(result.value)
+    const recipes = (await withCachedTimes(result.value)).filter((recipe) => spoonacularFits(recipe, prefs.diet))
     return { part: { status: "ok", savedAt: result.savedAt, usage: result.usage, count: recipes.length }, recipes }
   } catch (error) {
     if (isQuota(error)) return { part: { status: "resting", resetsAt: restingUntil(), usage: await getUsageToday() }, recipes: [] }
@@ -146,7 +155,12 @@ async function spoonacularRecipes(
  * library comes first and is free; Spoonacular is only asked when that gives fewer than
  * LOCAL_ENOUGH ideas, or for "Show more ideas" (`more`).
  */
-export async function getRecipeIdeas(householdId: string, filters: RecipeFilters, more = false): Promise<IdeasResult> {
+export async function getRecipeIdeas(
+  householdId: string,
+  filters: RecipeFilters,
+  more = false,
+  prefs: RecipePrefs = { diet: null, cuisines: [] },
+): Promise<IdeasResult> {
   const items = await getPantryItems(householdId)
   const today = localDateKey()
   const names = pantrySearchNames(items, today)
@@ -156,16 +170,18 @@ export async function getRecipeIdeas(householdId: string, filters: RecipeFilters
   const index = buildPantryIndex(items, today)
   let candidates: Awaited<ReturnType<typeof findLocalCandidates>> = []
   try {
-    candidates = await findLocalCandidates(householdId, items, filters)
+    candidates = (await findLocalCandidates(householdId, items, filters)).filter((recipe) => localFits(recipe, prefs.diet))
   } catch (error) {
     // Before the migration is applied (or on a hiccup), fall back to Spoonacular alone.
     console.error("Matching local recipes failed:", error instanceof Error ? error.message : error)
   }
 
+  const liked = new Set(candidates.filter((recipe) => likesCuisine(recipe.cuisine, prefs.cuisines)).map((recipe) => recipe.id))
+
   if (search) {
     const local = rankSearch(index, candidates)
     const { part, recipes } = wantsSpoonacular(local.length, more)
-      ? await spoonacularRecipes(names, filters)
+      ? await spoonacularRecipes(names, filters, prefs)
       : { part: { status: "skipped" } as const, recipes: [] }
     return {
       status: "ok",
@@ -176,12 +192,13 @@ export async function getRecipeIdeas(householdId: string, filters: RecipeFilters
     }
   }
 
-  const local = rankLocal(index, candidates)
+  const ranked = rankLocal(index, candidates)
+  const local = { makeNow: preferCuisines(ranked.makeNow, liked), almostThere: preferCuisines(ranked.almostThere, liked) }
   const localCount = local.makeNow.length + local.almostThere.length
   if (!wantsSpoonacular(localCount, more)) {
     return { status: "ok", mode: "ideas", ...local, localCount, spoonacular: { status: "skipped" } }
   }
-  const { part, recipes } = await spoonacularRecipes(names, filters)
+  const { part, recipes } = await spoonacularRecipes(names, filters, prefs)
   const extra = part.status === "ok" ? sortSuggestions(index, recipes) : null
   return { status: "ok", mode: "ideas", ...mergeSuggestions(local, extra), localCount, spoonacular: part }
 }
