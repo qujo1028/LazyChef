@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Brand } from "@/components/brand"
+import { LegalLinks } from "@/components/legal/legal-links"
 
 /** Layout for pages outside the tab bar: sign-in, onboarding, invites. */
 export function CenteredShell({
@@ -12,7 +13,8 @@ export function CenteredShell({
   aside?: React.ReactNode
 }) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-10">
+    // Safe-area padding keeps the header clear of the status bar in the iOS app and home-screen web app.
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pt-[env(safe-area-inset-top)] pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
       <header className="flex h-16 items-center justify-between">
         <Link href="/" aria-label="LazyChef home" className="inline-flex min-h-11 items-center">
           <Brand />
@@ -20,6 +22,7 @@ export function CenteredShell({
         {aside}
       </header>
       <main className="flex flex-1 flex-col justify-center gap-6 py-6">{children}</main>
+      <LegalLinks />
     </div>
   )
 }

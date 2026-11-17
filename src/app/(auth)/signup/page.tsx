@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { isAppleSignInEnabled } from "@/features/auth/apple"
+import { AppleButton } from "@/features/auth/components/apple-button"
 import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { SignupForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
+import { FirstRunSummary } from "@/features/preferences/components/first-run-summary"
 import { safeNext } from "@/lib/safe-next"
 import { firstParam } from "@/lib/search-params"
 
@@ -24,9 +27,22 @@ export default async function SignupPage({ searchParams }: PageProps<"/signup">)
             : "One pantry and one shopping list for everyone you live with."
         }
       />
+      {invited ? null : <FirstRunSummary />}
+      {isAppleSignInEnabled() && <AppleButton next={next} />}
       <GoogleButton next={next} />
       <OrDivider />
       <SignupForm next={next} />
+      <p className="-mt-2 text-center text-xs text-muted-foreground">
+        By creating an account, you agree to the{" "}
+        <Link href="/terms" className="underline underline-offset-2 hover:text-foreground">
+          Terms of use
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          Privacy policy
+        </Link>
+        .
+      </p>
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link

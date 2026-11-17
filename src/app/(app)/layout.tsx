@@ -2,6 +2,7 @@ import { AppHeader } from "@/components/app-shell/app-header"
 import { BottomNav } from "@/components/app-shell/bottom-nav"
 import { HouseholdChannelProvider } from "@/features/household/components/household-channel"
 import { requireHousehold } from "@/features/household/queries"
+import { FirstRunSync } from "@/features/preferences/components/first-run-sync"
 import { ProProvider } from "@/features/pro/components/pro-provider"
 import { getProStatus } from "@/features/pro/queries"
 
@@ -22,6 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             {children}
           </main>
           <BottomNav />
+          <FirstRunSync hasHousehold />
         </div>
       </ProProvider>
     </HouseholdChannelProvider>

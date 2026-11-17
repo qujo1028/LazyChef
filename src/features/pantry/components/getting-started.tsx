@@ -61,7 +61,7 @@ export function GettingStarted({
         <span className="inline-flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
           <Refrigerator className="size-6" aria-hidden />
         </span>
-        <h2 className="text-lg font-semibold">{onlyStaples ? "Now add your food" : "Your pantry is empty"}</h2>
+        <h2 className="font-heading text-lg font-semibold">{onlyStaples ? "Now add your food" : "Your pantry is empty"}</h2>
         <p className="max-w-xs text-sm text-muted-foreground">
           Add what&apos;s in your fridge and cupboards, like &ldquo;2 lbs chicken breast&rdquo; or &ldquo;1 dozen
           eggs&rdquo;. Everyone in your household shares this pantry.

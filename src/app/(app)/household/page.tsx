@@ -2,9 +2,11 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PartyPopper, Plus } from "lucide-react"
 
+import { LegalLinks } from "@/components/legal/legal-links"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DeleteAccountButton } from "@/features/account/components/delete-account-button"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
 import { HouseholdSwitcher, LeaveHouseholdButton } from "@/features/household/components/household-actions"
 import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/components/household-forms"
@@ -12,6 +14,8 @@ import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
 import { ProCard } from "@/features/pro/components/pro-card"
+import { FoodPreferencesSheet } from "@/features/preferences/components/food-preferences-sheet"
+import { getMyPreferences } from "@/features/preferences/queries"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Household" }
@@ -21,7 +25,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
     requireHousehold(),
     searchParams,
   ])
-  const members = await getHouseholdMembers(household.id)
+  const [members, prefs] = await Promise.all([getHouseholdMembers(household.id), getMyPreferences()])
   const isOwner = role === "owner"
   const welcome = firstParam(params.welcome) === "1"
 
@@ -92,11 +96,14 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
         </CardHeader>
         <CardContent className="grid gap-4">
           <DisplayNameForm displayName={profile?.display_name ?? ""} />
+          <FoodPreferencesSheet initial={prefs} />
           <SignOutButton />
+          <DeleteAccountButton />
         </CardContent>
       </Card>
 
       <LeaveHouseholdButton householdId={household.id} householdName={household.name} lastMember={members.length === 1} />
+      <LegalLinks />
     </>
   )
 }

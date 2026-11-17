@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ListPlus } from "lucide-react"
+import { ArrowLeftRight, Check, ListPlus } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -30,8 +30,19 @@ function plural(n: number, word: string) {
   return `${n} ${word}${n === 1 ? "" : "s"}`
 }
 
-/** The recipe's ingredients split into "You need" (with boxes to add to the list) and "You have". */
-export function IngredientChecklist({ recipeId, lines }: { recipeId: string; lines: ChecklistLine[] }) {
+/**
+ * The recipe's ingredients split into "You need" (with boxes to add to the list) and "You have".
+ * With `onSwap`, each missing ingredient also gets a "what can I use instead?" button.
+ */
+export function IngredientChecklist({
+  recipeId,
+  lines,
+  onSwap,
+}: {
+  recipeId: string
+  lines: ChecklistLine[]
+  onSwap?: (line: ChecklistLine) => void
+}) {
   const [added, setAdded] = useState<ReadonlySet<number>>(() => new Set())
   const isOnList = (line: ChecklistLine) => line.onList || added.has(line.index)
   const addable = lines.filter((line) => line.status === "need" && !isOnList(line))
@@ -105,6 +116,19 @@ export function IngredientChecklist({ recipeId, lines }: { recipeId: string; lin
                       <span className="text-xs text-muted-foreground">Optional</span>
                     ) : null}
                   </label>
+                  {onSwap ? (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="-my-1 -mr-2 size-11 shrink-0 text-muted-foreground"
+                      onClick={() => onSwap(line)}
+                      aria-label={`What can I use instead of ${line.name}?`}
+                      title="What can I use instead?"
+                    >
+                      <ArrowLeftRight aria-hidden />
+                    </Button>
+                  ) : null}
                 </li>
               )
             })}

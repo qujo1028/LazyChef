@@ -254,3 +254,96 @@ Not done:
 
 Done 2026-09-30: the import ran with TheMealDB's test key (790 recipes, 8,152 ingredient lines) and the PR
 merged. Re-run `npm run recipes:import -- --write` with a supporter key if you get one (it upserts, no copies).
+
+## Account deletion (2026-11-08, branch `claude/app-store-launch-checklist-d68e57`)
+Needed for the App Store (guideline 5.1.1(v)); see `docs/app-store-launch.md` for the rest of the launch list.
+Built:
+- **Migration `20261108000100_account_deletion.sql`** (applied to the live DB 2026-11-08 via the Supabase connector, recorded as 20261108000100; security advisor shows nothing new):
+  - `tidy_household` trigger on `household_members` (after delete): the last member out deletes the household
+    with everything in it, and an ownerless household passes to its longest-standing member. Works however the
+    membership goes, including a user deleted from the Supabase dashboard. `leave_household` is unchanged.
+  - `stamp_recipe` and `stamp_shopping_list_item` kept `created_by` / `checked_by` fixed, which put a deleted
+    user's id back after the foreign key cleared it (the delete failed). They now let go once the profile is gone.
+  - 8 PGlite tests (`supabase/tests/account-deletion.test.mjs`), 85 total.
+- **"Delete account"** on the Household page (You card), with a confirm dialog. `deleteAccount`
+  (`src/features/account/actions.ts`) deletes the auth user with the secret key (`src/lib/supabase/admin.ts`),
+  removes the recipe photos of households that were deleted, clears the session and shows
+  "Your account was deleted." on `/login`. Needs `SUPABASE_SECRET_KEY` (already set in Vercel).
+- Activity entries in shared households stay, shown as "Someone".
+
+Not done:
+- End-to-end check with a throwaway account (no Docker here for a local stack).
+  Checked so far: typecheck, lint, build, unit + DB tests, and the `/login?deleted=1` message at 375 px.
+- The Supabase project was found paused (free plan, a week idle) on 2026-11-08 and restored. Upgrade to Pro
+  before launch, or it will pause again.
+- When Sign in with Apple is added, revoke the Apple token on deletion too (Apple requires it).
+
+## iOS and Android app shell (2026-11-09, branch `claude/ios-android-app-production-9561f4`)
+Capacitor 8.5.3 shell around the live site; setup and how it works in `docs/mobile-apps.md`.
+Built:
+- `capacitor.config.ts` (loads https://lazychef-gamma.vercel.app, `CAP_SERVER_URL` overrides for dev),
+  `ios/` and `android/` projects (`app.lazychef`), npm scripts `ios`, `android`, `cap:sync`.
+- Offline screen `native/www/offline.html` (`server.errorPath`), retries when the connection comes back.
+- Google sign-in inside the app: in-app browser tab + `app.lazychef://auth/callback` back into the app
+  (`signInWithGoogle` returns the URL when the form says `native`). Website behaviour unchanged.
+- iOS: camera/photo permission text, link scheme, `ITSAppUsesNonExemptEncryption` = NO, iPhone + portrait only.
+  Android: camera permission, link scheme, portrait only.
+- Status bar spacing: sign-in, sign-up, onboarding and invite pages (and their loading/error screens) and toasts
+  now leave room for the status bar and camera cutout. The tab pages' header already did.
+- Checks: typecheck, lint, build, 1,665 unit tests (4 new for the app link). Built and run on the iPhone 17 Pro
+  simulator (iOS 26.5): live site loads, offline screen shows, Google opens in an in-app sheet.
+
+Not done:
+- Android app not built: Android Studio isn't installed (the user chose not to install it for now).
+- Google sign-in is turned off in Supabase (Auth → Providers). Turn it on with a Google OAuth client, then test it
+  in the app. Supabase Site URL and Redirect URLs were fixed on 2026-11-09.
+- Tab pages (Pantry, List…) not checked in the simulator: needs a signed-in account.
+- App icon and splash screen are still Capacitor's defaults.
+
+## iOS audit fixes, native sign-in, AI features (2026-11-10, branch `claude/lazychef-code-terminal-469696`)
+iOS (Phase 1):
+- Real app icon (light, dark, tinted) and cream/dark launch screen, drawn from the site's logo by
+  `scripts/build-native-images.mjs` (re-run after logo changes). Replaces Capacitor's placeholders.
+- `PrivacyInfo.xcprivacy`; one bridge view controller at launch (storyboard keys removed from Info.plist);
+  dynamic web view background (no cream flash in dark mode); trimmed AppDelegate.
+- Google sign-in return link handled on cold launch too (`App.getLaunchUrl()`, once per link).
+- Links to other sites open in an in-app browser sheet (`native-external-links.tsx`).
+Sign-in (Phase 2):
+- `LazyChefAuth` plugin (`ios/App/App/LazyChefAuthPlugin.swift`, `src/lib/native-auth.ts`): Google via
+  ASWebAuthenticationSession (no "Open in LazyChef?" prompt); older builds/Android keep the browser tab.
+- Sign in with Apple built but off until `NEXT_PUBLIC_APPLE_SIGN_IN=1` (owner not in the Apple Developer
+  Program yet; no entitlement added). Steps in `docs/mobile-apps.md`.
+- Apple token revocation on account deletion, dormant until the APPLE_* env vars are set. Web sign-ins keep
+  Supabase's provider refresh token when given; otherwise deletion shows how to remove LazyChef from the Apple ID.
+- Migration `20261110082750_apple_refresh_tokens.sql` applied to the live DB 2026-11-10.
+AI (Groq, `GROQ_API_KEY` set locally and in Vercel Production/Preview on 2026-11-10):
+- Shared: `src/lib/llm/ai.ts` (`askAiJson`, hourly 'ai' limit), `src/components/ai/ai-consent.tsx` (per-feature
+  consent, guideline 5.1.2; `AiLabel`), Groq in the privacy policy.
+- Quick-add from text (pantry bulk add), recipe idea from the pantry (Recipes), tidy scanned names (scanner),
+  substitutions (recipe detail).
+- Migration `20261110082751_ai_rate_limit.sql` applied to the live DB 2026-11-10. It keeps the `pro_sync` bucket
+  from the subscriptions migration, which is live but not on main yet: when that branch merges, make sure its
+  migration doesn't redefine these functions without `ai`.
+Checks: typecheck, lint, build, 1,769 unit tests, 94 DB tests; /code-review findings fixed.
+
+Not done:
+- No Xcode build in this session (sandbox blocks SwiftPM); Swift only type-checked against a Capacitor stub.
+  Run `npm run ios` and test: launch screen, dark mode, Google sign-in (warm and cold), outside links.
+- AI features not tried against the real Groq API or in a browser.
+- Quick-add isn't on the shopping list (no review step there); list scan sheet has no "Tidy name".
+
+## Live-only migrations recovered (2026-11-16, branch `claude/recover-live-migrations`)
+Two migrations had been applied to the live database from the `pantry-monetization-audit` worktree but were in no
+pushed branch (the second wasn't committed at all). Copied here unchanged; both match what Supabase recorded
+(md5 of `schema_migrations.statements` equals the files):
+- `20261108000200_subscriptions.sql`: `subscriptions`, `revenuecat_events`, `private.pro_comps`,
+  `get_pro_status()`, and the `pro_sync` rate-limit bucket. `20261110082751_ai_rate_limit.sql` runs after it and
+  keeps both `pro_sync` and `ai` (checked on the live DB).
+- `20261109000100_extended_recipes.sql`: `recipes.extended` (244 TheMealDB recipes flagged) and
+  `match_local_recipes(..., p_extended boolean default false)`. Main's 10-argument calls still work.
+- Their PGlite tests (`subscriptions.test.mjs`, `extended-recipes.test.mjs`) and the matching `database.ts` types.
+  110 DB tests pass.
+
+Not brought over (still only in that worktree): the RevenueCat app code, the paywall, the "Extended search" UI,
+and `src/features/recipes/import/extended.ts`. Re-running `npm run recipes:import` from main leaves the
+`extended` flags as they are (the importer doesn't write that column), but newly imported recipes won't be flagged.

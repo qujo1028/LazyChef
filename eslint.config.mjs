@@ -12,7 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Native app projects (Capacitor), including web assets copied into them.
+    // Native app projects (Capacitor copies its own JS into them).
     "ios/**",
     "android/**",
   ]),

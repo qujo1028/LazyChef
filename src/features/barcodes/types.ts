@@ -12,6 +12,8 @@ export type ScanHit = {
   label: string
   /** The add-food line: "24 eggs". */
   line: string
+  /** Open Food Facts' name looks messy and the AI assistant is set up: offer "Tidy name with AI". */
+  tidy?: boolean
 }
 
 export type LookupResult = { found: true; hit: ScanHit } | { found: false; code: string }

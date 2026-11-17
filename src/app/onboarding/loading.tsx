@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function OnboardingLoading() {
   return (
-    <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10" aria-busy="true" aria-label="Loading">
+    <div className="mx-auto grid w-full max-w-md gap-6 px-4 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))]" aria-busy="true" aria-label="Loading">
       <Skeleton className="h-8 w-56" />
       {[0, 1].map((card) => (
         <div key={card} className="grid gap-3 rounded-xl border p-5">

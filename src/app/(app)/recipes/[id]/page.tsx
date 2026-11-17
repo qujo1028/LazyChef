@@ -16,6 +16,8 @@ import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-cre
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
 import { parseRecipeRef } from "@/features/recipes/ref"
+import { IngredientsWithSwaps } from "@/features/recipes/substitutions/components/ingredients-with-swaps"
+import { isAiAvailable } from "@/lib/llm/ai"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -123,19 +125,28 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
       </header>
 
       <section className="grid gap-2.5">
-        <h2 className="font-semibold">
+        <h2 className="font-heading text-lg font-semibold">
           Ingredients{" "}
-          <span className="font-normal text-muted-foreground">
+          <span className="font-sans text-sm font-normal text-muted-foreground">
             · you have {have} of {lines.length}
           </span>
         </h2>
-        <IngredientChecklist recipeId={recipe.ref} lines={lines} />
+        {isAiAvailable() ? (
+          <IngredientsWithSwaps
+            recipeId={recipe.ref}
+            title={recipe.title}
+            lines={lines}
+            sendCopy={recipe.source === "spoonacular"}
+          />
+        ) : (
+          <IngredientChecklist recipeId={recipe.ref} lines={lines} />
+        )}
         <CookSheet recipeId={recipe.ref} title={recipe.title} image={image} lines={cook} saved={saved} />
       </section>
 
       {recipe.steps.length > 0 ? (
         <section className="grid gap-2.5">
-          <h2 className="font-semibold">Steps</h2>
+          <h2 className="font-heading text-lg font-semibold">Steps</h2>
           <ol className="grid gap-3">
             {recipe.steps.map((step, i) => (
               <li key={i} className="flex gap-3 text-sm leading-relaxed">

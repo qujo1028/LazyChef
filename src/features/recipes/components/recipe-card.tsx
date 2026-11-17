@@ -1,66 +1,34 @@
-import { AlarmClock, Clock } from "lucide-react"
-import Link from "next/link"
+import { CircleCheck } from "lucide-react"
 
 import { displayName } from "@/features/pantry/display"
 
 import type { Suggestion } from "../match"
-import { recipeHref } from "../ref"
-import { RecipeImage } from "./recipe-image"
-import { SaveButton } from "./save-button"
-import { SourceTag } from "./source-tag"
+import { RecipeTile } from "./recipe-tile"
 
-function list(names: string[]) {
-  return names.map(displayName).join(", ")
-}
-
+/** A suggestion as a grid tile: what you have, or what's missing. */
 export function RecipeCard({ recipe, saved }: { recipe: Suggestion; saved: boolean }) {
+  const expiring = recipe.usesExpiring[0] ? displayName(recipe.usesExpiring[0]) : null
   return (
-    <li className="relative min-w-0">
-      <Link
-        href={recipeHref(recipe.id)}
-        className="flex gap-3 rounded-xl border bg-card p-2.5 transition-colors outline-none hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-muted"
-      >
-        <RecipeImage src={recipe.image} className="size-24 shrink-0 rounded-lg" />
-        <div className="grid min-w-0 content-start gap-1 py-0.5">
-          <h3 className="line-clamp-2 pr-9 leading-snug font-semibold">{recipe.title}</h3>
-          <SourceTag source={recipe.source} />
-          <p className="text-xs text-muted-foreground">
-            {recipe.readyInMinutes ? (
-              <span className="mr-2 inline-flex items-center gap-1">
-                <Clock className="size-3" aria-hidden />
-                {recipe.readyInMinutes} min
-              </span>
-            ) : null}
-            {recipe.have.length} from your pantry
-          </p>
-          {recipe.need.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-1">
-              <span className="text-xs font-medium text-amber-700 dark:text-amber-400">Missing:</span>
-              {recipe.need.map((name) => (
-                <span
-                  key={name}
-                  className="max-w-full truncate rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-900 dark:bg-amber-950 dark:text-amber-200"
-                >
-                  {displayName(name)}
-                </span>
-              ))}
-            </div>
-          ) : null}
-          {recipe.usesExpiring.length > 0 ? (
-            <p className="inline-flex items-center gap-1 text-xs text-amber-700 dark:text-amber-400">
-              <AlarmClock className="size-3 shrink-0" aria-hidden />
-              <span className="truncate">Uses up {list(recipe.usesExpiring)}</span>
-            </p>
-          ) : null}
-        </div>
-      </Link>
-      <SaveButton
-        recipeId={recipe.id}
-        title={recipe.title}
-        image={recipe.source === "spoonacular" ? recipe.image : null}
-        saved={saved}
-        className="absolute top-1 right-1"
-      />
-    </li>
+    <RecipeTile
+      id={recipe.id}
+      source={recipe.source}
+      title={recipe.title}
+      image={recipe.image}
+      readyInMinutes={recipe.readyInMinutes}
+      saved={saved}
+      expiring={expiring}
+    >
+      {recipe.need.length === 0 ? (
+        <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
+          <CircleCheck className="size-3.5 shrink-0" aria-hidden />
+          You have everything
+        </p>
+      ) : (
+        <p className="line-clamp-2 text-xs text-muted-foreground">
+          <span className="font-medium text-amber-700 dark:text-amber-400">Need {recipe.need.length}:</span>{" "}
+          {recipe.need.map(displayName).join(", ")}
+        </p>
+      )}
+    </RecipeTile>
   )
 }

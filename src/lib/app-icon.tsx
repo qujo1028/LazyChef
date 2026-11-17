@@ -1,16 +1,12 @@
 import { ImageResponse } from "next/og"
 
-export const BRAND_GREEN = "#2f7d4f"
+import { LOGO_COLORS, LogoGlyph } from "@/components/logo-glyph"
 
-// Lucide "chef-hat" (ISC license), drawn in white on the brand green.
-const CHEF_HAT = [
-  "M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z",
-  "M6 17h12",
-]
+export const BRAND_GREEN = LOGO_COLORS.green
 
 /** Square app icon. `radius` is a fraction of the size (0 for iOS, which masks it). */
 export function renderAppIcon(size: number, radius: number) {
-  const glyph = Math.round(size * 0.58)
+  const glyph = Math.round(size * 0.66)
   return new ImageResponse(
     (
       <div
@@ -20,15 +16,14 @@ export function renderAppIcon(size: number, radius: number) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: BRAND_GREEN,
+          // A soft top-left highlight keeps the flat green from looking like a placeholder.
+          background: `radial-gradient(circle at 30% 20%, #3f9461 0%, ${LOGO_COLORS.green} 55%, #24633d 100%)`,
           borderRadius: size * radius,
         }}
       >
-        <svg width={glyph} height={glyph} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-          {CHEF_HAT.map((d) => (
-            <path key={d} d={d} />
-          ))}
-        </svg>
+        <div style={{ display: "flex", marginTop: size * 0.02 }}>
+          <LogoGlyph size={glyph} />
+        </div>
       </div>
     ),
     { width: size, height: size },

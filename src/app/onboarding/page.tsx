@@ -6,6 +6,7 @@ import { CenteredShell } from "@/components/centered-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
+import { FirstRunSync } from "@/features/preferences/components/first-run-sync"
 import { DismissInviteButton } from "@/features/household/components/household-actions"
 import { CreateHouseholdForm, JoinHouseholdForm } from "@/features/household/components/household-forms"
 import { getHouseholdContext, getPendingInvite } from "@/features/household/queries"
@@ -19,6 +20,7 @@ export default async function OnboardingPage() {
 
   return (
     <CenteredShell aside={<SignOutButton compact />}>
+      <FirstRunSync hasHousehold={hasHousehold} />
       {hasHousehold ? (
         <Button asChild variant="ghost" className="-ml-2 justify-self-start self-start">
           <Link href="/pantry">

@@ -67,6 +67,27 @@ export type Database = {
           },
         ]
       }
+      apple_refresh_tokens: {
+        Row: {
+          created_at: string
+          refresh_token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          refresh_token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          refresh_token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       category_overrides: {
         Row: {
           category: Database["public"]["Enums"]["item_category"]
@@ -370,6 +391,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           cuisine: string | null
+          extended: boolean
           household_id: string | null
           id: string
           image_url: string | null
@@ -389,6 +411,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
+          extended?: boolean
           household_id?: string | null
           id?: string
           image_url?: string | null
@@ -408,6 +431,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
+          extended?: boolean
           household_id?: string | null
           id?: string
           image_url?: string | null
@@ -699,6 +723,41 @@ export type Database = {
           },
         ]
       }
+      user_preferences: {
+        Row: {
+          allergies: string[]
+          cuisines: string[]
+          diet: string
+          updated_at: string
+          user_id: string
+          world_recipes: boolean
+        }
+        Insert: {
+          allergies?: string[]
+          cuisines?: string[]
+          diet?: string
+          updated_at?: string
+          user_id: string
+          world_recipes?: boolean
+        }
+        Update: {
+          allergies?: string[]
+          cuisines?: string[]
+          diet?: string
+          updated_at?: string
+          user_id?: string
+          world_recipes?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -774,6 +833,7 @@ export type Database = {
       }
       match_local_recipes: {
         Args: {
+          p_extended?: boolean
           p_household_id: string
           p_ignore_ids?: number[]
           p_ignore_keys?: string[]
@@ -823,6 +883,10 @@ export type Database = {
       save_household_recipe: {
         Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json; p_recipe_id: string | null }
         Returns: string
+      }
+      set_my_preferences: {
+        Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
+        Returns: undefined
       }
       take_rate_limit: {
         Args: { p_bucket: string }

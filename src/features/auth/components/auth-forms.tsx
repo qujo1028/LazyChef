@@ -1,5 +1,6 @@
 "use client"
 
+import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useActionState } from "react"
 
@@ -17,10 +18,18 @@ import {
 import { PASSWORD_HINT, PASSWORD_MIN_LENGTH } from "@/features/auth/schemas"
 import { withConnectionErrors } from "@/lib/call-action"
 
-export function LoginForm({ next, initialError }: { next: string; initialError?: string }) {
+export function LoginForm({
+  next,
+  initialError,
+  initialNotice,
+}: {
+  next: string
+  initialError?: string
+  initialNotice?: string
+}) {
   const [state, action, pending] = useActionState<AuthFormState, FormData>(
     withConnectionErrors(signIn),
-    initialError ? { error: initialError } : undefined,
+    initialError ? { error: initialError } : initialNotice ? { notice: initialNotice } : undefined,
   )
   return (
     <form action={action} className="grid gap-5">
@@ -72,7 +81,14 @@ export function SignupForm({ next }: { next: string }) {
       </FieldGroup>
       <FormMessage error={state?.error} />
       <Button type="submit" size="lg" disabled={pending}>
-        {pending ? "Creating account…" : "Create account"}
+        {pending ? (
+          <>
+            <Loader2 className="motion-safe:animate-spin" aria-hidden />
+            Creating account…
+          </>
+        ) : (
+          "Create account"
+        )}
       </Button>
     </form>
   )

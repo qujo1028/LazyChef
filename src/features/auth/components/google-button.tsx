@@ -6,6 +6,8 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { signInWithGoogle } from "@/features/auth/actions"
 import { actionError, callAction } from "@/lib/call-action"
+import { isNativeApp } from "@/lib/native-app"
+import { openNativeOAuth } from "@/lib/native-oauth"
 
 function GoogleLogo() {
   return (
@@ -32,8 +34,20 @@ export function GoogleButton({ next }: { next: string }) {
   return (
     <form
       action={async (formData) => {
-        const error = actionError(await callAction(() => signInWithGoogle(formData)))
-        if (error) toast.error(error)
+        // In the app, Google's page opens in a system sign-in sheet or in-app browser tab
+        // (Google blocks web views); see openNativeOAuth.
+        const native = isNativeApp()
+        if (native) formData.set("native", "1")
+        const result = await callAction(() => signInWithGoogle(formData))
+        const error = actionError(result)
+        if (error) return void toast.error(error)
+        if (native && result && "url" in result && result.url) {
+          try {
+            await openNativeOAuth(result.url)
+          } catch {
+            toast.error("Google sign-in didn't finish. Please try again.")
+          }
+        }
       }}
     >
       <input type="hidden" name="next" value={next} />

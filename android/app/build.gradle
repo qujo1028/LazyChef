@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.qujo1028.lazychef"
+    namespace = "app.lazychef"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.qujo1028.lazychef"
+        applicationId "app.lazychef"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/pantry",
     scope: "/",
     display: "standalone",
-    background_color: "#ffffff",
+    background_color: "#fbf8f1",
     theme_color: BRAND_GREEN,
     icons: [
       { src: "/icon", sizes: "512x512", type: "image/png", purpose: "any" },

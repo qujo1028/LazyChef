@@ -2,11 +2,13 @@
 
 import { ScanBarcode, X } from "lucide-react"
 
+import { useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { ingredientEmoji } from "@/lib/ingredients/emoji"
 
 import { BarcodeScanner } from "./barcode-scanner"
 import { ScanRows } from "./scan-rows"
+import { TidyScanName } from "./tidy-scan-name"
 import { useBarcodeLookups } from "./use-barcode-lookups"
 
 /** A scanned item headed for the add-food review. */
@@ -22,7 +24,9 @@ export function ScanToAddSheet({
   onOpenChange: (open: boolean) => void
   onDone: (lines: ScannedLine[]) => void
 }) {
-  const { rows, scan, retry, name, remove, clear } = useBarcodeLookups()
+  const { rows, scan, retry, name, rename, remove, clear } = useBarcodeLookups()
+  // For "Tidy name with AI", which lookups offer only when the AI assistant is set up.
+  const { ensureConsent, dialog } = useAiConsent("the product's name, brand, categories and size (nothing about you)")
   const found = rows.flatMap((row) => (row.status === "found" ? [row.hit] : []))
   const looking = rows.some((row) => row.status === "looking")
 
@@ -56,22 +60,28 @@ export function ScanToAddSheet({
         onName={name}
         onRemove={remove}
         renderFound={(row, hit) => (
-          <div className="flex items-center gap-2.5">
-            <span className="text-xl leading-none" aria-hidden>
-              {ingredientEmoji(hit.name)}
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-medium">{hit.line}</p>
-              {hit.label.toLowerCase() !== hit.name ? (
-                <p className="truncate text-xs text-muted-foreground">{hit.label}</p>
-              ) : null}
+          <>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl leading-none" aria-hidden>
+                {ingredientEmoji(hit.name)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-medium">{hit.line}</p>
+                {hit.label.toLowerCase() !== hit.name ? (
+                  <p className="truncate text-xs text-muted-foreground">{hit.label}</p>
+                ) : null}
+              </div>
+              <Button type="button" variant="ghost" size="icon" onClick={() => remove(row.key)} aria-label={`Remove ${hit.name}`}>
+                <X aria-hidden />
+              </Button>
             </div>
-            <Button type="button" variant="ghost" size="icon" onClick={() => remove(row.key)} aria-label={`Remove ${hit.name}`}>
-              <X aria-hidden />
-            </Button>
-          </div>
+            {hit.tidy ? (
+              <TidyScanName key={hit.code} hit={hit} ensureConsent={ensureConsent} onAccept={(scan) => rename(hit.code, scan)} />
+            ) : null}
+          </>
         )}
       />
+      {dialog}
     </BarcodeScanner>
   )
 }

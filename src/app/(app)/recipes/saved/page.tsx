@@ -7,6 +7,7 @@ import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
+import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
 import { SavedRecipeCard } from "@/features/recipes/components/saved-recipe-card"
 import { getSavedRecipes } from "@/features/recipes/queries"
 import { canMakeNow, parseSavedSort, SAVED_SORTS, sortSaved } from "@/features/recipes/saved"
@@ -64,11 +65,11 @@ export default async function SavedRecipesPage({
               </Link>
             ))}
           </nav>
-          <ul className="grid grid-cols-1 gap-2.5">
+          <RecipeGrid>
             {sorted.map((recipe) => (
               <SavedRecipeCard key={recipe.id} recipe={recipe} serverNow={serverNow} />
             ))}
-          </ul>
+          </RecipeGrid>
           {unmatched > 0 ? (
             <p className="text-center text-xs text-muted-foreground">
               Couldn&apos;t check {unmatched === 1 ? "1 recipe" : `${unmatched} recipes`} against your pantry right now

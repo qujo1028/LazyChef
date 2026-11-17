@@ -24,7 +24,7 @@ function plural(n: number, one: string, many = `${one}s`) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="grid gap-2.5">
-      <h2 className="font-semibold">{title}</h2>
+      <h2 className="font-heading font-semibold">{title}</h2>
       {children}
     </section>
   )
