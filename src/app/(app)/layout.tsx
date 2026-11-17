@@ -2,6 +2,7 @@ import { AppHeader } from "@/components/app-shell/app-header"
 import { BottomNav } from "@/components/app-shell/bottom-nav"
 import { HouseholdChannelProvider } from "@/features/household/components/household-channel"
 import { requireHousehold } from "@/features/household/queries"
+import { FirstRunSync } from "@/features/preferences/components/first-run-sync"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { household, profile } = await requireHousehold()
@@ -18,6 +19,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {children}
         </main>
         <BottomNav />
+        <FirstRunSync hasHousehold />
       </div>
     </HouseholdChannelProvider>
   )

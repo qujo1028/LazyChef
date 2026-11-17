@@ -26,7 +26,9 @@ export function AiIdeaCard() {
   const [added, setAdded] = useState(false)
   const [asking, startAsking] = useTransition()
   const [adding, startAdding] = useTransition()
-  const { ensureConsent, dialog } = useAiConsent("the names of the items in your pantry, and any hint you type")
+  const { ensureConsent, dialog } = useAiConsent(
+    "the names of the items in your pantry, your diet and allergies if you've set them, and any hint you type",
+  )
 
   async function ask(avoidTitle?: string) {
     if (!(await ensureConsent())) return

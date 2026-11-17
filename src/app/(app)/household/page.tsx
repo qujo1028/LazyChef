@@ -13,6 +13,8 @@ import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/compo
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { FoodPreferencesSheet } from "@/features/preferences/components/food-preferences-sheet"
+import { getMyPreferences } from "@/features/preferences/queries"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Household" }
@@ -22,7 +24,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
     requireHousehold(),
     searchParams,
   ])
-  const members = await getHouseholdMembers(household.id)
+  const [members, prefs] = await Promise.all([getHouseholdMembers(household.id), getMyPreferences()])
   const isOwner = role === "owner"
   const welcome = firstParam(params.welcome) === "1"
 
@@ -91,6 +93,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
         </CardHeader>
         <CardContent className="grid gap-4">
           <DisplayNameForm displayName={profile?.display_name ?? ""} />
+          <FoodPreferencesSheet initial={prefs} />
           <SignOutButton />
           <DeleteAccountButton />
         </CardContent>

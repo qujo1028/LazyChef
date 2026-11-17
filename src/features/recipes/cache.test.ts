@@ -33,6 +33,11 @@ describe("suggestionsCacheKey", () => {
     const curry = suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: "Chicken Curry" })
     expect(curry).not.toBe(base)
     expect(suggestionsCacheKey(["rice", "eggs"], { type: null, maxTime: null, query: "chicken curry" })).toBe(curry)
+    // A diet turns a plain find into a search, keyed by the diet; no diet keeps the old key.
+    const vegan = suggestionsCacheKey(["eggs", "rice"], NO_FILTERS, { diet: "vegan", intolerances: [] })
+    expect(vegan).toMatch(/^search:/)
+    expect(suggestionsCacheKey(["eggs", "rice"], NO_FILTERS, { diet: "vegan", intolerances: ["soy"] })).not.toBe(vegan)
+    expect(suggestionsCacheKey(["eggs", "rice"], NO_FILTERS, { diet: null, intolerances: [] })).toBe(base)
   })
 
   it("recipe details are keyed by id", () => {

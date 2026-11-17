@@ -51,6 +51,10 @@ export type RecipeSearch = {
   maxReadyTime?: number | null
   /** Words to look for ("chicken curry"). */
   query?: string | null
+  /** Spoonacular diet ("vegetarian", "vegan", "pescetarian"). */
+  diet?: string | null
+  /** Spoonacular intolerances ("dairy", "tree nut", "seafood"…). */
+  intolerances?: readonly string[]
   number?: number
 }
 
@@ -74,7 +78,15 @@ export function searchCost(number: number): number {
  * can't filter). Sorted by fewest missing ingredients; `includeIngredients` only ranks,
  * it doesn't require every one of them.
  */
-export async function searchRecipes({ ingredients, type, maxReadyTime, query: words, number = 30 }: RecipeSearch): Promise<RecipeList> {
+export async function searchRecipes({
+  ingredients,
+  type,
+  maxReadyTime,
+  query: words,
+  diet,
+  intolerances = [],
+  number = 30,
+}: RecipeSearch): Promise<RecipeList> {
   const query: Record<string, string | number | boolean> = {
     ...SEARCH_ADD_ONS,
     ignorePantry: true,
@@ -85,6 +97,8 @@ export async function searchRecipes({ ingredients, type, maxReadyTime, query: wo
   if (type) query.type = type
   if (maxReadyTime) query.maxReadyTime = maxReadyTime
   if (words) query.query = words
+  if (diet) query.diet = diet
+  if (intolerances.length > 0) query.intolerances = intolerances.join(",")
   const { data, quota } = await spoonacularFetch<unknown>("/recipes/complexSearch", { query })
   const results = data !== null && typeof data === "object" ? (data as { results?: unknown }).results : undefined
   if (!Array.isArray(results)) throw new SpoonacularError("bad_response", { quota })

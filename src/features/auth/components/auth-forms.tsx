@@ -1,5 +1,6 @@
 "use client"
 
+import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useActionState } from "react"
 
@@ -80,7 +81,14 @@ export function SignupForm({ next }: { next: string }) {
       </FieldGroup>
       <FormMessage error={state?.error} />
       <Button type="submit" size="lg" disabled={pending}>
-        {pending ? "Creating account…" : "Create account"}
+        {pending ? (
+          <>
+            <Loader2 className="motion-safe:animate-spin" aria-hidden />
+            Creating account…
+          </>
+        ) : (
+          "Create account"
+        )}
       </Button>
     </form>
   )
