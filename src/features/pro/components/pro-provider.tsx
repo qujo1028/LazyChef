@@ -1,12 +1,16 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react"
+import { toast } from "sonner"
 
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
+import { callAction } from "@/lib/call-action"
 import { getNativePlatform } from "@/lib/native/platform"
 
+import { refreshPro } from "../actions"
 import type { ProFeature } from "../plans"
-import { setupPurchases } from "../purchases"
+import { presentRevenueCatPaywall, setupPurchases } from "../purchases"
 import type { ProStatus } from "../status"
 import { Paywall } from "./paywall"
 
@@ -23,6 +27,7 @@ const ProContext = createContext<ProContextValue | null>(null)
 
 /** Pro status for every tab, and the paywall sheet that any Pro feature can open. */
 export function ProProvider({ status, userId, children }: { status: ProStatus; userId: string; children: React.ReactNode }) {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [feature, setFeature] = useState<ProFeature | null>(null)
 
@@ -32,10 +37,31 @@ export function ProProvider({ status, userId, children }: { status: ProStatus; u
     setupPurchases(userId).catch((error) => console.error("RevenueCat setup failed:", error))
   }, [userId])
 
-  const openPaywall = useCallback((tapped?: ProFeature) => {
-    setFeature(tapped ?? null)
-    setOpen(true)
-  }, [])
+  const openPaywall = useCallback(
+    (tapped?: ProFeature) => {
+      // In the app: RevenueCat's own paywall (managed in the RevenueCat dashboard).
+      if (getNativePlatform()) {
+        void (async () => {
+          try {
+            const outcome = await presentRevenueCatPaywall(userId)
+            if (outcome === "dismissed") return
+            // Ask the server to read the new subscription so Pro unlocks right away.
+            const result = await callAction(refreshPro)
+            if ("error" in result) toast.success(outcome === "restored" ? "Pro restored" : "Welcome to Pro", { description: result.error })
+            else toast.success(outcome === "restored" ? "Pro restored" : "Welcome to Pro")
+            router.refresh()
+          } catch (error) {
+            toast.error(error instanceof Error ? error.message : "The paywall couldn't open.")
+          }
+        })()
+        return
+      }
+      // On the web: the info sheet (purchases only happen in the app).
+      setFeature(tapped ?? null)
+      setOpen(true)
+    },
+    [userId, router],
+  )
 
   const value = useMemo(
     () => ({ status, userId, isPro: status.householdPro, openPaywall }),

@@ -139,3 +139,36 @@ export async function restorePro(userId: string): Promise<boolean> {
     throw new Error("Couldn't reach the store to restore purchases. Try again in a moment.")
   }
 }
+
+export type PaywallOutcome = "purchased" | "restored" | "dismissed"
+
+/**
+ * Shows RevenueCat's own paywall (designed in the RevenueCat dashboard) for the current offering,
+ * natively. "purchased" / "restored" mean Pro should now be on; call refreshPro() after. Throws a
+ * short, showable Error if the paywall couldn't open.
+ */
+export async function presentRevenueCatPaywall(userId: string): Promise<PaywallOutcome> {
+  if (!(await setupPurchases(userId))) throw new Error("Purchases aren't available right now.")
+  const { RevenueCatUI, PAYWALL_RESULT } = await import("@revenuecat/purchases-capacitor-ui")
+  try {
+    const { result } = await RevenueCatUI.presentPaywall()
+    if (result === PAYWALL_RESULT.PURCHASED) return "purchased"
+    if (result === PAYWALL_RESULT.RESTORED) return "restored"
+    if (result === PAYWALL_RESULT.ERROR) throw new Error("The paywall couldn't load. Try again in a moment.")
+    return "dismissed"
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("The paywall")) throw error
+    throw new Error("The paywall couldn't load. Try again in a moment.")
+  }
+}
+
+/** Opens RevenueCat's Customer Center: manage, cancel or restore a subscription. App only. */
+export async function presentCustomerCenter(userId: string): Promise<void> {
+  if (!(await setupPurchases(userId))) throw new Error("Subscriptions can only be managed in the app.")
+  const { RevenueCatUI } = await import("@revenuecat/purchases-capacitor-ui")
+  try {
+    await RevenueCatUI.presentCustomerCenter()
+  } catch {
+    throw new Error("Couldn't open subscription settings. Try again in a moment.")
+  }
+}

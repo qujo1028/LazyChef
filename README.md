@@ -135,7 +135,7 @@ npm run android    # sync, then open Android Studio
 
 ## Pro subscriptions (RevenueCat)
 
-Pro is one entitlement, `pro`, sold as two plans: **Yearly $24.99 with a 3-day free trial**
+Pro is one entitlement, `lazychef_pro`, sold as two plans: **Yearly $24.99 with a 3-day free trial**
 (shown first, as the best deal) and **Monthly $4.99**. One subscription covers the whole
 household: everyone in a household has Pro when any member does. Purchases happen in the apps
 (App Store / Google Play); the website shows the same paywall and says to get Pro in the app.

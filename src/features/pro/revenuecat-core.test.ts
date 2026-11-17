@@ -65,7 +65,7 @@ describe("subscriptionFromSubscriber", () => {
     subscriber: {
       management_url: "https://apps.apple.com/account/subscriptions",
       entitlements: {
-        pro: {
+        lazychef_pro: {
           expires_date: "2026-11-11T10:00:00Z",
           grace_period_expires_date: null,
           product_identifier: "lazychef_pro_yearly",
@@ -111,7 +111,7 @@ describe("subscriptionFromSubscriber", () => {
 
   it("extends to the grace period on a billing issue", () => {
     const billing = structuredClone(trial)
-    billing.subscriber.entitlements.pro.grace_period_expires_date = "2026-11-27T10:00:00Z" as never
+    billing.subscriber.entitlements.lazychef_pro.grace_period_expires_date = "2026-11-27T10:00:00Z" as never
     billing.subscriber.subscriptions.lazychef_pro_yearly.billing_issues_detected_at = "2026-11-11T10:00:05Z" as never
     const row = subscriptionFromSubscriber(ALEX, billing)
     expect(row.expires_at).toBe("2026-11-27T10:00:00.000Z")
@@ -120,20 +120,20 @@ describe("subscriptionFromSubscriber", () => {
 
   it("keeps an expired entitlement with its date (the database decides it's over)", () => {
     const expired = structuredClone(trial)
-    expired.subscriber.entitlements.pro.expires_date = "2026-01-01T00:00:00Z"
+    expired.subscriber.entitlements.lazychef_pro.expires_date = "2026-01-01T00:00:00Z"
     expect(subscriptionFromSubscriber(ALEX, expired)).toMatchObject({ has_entitlement: true, expires_at: "2026-01-01T00:00:00.000Z" })
   })
 
   it("treats no expiry date as lifetime", () => {
     const lifetime = structuredClone(trial)
-    lifetime.subscriber.entitlements.pro.expires_date = null as never
-    lifetime.subscriber.entitlements.pro.grace_period_expires_date = "2026-12-01T00:00:00Z" as never
+    lifetime.subscriber.entitlements.lazychef_pro.expires_date = null as never
+    lifetime.subscriber.entitlements.lazychef_pro.grace_period_expires_date = "2026-12-01T00:00:00Z" as never
     expect(subscriptionFromSubscriber(ALEX, lifetime).expires_at).toBeNull()
   })
 
   it("matches a Play Store base plan to its subscription", () => {
     const play = structuredClone(trial)
-    play.subscriber.entitlements.pro.product_identifier = "lazychef_pro_yearly:yearly"
+    play.subscriber.entitlements.lazychef_pro.product_identifier = "lazychef_pro_yearly:yearly"
     const row = subscriptionFromSubscriber(ALEX, play)
     expect(row.product_id).toBe("lazychef_pro_yearly:yearly")
     expect(row.store).toBe("app_store")

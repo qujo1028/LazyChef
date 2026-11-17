@@ -1,18 +1,22 @@
 "use client"
 
 import { Crown, ExternalLink } from "lucide-react"
+import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useNativePlatform } from "@/lib/native/platform"
 import { useViewerTime } from "@/lib/use-viewer-time"
 
+import { presentCustomerCenter } from "../purchases"
 import { proStatusLine } from "../status-line"
 import { usePro } from "./pro-provider"
 
 /** "LazyChef Pro" on the Household page: what plan you're on, and the way to Pro or to manage it. */
 export function ProCard() {
-  const { status, isPro, openPaywall } = usePro()
+  const { status, userId, isPro, openPaywall } = usePro()
+  const platform = useNativePlatform()
   const { timeZone } = useViewerTime(status.checkedAt)
 
   return (
@@ -31,7 +35,15 @@ export function ProCard() {
             See what Pro includes
           </Button>
         ) : null}
-        {status.mePro && status.meSource === "subscription" && status.managementUrl ? (
+        {platform && status.mePro && status.meSource === "subscription" ? (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => presentCustomerCenter(userId).catch((e) => toast.error(e instanceof Error ? e.message : "Couldn't open subscription settings."))}
+          >
+            Manage subscription
+          </Button>
+        ) : status.mePro && status.meSource === "subscription" && status.managementUrl ? (
           <Button asChild variant="outline">
             <a href={status.managementUrl} target="_blank" rel="noreferrer">
               Manage subscription
