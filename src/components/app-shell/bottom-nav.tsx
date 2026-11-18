@@ -1,6 +1,6 @@
 "use client"
 
-import { ChefHat, History, ListChecks, Refrigerator, type LucideIcon } from "lucide-react"
+import { ChefHat, ListChecks, Refrigerator, Users, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -10,7 +10,7 @@ const tabs: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/pantry", label: "Pantry", icon: Refrigerator },
   { href: "/recipes", label: "Recipes", icon: ChefHat },
   { href: "/list", label: "List", icon: ListChecks },
-  { href: "/activity", label: "Activity", icon: History },
+  { href: "/household", label: "Household", icon: Users },
 ]
 
 export function BottomNav() {

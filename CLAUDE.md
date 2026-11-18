@@ -36,7 +36,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
   dashboard (gated by `ADMIN_EMAILS`, `src/features/admin/guard.ts`), `api/` for the RevenueCat webhook and the cron
   routes. Logic lives in `src/features/<domain>/` (`actions.ts` server actions, `queries.ts` reads, `components/`, and
   pure helper modules that carry the unit tests).
-- Five tab screens: Pantry, Recipes, List, Activity, Household, plus `/recipes/[id]` (where the cook sheet opens).
+- Four tab screens: Pantry, Recipes, List, Household. Activity is a header icon (top right). Plus `/recipes/[id]` (where the cook sheet opens).
   Sub-views are `?view=` on one page (Recipes `ideas|saved|ours`, Activity `log|chart|board`); add/edit flows are
   sheets. Old URLs redirect via `src/lib/legacy-routes.ts` (wired into `next.config.ts` `redirects()`). One-shot
   flags like `?add=bulk`, `?new=1`, `?edit=1`, `?pro=1` open a sheet and are removed by `src/lib/use-strip-params.ts`.
