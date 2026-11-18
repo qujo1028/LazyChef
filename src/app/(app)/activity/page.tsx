@@ -40,8 +40,8 @@ export default async function ActivityPage({ searchParams }: PageProps<"/activit
         <PageHeading title="Activity" description="Who has cooked the most days." />
         <ActivityTabs current="board" />
         <LeaderboardView
-          // A refresh brings new rows; remounting drops the live ones already folded in.
-          key={`${household.id}:${board.fetchedAt}`}
+          // Stays mounted across refreshes so the Weekly | All time choice is kept.
+          key={household.id}
           rows={board.rows}
           members={board.members}
           viewerId={viewer.id}

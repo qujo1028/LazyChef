@@ -114,8 +114,7 @@ export function LeaderboardView({
   const router = useRouter()
   const { now, timeZone } = useViewerTime(serverNow)
   const [mode, setMode] = useState<Mode>("week")
-  // Cooks that arrived live since the page loaded. The page remounts this component with
-  // fresh rows after a refresh, which clears them. Counting days makes repeats harmless.
+  // Cooks that arrived live since the page loaded (see the filter below for refreshes).
   const [liveRows, setLiveRows] = useState<CookRow[]>([])
 
   useHouseholdChanges("activity_log", (change) => {
@@ -131,12 +130,14 @@ export function LeaderboardView({
   const board = useMemo(
     () =>
       computeLeaderboard(
-        liveRows.length === 0 ? rows : [...rows, ...liveRows],
+        // Live rows the server has since caught up on (after a refresh) are dropped; counting
+        // days makes any overlap harmless anyway.
+        [...rows, ...liveRows.filter((row) => Date.parse(row.createdAt) > serverNow)],
         members.map((m) => ({ userId: m.userId, displayName: m.displayName, avatarUrl: m.avatarUrl })),
         now,
         timeZone,
       ),
-    [rows, liveRows, members, now, timeZone],
+    [rows, liveRows, serverNow, members, now, timeZone],
   )
 
   if (members.length < 2) {
