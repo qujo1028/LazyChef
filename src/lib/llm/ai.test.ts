@@ -6,6 +6,9 @@ vi.mock("server-only", () => ({}))
 const takeRateLimit = vi.fn<(bucket: string) => Promise<boolean>>()
 vi.mock("@/lib/rate-limit", () => ({ takeRateLimit: (bucket: string) => takeRateLimit(bucket) }))
 
+const bumpMetric = vi.fn<(metric: string) => Promise<void>>()
+vi.mock("@/features/admin/metrics", () => ({ bumpMetric: (metric: string) => bumpMetric(metric) }))
+
 const chat = vi.fn<(...args: unknown[]) => Promise<string>>()
 vi.mock("@/lib/llm/client", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/llm/client")>()
@@ -69,5 +72,19 @@ describe("askAiJson", () => {
 
     chat.mockResolvedValueOnce("sorry")
     expect((await askAiJson(messages, schema)).ok).toBe(false)
+  })
+
+  it("counts model errors and bad answers for the admin dashboard", async () => {
+    chat.mockRejectedValueOnce(new LlmError("timeout"))
+    await askAiJson(messages, schema)
+    expect(bumpMetric).toHaveBeenLastCalledWith("ai_error:timeout")
+
+    chat.mockResolvedValueOnce("sorry")
+    await askAiJson(messages, schema)
+    expect(bumpMetric).toHaveBeenLastCalledWith("ai_error:bad_json")
+
+    chat.mockResolvedValueOnce('{"items":"no"}')
+    await askAiJson(messages, schema)
+    expect(bumpMetric).toHaveBeenLastCalledWith("ai_error:schema")
   })
 })

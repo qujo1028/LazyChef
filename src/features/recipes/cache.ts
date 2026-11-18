@@ -9,6 +9,7 @@ import {
   type SpoonacularQuota,
 } from "@/lib/spoonacular"
 import { utcDay } from "@/lib/spoonacular/cost"
+import { bumpMetric } from "@/features/admin/metrics"
 import { getServerDb } from "@/lib/supabase/service"
 import { takeRateLimit } from "@/lib/rate-limit"
 import type { Json } from "@/types/database"
@@ -115,7 +116,35 @@ function layered(primary: CacheStore, backup: CacheStore): CacheStore {
 let memory: CacheStore | null = null
 let warned = false
 
+/**
+ * Counts cache lookups for the admin dashboard (fire and forget). A single lookup counts one
+ * hit or miss. A bulk lookup counts at most one hit (some keys found) and one miss (some not),
+ * because the daily counter only goes up by one per call.
+ */
+export function counted(store: CacheStore): CacheStore {
+  return {
+    ...store,
+    async get(key) {
+      const found = await store.get(key)
+      void bumpMetric(found ? "spoonacular_cache:hit" : "spoonacular_cache:miss")
+      return found
+    },
+    async getMany(keys) {
+      const found = await store.getMany(keys)
+      if (keys.length > 0) {
+        if (found.size > 0) void bumpMetric("spoonacular_cache:hit")
+        if (found.size < keys.length) void bumpMetric("spoonacular_cache:miss")
+      }
+      return found
+    },
+  }
+}
+
 export function getCacheStore(): CacheStore {
+  return counted(rawCacheStore())
+}
+
+function rawCacheStore(): CacheStore {
   memory ??= memoryStore()
   const db = getServerDb()
   if (db) return layered(supabaseStore(db), memory)

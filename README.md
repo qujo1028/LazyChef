@@ -79,6 +79,8 @@ Authentication → Emails → Templates:
      in a `NEXT_PUBLIC_` variable.
    - `NEXT_PUBLIC_SITE_URL`: optional, e.g. `https://lazychef-gamma.vercel.app`. Only used when a request
      doesn't say which host it came from.
+   - Admin dashboard (optional): `ADMIN_EMAILS`, `GITHUB_DASHBOARD_TOKEN`, `GITHUB_REPO`, `CRON_SECRET`.
+     Set them for Production, and mark the token and secret Sensitive. See [Admin dashboard](#admin-dashboard-admin).
 3. `npx vercel@latest deploy --prod`
 4. Supabase → Authentication → URL Configuration: set Site URL to the production URL, add
    `https://<domain>/**` to Redirect URLs, and keep `http://localhost:3000/**` for local development.
@@ -216,6 +218,56 @@ npm run recipes:import -- --write                         # upserts into Supabas
   can only be written with the secret key).
 - Images and source links stay TheMealDB's (linked, not copied). Every imported recipe says
   "From TheMealDB" and links back to its page there, as their terms ask.
+
+## Admin dashboard (`/admin`)
+
+A developer dashboard for the people listed in `ADMIN_EMAILS`. Anyone else (signed in or not) gets a 404,
+and search engines are told not to index it. Five tabs:
+
+- **Overview**:
+  - Users, active users, households, revenue and Pro (MRR, gross, net, refunds, conversion), and usage totals.
+  - Activity and trend charts, the activation funnel, retention cohorts and popular recipes.
+  - A red banner when an `alert` issue is open.
+- **Board**: open issues in columns (Backlog, Up next, In progress) with move, close and reopen, plus open PRs
+  and issues closed in the last week. PRs are links only; merge them on GitHub.
+- **Health**:
+  - The production deploy and recent deploys (from the GitHub Deployments Vercel posts), and CI on `main`.
+  - Service status for Supabase, Groq, Spoonacular and RevenueCat. Spoonacular status comes from our usage
+    table, so it costs no points.
+  - Recent RevenueCat webhooks, and which env vars are set (names only).
+- **Limits**: Spoonacular points (today and 30 days), the AI weekly allowance, hourly rate limits, requests turned
+  away, AI and Spoonacular errors, and the recipe cache hit rate.
+- **Support**:
+  - Look up one account by its exact email, and give or remove free Pro (a comp).
+  - The audit log. Every lookup, comp change and board action is recorded first; if that fails, nothing happens.
+
+### Setup
+
+1. **Admins**: set `ADMIN_EMAILS` (comma-separated, server-only) in Vercel and `.env.local`.
+2. **GitHub**: create a fine-grained token for this one repo.
+   - Permissions: **Issues: read and write**; **Pull requests, Deployments, Commit statuses, Metadata: read**.
+     Add **Checks: read** too if it's offered; without it, the CI card shows commit statuses only.
+   - Set it as `GITHUB_DASHBOARD_TOKEN`, and `GITHUB_REPO` to `owner/name`.
+   - The board creates its `status: next` / `status: in-progress` labels the first time you move an issue,
+     and the alerts create the `alert` label.
+3. **Daily job**: set `CRON_SECRET` to a long random string (`openssl rand -hex 32`).
+   - `vercel.json` runs `/api/admin/snapshot` every day at 00:10 UTC. Vercel sends the secret.
+   - It saves the day's totals (for the trend charts) and opens a GitHub issue labelled `alert`, or comments on
+     the open one, when something needs a look. For example: Spoonacular ran out, the production deploy failed,
+     no RevenueCat webhooks for 14 days, AI refusals or errors spiked, or Supabase or Groq is down.
+4. **Database**: apply `supabase/migrations/20261118060000_admin_dashboard.sql`.
+   - Its functions run only with the secret key (`service_role`).
+   - It adds daily counters, daily snapshots, the audit log, and counting inside `take_rate_limit` and
+     `take_ai_allowance`.
+
+Without a token or key, each card says what's missing and the rest of the page still works.
+
+Data notes:
+- Revenue comes from the RevenueCat webhooks we've stored (production only, since they were set up).
+  RevenueCat's dashboard is the source of truth.
+- MRR, net and active users are estimates.
+- Counters and snapshots start the day the migration is applied. Earlier user and household totals are
+  rebuilt from signup dates, so deleted accounts are missing from them.
 
 ## Scripts
 
