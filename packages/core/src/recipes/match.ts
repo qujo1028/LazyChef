@@ -8,7 +8,7 @@ import type { RecipeIngredient, RecipeSummary } from "./recipe-shapes"
 
 import { daysBetween, EXPIRING_SOON_DAYS } from "../dates/days"
 import { BASICS } from "./basics"
-import { isAvailable, MAX_QUERY_NAMES } from "./pantry-names"
+import { isAvailable } from "./pantry-names"
 import type { PantryItem } from "../pantry/types"
 import type { RecipeSource } from "./ref"
 
