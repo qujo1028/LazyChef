@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { LUNCH_MAIN_MINUTES as CORE_LUNCH_MAIN_MINUTES, MAX_QUERY_LENGTH as CORE_MAX_QUERY_LENGTH } from "@lazychef/core/recipes/filters"
 import { MAX_QUERY_NAMES as CORE_MAX_QUERY_NAMES } from "@lazychef/core/recipes/match"
 
+import { normalizeIngredientName } from "../_shared/core/normalize.ts"
 import { LUNCH_MAIN_MINUTES, MAX_QUERY_LENGTH, MAX_QUERY_NAMES, parseRequest } from "./validate.ts"
 
 const HOUSEHOLD = "4f7c2a1e-9b3d-4c5e-8f6a-1b2c3d4e5f60"
@@ -25,7 +26,7 @@ describe("parseRequest", () => {
     expect(parseRequest({ action: "quota" })).toEqual({ ok: true, request: { action: "quota" } })
     expect(parseRequest(suggest())).toEqual({
       ok: true,
-      request: { action: "suggest", householdId: HOUSEHOLD, names: ["eggs"], filters: { type: null, maxTime: null, query: null } },
+      request: { action: "suggest", householdId: HOUSEHOLD, names: ["egg"], filters: { type: null, maxTime: null, query: null } },
     })
     expect(parseRequest({ action: "info", householdId: HOUSEHOLD, ids: [1, 2, 2] })).toEqual({
       ok: true,
@@ -52,8 +53,17 @@ describe("parseRequest", () => {
     expect(parseRequest(suggest({ names: ["x".repeat(101)] })).ok).toBe(false)
     expect(parseRequest(suggest({ names: Array.from({ length: 61 }, (_, i) => `n${i}`) })).ok).toBe(false)
     expect(parseRequest(suggest({ names: Array.from({ length: 60 }, (_, i) => `n${i}`) })).ok).toBe(true)
-    const parsed = parseRequest(suggest({ names: ["  Eggs ", "salt,pepper", "eggs", "\u0000", "a\nb"] }))
-    expect(parsed.ok && parsed.request.action === "suggest" && parsed.request.names).toEqual(["eggs", "salt pepper", "a b"])
+    const parsed = parseRequest(suggest({ names: ["  Eggs ", "Fresh Tomatoes", "egg", "\u0000", "卵", "spring\nonion"] }))
+    expect(parsed.ok && parsed.request.action === "suggest" && parsed.request.names).toEqual(["egg", "tomato", "spring onion"])
+  })
+
+  it("sends Spoonacular the same strings the cache key hashes", () => {
+    for (const raw of ["Fresh Tomatoes", "boneless chicken breasts", "Crème Fraîche", "salt,pepper", "eggs"]) {
+      const parsed = parseRequest(suggest({ names: [raw] }))
+      const [name] = parsed.ok && parsed.request.action === "suggest" ? parsed.request.names : []
+      expect(normalizeIngredientName(name)).toBe(name)
+      expect(name).not.toContain(",")
+    }
   })
 
   it("checks filters", () => {
@@ -69,7 +79,7 @@ describe("parseRequest", () => {
     expect(parsed.ok && parsed.request.action === "suggest" && parsed.request.filters).toEqual({
       type: "breakfast",
       maxTime: 15,
-      query: ("Oat " + "s".repeat(100)).slice(0, 80),
+      query: ("oat " + "s".repeat(100)).slice(0, 80),
     })
     const blank = parseRequest(suggest({ filters: { query: "   " } }))
     expect(blank.ok && blank.request.action === "suggest" && blank.request.filters.query).toBeNull()

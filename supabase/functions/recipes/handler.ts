@@ -94,14 +94,35 @@ export function bearerToken(header: string | null): string | null {
   return match ? match[1] : null
 }
 
-/** Reads the body as JSON, refusing anything over MAX_BODY_BYTES. Undefined when it isn't JSON. */
-async function readJson(req: Request): Promise<unknown> {
+/**
+ * Reads the body as JSON, stopping as soon as it passes MAX_BODY_BYTES (a chunked request has no
+ * Content-Length, so the stream itself is capped). Undefined when it's too big or isn't JSON.
+ */
+export async function readJson(req: Request): Promise<unknown> {
   const declared = Number(req.headers.get("Content-Length"))
   if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) return undefined
-  const text = await req.text()
-  if (new TextEncoder().encode(text).length > MAX_BODY_BYTES) return undefined
+  if (!req.body) return undefined
+  const reader = req.body.getReader()
+  const chunks: Uint8Array[] = []
+  let size = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    size += value.byteLength
+    if (size > MAX_BODY_BYTES) {
+      await reader.cancel().catch(() => {})
+      return undefined
+    }
+    chunks.push(value)
+  }
+  const bytes = new Uint8Array(size)
+  let offset = 0
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset)
+    offset += chunk.byteLength
+  }
   try {
-    return JSON.parse(text)
+    return JSON.parse(new TextDecoder().decode(bytes))
   } catch {
     return undefined
   }
@@ -195,34 +216,36 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     let latest: Usage | null = usage
     let problem: EdgeErrorCode | null = null
     const missing = ids.filter((id) => !details.has(id))
-    if (missing.length > 0) {
-      if (isResting(usage, bulkCost(missing.length), INFO_RESERVE)) {
-        problem = "resting"
-      } else {
-        // One hit per uncached recipe (each costs points), so random ids can't drain the day.
-        const granted = await Promise.all(missing.map(() => caller.takeRateLimit("recipe_open")))
-        const toFetch = missing.slice(0, granted.filter(Boolean).length)
-        if (toFetch.length < missing.length) problem = "rate_limited"
-        if (toFetch.length > 0) {
-          const cost = bulkCost(toFetch.length)
-          try {
-            const { recipes, quota } = await spoonacular.informationBulk(toFetch)
-            const fetched = recipes.filter((recipe) => toFetch.includes(recipe.id))
-            for (const recipe of fetched) details.set(recipe.id, recipe)
-            const [fresh] = await Promise.all([
-              store.record({ quota, estimate: cost }),
-              ...fetched.map((recipe) => store.put(recipeCacheKey(recipe.id), recipe)),
-            ])
-            latest = fresh ?? latest
-          } catch (error) {
-            if (!(error instanceof SpoonacularError)) throw error
-            if (error.code === "quota") {
-              latest = (await store.record({ quota: error.quota, exhausted: true })) ?? latest
-              problem = "resting"
-            } else {
-              log(`[recipes] info failed: ${describe(error)}`)
-              problem = "upstream"
-            }
+    // As many of the missing ones as today's points cover (keeping INFO_RESERVE back).
+    let affordable = missing.length
+    while (affordable > 0 && isResting(usage, bulkCost(affordable), INFO_RESERVE)) affordable--
+    if (affordable < missing.length) problem = "resting"
+    if (affordable > 0) {
+      // One hit per uncached recipe (each costs points), so random ids can't drain the day.
+      const granted = await Promise.allSettled(missing.slice(0, affordable).map(() => caller.takeRateLimit("recipe_open")))
+      const allowed = granted.filter((result) => result.status === "fulfilled" && result.value).length
+      if (allowed === 0 && granted.some((result) => result.status === "rejected")) throw new Error("Rate limit check failed")
+      const toFetch = missing.slice(0, allowed)
+      if (allowed < affordable) problem ??= "rate_limited"
+      if (toFetch.length > 0) {
+        const cost = bulkCost(toFetch.length)
+        try {
+          const { recipes, quota } = await spoonacular.informationBulk(toFetch)
+          const fetched = recipes.filter((recipe) => toFetch.includes(recipe.id))
+          for (const recipe of fetched) details.set(recipe.id, recipe)
+          const [fresh] = await Promise.all([
+            store.record({ quota, estimate: cost }),
+            ...fetched.map((recipe) => store.put(recipeCacheKey(recipe.id), recipe)),
+          ])
+          latest = fresh ?? latest
+        } catch (error) {
+          if (!(error instanceof SpoonacularError)) throw error
+          if (error.code === "quota") {
+            latest = (await store.record({ quota: error.quota, exhausted: true })) ?? latest
+            problem = "resting"
+          } else {
+            log(`[recipes] info failed: ${describe(error)}`)
+            problem = "upstream"
           }
         }
       }
@@ -230,7 +253,7 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
 
     const recipes = ids.flatMap((id) => details.get(id) ?? [])
     const quota = toRecipeQuota(latest, now())
-    if (problem && recipes.length === 0 && missing.length > 0) return failure(problem, MESSAGES[problem], quota)
+    if (problem && recipes.length === 0) return failure(problem, MESSAGES[problem], quota)
     const body: InfoResponse = { recipes, quota }
     return json(body)
   }
@@ -242,12 +265,13 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
     const token = bearerToken(req.headers.get("Authorization"))
     if (!token) return failure("unauthorized", MESSAGES.unauthorized)
 
-    const parsed = parseRequest(await readJson(req))
-    if (!parsed.ok) return failure("bad_request", parsed.error)
-
     try {
+      // Who's asking first, so a stranger's body is never read.
       const caller = await deps.authenticate(token)
       if (!caller) return failure("unauthorized", MESSAGES.unauthorized)
+
+      const parsed = parseRequest(await readJson(req))
+      if (!parsed.ok) return failure("bad_request", parsed.error)
 
       const { spoonacular, store } = deps
       if (!spoonacular || !store) return failure("not_configured", MESSAGES.not_configured)

@@ -1,6 +1,7 @@
 // Checks and cleans a request body against the Edge contract. Everything from the app is
 // untrusted: anything that doesn't fit is a 400, never passed on to Spoonacular or the database.
 import { MAX_INFO_IDS, type EdgeRequest, type SuggestFilters } from "../_shared/core/edge-contract.ts"
+import { normalizeIngredientName } from "../_shared/core/normalize.ts"
 import { MEAL_TYPES } from "./spoonacular.ts"
 
 /** packages/core/src/recipes/match.ts MAX_QUERY_NAMES (a test keeps them equal). */
@@ -33,14 +34,19 @@ function clean(value: string): string {
   return value.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim()
 }
 
-/** Names as pantrySearchNames() makes them: lowercase, no commas (they separate names), unique. */
+/**
+ * The names' normalized keys ("Fresh Tomatoes" becomes "tomato"), unique, in order. Spoonacular is
+ * asked with exactly these, the same strings the cache key hashes, so whatever a request stores
+ * under a key is what any other request with that key would have fetched: one household can't
+ * plant results for another. Names with no key (no ASCII letters or digits) are dropped.
+ */
 function parseNames(value: unknown): string[] | null {
   if (!Array.isArray(value) || value.length > MAX_QUERY_NAMES) return null
   const names: string[] = []
   for (const item of value) {
     if (typeof item !== "string" || item.length > MAX_NAME_LENGTH) return null
-    const name = clean(item.replace(/,/g, " ")).toLowerCase()
-    if (name && !names.includes(name)) names.push(name)
+    const key = normalizeIngredientName(clean(item))
+    if (key && !names.includes(key)) names.push(key)
   }
   return names
 }
@@ -60,7 +66,8 @@ function parseFilters(value: unknown): SuggestFilters | null {
   }
   if (query !== undefined && query !== null && (typeof query !== "string" || query.length > MAX_RAW_QUERY_LENGTH)) return null
 
-  const words = typeof query === "string" ? clean(query).slice(0, MAX_QUERY_LENGTH).trim() || null : null
+  // Lowercase, as the cache key has it, so the words sent are exactly the ones keyed.
+  const words = typeof query === "string" ? clean(query).slice(0, MAX_QUERY_LENGTH).trim().toLowerCase() || null : null
   const time = typeof maxTime === "number" ? maxTime : null
   // "Lunch" isn't a Spoonacular type: like the web, ask for a quick main course.
   if (type === "lunch") {

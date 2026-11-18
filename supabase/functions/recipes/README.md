@@ -34,7 +34,14 @@ Every success and every `resting` answer carries `quota`.
 - **Keys:** the service role key is used only for `spoonacular_cache` and `spoonacular_usage`, as
   the web's `getServerDb` does. The Spoonacular key only goes in the `x-api-key` header. Neither
   is ever returned or logged.
-- **Inputs:** everything is validated (`validate.ts`). Anything that doesn't fit is a 400.
+- **Inputs:** everything is validated (`validate.ts`). Anything that doesn't fit is a 400. Bodies
+  are read only after the token checks out, and never past 16 KB.
+- **No cache poisoning:** names become their normalized keys ("Fresh Tomatoes" is "tomato") and the
+  search words are lowercased before Spoonacular sees them, so what's stored under a cache key is
+  exactly what any request with that key would have fetched.
+- **Known gap:** the per-person limits still let one account (or a few) use up the shared 50 daily
+  points in about an hour. A per-household or global bucket would need a migration (a new
+  `rate_limit_rule` entry and the `take_rate_limit` allowlist).
 
 Status codes: 200 success, 200 `resting` (cached results still come back), 400 `bad_request`,
 401 `unauthorized`, 403 `unauthorized` (not a member), 405 for non-POST, 429 `rate_limited`,

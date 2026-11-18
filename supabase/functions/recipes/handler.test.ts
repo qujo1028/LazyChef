@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest"
 
 import type { RecipeDetail, RecipeSummary } from "../_shared/core/recipe-shapes.ts"
 import { memoryStore, recipeCacheKey, suggestionsCacheKey, type CacheStore } from "./cache.ts"
-import { createHandler, MAX_BODY_BYTES, type Caller, type HandlerDeps } from "./handler.ts"
+import { createHandler, MAX_BODY_BYTES, readJson, type Caller, type HandlerDeps } from "./handler.ts"
 import { SpoonacularError, type Spoonacular } from "./spoonacular.ts"
 
 const HOUSEHOLD = "4f7c2a1e-9b3d-4c5e-8f6a-1b2c3d4e5f60"
@@ -98,13 +98,28 @@ describe("recipes handler: transport and auth", () => {
     expect(spoonacular.findByIngredients).not.toHaveBeenCalled()
   })
 
-  it("refuses bad bodies before checking anything else", async () => {
-    const { handle, authenticate } = setup()
+  it("refuses bad bodies, after checking who's asking", async () => {
+    const { handle, spoonacular } = setup()
     expect(await read(await handle(post("{not json")))).toMatchObject({ status: 400, body: { code: "bad_request" } })
     expect(await read(await handle(post({ action: "suggest", householdId: "nope", names: [] })))).toMatchObject({ status: 400 })
     const big = { action: "quota", pad: "x".repeat(MAX_BODY_BYTES) }
     expect(await read(await handle(post(big)))).toMatchObject({ status: 400 })
-    expect(authenticate).not.toHaveBeenCalled()
+    expect(await read(await handle(post("{not json", "forged")))).toMatchObject({ status: 401 })
+    expect(spoonacular.findByIngredients).not.toHaveBeenCalled()
+  })
+
+  it("stops reading a chunked body once it's too big", async () => {
+    let pulled = 0
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulled++
+        if (pulled > 1000) controller.close()
+        else controller.enqueue(new Uint8Array(4096))
+      },
+    })
+    const request = new Request("http://localhost/", { method: "POST", body: stream, duplex: "half" } as RequestInit)
+    expect(await readJson(request)).toBeUndefined()
+    expect(pulled).toBeLessThan(10)
   })
 
   it("is not_configured without a Spoonacular key, after auth", async () => {
@@ -173,7 +188,7 @@ describe("recipes handler: suggest", () => {
     const filters = { type: "breakfast", maxTime: 15, query: null }
     const response = await read(await handle(post(suggest(["oats"], filters as never))))
     expect(response.body.recipes[0]).toMatchObject({ id: 3 })
-    expect(spoonacular.search).toHaveBeenCalledWith({ names: ["oats"], type: "breakfast", maxTime: 15, query: null })
+    expect(spoonacular.search).toHaveBeenCalledWith({ names: ["oat"], type: "breakfast", maxTime: 15, query: null })
     expect(spoonacular.findByIngredients).not.toHaveBeenCalled()
   })
 
@@ -263,6 +278,26 @@ describe("recipes handler: info", () => {
     const partial = await read(await handle(post(info([1, 2]))))
     expect(partial).toMatchObject({ status: 200, body: { quota: { resting: true } } })
     expect(partial.body.recipes.map((r: RecipeDetail) => r.id)).toEqual([1])
+    expect(spoonacular.informationBulk).not.toHaveBeenCalled()
+  })
+
+  it("fetches only as many as today's points cover", async () => {
+    const { handle, store, spoonacular } = setup()
+    // 5 points left, 1 kept back: bulkCost(8) = 4.5 is too much, bulkCost(7) = 4 fits.
+    await store.record({ quota: quota(45, 5) })
+    const ids = Array.from({ length: 10 }, (_, i) => i + 1)
+    const response = await read(await handle(post(info(ids))))
+    expect(response.status).toBe(200)
+    expect(spoonacular.informationBulk).toHaveBeenCalledWith([1, 2, 3, 4, 5, 6, 7])
+  })
+
+  it("fails closed when every rate limit check errors", async () => {
+    const { handle, spoonacular } = setup({}, {
+      takeRateLimit: async () => {
+        throw new Error("db down")
+      },
+    })
+    expect(await read(await handle(post(info([1, 2]))))).toMatchObject({ status: 502, body: { code: "upstream" } })
     expect(spoonacular.informationBulk).not.toHaveBeenCalled()
   })
 

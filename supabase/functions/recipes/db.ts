@@ -48,7 +48,8 @@ export async function authenticate(url: string, anonKey: string, token: string):
     async takeRateLimit(bucket: RateLimitBucket) {
       const { data: allowed, error: limitError } = await client.rpc("take_rate_limit", { p_bucket: bucket })
       if (limitError) throw new Error("Rate limit check failed")
-      return allowed !== false
+      // Only an explicit true counts: take_rate_limit returns null for a bucket it doesn't allow.
+      return allowed === true
     },
   }
 }
