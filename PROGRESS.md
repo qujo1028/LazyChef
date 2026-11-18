@@ -744,3 +744,17 @@ W2 recipe detail (`feature/p4-recipe-detail`, Sonnet):
   `components/RecipeSaveButton.tsx` (own heart; the lead can dedupe with W1's). No shared-file changes.
 - Not checked: simulator, signed-in account, the Edge Function (not deployed), household photo signing, the heart on a
   real saved list. Not ported: serving scaler, rating thumbs, edit own recipe, AI swaps (not in this task).
+W1 recipes screen (`feature/p4-recipes-screen`):
+- `(tabs)/recipes.tsx`: Suggested / Saved / Mine chips on one screen. Suggested has "Make now" and "Almost there (1 to 3
+  missing)" sections with "Missing: x, y", a title search (debounced; library first, Spoonacular only when fewer than
+  10 local ideas), a quota line ("Spoonacular: N searches left today, resets at 5 pm", or a plain "resting", "not set
+  up", "offline" note that still shows library results) and the Spoonacular credit when its recipes show. Saved lists
+  `saved_recipes` ("Can make now" / "Have 5 of 7" for library recipes, no match for Spoonacular ones), sorted ready
+  first. Mine lists the household's recipes, newest first. Heart (`FavoriteButton`) saves and unsaves with an instant
+  update and rollback; `saved_recipes` broadcasts refetch it. Pull to refresh on every filter.
+- Code: `features/recipes/{local,saved,use-suggestions}.ts`, components `RecipeCard`, `FavoriteButton`,
+  `SpoonacularCredit`; pure helpers with tests in `src/lib/recipe-{quota,cards,ideas}.ts`. No shared files changed.
+- Not checked (no simulator, account, or deployed Edge Function): the screen on a device, the Spoonacular top-up and
+  quota line against the real function, realtime on a second phone. Skipped: diet and cuisine preferences, thumbs
+  taste ranking, cook history on saved cards, matching saved Spoonacular recipes (needs the `info` call), creating
+  recipes (Mine only lists them).
