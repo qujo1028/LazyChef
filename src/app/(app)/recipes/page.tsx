@@ -11,6 +11,8 @@ import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from
 import { getMyPreferences } from "@/features/preferences/queries"
 import { AiIdeaCard } from "@/features/recipes/ai-idea/ai-idea-card"
 import type { Usage } from "@/features/recipes/cache-core"
+import { CookAgain } from "@/features/recipes/components/cook-again"
+import { RatingPrompt } from "@/features/recipes/components/rating-prompt"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { ActiveFilters, RecipeFilterButton } from "@/features/recipes/components/recipe-filters"
@@ -36,6 +38,7 @@ import {
 } from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
+import { getCookAgain, getMyUnratedCooks } from "@/features/recipes/ratings"
 import { isAiAvailable } from "@/lib/llm/ai"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
@@ -225,9 +228,11 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
   const hour = hourInZone(new Date(), zone)
   const autoMeal = autoLabel(hour)
   const meals = resolveMeals(filters, hour)
-  const [result, savedIds] = await Promise.all([
+  const [result, savedIds, unratedCooks, cookAgain] = await Promise.all([
     getRecipeIdeas(household.id, filters, more, recipePrefs, meals),
     getSavedIds(household.id),
+    getMyUnratedCooks(household.id, zone ? decodeURIComponent(zone) : undefined),
+    getCookAgain(household.id),
   ])
 
   const heading = (
@@ -235,6 +240,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
       <TimezoneSync current={zone ? decodeURIComponent(zone) : null} />
       <PageHeading title="Recipes" description="What you can cook with what you have." />
       <RecipesTabs current="/recipes" />
+      <RatingPrompt cooks={unratedCooks} />
     </>
   )
 
@@ -261,6 +267,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     <>
       {heading}
       <SearchRow filters={filters} prefs={prefs} autoMeal={autoMeal} />
+      {result.mode === "ideas" ? <CookAgain cards={cookAgain} /> : null}
       {shown.length === 0 ? (
         <SpoonacularEmpty part={result.spoonacular} filters={filters} autoMeal={autoMeal} />
       ) : result.mode === "search" ? (

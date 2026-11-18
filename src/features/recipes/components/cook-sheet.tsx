@@ -26,6 +26,7 @@ import {
   type CookResult,
 } from "../cook"
 import { scaleCookLines, scaleOriginal } from "../scale"
+import { RatingButtons } from "./rating-buttons"
 
 type Done = { results: CookResult[]; undone: boolean }
 
@@ -368,6 +369,12 @@ function CookDone({
         </DrawerDescription>
       </DrawerHeader>
       <div className="grid gap-3 px-4 pb-2">
+        {!done.undone ? (
+          <div className="flex min-h-14 items-center gap-3 rounded-xl border bg-card py-1.5 pr-2 pl-3.5">
+            <p className="min-w-0 flex-1 text-sm font-semibold">How was it?</p>
+            <RatingButtons recipeId={recipeId} title={title} />
+          </div>
+        ) : null}
         {!done.undone && offerSave ? (
           <div className="flex min-h-14 items-center gap-3 rounded-xl border bg-card py-1.5 pr-2 pl-3.5">
             <p className="min-w-0 flex-1 text-sm">
