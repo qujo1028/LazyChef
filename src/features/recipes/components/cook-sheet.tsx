@@ -25,6 +25,7 @@ import {
   type CookLine,
   type CookResult,
 } from "../cook"
+import { scaleCookLines, scaleOriginal } from "../scale"
 
 type Done = { results: CookResult[]; undone: boolean }
 
@@ -33,8 +34,9 @@ export function CookSheet({
   recipeId,
   title,
   image = null,
-  lines,
+  lines: recipeLines,
   saved,
+  scale = 1,
 }: {
   recipeId: string
   title: string
@@ -43,7 +45,10 @@ export function CookSheet({
   lines: CookLine[]
   /** Whether the household already saved it (the done screen offers to otherwise). */
   saved: boolean
+  /** Servings multiplier: the amounts taken out are scaled by it. */
+  scale?: number
 }) {
+  const lines = scaleCookLines(recipeLines, scale)
   const [open, setOpen] = useState(false)
   const [session, setSession] = useState(0)
   const trackable = lines.some((line) => line.kind === "deduct" || line.kind === "check")
@@ -76,6 +81,7 @@ export function CookSheet({
               title={title}
               image={image}
               lines={lines}
+              scale={scale}
               saved={saved}
               close={() => setOpen(false)}
             />
@@ -97,6 +103,7 @@ function CookContent({
   title,
   image,
   lines,
+  scale,
   saved,
   close,
 }: {
@@ -104,6 +111,7 @@ function CookContent({
   title: string
   image: string | null
   lines: CookLine[]
+  scale: number
   saved: boolean
   close: () => void
 }) {
@@ -186,6 +194,7 @@ function CookContent({
             <CookLineCard
               key={line.index}
               line={line}
+              scale={scale}
               choice={choices[line.index]}
               error={shownErrors[line.index]}
               disabled={pending}
@@ -222,12 +231,14 @@ function CookContent({
 
 function CookLineCard({
   line,
+  scale,
   choice,
   error,
   disabled,
   onChange,
 }: {
   line: Extract<CookLine, { kind: "deduct" | "check" }>
+  scale: number
   choice: CookChoice | undefined
   error: string | undefined
   disabled: boolean
@@ -242,7 +253,7 @@ function CookLineCard({
         <div className="grid min-w-0 flex-1 gap-0.5">
           <span className={cn("font-medium", skipped && "text-muted-foreground")}>{displayName(line.itemName)}</span>
           <span className="text-xs text-muted-foreground">
-            Recipe: {line.original} · {haveLabel(line)}
+            Recipe: {scaleOriginal(line.original, scale)} · {haveLabel(line)}
           </span>
         </div>
         <label className="flex min-h-11 shrink-0 items-center gap-2 text-sm">

@@ -7,8 +7,8 @@ import { EmptyState } from "@/components/empty-state"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { CookSheet } from "@/features/recipes/components/cook-sheet"
-import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import type { ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import { RecipeIngredients } from "@/features/recipes/components/recipe-ingredients"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { SaveButton } from "@/features/recipes/components/save-button"
 import { SourceTag } from "@/features/recipes/components/source-tag"
@@ -16,7 +16,6 @@ import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-cre
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
 import { parseRecipeRef } from "@/features/recipes/ref"
-import { IngredientsWithSwaps } from "@/features/recipes/substitutions/components/ingredients-with-swaps"
 import { isAiAvailable } from "@/lib/llm/ai"
 
 export const metadata: Metadata = { title: "Recipe" }
@@ -131,17 +130,17 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
             · you have {have} of {lines.length}
           </span>
         </h2>
-        {isAiAvailable() ? (
-          <IngredientsWithSwaps
-            recipeId={recipe.ref}
-            title={recipe.title}
-            lines={lines}
-            sendCopy={recipe.source === "spoonacular"}
-          />
-        ) : (
-          <IngredientChecklist recipeId={recipe.ref} lines={lines} />
-        )}
-        <CookSheet recipeId={recipe.ref} title={recipe.title} image={image} lines={cook} saved={saved} />
+        <RecipeIngredients
+          recipeId={recipe.ref}
+          title={recipe.title}
+          image={image}
+          lines={lines}
+          cook={cook}
+          saved={saved}
+          baseServings={recipe.servings}
+          withSwaps={isAiAvailable()}
+          sendCopy={recipe.source === "spoonacular"}
+        />
       </section>
 
       {recipe.steps.length > 0 ? (
