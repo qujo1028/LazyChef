@@ -383,7 +383,7 @@ W4 config (`feature/p0-config`):
 - `apps/mobile/eas.json`: `appVersionSource: remote`; profiles `development` (dev client, internal), `preview` (internal),
   `production` (autoIncrement). No EAS project ID yet, so nothing has been run against EAS.
 - `app.json`: `ios.config.usesNonExemptEncryption: false`, Android adaptive icon background `#F8F6EC`, splash dark
-  background `#1C1A14` via the `dark` key of the expo-splash-screen plugin.
+  background `#1B1A12` via the `dark` key of the expo-splash-screen plugin.
 - `packages/db-types` re-exports the generated `Database` type and typechecks from the mobile app.
 
 W3 data layer (`feature/p0-data`):
