@@ -9,7 +9,7 @@ The Expo rebuild of LazyChef. Scope decisions are in [product-scope.md](product-
 | Framework | Expo (managed), Expo Router, TypeScript | Fastest route to TestFlight through EAS Build and Submit. Camera, secure store, deep links, and notifications are all supported. |
 | Repo | One repo, npm workspaces | Shared logic in one place, so web and mobile can't drift apart. |
 | Server state | TanStack Query, plus Supabase realtime on `household:<id>` | Keeps the live-update behavior. |
-| Styling | Theme tokens from `src/app/globals.css`, styled with NativeWind | Keeps the current look without redesigning every component. |
+| Styling | A separate RN theme file (`apps/mobile/theme`) built from the palette hex values in [app-design.md](app-design.md). NativeWind for class-based styling. `globals.css` stays the web app's OKLCH theme. | The palette changed to olive and paprika, so the RN theme no longer mirrors the web tokens. |
 | Android | Out of v1 | Expo setup won't block it later. |
 | Dev builds | Expo development build (`expo-dev-client`), not Expo Go | RevenueCat and other native modules won't run in Expo Go. A dev build also avoids version surprises in Expo Go (see risks). |
 
@@ -30,7 +30,7 @@ Moving the web app into `apps/web` is its own step and happens after the core ex
 - **Supabase stays the backend.** The app calls the same RLS-protected tables and `security definer` RPCs as the web app. It never holds the secret key.
 - **Server-only work runs in Supabase Edge Functions:** Spoonacular lookups (cached, quota-aware), AI features, barcode lookup, and the AI usage counter.
 - **The RevenueCat webhook stays on Vercel** (`/api/revenuecat/webhook`).
-- **Auth:** Supabase email and password, plus password reset, and Google sign-in with `expo-auth-session`. Deep links use the `app.lazychef` scheme. Reuse the logic in `src/lib/native-auth.ts` and `native-oauth.ts`.
+- **Auth:** Supabase email and password, plus password reset, and Google sign-in with `expo-auth-session`. Deep links use the `app.lazychef` scheme. Shared parts (callback URL parsing, safe redirects) move to `packages/core`. Capacitor-specific code in `src/lib/native-auth.ts` stays in the web app. RN uses `expo-auth-session`.
 - **Realtime:** subscribe to `household:<id>`. Refetch when the app comes back to the foreground, because the socket can drop in the background.
 
 ## Phases
@@ -39,7 +39,7 @@ Estimates assume one developer working with Claude Code.
 
 | Phase | Scope | Exit check |
 |---|---|---|
-| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme, five-tab nav (pending decision, see product-scope.md), CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build |
+| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme, four bottom tabs (Pantry, Recipes, List, Household) with Activity in the header, CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build |
 | P1 Accounts and household (~1 wk) | Welcome, login, signup, reset, onboarding, join by code, members, realtime | Two phones see each other's changes live |
 | P2 Pantry (~1.5 wk) | Category list, quick-add sheet with autocomplete, edit sheet, "Used some," −1 with Undo, staples | Parity with the web pantry for the keep items at 375px |
 | P3 Shopping list (~1 wk) | Add, check off, put away into the pantry | A list item moves to the pantry and shows for all members |

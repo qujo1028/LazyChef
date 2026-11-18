@@ -101,6 +101,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - Mobile app: session tokens go in `expo-secure-store`. The app bundle gets only the publishable Supabase key, never the
   secret key. Spoonacular and AI calls go through Edge Functions, never directly from the app. Refetch on app resume.
 - Product decisions (keep / redo / cut, the design framework) live in `docs/product-scope.md`. Build to it, and update it before changing scope.
+- Mobile palette and type come from `docs/app-design.md`, not from `src/app/globals.css`. The RN theme is its own file.
 
 ## Parallel work
 - Before planning or briefing parallel sessions, run `git fetch origin` and base every worktree on `origin/main`, never a stale local `main`. Check whether a feature already exists there first.
