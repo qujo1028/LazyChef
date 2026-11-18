@@ -27,7 +27,9 @@ function failure(error: unknown): { error: string } {
   return { error: GENERIC }
 }
 
-const emailSchema = z.string().trim().max(320).email()
+const EMAIL_TOO_LONG = "That email is too long."
+// 200 matches the audit log's target limit, so a lookup that passes here can always be recorded.
+const emailSchema = z.string().trim().max(200, EMAIL_TOO_LONG).email("Enter the full email address.")
 const userIdSchema = z.string().uuid()
 const dateSchema = z
   .string()
@@ -57,7 +59,7 @@ async function audit(...args: Parameters<typeof logAdminAction>): Promise<boolea
 export async function lookupUser(email: string): Promise<LookupResult> {
   const viewer = await requireAdmin()
   const parsed = emailSchema.safeParse(email)
-  if (!parsed.success) return { error: "Enter the full email address." }
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Enter the full email address." }
   const normalized = parsed.data.toLowerCase()
 
   if (!(await audit(viewer, "user.lookup", normalized))) return { error: AUDIT_FAILED }

@@ -68,7 +68,8 @@ describe("non-admins", () => {
 describe("validation", () => {
   it("rejects bad input without any call", async () => {
     expect(await lookupUser("nobody")).toHaveProperty("error")
-    expect(await lookupUser("a".repeat(320) + "@b.co")).toHaveProperty("error")
+    expect(await lookupUser("a".repeat(196) + "@b.co")).toEqual({ error: "That email is too long." })
+    expect(await lookupUser("nobody")).toEqual({ error: "Enter the full email address." })
     expect(await grantCompAction({ userId: "nope", expiresAt: null, note: null })).toHaveProperty("error")
     expect(await grantCompAction({ userId: uid, expiresAt: "2030-02-31", note: null })).toHaveProperty("error")
     expect(await grantCompAction({ userId: uid, expiresAt: "tomorrow", note: null })).toHaveProperty("error")
