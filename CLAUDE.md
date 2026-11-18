@@ -113,6 +113,10 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - Before reporting done, a worker runs `npm run typecheck && npm run lint && npm run test` (plus `npm run test:db` if it touched the DB), then runs `/code-review` on its own diff and fixes what it finds. The worker's report includes the review result, so the lead doesn't have to re-review from scratch.
 - The lead session checks the report, merges each branch as soon as it's green rather than batching, reruns the checks on the merged result, then opens a PR. Pushes to `main` auto-deploy to Vercel, so the user merges the PR.
 - Keep to 4 workers at once (up from 2-3). Use subagents for research or diff review inside a session.
+- Pick each worker's model by how complex its task is, and always set it explicitly (never let workers inherit the
+  lead's model): Haiku for the least complex (small, mechanical, well-specified), Sonnet for typical feature work,
+  Opus for the most complex (auth flows, concurrency, security-sensitive or cross-cutting logic). Name the model and
+  the reason in the worker brief.
 - Workers on this Mac have no Playwright and no signed-in test account; say what could not be checked in a browser.
 - Handoff: every session reads `PROGRESS.md` first and updates its entry before reporting done. Workers don't edit the status block at the top; the lead does.
 - Definition of done per feature is in `docs/react-native-app.md`. It applies to web and mobile work alike.

@@ -8,6 +8,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 - **Database:** `20261118060000_admin_dashboard.sql` is already applied to the live project (checked 2026-11-18). Still pending: `20261118120000_push_notifications.sql` (on `main`, not live). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
+  - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
   - Supabase project is on the free plan. Upgrade to Pro before launch, or it pauses after a week idle.
   - Google sign-in: enable the provider in Supabase (Auth → Providers) with a Google OAuth client, then test it in the app.
   - Sign in with Apple is built but off (`NEXT_PUBLIC_APPLE_SIGN_IN=1`). Needs the Apple Developer Program.
@@ -421,3 +422,118 @@ Lead merge (P0): all four workers merged into `feature/p0-scaffold`. Follow-ups 
 `next build`, ingredients check; mobile typecheck, lint, iOS bundle. On a real iPhone via Expo Go (2026-11-18): tabs,
 header, fonts and theme look right (user checked). Still open: old file paths in `docs/handoff-*.md` and
 `docs/mobile-apps.md` (historical docs, left as is); `db.ts` in core repeats the `Tables`/`Enums` helpers.
+
+## P1 Accounts and household (2026-11-18, lead: `feature/p1-accounts`)
+Based on `origin/main` (P0 merged as PR #67, with the audit exceptions in `scripts/audit.mjs`).
+Migration lock: nobody (P1 uses the existing tables and RPCs: `create_household`, `join_household`,
+`get_invite_preview`, `regenerate_invite_code`, `remove_member`, `leave_household`).
+
+Step 0 (lead):
+- Packages installed so workers don't change `package-lock.json`: `expo-apple-authentication`, `expo-auth-session`,
+  `expo-crypto`, `expo-clipboard`.
+- Supabase client uses the PKCE flow (`flowType: 'pkce'`): OAuth and email links come back with `?code=`.
+- `useSession()` now reads one shared `SessionProvider` (`src/lib/use-session.tsx`, mounted in `AppProviders`).
+- `src/lib/household.ts`: `useHouseholdContext()`, `useActiveHousehold()`, `pickActiveMembership()` and `queryKeys`
+  (every key starts with `['household', ...]`).
+- Route gate in the root layout with `Stack.Protected`: signed out sees `(auth)`, signed in without a household sees
+  `onboarding`, otherwise `(tabs)` and `activity`. `index`, `auth/callback`, `reset-password` and `join/[code]` are
+  always reachable. Stub screens for each worker.
+- Components: `TextField`, `FormMessage`, and `PrimaryPillButton` gained `variant` (primary, outline, text, danger)
+  and `loading`.
+- `src/providers/household-channel.tsx` stub with the web app's `HouseholdChannelProvider` / `useHouseholdChanges`
+  signatures, mounted in the tabs layout. The header shows the active household's name.
+
+Workers (branch from `origin/feature/p1-accounts`): W1 `feature/p1-auth` (welcome, sign in and up, reset, Google,
+Apple, callback), W2 `feature/p1-onboarding` (onboarding, join by code and link), W3 `feature/p1-household`
+(Household tab: members, invite, rename, leave, switch, sign out), W4 `feature/p1-realtime` (household channel,
+resume refetch).
+
+W4 realtime (`feature/p1-realtime`):
+- `apps/mobile/src/providers/household-channel.tsx`: private channel `household:<id>` after `supabase.realtime.setAuth()`.
+  Exports unchanged (`HouseholdChannelProvider`, `useHouseholdChanges`, `HouseholdChange`) plus
+  `useHouseholdChannelStatus()` (`connecting | live | offline`) and a `__DEV__` status log.
+- `households` / `household_members` broadcasts invalidate `queryKeys.all`; other tables go to `useHouseholdChanges`
+  listeners with the web's payload mapping.
+- Background drops the channel; `active` and NetInfo reconnect resubscribe and, once subscribed, invalidate household
+  queries (missed broadcasts). `CHANNEL_ERROR`, `TIMED_OUT` and unexpected `CLOSED` retry with capped, jittered backoff
+  (1s to 30s). `TOKEN_REFRESHED` calls `setAuth(token)`. Channel operations are serialized so a remount or household
+  switch never stacks channels; unmount and sign out remove the channel.
+- Pure logic and tests: `apps/mobile/src/lib/household-realtime.ts` and `.test.ts` (payload mapping, backoff, status).
+- Manual two-phone check (two accounts in one household, both signed in on real devices):
+  1. Phone A renames the household. Phone B's header and Household tab show the new name without a refresh.
+  2. A second account joins by invite code. Both phones' member lists gain the member without a refresh.
+  3. Background phone B (home screen), change the household name on A, wait 30s, reopen B. It catches up within a
+     second or two of resuming.
+  4. Turn airplane mode on for B, change something on A, turn it off. B catches up.
+  5. Switch households on A and check B is unaffected; sign out on B and confirm no console errors from the channel.
+  Dev builds log `[realtime] household channel live/connecting/offline`.
+- Not verified here: any of the above on a device (needs two signed-in devices). Item/pantry listeners
+  (`useHouseholdChanges`) have no consumers until P2.
+
+W2 onboarding (`feature/p1-onboarding`):
+- `app/onboarding.tsx`: "Welcome, <first name>!", then Start a household (name, then "What's in your kitchen?" with typed
+  lines plus staple chips, "Skip for now") or Join with a code. The household is created on the last step only, so the
+  gate doesn't switch away mid-flow; `add_pantry_items` failures are ignored (the household exists). If the refresh
+  after creating fails, a "Your household is ready" retry replaces the form so nobody creates a duplicate. A pending
+  invite shows "You're invited to <household>" first with Join and "Not now". A failed household load with no data
+  shows "Couldn't load your household" with Retry. Small Sign out button.
+- `app/join/[code].tsx` (`app.lazychef://join/CODE`): signed out stores the code (AsyncStorage, 7 days) and goes to
+  `/welcome`; signed in previews it (invalid, rate limited, network error, already a member then set active and open
+  the pantry, or "Join <household>?" with member count).
+- Files: `features/invite/` (`join.ts`, `InviteCard.tsx`, `pending-invite-store.ts`), `features/onboarding/StapleChips.tsx`,
+  `components/Card.tsx` (the one card style), `components/FormScreen.tsx` (keyboard avoiding), `lib/first-pantry.ts`,
+  `lib/invite-code.ts`, `lib/invite-preview.ts`, `lib/pending-invite.ts` with Vitest tests.
+- Not built: universal links on the website domain (needs an Apple Developer account and an apple-app-site-association file).
+- Unverified: nothing was run on a device or simulator, and nothing was written to the live project. The join and create
+  flows, keyboard behaviour, Dynamic Type and the 375pt layout are untested on screen.
+
+W1 auth (`feature/p1-auth`):
+- Built: welcome (display-font name, web pitch, Apple on iOS when enabled, Google, email, create account), sign in,
+  sign up (sends `display_name` metadata, "Check your email" state when there is no session), forgot password,
+  reset password, and `auth/callback` (`?code=` PKCE exchange, `error` params, `next` through core `safeNext`,
+  exchange guarded to run once per code). Google uses `signInWithOAuth` with `skipBrowserRedirect` and
+  `WebBrowser.openAuthSessionAsync`; cancel is quiet. Apple uses the native button, a nonce from `expo-crypto`,
+  `signInWithIdToken`, and saves the first-sign-in name to user metadata and `profiles` (same rule as the web).
+- Pure and tested: `packages/core/src/auth/forms.ts` (form schemas), `apple.ts` (name, hex, new-account rule),
+  `apps/mobile/src/lib/auth/` (`errors.ts`, `callback-url.ts`, `once.ts`). Native glue: `redirect.ts`, `google.ts`, `apple.ts`.
+- `app.json`: `expo-apple-authentication` plugin and `ios.usesAppleSignIn`. `.env.example`: `EXPO_PUBLIC_APPLE_SIGN_IN`.
+- Not checked: no simulator or signed-in device here, so none of the flows ran end to end (only tsc, lint, iOS bundle, Vitest).
+- Not ported: the web stores Apple's authorization code server-side to revoke the Apple link on account deletion.
+  The app does not send it yet; handle with account deletion (needs an Edge Function).
+- You must configure: Supabase Auth, URL Configuration, redirect allow list entries `app.lazychef://**` and, for Expo
+  Go, `exp://**`; the Google provider (works in Expo Go through the in-app browser); for Apple, the Apple Developer
+  account, the Supabase Apple provider with the bundle id `app.lazychef.mobile` as a client id, then set
+  `EXPO_PUBLIC_APPLE_SIGN_IN=1` and make a dev build (Expo Go does not carry the Apple entitlement for this app).
+
+W3 household (`feature/p1-household`):
+- Household tab (`apps/mobile/src/app/(tabs)/household.tsx`) with one card style: household name with owner-only inline
+  rename, invite card (large code, Share via the web `/join/<code>` link, Copy code with expo-clipboard, owner-only Reset
+  with confirm), members (name, role, "You", joined date, owner-only Remove with `Alert`), switch household (only with
+  more than one), leave (danger, confirm, owner hand-over copy), and a Sign out card (temporary until P6).
+- Code: `src/features/household/api.ts` (members query under `queryKeys.members`, mutations that fail fast with
+  "You're offline" and invalidate `queryKeys.all`), `src/features/household/components/*`, and pure helpers with 
+  tests in `src/lib/household-settings.ts`.
+- Pull to refresh, loading, error-with-retry; cached data shows offline via the app-wide banner.
+- Not checked on a device or against the live backend (no signed-in account here). Needs no shared-file changes.
+
+Lead merge (P1): W4, W2, W1, W3 merged into `feature/p1-accounts` in that order. The workers ran on Sonnet (first
+launched on Opus by mistake, then relaunched). Each worker's `/code-review` reviewed the base stub instead of its own
+diff, so the lead reviewed every diff by hand. Fixes on merge:
+- Tabs layout always mounts `HouseholdChannelProvider` (null id means no channel), so the tabs never remount.
+- A cold start offline with nothing cached shows "You're offline" instead of a blank screen.
+- Realtime listeners are isolated (one throwing can't stop the others).
+- Onboarding: a retry after `create_household` succeeded could create a second household (stale state in a closure).
+- `auth/callback` also accepts `?token_hash=&type=` email links, like the web callback.
+- `useSession`: a late `getSession()` can no longer overwrite a newer session from the auth listener.
+Checks: web typecheck, lint, 2,298 tests, ingredients check, `scripts/audit.mjs`; mobile typecheck, lint, iOS and web exports.
+
+Open for P1's exit check (needs the user and real phones):
+- Supabase: add `app.lazychef://**` and `exp://**` to the redirect allow list; turn on the Google provider.
+- Email templates (README) link to `{{ .SiteURL }}`, so confirm and reset emails open the website, not the app. Changing
+  that affects the web app, so it's a separate decision.
+- Apple sign-in needs the Apple Developer account, the Supabase Apple provider with `app.lazychef.mobile`, and a dev build.
+- Two-phone live test: steps in the W4 section above. Nothing in P1 has run on a device yet.
+- For P2 worker briefs: tell workers to point `/code-review` at their own branch diff.
+
+Phone check (2026-11-18): the user tried P1 on a phone in Expo Go and everything worked.
+To do later: revisit onboarding once the rest of the app is built (also in the open items at the top).
