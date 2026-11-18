@@ -346,3 +346,12 @@ Not done / to do:
   permanently (`src/lib/legacy-routes.ts`, wired in `next.config.ts`). The older notes above name the old addresses.
 - Bulk add is a sheet on Pantry; Saved and Ours are tabs on Recipes; add/edit recipe is a sheet; Stats is a view of Activity;
   the paywall opens from the Pro card on Household.
+
+## Migration sync (2026-11-18, branch `fix/migration-sync`)
+- `20261118091235_push_notifications.sql` applied to the live database (it was on `main` but not live). The recorded
+  hash matches the file exactly.
+- `undo_cook` was live under version `20261118074317`, but the repo file was `20261117000100`. The live function
+  bodies match the repo exactly (`cook_recipe` and `undo_cook`). Only the recorded version and the stored statement text
+  differ. Renamed the file to `20261118074317_undo_cook.sql`. The file's SQL is unchanged.
+- `20261118060000_admin_dashboard.sql` was already live (hash matches the file).
+- `npm run test:db`: 216 passing.
