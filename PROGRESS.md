@@ -378,3 +378,11 @@ W4 config (`feature/p0-config`):
 - `app.json`: `ios.config.usesNonExemptEncryption: false`, Android adaptive icon background `#F8F6EC`, splash dark
   background `#1C1A14` via the `dark` key of the expo-splash-screen plugin.
 - `packages/db-types` re-exports the generated `Database` type and typechecks from the mobile app.
+
+W3 data layer (`feature/p0-data`):
+- `apps/mobile/src/lib/supabase.ts`: publishable-key client, no throw when env is missing, auto refresh follows AppState.
+- Session tokens in expo-secure-store, chunked across keys (`chunked-storage.ts`, 8 Vitest cases); localStorage on Expo web.
+- `query-client.ts`: TanStack Query persisted to AsyncStorage (24h, buster = app version), focus via AppState, online via NetInfo, cache cleared on sign out or account switch.
+- `use-session.ts` hook, `providers/app-providers.tsx`, `providers/offline-banner.tsx`, `apps/mobile/.env.example`.
+- Chunk tests are not in the root Vitest include; run with a config whose `include` is `apps/mobile/src/lib/**/*.test.ts`.
+
