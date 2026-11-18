@@ -758,3 +758,15 @@ W1 recipes screen (`feature/p4-recipes-screen`):
   quota line against the real function, realtime on a second phone. Skipped: diet and cuisine preferences, thumbs
   taste ranking, cook history on saved cards, matching saved Spoonacular recipes (needs the `info` call), creating
   recipes (Mine only lists them).
+
+W4 habit ring and This week card (`feature/p4-habit`, Sonnet):
+- `WeekRing.tsx` (react-native-svg ring, olive on a pill track, reanimated fill unless reduce motion, label "2 of 3 cook
+  days this week") and `WeekDots` (Mon to Sun). `ThisWeekCard.tsx` uses `useHabit()`: ring, streak, tier with next-tier
+  hint, active challenge, "Welcome back" on comeback, and at most one nudge (expiring food from the live pantry; dismissed
+  per day in AsyncStorage). The card hides while loading or on error. Goal is `DEFAULT_GOAL` until goals exist.
+- Skipped: the "almost there" and "first cook" nudges (they need recipe data the Pantry does not have).
+- Mounted in `app/(tabs)/pantry.tsx` as the FlatList `ListHeaderComponent` (hidden while searching).
+- Dev only (`__DEV__`): "Dev preview" row on the card with cook days, streak, comeback and challenge done presets. It
+  overrides the summary shown, never written anywhere.
+- Pure helpers with tests: `lib/week-card.ts`. No shared-file changes.
+- Not checked on a device: ring animation, layout at 375px, dark mode, reduce motion, dismissal persistence.
