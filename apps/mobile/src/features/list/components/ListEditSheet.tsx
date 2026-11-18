@@ -77,6 +77,8 @@ export function ListEditSheet({ itemId, visible, onClose }: { itemId: string | n
   );
 }
 
+const REMOVED = 'Someone already removed that item.';
+
 function ListEditContent({
   item,
   live,
@@ -113,7 +115,9 @@ function ListEditContent({
   const name = displayName(item.name);
   const errors = listFormErrors(form);
   const shownErrors = showErrors ? errors : {};
-  const dirty = (Object.keys(initial) as (keyof ListItemForm)[]).some((key) => form[key] !== initial[key]);
+  // Whitespace-only edits don't count: they save nothing.
+  const valid = !errors.name && !errors.quantity && !errors.note;
+  const dirty = valid ? Object.keys(listChangedFields(initial, form)).length > 0 : (Object.keys(initial) as (keyof ListItemForm)[]).some((key) => form[key] !== initial[key]);
   const set = (patch: Partial<ListItemForm>) => {
     setForm((current) => ({ ...current, ...patch }));
     setMessage(null);
@@ -139,7 +143,8 @@ function ListEditContent({
     const result = await updateListItem(householdId, item.id, fields);
     setPending(false);
     if (result.error !== undefined) {
-      apply({ type: 'upsert', item: before });
+      // A housemate removed it: don't bring it back.
+      apply(result.error === REMOVED ? { type: 'remove', id: item.id } : { type: 'upsert', item: before });
       setMessage(result.error);
       return;
     }
@@ -201,7 +206,7 @@ function ListEditContent({
               <Text style={[type.body, styles.fill, { color: colors.ink }]}>
                 {checkedByLabel((live ?? item).checked_by, members, session?.user.id ?? '')}
               </Text>
-              <PrimaryPillButton title="Uncheck" variant="outline" onPress={() => setItemChecked(item.id, false)} />
+              <PrimaryPillButton title="Uncheck" variant="outline" disabled={pending} onPress={() => setItemChecked(item.id, false)} />
             </View>
           ) : null}
 
