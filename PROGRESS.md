@@ -370,3 +370,11 @@ Step 0 scaffold (lead):
 Workers (branch from `feature/p0-scaffold`): W1 `feature/p0-core` (packages/core extraction), W2 `feature/p0-shell`
 (theme, tabs, components), W3 `feature/p0-data` (Supabase, Query, offline), W4 `feature/p0-config` (db-types, CI, EAS).
 Migration lock: nobody (P0 has no schema changes).
+
+W3 data layer (`feature/p0-data`):
+- `apps/mobile/src/lib/supabase.ts`: publishable-key client, no throw when env is missing, auto refresh follows AppState.
+- Session tokens in expo-secure-store, chunked across keys (`chunked-storage.ts`, 8 Vitest cases); localStorage on Expo web.
+- `query-client.ts`: TanStack Query persisted to AsyncStorage (24h, buster = app version), focus via AppState, online via NetInfo, cache cleared on sign out or account switch.
+- `use-session.ts` hook, `providers/app-providers.tsx`, `providers/offline-banner.tsx`, `apps/mobile/.env.example`.
+- Chunk tests are not in the root Vitest include; run with a config whose `include` is `apps/mobile/src/lib/**/*.test.ts`.
+
