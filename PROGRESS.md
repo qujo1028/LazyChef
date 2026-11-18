@@ -578,3 +578,15 @@ W4 edit (`feature/p2-edit`):
 - Skipped: "Add to shopping list" (P3). No shared-file changes.
 - Not checked on a device or against the live backend (no simulator or signed-in account). Checks: mobile typecheck,
   lint, `npm test`, `npx expo export -p ios`.
+
+W2 add food (`feature/p2-add-food`):
+- `AddFoodSheet` (stub props kept): quick mode with one input, autocomplete from `searchIngredients` for the name at the
+  caret (`suggestionQuery`, `replaceNameAtCaret`, bold `matchRange`, in `SuggestionList.tsx`), "N items" hint, an "Add several"
+  toggle to W3's `AddSeveralInput` that keeps the text, then W3's `ReviewList` step with Back and "Add N to pantry".
+- Flow: `previewItems` then `draftsFromResolved`; `draftsToItems` null shows field errors; `addItems` errors show inside
+  the sheet; success closes, then the toast (`describeAdditions`) shows from `onDismiss` (iOS) or right away (Android).
+  Text and review survive a close; a new seed or a finished add starts fresh. Input autofocuses after the slide-in.
+- Pure helpers with tests: `src/lib/add-food.ts` (`highlightParts`, `reviewTitle`, `addButtonLabel`, `stateOnOpen`).
+- Not checked on a device: keyboard avoidance, autofocus timing in the page sheet, caret placement after picking a
+  suggestion (uses a controlled `selection` released on the next selection event), pasting a multi-line list into the
+  one-line box (iOS may flatten line breaks; "Add several" handles lists). No shared-file changes.
