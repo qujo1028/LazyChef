@@ -103,6 +103,8 @@ export type LocalRecipeCard = {
   /** As stored ("Italian", "France"); null for most household recipes. */
   cuisine?: string | null
   ingredients: readonly LocalIngredient[]
+  /** Saved from an AI idea (household recipes only). */
+  aiGenerated?: boolean
 }
 
 /** Our ingredient rows in the shape the rest of the recipe code (checklist, cook, list) uses. */
@@ -120,7 +122,7 @@ export function toRecipeIngredients(lines: readonly LocalIngredient[]): RecipeIn
 /** A local recipe matched against the pantry. Optional lines ("to serve") never count. */
 export function localSuggestion(index: PantryIndex, recipe: LocalRecipeCard): Suggestion {
   const required = recipe.ingredients.filter((line) => !line.optional)
-  return toSuggestion(index, {
+  const suggestion = toSuggestion(index, {
     id: recipe.id,
     source: recipe.source,
     title: recipe.title,
@@ -129,6 +131,7 @@ export function localSuggestion(index: PantryIndex, recipe: LocalRecipeCard): Su
     used: [],
     missed: toRecipeIngredients(required),
   })
+  return recipe.aiGenerated ? { ...suggestion, aiGenerated: true } : suggestion
 }
 
 /** Fewest missing first, then the ones using more of the pantry, then expiring food, then A to Z. */

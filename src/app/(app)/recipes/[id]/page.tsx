@@ -101,7 +101,7 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
           />
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-          <SourceTag source={recipe.source} />
+          <SourceTag source={recipe.source} aiGenerated={recipe.aiGenerated} />
           {recipe.readyInMinutes ? (
             <span className="inline-flex items-center gap-1.5">
               <Clock className="size-4" aria-hidden /> {recipe.readyInMinutes} min

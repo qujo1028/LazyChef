@@ -43,6 +43,7 @@ export async function signedPhotoUrls(supabase: Db, paths: readonly (string | nu
 
 type RecipeRow = {
   id: string
+  ai_generated: boolean
   source: "themealdb" | "user"
   cuisine: string | null
   title: string
@@ -88,6 +89,9 @@ function isEveryday(row: Pick<RecipeRow, "source" | "cuisine">): boolean {
   return row.source === "user" || row.cuisine === null || EVERYDAY.has(row.cuisine.trim().toLowerCase())
 }
 
+/** A library or household recipe card, plus whether it was saved from an AI idea. */
+export type LocalCard = LocalRecipeCard & { aiGenerated: boolean }
+
 /**
  * Cards (with ingredients and photo links) for these recipes, in the order given.
  * `everydayOnly` drops library recipes from less familiar cuisines (see EVERYDAY_CUISINES).
@@ -96,14 +100,14 @@ export async function getLocalCards(
   ids: readonly string[],
   householdId: string,
   { everydayOnly = false }: { everydayOnly?: boolean } = {},
-): Promise<LocalRecipeCard[]> {
+): Promise<LocalCard[]> {
   if (ids.length === 0) return []
   const supabase = await createClient()
   const recipeResults = await Promise.all(
     chunks(ids, 100).map((part) =>
       supabase
         .from("recipes")
-        .select("id, source, cuisine, title, image_url, photo_path, ready_in_minutes, household_id")
+        .select("id, source, cuisine, title, image_url, photo_path, ready_in_minutes, household_id, ai_generated")
         .in("id", part)
         // Only the shared library and this household (someone in two households sees the active one).
         .or(`household_id.is.null,household_id.eq.${householdId}`),
@@ -136,6 +140,7 @@ export async function getLocalCards(
       readyInMinutes: row.ready_in_minutes,
       cuisine: row.cuisine,
       ingredients: ingredients.get(row.id) ?? [],
+      aiGenerated: row.ai_generated,
     }
   })
 }
@@ -151,7 +156,7 @@ export async function findLocalCandidates(
   filters: RecipeFilters,
   /** The meal queries to run (one database call each); null for every meal. */
   meals: readonly MealQuery[] | null = filters.type ? [{ type: filters.type === "lunch" ? "main course" : filters.type, maxMinutes: filters.maxTime }] : null,
-): Promise<LocalRecipeCard[]> {
+): Promise<LocalCard[]> {
   const supabase = await createClient()
   const pantry = pantryMatchKeys(items)
   const basics = basicKeys()
@@ -209,6 +214,8 @@ export type LocalRecipe = {
   optional: boolean[]
   lines: LocalIngredient[]
   createdBy: string | null
+  /** Saved from an AI idea (tagged "AI idea"). */
+  aiGenerated: boolean
 }
 
 /** Null when it doesn't exist or isn't the shared library's or this household's. */
@@ -246,11 +253,12 @@ export async function getLocalRecipe(id: string, householdId: string): Promise<L
     optional: ingredients.map((line) => line.optional),
     lines: ingredients,
     createdBy: row.created_by,
+    aiGenerated: row.ai_generated,
   }
 }
 
 /** The household's own recipes, newest first (the "Ours" tab). */
-export async function getHouseholdRecipes(householdId: string): Promise<LocalRecipeCard[]> {
+export async function getHouseholdRecipes(householdId: string): Promise<LocalCard[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from("recipes")

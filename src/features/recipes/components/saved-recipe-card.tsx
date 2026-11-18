@@ -32,6 +32,7 @@ export function SavedRecipeCard({ recipe, serverNow }: { recipe: SavedRecipe; se
       title={recipe.title}
       image={recipe.image}
       readyInMinutes={recipe.readyInMinutes}
+      aiGenerated={recipe.aiGenerated}
       saved
     >
       <MatchLine recipe={recipe} />

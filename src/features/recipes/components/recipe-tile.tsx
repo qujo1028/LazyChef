@@ -15,6 +15,7 @@ export function RecipeTile({
   readyInMinutes,
   saved,
   expiring,
+  aiGenerated = false,
   children,
 }: {
   id: string
@@ -25,6 +26,8 @@ export function RecipeTile({
   saved: boolean
   /** Shown as a badge on the photo: "Uses up spinach". */
   expiring?: string | null
+  /** A household recipe saved from an AI idea: tagged "AI idea". */
+  aiGenerated?: boolean
   children?: React.ReactNode
 }) {
   return (
@@ -52,7 +55,7 @@ export function RecipeTile({
         </div>
         <div className="grid min-w-0 gap-1 px-0.5">
           <h3 className="line-clamp-2 text-sm leading-snug font-semibold">{title}</h3>
-          {source === "user" ? <SourceTag source={source} /> : null}
+          {source === "user" ? <SourceTag source={source} aiGenerated={aiGenerated} /> : null}
           {children}
         </div>
       </Link>

@@ -1,26 +1,12 @@
 "use server"
 
-import { requireHousehold, requireViewer } from "@/features/household/queries"
-import { localDateKey } from "@/features/pantry/dates"
+import { requireViewer } from "@/features/household/queries"
 import { firstIssue } from "@/features/pantry/schemas"
-import { getPantryItems } from "@/features/pantry/queries"
 import type { ActionResult } from "@/features/pantry/types"
-import { hasRestrictions } from "@/features/preferences/options"
-import { getMyPreferences } from "@/features/preferences/queries"
 import { askAiJson } from "@/lib/llm/ai"
 
-import { pantrySearchNames } from "../match"
-import {
-  aiRecipeSchema,
-  breaksDiet,
-  buildIdeaMessages,
-  cleanNames,
-  hintSchema,
-  markPantryIngredients,
-  missingIngredients,
-  namesForDiet,
-  type AiRecipe,
-} from "./idea"
+import { loadIdeaPantry } from "./context"
+import { aiRecipeSchema, breaksDiet, buildIdeaMessages, hintSchema, markPantryIngredients, missingIngredients, type AiRecipe } from "./idea"
 
 export type AiIdea = { recipe: AiRecipe; missing: string[] }
 
@@ -39,13 +25,9 @@ export async function getAiRecipeIdea(hint: string, avoidTitle?: string): Promis
   if (!parsedHint.success) return { error: firstIssue(parsedHint.error) }
   const avoid = typeof avoidTitle === "string" ? avoidTitle.trim().slice(0, 100) : undefined
 
-  const [{ household }, prefs] = await Promise.all([requireHousehold(), getMyPreferences()])
-  const diet = hasRestrictions(prefs) ? prefs : null
-  const items = await getPantryItems(household.id)
-  const names = cleanNames(namesForDiet(pantrySearchNames(items, localDateKey()), diet))
-  if (names.length === 0) {
-    return { error: diet ? "Nothing in your pantry fits your diet yet. Add a few things first." : "Add a few things to your pantry first." }
-  }
+  const pantry = await loadIdeaPantry()
+  if (pantry.error !== undefined) return { error: pantry.error }
+  const { diet, names } = pantry
 
   for (let attempt = 0; attempt < DIET_ATTEMPTS; attempt++) {
     const result = await askAiJson(buildIdeaMessages(names, parsedHint.data, avoid, diet), aiRecipeSchema, {
