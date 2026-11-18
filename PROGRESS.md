@@ -8,6 +8,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 - **Database:** `20261118060000_admin_dashboard.sql` is already applied to the live project (checked 2026-11-18). Still pending: `20261118120000_push_notifications.sql` (on `main`, not live). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
+  - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
   - Supabase project is on the free plan. Upgrade to Pro before launch, or it pauses after a week idle.
   - Google sign-in: enable the provider in Supabase (Auth → Providers) with a Google OAuth client, then test it in the app.
   - Sign in with Apple is built but off (`NEXT_PUBLIC_APPLE_SIGN_IN=1`). Needs the Apple Developer Program.
@@ -533,3 +534,6 @@ Open for P1's exit check (needs the user and real phones):
 - Apple sign-in needs the Apple Developer account, the Supabase Apple provider with `app.lazychef.mobile`, and a dev build.
 - Two-phone live test: steps in the W4 section above. Nothing in P1 has run on a device yet.
 - For P2 worker briefs: tell workers to point `/code-review` at their own branch diff.
+
+Phone check (2026-11-18): the user tried P1 on a phone in Expo Go and everything worked.
+To do later: revisit onboarding once the rest of the app is built (also in the open items at the top).
