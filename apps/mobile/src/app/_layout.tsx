@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { AppScreenHeader } from '@/components/AppScreenHeader';
+import { EmptyState } from '@/components/EmptyState';
 import { useHouseholdContext } from '@/lib/household';
 import { useSession } from '@/lib/use-session';
 import { AppProviders } from '@/providers/app-providers';
@@ -50,7 +51,16 @@ function Navigation() {
   const signedIn = session !== null;
   // Hold on a blank screen until we know which group to show, so nobody sees the wrong one flash.
   const waiting = loading || (signedIn && context.isPending);
-  if (waiting) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+  if (waiting) {
+    // Offline with nothing cached: the query is paused, so say so instead of a blank screen.
+    // The offline banner is already showing above this, and the query resumes on reconnect.
+    const paused = signedIn && context.fetchStatus === 'paused';
+    return (
+      <View style={{ flex: 1, padding: 16, justifyContent: 'center', backgroundColor: colors.background }}>
+        {paused ? <EmptyState title="You're offline" line="Connect to the internet to load your household." /> : null}
+      </View>
+    );
+  }
   const hasHousehold = (context.data?.memberships.length ?? 0) > 0;
 
   return (
