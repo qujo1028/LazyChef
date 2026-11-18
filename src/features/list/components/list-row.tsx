@@ -3,6 +3,7 @@
 import { Check, Pencil } from "lucide-react"
 
 import { displayName } from "@/features/pantry/display"
+import { haptic } from "@/lib/native/haptics"
 import { cn } from "@/lib/utils"
 
 import { amountText } from "../display"
@@ -34,7 +35,10 @@ export function ListRow({
         type="button"
         role="checkbox"
         aria-checked={checked}
-        onClick={() => onToggle(item)}
+        onClick={() => {
+          haptic("tap")
+          onToggle(item)
+        }}
         className="flex min-h-14 min-w-0 flex-1 items-center gap-3 py-2 pl-3 text-left outline-none hover:bg-muted/50 focus-visible:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset active:bg-muted/60"
       >
         <span
