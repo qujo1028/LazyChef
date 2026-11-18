@@ -423,7 +423,7 @@ header, fonts and theme look right (user checked). Still open: old file paths in
 `docs/mobile-apps.md` (historical docs, left as is); `db.ts` in core repeats the `Tables`/`Enums` helpers.
 
 ## P1 Accounts and household (2026-11-18, lead: `feature/p1-accounts`)
-Based on `feature/p0-scaffold` (PR #67), since P0 isn't on `main` yet. Rebase onto `main` once #67 merges.
+Based on `origin/main` (P0 merged as PR #67, with the audit exceptions in `scripts/audit.mjs`).
 Migration lock: nobody (P1 uses the existing tables and RPCs: `create_household`, `join_household`,
 `get_invite_preview`, `regenerate_invite_code`, `remove_member`, `leave_household`).
 
