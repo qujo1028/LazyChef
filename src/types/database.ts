@@ -67,6 +67,38 @@ export type Database = {
           },
         ]
       }
+      ai_idea_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          household_id?: string
+          response?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_idea_cache_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       apple_refresh_tokens: {
         Row: {
           created_at: string
@@ -386,8 +418,51 @@ export type Database = {
           },
         ]
       }
+      recipe_ratings: {
+        Row: {
+          created_at: string
+          household_id: string
+          rating: number
+          recipe_ref: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          rating: number
+          recipe_ref: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          rating?: number
+          recipe_ref?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ratings_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipes: {
         Row: {
+          ai_generated: boolean
           created_at: string
           created_by: string | null
           cuisine: string | null
@@ -408,6 +483,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_generated?: boolean
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
@@ -428,6 +504,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_generated?: boolean
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
@@ -855,9 +932,17 @@ export type Database = {
         Args: never
         Returns: number
       }
+      put_ai_idea_cache: {
+        Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
+        Returns: string
+      }
       put_spoonacular_cache: {
         Args: { p_cache_key: string; p_response: Json; p_ttl_seconds?: number }
         Returns: string
+      }
+      rate_recipe: {
+        Args: { p_household_id: string; p_rating: number; p_recipe_ref: string }
+        Returns: number
       }
       record_spoonacular_usage: {
         Args: {
@@ -879,6 +964,10 @@ export type Database = {
       remove_member: {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
+      }
+      save_ai_recipe: {
+        Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json }
+        Returns: string
       }
       save_household_recipe: {
         Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json; p_recipe_id: string | null }
