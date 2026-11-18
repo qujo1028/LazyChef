@@ -70,7 +70,9 @@ export function BoardView({
   byColumn.done.sort((a, b) => (b.closedAt ?? "").localeCompare(a.closedAt ?? ""))
 
   return (
-    <div className="overflow-x-auto pb-2 lg:overflow-visible">
+    // `relative` so the cards' sr-only (absolutely positioned) text is clipped by this scroller
+    // instead of stretching the whole page sideways on phones.
+    <div className="relative overflow-x-auto pb-2 lg:overflow-visible">
       <div className="flex snap-x snap-mandatory gap-3 lg:grid lg:grid-cols-5 lg:snap-none">
         {COLUMNS.map((column) => {
           const items = column === "review" ? (pulls ?? []) : byColumn[column]
