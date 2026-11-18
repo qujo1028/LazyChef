@@ -1,9 +1,11 @@
 import { useRouter } from "expo-router";
 import { Tabs } from "expo-router/js-tabs";
+import { View } from "react-native";
 
 import { AppScreenHeader } from "@/components/AppScreenHeader";
 import { BottomTabBar } from "@/components/BottomTabBar";
 import { CircleIconButton } from "@/components/CircleIconButton";
+import { IdeasButton } from "@/features/ideas/components/IdeasButton";
 import { ListProvider } from '@/features/list/list-provider';
 import { PantryProvider } from "@/features/pantry/pantry-provider";
 import { useActiveHousehold } from "@/lib/household";
@@ -14,6 +16,9 @@ export default function TabsLayout() {
   const { household } = useActiveHousehold();
   // The root gate only shows this group with a household, so this is a brief edge case.
   const name = household?.name ?? "LazyChef";
+  const activity = (
+    <CircleIconButton icon="pulse-outline" label="Activity" onPress={() => router.push("/activity")} />
+  );
 
   return (
     <HouseholdChannelProvider householdId={household?.id ?? null}>
@@ -22,22 +27,28 @@ export default function TabsLayout() {
           <Tabs
             tabBar={(props) => <BottomTabBar {...props} />}
             screenOptions={{
-              header: () => (
-                <AppScreenHeader
-                  title={name}
-                  right={
-                    <CircleIconButton
-                      icon="pulse-outline"
-                      label="Activity"
-                      onPress={() => router.push("/activity")}
-                    />
-                  }
-                />
-              ),
+              header: () => <AppScreenHeader title={name} right={activity} />,
             }}
           >
             <Tabs.Screen name="pantry" options={{ title: "Pantry" }} />
-            <Tabs.Screen name="recipes" options={{ title: "Recipes" }} />
+            <Tabs.Screen
+              name="recipes"
+              options={{
+                title: "Recipes",
+                // The single Ideas entry point for AI (docs/product-scope.md) sits next to Activity.
+                header: () => (
+                  <AppScreenHeader
+                    title={name}
+                    right={
+                      <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <IdeasButton />
+                        {activity}
+                      </View>
+                    }
+                  />
+                ),
+              }}
+            />
             <Tabs.Screen name="list" options={{ title: "List" }} />
             <Tabs.Screen name="household" options={{ title: "Household" }} />
           </Tabs>

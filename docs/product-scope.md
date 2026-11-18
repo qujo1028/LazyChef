@@ -14,7 +14,7 @@ What the app should do, based on a consumer review of the current web app (2026-
 
 - **One way to add food.** A quick-add sheet with an "Add several" option. The separate `/pantry/add` page goes away.
 - **Recipe quota.** The Spoonacular free tier is 50 points a day, shared by the household. Show remaining searches and when they reset. Serve cached results first. Never show a silent dead end.
-- **One "Ideas" entry point** for all AI features (pantry, barcodes, recipe ideas, substitutions).
+- **One "Ideas" entry point** for AI: a sparkle "Ideas" button in the Recipes header opens one sheet with recipe ideas from the pantry (pick a meal, an optional hint, up to 3 ideas, save one to Mine or add its missing items to the list). Decided 2026-11-18 for the Expo app: v1 has recipe ideas only. "Split with AI" in add food and "Tidy name with AI" on scans wait until after v1 (they are add-food helpers, and the core loop works without them).
 - **Household page** handles household settings only. Account settings get their own screen.
 - **Simpler header:** household name only. The avatar moves into account settings.
 - **Free AI limit (10 uses a week):** show the count before the limit is reached.
@@ -22,6 +22,7 @@ What the app should do, based on a consumer review of the current web app (2026-
 ## Cut from v1
 
 - **Substitutions.** Adds a feature without solving the core job.
+- **Scan to check off on the shopping list** (Expo app). Scanning adds to the pantry only in v1 (decided 2026-11-18).
 - **Activity stats subpage.** Keep the activity feed.
 - **Separate recipe pages** ("Ours," "Saved," "New"). Merge into one recipes screen with filters: Mine, Saved, Suggested.
 - **Full Pro page.** Use a soft prompt only until people use the app weekly.

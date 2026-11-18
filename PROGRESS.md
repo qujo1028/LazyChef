@@ -824,3 +824,35 @@ Open before P4's exit check:
 - Known gaps: cooks must take at least one item out (same as the web and the database); undoing a cook doesn't
   remove list items it added; Mine has no create or edit form yet; taste ranking and cook history on saved cards
   aren't ported.
+
+## P5 Barcodes and Ideas (2026-11-18, lead: `feature/p5-barcodes-ideas`)
+Based on `origin/feature/p4-recipes`, because P4 (PR #71) isn't merged yet and P5 builds on its recipes screen, Edge
+Function pattern and list helpers. Rebase onto `origin/main` once #71 merges. Migration lock: held by
+`feature/library-expansion`, not P5. P5 needs no migration (household_barcodes, take_ai_allowance, take_rate_limit
+'ai', ai_idea_cache, put_ai_idea_cache, save_ai_recipe and the members-only `ai_usage` read already exist). If a worker
+finds it needs one, it stops and tells the lead, who asks the user.
+
+Decisions (user, 2026-11-18):
+- Ideas: a sparkle "Ideas" button in the Recipes header opens one Ideas sheet. v1 has recipe ideas only (meal, an
+  optional hint, up to 3 ideas from the pantry, save to Mine, add missing to list, the free count shown). Pantry
+  "split with AI" and scan "tidy name" wait until after v1. Recorded in `docs/product-scope.md`.
+- Barcode lookup: the phone calls Open Food Facts directly; household barcode memory is read and written as the user
+  (RLS). Recorded in `docs/react-native-app.md` (Backend).
+- Scan to check off on the List: not in P5 (pantry only). Recorded under Cut in `docs/product-scope.md`.
+
+Step 0 (lead):
+- Packages: `expo-camera` (via `npx expo install`), with its config plugin and camera permission text in `app.json`.
+- `packages/core/src/ai/edge-contract.ts`: the `ai` Edge Function contract (`ideas`, `allowance`), the allowance shape,
+  error codes. Copied to `supabase/functions/_shared/core/ai-contract.ts` by `scripts/sync-edge-shared.mjs`.
+- `apps/mobile/src/features/ideas/ai-edge.ts`: `callAi()` (never throws; a missing function reads as `not_configured`).
+- Query keys `aiAllowance(householdId)` and `barcodes(householdId)`.
+- Recipes tab header: `IdeasButton` (sparkles) next to Activity, opening the `IdeasSheet` stub.
+- Stubs with final signatures: `features/barcodes/lookup.ts` (`lookupBarcode`, `rememberBarcodes`),
+  `features/barcodes/components/BarcodeScanner.tsx` (`onCode`, `active`), `features/ideas/components/IdeasSheet.tsx`.
+
+Workers (branch from `origin/feature/p5-barcodes-ideas`):
+- W1 `feature/p5-edge-ai` (Opus: server code holding the Groq key, auth, the free allowance, rate limits, prompt
+  injection): `supabase/functions/ai/`.
+- W2 `feature/p5-ideas` (Sonnet: the Ideas sheet, consent, count line, save and add-missing).
+- W3 `feature/p5-scanner` (Sonnet: the camera scanner and scanning inside the Add food sheet).
+- W4 `feature/p5-barcode-lookup` (Sonnet: Open Food Facts from the phone and the household barcode memory, with tests).

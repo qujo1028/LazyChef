@@ -17,6 +17,7 @@ export const SHARED_DIR = "supabase/functions/_shared/core"
 export const COPIES = {
   "packages/core/src/recipes/recipe-shapes.ts": "recipe-shapes.ts",
   "packages/core/src/recipes/edge-contract.ts": "edge-contract.ts",
+  "packages/core/src/ai/edge-contract.ts": "ai-contract.ts",
   "packages/core/src/ingredients/library/normalize.ts": "normalize.ts",
   "src/lib/spoonacular/cost.ts": "cost.ts",
 }
