@@ -8,12 +8,13 @@ import type { Json } from "@/types/database"
 
 import { NO_HINTS, type TasteHints } from "@lazychef/core/recipes/taste"
 import type { AiRecipe } from "./idea"
+import { mealIdeasCacheKey as keyFromHash } from "@lazychef/core/recipes/ai/meal-ideas"
 import { ideasCacheKeySource, MEAL_IDEAS_TTL_SECONDS, readCachedIdeas, type CachedIdeas, type IdeaMeal } from "./meal-ideas"
 
 /** "meal-ideas:v1:dinner-ish:<sha256>": short (the column allows 200), and no pantry names in it. */
 export function mealIdeasCacheKey(meal: IdeaMeal, names: readonly string[], diet: DietInput | null, taste: TasteHints = NO_HINTS): string {
   const hash = createHash("sha256").update(ideasCacheKeySource(meal, names, diet, taste)).digest("hex")
-  return `meal-ideas:v1:${meal.replace(/\s+/g, "-")}:${hash}`
+  return keyFromHash(meal, hash)
 }
 
 /** A fresh cached answer, re-checked (see readCachedIdeas); null on a miss or a hiccup. */

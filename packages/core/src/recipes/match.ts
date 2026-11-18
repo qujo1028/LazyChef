@@ -7,6 +7,8 @@ import { findIngredient, getIngredientById, normalizeIngredientName } from "../i
 import type { RecipeIngredient, RecipeSummary } from "./recipe-shapes"
 
 import { daysBetween, EXPIRING_SOON_DAYS } from "../dates/days"
+import { BASICS } from "./basics"
+import { isAvailable, MAX_QUERY_NAMES } from "./pantry-names"
 import type { PantryItem } from "../pantry/types"
 import type { RecipeSource } from "./ref"
 
@@ -15,65 +17,11 @@ export type PantryRow = Pick<PantryItem, "name" | "quantity" | "ingredient_id" |
 /** Recipes missing at most this many ingredients show up under "Almost there". */
 export const MAX_MISSING = 3
 
-/** Most names sent to Spoonacular in one search (keeps the URL and the match sane). */
-export const MAX_QUERY_NAMES = 60
-
-/**
- * Taken as always there, like Spoonacular's own ignorePantry: water, salt and pepper never
- * count as missing. Normalized names (see normalizeIngredientName). Not "bell pepper".
- */
-export const BASICS: ReadonlySet<string> = new Set([
-  "water",
-  "ice",
-  "ice water",
-  "hot water",
-  "cold water",
-  "warm water",
-  "boiling water",
-  "salt",
-  "table salt",
-  "kosher salt",
-  "sea salt",
-  "pepper",
-  "black pepper",
-  "ground pepper",
-  "ground black pepper",
-  "cracked black pepper",
-  "white pepper",
-  "salt and pepper",
-])
-
-/** Staples and anything with some left (or not tracked). "Ran out" rows don't count. */
-export function isAvailable(item: Pick<PantryRow, "quantity" | "is_staple">): boolean {
-  return item.is_staple || item.quantity === null || item.quantity > 0
-}
+export { MAX_QUERY_NAMES, isAvailable, pantrySearchNames } from "./pantry-names"
+export { BASICS } from "./basics"
 
 function expiresSoon(item: PantryRow, today: string): boolean {
   return item.expires_on !== null && daysBetween(today, item.expires_on) <= EXPIRING_SOON_DAYS
-}
-
-/**
- * The names to search with: what's available, soonest-expiring first (so it's never cut
- * off), one per ingredient, at most MAX_QUERY_NAMES.
- */
-export function pantrySearchNames(items: readonly PantryRow[], today: string): string[] {
-  const available = items.filter(isAvailable)
-  const order = (item: PantryRow) => (item.expires_on === null ? Infinity : daysBetween(today, item.expires_on))
-  const sorted = [...available].sort(
-    (a, b) => order(a) - order(b) || Number(a.is_staple) - Number(b.is_staple) || a.name.localeCompare(b.name),
-  )
-  const seen = new Set<string>()
-  const names: string[] = []
-  for (const item of sorted) {
-    const key = normalizeIngredientName(item.name)
-    // Commas separate names in the request.
-    const name = item.name.replace(/,/g, " ").replace(/\s+/g, " ").trim().toLowerCase()
-    if (!key || !name || seen.has(key)) continue
-    seen.add(key)
-    names.push(name)
-    if (names.length >= MAX_QUERY_NAMES) break
-  }
-  return names
 }
 
 export type PantryIndex<T extends PantryRow = PantryRow> = {
