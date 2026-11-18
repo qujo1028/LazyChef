@@ -863,7 +863,7 @@ checks the household's `household_barcodes` row (as the user, RLS), then calls O
 (per household and code). `rememberBarcodes` inserts new codes and updates known ones (name, amount, unit only), ignores
 23505 and never fails the caller. Pure parts and tests: `lib/barcode-off.ts`, `barcode-cache.ts`, `barcode-memory.ts`.
 No tidy flag (AI tidy is out of v1). Not checked: a signed-in account, live RLS writes from a phone.
-=======
+
 W3 (scanner, `feature/p5-scanner`): `BarcodeScanner` is a real expo-camera `CameraView` (ean13, ean8, upc_a, upc_e),
 asks for the camera on first use, has a denied state with Open Settings, a torch button and a typed-code box (the only
 control on Expo web). The Add food sheet has a "Scan barcodes" button that opens a scan view (camera, scan list with
@@ -872,6 +872,5 @@ goes to the usual review, so there is still one way to add food. After an add th
 `rememberBarcodes`, named as added (one package's amount, `barcodeMemories`); the scan-to-draft link (`lib/scan-links.ts`)
 keeps a renamed item under its new name. Pure logic with tests: `lib/scan-dedupe.ts` (same code within 2.5 s ignored),
 `scan-rows.ts`, `scan-links.ts`. State hook: `features/barcodes/use-scan-rows.ts`. Dev only: "Dev: fake scan" (3017620422003).
-Not checked: the camera, the permission prompt, the torch and haptics (need a real phone); lookups return an error until
-W4's `lookupBarcode` merges. The `barcodes` query key isn't invalidated after remembering (W4 owns reads, if any).
->>>>>>> c93bb6a (Scan barcodes inside the Add food sheet)
+Not checked: the camera, the permission prompt, the torch and haptics (need a real phone), or a signed-in lookup.
+The `barcodes` query key isn't invalidated after remembering (W4 owns reads, if any).
