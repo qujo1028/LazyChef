@@ -48,14 +48,14 @@ function NameIt({ code, onName }: { code: string; onName: (name: string) => void
           placeholder="e.g. oat milk"
           value={value}
           onChangeText={setValue}
-          onSubmitEditing={() => value.trim() && onName(value)}
+          onSubmitEditing={() => value.trim() && onName(value.trim())}
           returnKeyType="done"
           maxLength={80}
           autoCapitalize="none"
           autoCorrect={false}
         />
       </View>
-      <PrimaryPillButton title="Save" variant="outline" onPress={() => onName(value)} disabled={!value.trim()} />
+      <PrimaryPillButton title="Save" variant="outline" onPress={() => onName(value.trim())} disabled={!value.trim()} />
     </View>
   );
 }
@@ -123,7 +123,9 @@ export function ScanPanel({ rows, active, onCode, onRetry, onName, onRemove }: P
   const [codeError, setCodeError] = useState<string | null>(null);
 
   function handleCode(code: string) {
-    setCodeError(onCode(code));
+    const message = onCode(code);
+    setCodeError(message);
+    return message;
   }
 
   return (

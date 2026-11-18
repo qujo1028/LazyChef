@@ -15,7 +15,8 @@ import { useTheme } from '@/theme';
 
 type Props = {
   /** A raw code from the camera or the typed box. The caller normalizes and looks it up. */
-  onCode: (code: string) => void;
+  /** May return an error message for a code it can't use; the typed box then keeps the text to fix. */
+  onCode: (code: string) => string | null | void;
   /** False pauses scanning (say while the sheet is closing). */
   active: boolean;
 };
@@ -42,9 +43,8 @@ export function BarcodeScanner({ onCode, active }: Props) {
 
   function submitTyped() {
     const code = typed.trim();
-    if (!code) return;
-    setTyped('');
-    onCode(code);
+    if (!code || !active) return;
+    if (typeof onCode(code) !== 'string') setTyped('');
   }
 
   // Ask on first use: when the scanner shows and the answer is still open.

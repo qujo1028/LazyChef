@@ -87,6 +87,8 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       setSeveral(false);
       setScanning(false);
       scan.clear();
+      links.byRaw.clear();
+      links.packages.clear();
     }
   }
 
@@ -145,27 +147,27 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     setError(null);
   }
 
-  async function preview(override?: string) {
-    if (pending) return;
+  async function preview(override?: string): Promise<boolean> {
+    if (pending) return false;
     const sent = typeof override === 'string' ? override : text;
     if (!sent.trim()) {
       setError(EMPTY_MESSAGE);
       inputRef.current?.focus();
-      return;
+      return false;
     }
     if (!householdId) {
       setError("We couldn't find your household. Try again in a moment.");
-      return;
+      return false;
     }
     setError(null);
     setPending(true);
     try {
       const result = await previewItems(householdId, sent);
       // Closed or edited while it was working: drop the stale answer.
-      if (!latest.current.visible || latest.current.text !== sent) return;
+      if (!latest.current.visible || latest.current.text !== sent) return false;
       if (result.error !== undefined) {
         setError(result.error);
-        return;
+        return false;
       }
       batch.current += 1;
       setShowErrors(false);
@@ -174,8 +176,12 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
         result.items.map((item) => item.raw),
         links,
       );
-      if (next.length === 0) setError(EMPTY_MESSAGE);
-      else setDrafts(next);
+      if (next.length === 0) {
+        setError(EMPTY_MESSAGE);
+        return false;
+      }
+      setDrafts(next);
+      return true;
     } finally {
       setPending(false);
     }
@@ -220,8 +226,10 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     const next = addScansToText(text, lines, links);
     setText(next);
     setScanning(false);
-    scan.clear();
-    void preview(next);
+    // Keep the scan list until the review shows, so a failed check doesn't lose it.
+    void preview(next).then((ok) => {
+      if (ok) scan.clear();
+    });
   }
 
   const found = scannedLines(scan.rows).length;

@@ -20,7 +20,6 @@ export const BAD_CODE_MESSAGE = "That doesn't look like a product barcode. Check
 export function useScanRows(householdId: string | null) {
   const [rows, setRows] = useState<ScanRow[]>([]);
   const nextKey = useRef(0);
-  const answers = useRef(new Map<string, Promise<LookupAnswer>>());
 
   const lookup = useCallback(
     async (key: number, code: string) => {
@@ -28,15 +27,10 @@ export function useScanRows(householdId: string | null) {
         setRows((current) => replaceRow(current, rowFromAnswer(key, code, { error: "We couldn't find your household." })));
         return;
       }
-      let answer = answers.current.get(code);
-      if (!answer) {
-        answer = lookupBarcode(householdId, code).catch(
-          (): LookupAnswer => ({ error: "Couldn't look that up right now. Type it in instead." }),
-        );
-        answers.current.set(code, answer);
-      }
-      const result = await answer;
-      if ('error' in result) answers.current.delete(code); // try again next time
+      // lookupBarcode caches and de-duplicates itself, and knows what the household just named.
+      const result = await lookupBarcode(householdId, code).catch(
+        (): LookupAnswer => ({ error: "Couldn't look that up right now. Type it in instead." }),
+      );
       setRows((current) => (current.some((r) => r.key === key) ? replaceRow(current, rowFromAnswer(key, code, result)) : current));
     },
     [householdId],
