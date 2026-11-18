@@ -2,6 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("server-only", () => ({}))
 
+const getHouseholdTaste = vi.fn(async () => ({ profile: { net: new Map(), liked: [], disliked: [] }, hints: { liked: ["Shakshuka"], disliked: ["Liver"] } }))
+vi.mock("../taste-queries", () => ({ getHouseholdTaste: () => getHouseholdTaste() }))
+
 const requireViewer = vi.fn(async () => ({ id: "user-1" }))
 vi.mock("@/features/household/queries", () => ({ requireViewer: () => requireViewer() }))
 
@@ -61,5 +64,15 @@ describe("getMealIdeas", () => {
     askAiJson.mockResolvedValue({ ok: false, error: "limit" })
     expect(await getMealIdeas("lunch")).toEqual({ error: "limit" })
     expect(putCached).not.toHaveBeenCalled()
+  })
+})
+
+describe("taste hints", () => {
+  it("passes the household's liked and disliked titles to the prompt (user message)", async () => {
+    askAiJson.mockResolvedValue({ ok: true, data: { ideas: [idea("A")] } })
+    await getMealIdeas("main course")
+    const messages = askAiJson.mock.calls[0][0] as { role: string; content: string }[]
+    expect(messages.find((m) => m.role === "user")?.content).toContain('Liked: ["Shakshuka"]')
+    expect(messages.find((m) => m.role === "system")?.content).not.toContain("Shakshuka")
   })
 })

@@ -11,6 +11,7 @@ import type { ChatMessage } from "@/lib/llm/client"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 
 import { BASICS } from "../match"
+import { hintLines, NO_HINTS, type TasteHints } from "../taste"
 import { MAX_AI_NAMES, MAX_HINT_LENGTH } from "./limits"
 
 const MAX_NAME_LENGTH = 60
@@ -114,8 +115,10 @@ export function buildIdeaMessages(
   hint: string,
   avoidTitle?: string,
   diet: DietInput | null = null,
+  taste: TasteHints = NO_HINTS,
 ): ChatMessage[] {
   const lines = pantryLines(names, diet)
+  lines.push(...hintLines(taste))
   if (hint) lines.push(`Hint from the household: ${JSON.stringify(hint.slice(0, MAX_HINT_LENGTH))}`)
   if (avoidTitle) lines.push(`Suggest something different from: ${JSON.stringify(avoidTitle.slice(0, 100))}`)
   lines.push("Reply in JSON.")

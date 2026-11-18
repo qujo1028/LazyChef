@@ -5,6 +5,7 @@ import { firstIssue } from "@/features/pantry/schemas"
 import type { ActionResult } from "@/features/pantry/types"
 import { askAiJson } from "@/lib/llm/ai"
 
+import { getHouseholdTaste } from "../taste-queries"
 import { loadIdeaPantry } from "./context"
 import { aiRecipeSchema, breaksDiet, buildIdeaMessages, hintSchema, markPantryIngredients, missingIngredients, type AiRecipe } from "./idea"
 
@@ -27,10 +28,11 @@ export async function getAiRecipeIdea(hint: string, avoidTitle?: string): Promis
 
   const pantry = await loadIdeaPantry()
   if (pantry.error !== undefined) return { error: pantry.error }
-  const { diet, names } = pantry
+  const { householdId, diet, names } = pantry
+  const { hints } = await getHouseholdTaste(householdId)
 
   for (let attempt = 0; attempt < DIET_ATTEMPTS; attempt++) {
-    const result = await askAiJson(buildIdeaMessages(names, parsedHint.data, avoid, diet), aiRecipeSchema, {
+    const result = await askAiJson(buildIdeaMessages(names, parsedHint.data, avoid, diet, hints), aiRecipeSchema, {
       maxTokens: 1500,
       temperature: 0.8,
     })

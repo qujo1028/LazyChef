@@ -9,6 +9,7 @@ import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 
 import type { MealFilter } from "../filters"
 import type { OwnRecipeInput } from "../own-recipe"
+import { hintLines, hintsKeySource, NO_HINTS, type TasteHints } from "../taste"
 import { aiRecipeSchema, breaksDiet, markPantryIngredients, pantryLines, RECIPE_JSON_SHAPE, RECIPE_RULES, type AiRecipe } from "./idea"
 
 /** How many ideas one request asks for (and the most ever shown). */
@@ -87,8 +88,13 @@ Reply with only a JSON object, no other text, in this shape:
 ${RECIPE_JSON_SHAPE}`
 
 /** The messages for one request of three ideas. Household data goes in the user message. */
-export function buildMealIdeasMessages(names: readonly string[], meal: IdeaMeal, diet: DietInput | null = null): ChatMessage[] {
-  const lines = [...pantryLines(names, diet), `Meal: ${MEAL_GUIDANCE[meal]}`, `Reply in JSON with exactly ${MEAL_IDEAS_COUNT} ideas.`]
+export function buildMealIdeasMessages(
+  names: readonly string[],
+  meal: IdeaMeal,
+  diet: DietInput | null = null,
+  taste: TasteHints = NO_HINTS,
+): ChatMessage[] {
+  const lines = [...pantryLines(names, diet), ...hintLines(taste), `Meal: ${MEAL_GUIDANCE[meal]}`, `Reply in JSON with exactly ${MEAL_IDEAS_COUNT} ideas.`]
   return [
     { role: "system", content: SYSTEM_PROMPT },
     { role: "user", content: lines.join("\n") },
@@ -136,12 +142,14 @@ export function readCachedIdeas(response: unknown, diet: DietInput | null, pantr
 
 /**
  * The parts of the cache key: the meal, the pantry (normalized, sorted and de-duplicated, so
- * the order things expire in doesn't matter) and the diet. Hashed by the server (meal-cache.ts).
+ * the order things expire in doesn't matter) and the diet and the household's taste hints. Hashed by the server (meal-cache.ts).
  */
-export function ideasCacheKeySource(meal: IdeaMeal, names: readonly string[], diet: DietInput | null): string {
+export function ideasCacheKeySource(meal: IdeaMeal, names: readonly string[], diet: DietInput | null, taste: TasteHints = NO_HINTS): string {
   const keys = [...new Set(names.map((name) => normalizeIngredientName(name) || name.trim().toLowerCase()))].filter(Boolean).sort()
   const dietPart = diet ? `${diet.diet}:${[...diet.allergies].sort().join(",")}` : "none"
-  return JSON.stringify(["meal-ideas:v1", meal, dietPart, keys])
+  // New ratings change the hints, so ideas refresh within the hour; no ratings keeps the old key.
+  const tastePart = hintsKeySource(taste)
+  return JSON.stringify(tastePart ? ["meal-ideas:v1", meal, dietPart, keys, tastePart] : ["meal-ideas:v1", meal, dietPart, keys])
 }
 
 /** The meal types a saved idea is filed under (so it shows up for that meal next time). */

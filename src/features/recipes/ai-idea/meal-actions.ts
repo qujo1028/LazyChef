@@ -4,6 +4,7 @@ import { requireViewer } from "@/features/household/queries"
 import type { ActionResult } from "@/features/pantry/types"
 import { askAiJson } from "@/lib/llm/ai"
 
+import { getHouseholdTaste } from "../taste-queries"
 import { loadIdeaPantry } from "./context"
 import { missingIngredients, type AiRecipe } from "./idea"
 import { getCachedMealIdeas, mealIdeasCacheKey, putCachedMealIdeas } from "./meal-cache"
@@ -31,11 +32,12 @@ export async function getMealIdeas(meal: string): Promise<ActionResult<{ ideas: 
   if (pantry.error !== undefined) return { error: pantry.error }
   const { householdId, diet, names } = pantry
 
-  const key = mealIdeasCacheKey(parsedMeal.data, names, diet)
+  const { hints } = await getHouseholdTaste(householdId)
+  const key = mealIdeasCacheKey(parsedMeal.data, names, diet, hints)
   const cached = await getCachedMealIdeas(householdId, key, diet, names)
   if (cached) return { ideas: cached.map(withMissing) }
 
-  const result = await askAiJson(buildMealIdeasMessages(names, parsedMeal.data, diet), mealIdeasReplySchema, {
+  const result = await askAiJson(buildMealIdeasMessages(names, parsedMeal.data, diet, hints), mealIdeasReplySchema, {
     maxTokens: 4000,
     temperature: 0.8,
   })

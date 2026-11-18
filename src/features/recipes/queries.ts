@@ -51,6 +51,8 @@ import {
 import type { RecipeRef, RecipeSource } from "./ref"
 import { likesCuisine, localFits, preferCuisines, spoonacularFits, type RecipePrefs } from "./prefs"
 import { cookHistory, type SavedRecipe } from "./saved"
+import { applyTaste, suggestionScores, type TasteProfile } from "./taste"
+import { getHouseholdTaste } from "./taste-queries"
 
 /**
  * How many recipes to ask for. findByIngredients is cheap (40 → 1.4 points). complexSearch
@@ -203,15 +205,24 @@ export async function getRecipeIdeas(
     }
   }
 
-  const ranked = rankLocal(index, candidates)
+  // Thumbs ratings break ties inside each missing-count group (cheap selects, no Spoonacular).
+  const { profile: taste } = await getHouseholdTaste(householdId)
+  const ranked = rankLocal(index, candidates, taste)
   const local = { makeNow: preferCuisines(ranked.makeNow, liked), almostThere: preferCuisines(ranked.almostThere, liked) }
   const localCount = local.makeNow.length + local.almostThere.length
   if (!wantsSpoonacular(localCount, more)) {
     return { status: "ok", mode: "ideas", ...local, localCount, spoonacular: { status: "skipped" } }
   }
   const { part, recipes } = await spoonacularRecipes(names, filters, prefs, queries)
-  const extra = part.status === "ok" ? sortSuggestions(index, recipes) : null
+  const sorted = part.status === "ok" ? sortSuggestions(index, recipes) : null
+  const extra = sorted ? tasteSorted(sorted, taste) : null
   return { status: "ok", mode: "ideas", ...mergeSuggestions(local, extra), localCount, spoonacular: part }
+}
+
+/** Spoonacular's ideas with the household's taste as a tie-breaker inside each missing count. */
+function tasteSorted(extra: Suggestions, taste: TasteProfile): Suggestions {
+  const scores = suggestionScores(taste, [...extra.makeNow, ...extra.almostThere])
+  return { makeNow: applyTaste(extra.makeNow, scores), almostThere: applyTaste(extra.almostThere, scores) }
 }
 
 /** One recipe, fetched at most once an hour for everyone (the info endpoint costs a point). */
