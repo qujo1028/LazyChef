@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowRight, LoaderCircle, ScanBarcode } from "lucide-react"
-import Link from "next/link"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -31,6 +30,7 @@ export function QuickAddSheet({
   seed,
   today,
   onCloseAutoFocus,
+  onBulkAdd,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -38,6 +38,8 @@ export function QuickAddSheet({
   today: string
   /** Where focus goes when the sheet closes (it has no trigger button of its own). */
   onCloseAutoFocus?: (event: Event) => void
+  /** Hands what was typed (or a scan request) to the bulk add sheet; this sheet closes. */
+  onBulkAdd: (options: { text?: string; scan?: boolean }) => void
 }) {
   const helpId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -196,22 +198,28 @@ export function QuickAddSheet({
                 </p>
               ) : null}
               <div className="flex flex-wrap items-center justify-between gap-x-4">
-                <Link
-                  href={text.trim() ? `/pantry/add?text=${encodeURIComponent(text.trim())}` : "/pantry/add"}
-                  onClick={() => onOpenChange(false)}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onBulkAdd({ text: text.trim() })
+                    onOpenChange(false)
+                  }}
                   className="inline-flex min-h-11 items-center gap-1 rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   Adding a lot? Just went shopping
                   <ArrowRight className="size-4" aria-hidden />
-                </Link>
-                <Link
-                  href="/pantry/add?scan=1"
-                  onClick={() => onOpenChange(false)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onBulkAdd({ scan: true })
+                    onOpenChange(false)
+                  }}
                   className="inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   <ScanBarcode className="size-4" aria-hidden />
                   Scan barcodes
-                </Link>
+                </button>
               </div>
             </form>
           </>

@@ -369,3 +369,11 @@ Not done / to do:
   Metadata: read), `GITHUB_REPO` and `ADMIN_EMAILS` in Vercel.
 - Not tried in a browser or against the real GitHub repo / live data; charts unchecked at 320 px and in dark mode.
 - `parse-line.test.ts` "stays fast" is timing-sensitive and can fail when the whole suite runs in parallel.
+
+## Trim to five screens (feature/trim-screens)
+
+- Five tab screens (Pantry, Recipes, List, Activity, Household) plus recipe detail. `/pantry/add`, `/recipes/saved`,
+  `/recipes/ours`, `/recipes/new`, `/recipes/[id]/edit`, `/activity/stats` and `/pro` are gone as pages and redirect
+  permanently (`src/lib/legacy-routes.ts`, wired in `next.config.ts`). The older notes above name the old addresses.
+- Bulk add is a sheet on Pantry; Saved and Ours are tabs on Recipes; add/edit recipe is a sheet; Stats is a view of Activity;
+  the paywall opens from the Pro card on Household.
