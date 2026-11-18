@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaInsetsContext, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ToastProvider } from '@/components/Toast';
 import { cacheBuster, CACHE_MAX_AGE, queryClient, queryPersister } from '@/lib/query-client';
 import { useOffline } from '@/lib/use-offline';
 import { SessionProvider } from '@/lib/use-session';
@@ -33,7 +34,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
       persistOptions={{ persister: queryPersister, maxAge: CACHE_MAX_AGE, buster: cacheBuster }}
     >
       <SessionProvider>
-        <OfflineLayer>{children}</OfflineLayer>
+        <OfflineLayer>
+          <ToastProvider>{children}</ToastProvider>
+        </OfflineLayer>
       </SessionProvider>
     </PersistQueryClientProvider>
   );
