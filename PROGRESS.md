@@ -675,3 +675,17 @@ W4 pantry to list (`feature/p3-pantry-to-list`, Haiku):
   Left as they are: the sheet's held toast can wait if the sheet is reopened before the add settles (`send` is per spec);
   `useAddPantryItemToList` reads `householdId` via `useList()` as specified (re-renders on list changes); casing
   (lowercase on add, display case on "already on the list") as specified; the hook has no unit test (needs a provider).
+
+Lead merge (P3): W2, W1, W3, W4 merged into `feature/p3-list` in that order; only PROGRESS.md conflicted. The lead
+read every diff. Fix on merge: the list edit sheet closes before removing the line, so it never shows "someone removed
+this" for your own delete. W4 asked about "We ran out" showing for untracked items: that's intended (it sets an
+"On hand" item to 0, like the web). Checks: web typecheck, lint, 2,334 tests; mobile typecheck, lint, iOS and web exports.
+The P3 PR is stacked on P2 (base `feature/p2-pantry`) until PR #69 merges.
+
+Open for P3's exit check (needs the user and phones in Expo Go):
+- At 375pt, light and dark: quick add, check off with Undo, the edit sheet, put away (cards, hints, date picker),
+  "Clear without adding", and "Add to shopping list" from a ran-out row, the pantry edit sheet and the Ran out toast.
+- Two phones: an item added on one shows on the other; checking off and put away move it into the pantry on both.
+- Known gaps: a failed list edit rolls back over a housemate's newer change (same as the pantry sheet); a housemate's
+  change while put away is open makes the save fail with an error instead of refreshing the cards; scan to check
+  off waits for P5; the "added to the list" push waits for P6.
