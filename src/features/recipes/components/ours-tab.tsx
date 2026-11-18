@@ -1,19 +1,17 @@
-import type { Metadata } from "next"
 import { BookOpen, Plus } from "lucide-react"
-import Link from "next/link"
 
 import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
-import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
-import { RecipeCard } from "@/features/recipes/components/recipe-card"
-import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
-import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { getOurRecipes, getSavedIds } from "@/features/recipes/queries"
 
-export const metadata: Metadata = { title: "Our recipes" }
+import { RecipeCard } from "./recipe-card"
+import { RecipeSheet } from "./recipe-sheet"
+import { RecipeGrid } from "./recipe-tile"
+import { RecipesTabs } from "./recipes-tabs"
 
-export default async function OurRecipesPage() {
+/** Recipes, "Ours" view (?view=ours). `openNew` opens the add sheet on arrival (?new=1). */
+export async function OursTab({ openNew }: { openNew: boolean }) {
   const { household } = await requireHousehold()
   const [{ recipes }, savedIds] = await Promise.all([getOurRecipes(household.id), getSavedIds(household.id)])
   const ready = recipes.filter((recipe) => recipe.need.length === 0).length
@@ -28,12 +26,10 @@ export default async function OurRecipesPage() {
             : `${recipes.length} of your own${ready > 0 ? ` · ${ready} you can make now` : ""}`
         }
       />
-      <RecipesTabs current="/recipes/ours" />
-      <Button asChild size="lg" className="h-12 w-full text-base">
-        <Link href="/recipes/new">
-          <Plus aria-hidden /> Add your own recipe
-        </Link>
-      </Button>
+      <RecipesTabs current="ours" />
+      <RecipeSheet householdId={household.id} defaultOpen={openNew} variant="default" className="h-12 w-full text-base">
+        <Plus aria-hidden /> Add your own recipe
+      </RecipeSheet>
       {recipes.length === 0 ? (
         <EmptyState icon={BookOpen} title="No recipes of your own yet">
           Add the ones you make all the time. They show up in Make now and Almost there, and only your household can see

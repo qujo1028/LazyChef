@@ -1,7 +1,6 @@
 "use client"
 
 import { LoaderCircle, Plus, Trash2, X } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useId, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -47,15 +46,20 @@ export function RecipeForm({
   recipeId = null,
   initial = EMPTY_DRAFT,
   initialPhotoUrl = null,
+  onSaved,
+  onDeleted,
 }: {
   householdId: string
   /** Set when editing. */
   recipeId?: string | null
   initial?: OwnRecipeDraft
   initialPhotoUrl?: string | null
+  /** After the recipe is saved; `id` is its address (/recipes/<id>). */
+  onSaved: (id: string) => void
+  /** After the recipe is deleted (editing only). */
+  onDeleted: () => void
 }) {
   const id = useId()
-  const router = useRouter()
   const [draft, setDraft] = useState<OwnRecipeDraft>(initial)
   const [photoUrl, setPhotoUrl] = useState(initialPhotoUrl)
   const [errors, setErrors] = useState<Errors>({})
@@ -127,7 +131,7 @@ export function RecipeForm({
       }
       unsaved.current.clear()
       toast.success(recipeId ? "Recipe saved" : "Recipe added for your household")
-      startTransition(() => router.replace(`/recipes/${result.id}`))
+      onSaved(result.id)
     })
   }
 
@@ -292,7 +296,7 @@ export function RecipeForm({
             const result = await callAction(() => deleteOwnRecipe(recipeId))
             if (result.error !== undefined) return result
             toast.success("Recipe deleted")
-            router.replace("/recipes/ours")
+            onDeleted()
           }}
         />
       ) : null}

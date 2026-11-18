@@ -239,7 +239,6 @@ export async function rateRecipe(ref: string, rating: number): Promise<ActionRes
   if (error) return { error: error.code === "42501" ? NOT_COOKED_MESSAGE : dbError("rate_recipe", error) }
 
   revalidatePath("/recipes")
-  revalidatePath("/recipes/saved")
   revalidatePath(`/recipes/${parsed.data.ref}`)
   return { rating: parsed.data.rating }
 }

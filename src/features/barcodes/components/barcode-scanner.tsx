@@ -4,7 +4,7 @@ import { CameraOff, Flashlight, FlashlightOff, Keyboard, LoaderCircle } from "lu
 import { useEffect, useId, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
+import { Drawer, DrawerNested, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { normalizeBarcode } from "@/lib/barcode/codes"
 import { haptic } from "@/lib/native/haptics"
@@ -272,6 +272,7 @@ export function BarcodeScanner({
   onCode,
   children,
   footer,
+  nested = false,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -280,9 +281,12 @@ export function BarcodeScanner({
   onCode: (code: string) => void
   children?: React.ReactNode
   footer: React.ReactNode
+  /** Opens on top of another drawer (the bulk add sheet) instead of on its own. */
+  nested?: boolean
 }) {
+  const Root = nested ? DrawerNested : Drawer
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Root open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="mx-auto h-[92dvh] w-full max-w-lg data-[vaul-drawer-direction=bottom]:max-h-[92dvh]">
         <DrawerHeader className="text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
           <DrawerTitle className="text-lg">{title}</DrawerTitle>
@@ -308,6 +312,6 @@ export function BarcodeScanner({
         </div>
         <DrawerFooter className="border-t pb-[calc(1rem+env(safe-area-inset-bottom))]">{footer}</DrawerFooter>
       </DrawerContent>
-    </Drawer>
+    </Root>
   )
 }
