@@ -42,7 +42,7 @@ export default function RecipeScreen() {
   const { colors, spacing, type } = useTheme();
   const insets = useSafeAreaInsets();
   const toast = useToast();
-  const { household } = useActiveHousehold();
+  const { household, isPending: householdLoading } = useActiveHousehold();
   const householdId = household?.id ?? null;
   const { items: pantryItems } = usePantry();
   const { items: listItems } = useList();
@@ -54,7 +54,7 @@ export default function RecipeScreen() {
   const addingRef = useRef(false);
 
   const query = useQuery({
-    queryKey: queryKeys.recipe(householdId ?? 'none', id ?? ''),
+    queryKey: queryKeys.recipe(householdId ?? 'none', ref ? (ref.kind === 'spoonacular' ? String(ref.id) : ref.id) : ''),
     enabled: ref !== null && householdId !== null,
     staleTime: RECIPE_STALE_MS,
     queryFn: () => fetchRecipe(householdId!, ref!),
@@ -80,7 +80,7 @@ export default function RecipeScreen() {
 
   if (ref === null) return <Problem header={header('Recipe')} problem={problemFor('not_found')} />;
   if (!recipe) {
-    if (query.isPending) {
+    if (householdLoading || (query.isPending && query.fetchStatus !== 'idle')) {
       return (
         <View style={[styles.fill, { backgroundColor: colors.background, padding: spacing.lg }]}>
           {header('Recipe')}
@@ -164,7 +164,7 @@ export default function RecipeScreen() {
             </Text>
           </Text>
           {checklist.length > 0 ? (
-            <IngredientChecklist lines={checklist} adding={adding} onAdd={addMissing} />
+            <IngredientChecklist key={recipe.ref} lines={checklist} adding={adding} onAdd={addMissing} />
           ) : (
             <Text style={[type.body, { color: colors.muted }]}>This recipe has no ingredient list.</Text>
           )}

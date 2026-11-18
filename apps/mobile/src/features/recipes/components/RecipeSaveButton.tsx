@@ -39,10 +39,18 @@ export function RecipeSaveButton({
     busy.current = true;
     const next = !saved;
     queryClient.setQueryData(key, next);
-    const result = await setSaved(householdId, recipeRef, title, image, next);
-    busy.current = false;
+    let result: { error?: string };
+    try {
+      result = await setSaved(householdId, recipeRef, title, image, next);
+    } catch {
+      result = { error: "Couldn't reach the server. Try again." };
+    } finally {
+      busy.current = false;
+    }
     if (result.error !== undefined) {
-      queryClient.setQueryData(key, !next);
+      // Back to what the server last told us, not a guess from the tap.
+      void queryClient.invalidateQueries({ queryKey: key });
+      queryClient.setQueryData(key, saved);
       toast.show({ message: result.error, tone: 'error' });
       return;
     }
