@@ -1,7 +1,7 @@
 "use client"
 
 import { CircleAlert, CookingPot, Heart, ListPlus, LoaderCircle, Undo2 } from "lucide-react"
-import { useId, useState, useTransition } from "react"
+import { useId, useMemo, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import { formatUnit } from "@/lib/units"
 import { cn } from "@/lib/utils"
 
 import { cookRecipe, saveRecipe, undoCook } from "../actions"
+import { scaleCookLines } from "../scale"
 import {
   haveLabel,
   initialChoices,
@@ -34,15 +35,19 @@ export function CookSheet({
   title,
   lines,
   saved,
+  scale = 1,
 }: {
   recipeId: number
   title: string
   lines: CookLine[]
   /** Whether the household already saved it (the done screen offers to otherwise). */
   saved: boolean
+  /** Serving scaler factor: deductions start at the scaled amounts. */
+  scale?: number
 }) {
   const [open, setOpen] = useState(false)
   const [session, setSession] = useState(0)
+  const scaled = useMemo(() => scaleCookLines(lines, scale), [lines, scale])
   const trackable = lines.some((line) => line.kind === "deduct" || line.kind === "check")
 
   return (
@@ -71,7 +76,7 @@ export function CookSheet({
               key={session}
               recipeId={recipeId}
               title={title}
-              lines={lines}
+              lines={scaled}
               saved={saved}
               close={() => setOpen(false)}
             />

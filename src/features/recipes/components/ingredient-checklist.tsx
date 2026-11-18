@@ -14,6 +14,7 @@ import { describeListAdditions } from "@/features/list/plan"
 
 import { addRecipeIngredientsToList } from "../actions"
 import type { IngredientStatus } from "../match"
+import { scaleOriginal } from "../scale"
 
 export type ChecklistLine = {
   /** Position in the recipe's ingredient list (what the server action takes). */
@@ -30,7 +31,7 @@ function plural(n: number, word: string) {
 }
 
 /** The recipe's ingredients: what you have, and what you need with boxes to add to the list. */
-export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lines: ChecklistLine[] }) {
+export function IngredientChecklist({ recipeId, lines, scale = 1 }: { recipeId: number; lines: ChecklistLine[]; scale?: number }) {
   const [added, setAdded] = useState<ReadonlySet<number>>(() => new Set())
   const isOnList = (line: ChecklistLine) => line.onList || added.has(line.index)
   const addable = lines.filter((line) => line.status === "need" && !isOnList(line))
@@ -90,7 +91,7 @@ export function IngredientChecklist({ recipeId, lines }: { recipeId: number; lin
                 </span>
               )}
               <label htmlFor={line.status === "need" && !onList ? id : undefined} className="grid min-w-0 flex-1 gap-0.5">
-                <span className="text-sm leading-snug">{line.original}</span>
+                <span className="text-sm leading-snug">{scaleOriginal(line.original, scale)}</span>
                 <span
                   className={cn(
                     "text-xs",

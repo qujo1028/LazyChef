@@ -6,8 +6,8 @@ import { notFound } from "next/navigation"
 import { EmptyState } from "@/components/empty-state"
 import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { CookSheet } from "@/features/recipes/components/cook-sheet"
-import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import type { ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import { RecipeIngredients } from "@/features/recipes/components/recipe-ingredients"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { SaveButton } from "@/features/recipes/components/save-button"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
@@ -95,8 +95,14 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
             · you have {have} of {lines.length}
           </span>
         </h2>
-        <IngredientChecklist recipeId={recipe.id} lines={lines} />
-        <CookSheet recipeId={recipe.id} title={recipe.title} lines={cook} saved={saved} />
+        <RecipeIngredients
+          recipeId={recipe.id}
+          title={recipe.title}
+          baseServings={recipe.servings}
+          lines={lines}
+          cook={cook}
+          saved={saved}
+        />
       </section>
 
       {recipe.steps.length > 0 ? (
