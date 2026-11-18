@@ -856,3 +856,10 @@ Workers (branch from `origin/feature/p5-barcodes-ideas`):
 - W2 `feature/p5-ideas` (Sonnet: the Ideas sheet, consent, count line, save and add-missing).
 - W3 `feature/p5-scanner` (Sonnet: the camera scanner and scanning inside the Add food sheet).
 - W4 `feature/p5-barcode-lookup` (Sonnet: Open Food Facts from the phone and the household barcode memory, with tests).
+
+W4 (`feature/p5-barcode-lookup`, Sonnet): `features/barcodes/lookup.ts` is filled in. `lookupBarcode(householdId, input)`
+checks the household's `household_barcodes` row (as the user, RLS), then calls Open Food Facts v2 straight from the phone
+(6 s timeout, identifying User-Agent). It never throws, reads offline as friendly copy, and caches results per session
+(per household and code). `rememberBarcodes` inserts new codes and updates known ones (name, amount, unit only), ignores
+23505 and never fails the caller. Pure parts and tests: `lib/barcode-off.ts`, `barcode-cache.ts`, `barcode-memory.ts`.
+No tidy flag (AI tidy is out of v1). Not checked: a signed-in account, live RLS writes from a phone.
