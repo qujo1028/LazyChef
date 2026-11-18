@@ -256,19 +256,19 @@ describe("ai handler: ideas", () => {
   })
 
   it("says limit_reached with the allowance, without calling the model", async () => {
-    const { handle, caller, chat } = setup({
+    const { handle, chat } = setup({
       takeAllowance: vi.fn(async () => ({ allowed: false, pro: false, used: 10, lim: 10, resets_at: RESETS })),
     })
     const result = await read(await handle(post(ideas())))
     expect(result).toMatchObject({ status: 429, body: { code: "limit_reached", allowance: { used: 10, resetsAt: RESETS } } })
     expect(result.body.error).toContain("free AI recipes")
-    expect(caller.takeAiRateLimit).not.toHaveBeenCalled()
     expect(chat).not.toHaveBeenCalled()
   })
 
-  it("says rate_limited without calling the model", async () => {
-    const { handle, chat } = setup({ takeAiRateLimit: vi.fn(async () => false) })
-    expect(await read(await handle(post(ideas())))).toMatchObject({ status: 429, body: { code: "rate_limited", allowance: { used: 3 } } })
+  it("says rate_limited without taking a free use or calling the model", async () => {
+    const { handle, caller, chat } = setup({ takeAiRateLimit: vi.fn(async () => false) })
+    expect(await read(await handle(post(ideas())))).toMatchObject({ status: 429, body: { code: "rate_limited", allowance: { used: 2 } } })
+    expect(caller.takeAllowance).not.toHaveBeenCalled()
     expect(chat).not.toHaveBeenCalled()
   })
 

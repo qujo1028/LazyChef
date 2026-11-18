@@ -889,8 +889,9 @@ W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
 - `supabase/functions/ai/`: `ideas` and `allowance` per `ai/edge-contract.ts` (contract unchanged). JWT checked with
   `auth.getUser()`, then membership; everything runs as the caller (pantry, preferences, ratings and titles,
   `ai_idea_cache` / `put_ai_idea_cache`, `take_ai_allowance`, `get_pro_status` + `ai_usage` for the read-only allowance,
-  `take_rate_limit('ai')`). No service role client at all. Order as the web: pantry (`empty_pantry`), cache (free hit),
-  allowance (`limit_reached`), rate limit (`rate_limited`), Groq. Fails closed on any check error. One use per request;
+  `take_rate_limit('ai')`). No service role client at all. Order: pantry (`empty_pantry`), cache (free hit), rate limit
+  (`rate_limited`), allowance (`limit_reached`), Groq. The brief said allowance before rate limit (as the web), but then
+  an hourly refusal burns a free use, against CLAUDE.md's "after cache hits and refusals"; so the rate limit goes first. Fails closed on any check error. One use per request;
   the model gets one retry when nothing in its answer is usable. Status codes: 200 (also `empty_pantry`), 400, 401, 403,
   405, 429 (`limit_reached`, `rate_limited`), 502, 503. No migration needed.
 - Hint: cleaned (control, zero-width and bidi characters out, single-spaced, at most 100), sent as quoted data in the user
@@ -908,3 +909,12 @@ W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
 - `deno check` passes for `ai/index.ts` and `recipes/index.ts` (deno 2.9.8). Not deployed, no secrets set: see
   `supabase/functions/ai/README.md` (deploy, dashboard secret, curl smoke test). Not checked: a live Groq call, a
   signed-in session, the deployed function.
+- Self-review fixes: rate limit before allowance (above); pantry and ratings read in pages of 1000 (up to 5000);
+  taste read alongside the pantry and diet; bidi isolate, soft hyphen and Arabic letter mark characters stripped from the
+  hint; a non-text hint gets its own message; `filters.ts` no longer copied (the meal list check moved to a test).
+  Open for the lead: (1) a cache hit still fails with `upstream` if the read-only allowance can't be read, since
+  `AiSuccess` requires `allowance` (an optional allowance would need a contract change); (2) `limit_reached`'s "come
+  back Friday" weekday is worded in UTC, so the app may prefer to word it from `resetsAt`; (3) the read-only allowance
+  uses `AI_FREE_WEEKLY` (10), since only `take_ai_allowance` returns the database's limit; (4) `ai/groq.ts` is a port of
+  `src/lib/llm/client.ts`, not shared code (moving the web client into core is a follow-up); (5) the web's
+  `getMealIdeas` still takes the allowance before the rate limit.

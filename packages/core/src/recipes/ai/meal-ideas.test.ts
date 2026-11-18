@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import { AI_IDEA_MEALS, AI_MAX_HINT_LENGTH } from "../../ai/edge-contract"
 import { MAX_HINT_LENGTH } from "../ai-limits"
+import { MEAL_FILTERS } from "../filters"
 import { buildIdeaMessages, hintLine } from "./idea"
 import { buildMealIdeasMessages, IDEA_MEALS, ideasCacheKeySource, mealIdeasCacheKey } from "./meal-ideas"
 
@@ -11,6 +12,10 @@ describe("the ai Edge contract", () => {
   it("offers the same meals and hint length as the web", () => {
     expect([...AI_IDEA_MEALS]).toEqual([...IDEA_MEALS])
     expect(AI_MAX_HINT_LENGTH).toBe(MAX_HINT_LENGTH)
+  })
+
+  it("offers the meal filters plus any meal", () => {
+    expect([...IDEA_MEALS]).toEqual([...MEAL_FILTERS.map((filter) => filter.value), "any"])
   })
 })
 

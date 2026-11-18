@@ -50,6 +50,6 @@ describe("parseRequest", () => {
 
 describe("cleanHint", () => {
   it("drops control, zero-width and direction characters", () => {
-    expect(cleanHint("spicy\u0000\u200b\u202enoodles\u2028now\ufeff")).toBe("spicy noodles now")
+    expect(cleanHint("spicy\u0000\u200b\u202e\u2067noodles\u2028now\ufeff")).toBe("spicy noodles now")
   })
 })

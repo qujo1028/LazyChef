@@ -7,7 +7,6 @@ import { z } from "zod"
 
 import { normalizeIngredientName } from "./normalize.ts"
 import type { DietInput } from "./diet.ts"
-import type { MealFilter } from "./filters.ts"
 import { hintLines, hintsKeySource, NO_HINTS, type TasteHints } from "./taste-hints.ts"
 import {
   aiRecipeSchema,
@@ -27,7 +26,7 @@ export const MEAL_IDEAS_COUNT = 3
 /** A cached answer lives this long (Spoonacular-style hourly freshness; the table caps it too). */
 export const MEAL_IDEAS_TTL_SECONDS = 60 * 60
 
-/** The meal the ideas are for: one of the meal filters, or any meal. */
+/** The meal the ideas are for: one of the meal filters, or any meal (meal-ideas.test.ts checks they match). */
 export const IDEA_MEALS = [
   "breakfast",
   "lunch",
@@ -38,7 +37,7 @@ export const IDEA_MEALS = [
   "snack",
   "dessert",
   "any",
-] as const satisfies readonly (MealFilter | "any")[]
+] as const
 export type IdeaMeal = (typeof IDEA_MEALS)[number]
 export const ideaMealSchema = z.enum(IDEA_MEALS)
 

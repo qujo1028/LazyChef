@@ -16,8 +16,8 @@ the same code (`packages/core/src/recipes/ai/`).
 | `ideas`     | `householdId`, `meal`, `hint?`         | Up to 3 ideas for the meal from the pantry, each with `missing` (names to buy). `cached: true` when it came from the hourly cache (free). Takes one free use on a cache miss. |
 | `allowance` | `householdId`                          | The allowance only (`pro`, `used` in the last 7 days, `limit`, `resetsAt`). Takes nothing. |
 
-Every success carries `allowance`. So do `limit_reached`, `rate_limited` and model failures after
-a use was taken, so the app's count line stays right.
+Every success carries `allowance`. So do `limit_reached`, `rate_limited` and model failures, so
+the app's count line stays right.
 
 ## Rules it enforces
 
@@ -26,9 +26,11 @@ a use was taken, so the app's count line stays right.
 - **Only one client, the caller's.** Pantry, preferences, ratings, the idea cache
   (`ai_idea_cache`, `put_ai_idea_cache`), `take_ai_allowance`, `get_pro_status`, `ai_usage` and
   `take_rate_limit('ai')` all run with the person's token. There is no service role key here.
-- **Order (as on the web):** validate, auth, membership, read the pantry (nothing to cook from is
-  `empty_pantry`), cache lookup (a hit is free), `take_ai_allowance` (refused is
-  `limit_reached`), `take_rate_limit('ai')` (refused is `rate_limited`), then Groq.
+- **Order:** validate, auth, membership, read the pantry (nothing to cook from is
+  `empty_pantry`), cache lookup (a hit is free), `take_rate_limit('ai')` (refused is
+  `rate_limited`), `take_ai_allowance` (refused is `limit_reached`), then Groq. The rate limit
+  comes before the allowance so an hourly refusal never costs one of the household's free uses
+  (the web's `getMealIdeas` takes the allowance first).
 - **Fails closed:** if any check errors (auth, membership, pantry, preferences, allowance, rate
   limit), the answer is `upstream` and the model is never called. The web's `takeAiAllowance`
   lets the call through on an error; this doesn't. Taste hints are optional context: if they

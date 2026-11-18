@@ -228,11 +228,11 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
 
   async function ideas(llm: Llm, caller: Caller, householdId: string, meal: IdeaMeal, hint: string): Promise<Response> {
     // The pantry and diet are read here as the caller, never taken from the app.
-    const [items, diet] = await Promise.all([caller.pantryItems(householdId), loadDiet(caller)])
+    // Taste is read alongside (it doesn't depend on them); an empty pantry wastes that read.
+    const [items, diet, taste] = await Promise.all([caller.pantryItems(householdId), loadDiet(caller), loadTaste(caller, householdId)])
     const names = cleanNames(namesForDiet(pantrySearchNames(items, utcDateKey(now())), diet))
     if (names.length === 0) return failure("empty_pantry", diet ? MESSAGES.empty_for_diet : MESSAGES.empty_pantry)
 
-    const taste = await loadTaste(caller, householdId)
     const key = await ideasCacheKey(meal, names, diet, taste, hint)
     const hit = await cached(caller, householdId, key, diet, names)
     if (hit) {
@@ -242,13 +242,17 @@ export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Resp
       return json(body)
     }
 
-    // One use per request, however many attempts the model needs. Fails closed: a failed
-    // check throws, and the catch-all answers upstream without calling the model.
+    // The hourly limit first, so a refusal never costs one of the household's free uses
+    // (CLAUDE.md: take the allowance after cache hits and refusals). Then one use per request,
+    // however many attempts the model needs. Fails closed: a failed check throws, and the
+    // catch-all answers upstream without calling the model.
+    if (!(await caller.takeAiRateLimit())) {
+      return failure("rate_limited", MESSAGES.rate_limited, allowanceFromRead(await caller.readAllowance(householdId)))
+    }
     const row = await caller.takeAllowance(householdId)
     if (!row) throw new Error("take_ai_allowance returned no row")
     const allowance = allowanceFromRow(row)
     if (!row.allowed) return failure("limit_reached", limitMessage(row.resets_at, now()), allowance)
-    if (!(await caller.takeAiRateLimit())) return failure("rate_limited", MESSAGES.rate_limited, allowance)
 
     let fresh: AiRecipe[]
     try {

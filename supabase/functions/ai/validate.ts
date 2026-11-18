@@ -23,7 +23,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 /** Control and format characters out (they can hide text from the person), whitespace single-spaced and trimmed. */
 export function cleanHint(value: string): string {
   // deno-lint-ignore no-control-regex
-  return value.replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u2028-\u202e\u2060-\u2064\ufeff]/g, " ").replace(/\s+/g, " ").trim()
+  return value.replace(/[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u2064\u2066-\u2069\ufeff]/g, " ").replace(/\s+/g, " ").trim()
 }
 
 function parseHousehold(value: unknown): string | null {
@@ -42,9 +42,8 @@ export function parseRequest(body: unknown): Parsed {
       if (!householdId) return fail("Pick a household.")
       if (typeof body.meal !== "string" || !MEALS.has(body.meal)) return fail("Pick a meal first.")
       const { hint } = body
-      if (hint !== undefined && hint !== null && (typeof hint !== "string" || hint.length > MAX_RAW_HINT_LENGTH)) {
-        return fail(`Keep the hint under ${AI_MAX_HINT_LENGTH} characters.`)
-      }
+      if (hint !== undefined && hint !== null && typeof hint !== "string") return fail("The hint should be text.")
+      if (typeof hint === "string" && hint.length > MAX_RAW_HINT_LENGTH) return fail(`Keep the hint under ${AI_MAX_HINT_LENGTH} characters.`)
       const clean = typeof hint === "string" ? cleanHint(hint) : ""
       if (clean.length > AI_MAX_HINT_LENGTH) return fail(`Keep the hint under ${AI_MAX_HINT_LENGTH} characters.`)
       return { ok: true, request: { action: "ideas", householdId, meal: body.meal as AiIdeaMeal, hint: clean } }

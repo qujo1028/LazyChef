@@ -25,7 +25,6 @@ export const COPIES = {
   "packages/core/src/recipes/ai/meal-ideas.ts": "ai-meal-ideas.ts",
   "packages/core/src/recipes/ai-limits.ts": "ai-limits.ts",
   "packages/core/src/recipes/basics.ts": "basics.ts",
-  "packages/core/src/recipes/filters.ts": "filters.ts",
   "packages/core/src/recipes/pantry-names.ts": "pantry-names.ts",
   "packages/core/src/recipes/taste-hints.ts": "taste-hints.ts",
   "packages/core/src/preferences/diet.ts": "diet.ts",

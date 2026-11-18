@@ -14,6 +14,25 @@ const NO_SESSION = { persistSession: false, autoRefreshToken: false, detectSessi
 
 /** PostgREST returns at most this many rows per request. */
 const PAGE = 1000
+/** The most rows read for one request (pantry items, ratings), in pages of PAGE. */
+const MAX_ROWS = 5000
+
+/** Reads up to MAX_ROWS rows page by page (PostgREST silently caps one request at PAGE). */
+async function readPages<T>(
+  what: string,
+  fetchPage: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>,
+): Promise<T[]> {
+  const rows: T[] = []
+  while (rows.length < MAX_ROWS) {
+    const from = rows.length
+    const to = Math.min(from + PAGE, MAX_ROWS) - 1
+    const { data, error } = await fetchPage(from, to)
+    check(error, what)
+    rows.push(...(data ?? []))
+    if (!data || data.length < to - from + 1) break
+  }
+  return rows
+}
 
 /** A client acting as the person with this access token (RLS applies). */
 export function callerClient(url: string, anonKey: string, token: string): SupabaseClient {
@@ -54,14 +73,15 @@ export async function authenticate(url: string, anonKey: string, token: string):
     },
 
     async pantryItems(householdId) {
-      const { data: rows, error: pantryError } = await client
-        .from("pantry_items")
-        .select("name, quantity, is_staple, expires_on")
-        .eq("household_id", householdId)
-        .order("name")
-        .limit(PAGE)
-      check(pantryError, "Reading the pantry")
-      return (rows ?? []).map((row) => ({
+      const rows = await readPages("Reading the pantry", (from, to) =>
+        client
+          .from("pantry_items")
+          .select("name, quantity, is_staple, expires_on")
+          .eq("household_id", householdId)
+          .order("id")
+          .range(from, to),
+      )
+      return rows.map((row) => ({
         name: String(row.name ?? ""),
         quantity: row.quantity === null ? null : Number(row.quantity),
         is_staple: row.is_staple === true,
@@ -80,13 +100,17 @@ export async function authenticate(url: string, anonKey: string, token: string):
     },
 
     async ratings(householdId) {
-      const { data: rows, error: ratingsError } = await client
-        .from("recipe_ratings")
-        .select("recipe_ref, rating, updated_at")
-        .eq("household_id", householdId)
-        .limit(PAGE)
-      check(ratingsError, "Reading ratings")
-      return (rows ?? []).map((row) => ({ recipe_ref: String(row.recipe_ref), rating: Number(row.rating), updated_at: String(row.updated_at) }))
+      const rows = await readPages("Reading ratings", (from, to) =>
+        client
+          .from("recipe_ratings")
+          .select("recipe_ref, rating, updated_at")
+          .eq("household_id", householdId)
+          // One row per member and recipe, so this order is stable across pages.
+          .order("user_id")
+          .order("recipe_ref")
+          .range(from, to),
+      )
+      return rows.map((row) => ({ recipe_ref: String(row.recipe_ref), rating: Number(row.rating), updated_at: String(row.updated_at) }))
     },
 
     async recipeTitles(householdId, refs) {
