@@ -28,6 +28,7 @@ export const queryKeys = {
   context: (userId: string) => ['household', 'context', userId] as const,
   members: (householdId: string) => ['household', 'members', householdId] as const,
   invitePreview: (code: string) => ['household', 'invite-preview', code] as const,
+  pantry: (householdId: string) => ['household', 'pantry', householdId] as const,
 };
 
 async function fetchHouseholdContext(userId: string, email: string | null): Promise<HouseholdContext> {

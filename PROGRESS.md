@@ -537,3 +537,81 @@ Open for P1's exit check (needs the user and real phones):
 
 Phone check (2026-11-18): the user tried P1 on a phone in Expo Go and everything worked.
 To do later: revisit onboarding once the rest of the app is built (also in the open items at the top).
+
+## P2 Pantry (2026-11-18, lead: `feature/p2-pantry`)
+Based on `origin/main` (P1 merged as PR #68). Migration lock: nobody (P2 uses the existing `pantry_items`,
+`category_overrides`, `add_pantry_items` and `adjust_pantry_quantity`).
+
+Step 0 (lead):
+- Packages: `@react-native-community/datetimepicker` (via `npx expo install`, config plugin added) and `zod`.
+- `src/features/pantry/api.ts`: reads (paged) and writes as the signed-in user, same rules as the web actions
+  (`addItems`, `addStaples`, `updateItem`, `adjustQuantity`, `deleteItem`), each returning `{ error }` and failing fast
+  offline. `previewItems` resolves typed text locally (household fixes, library, keyword guess); no Spoonacular on
+  mobile until an Edge Function exists.
+- `src/features/pantry/pantry-provider.tsx`: `PantryProvider` in the tabs layout, `usePantry()` (`items`, `query`,
+  `apply`, `adjust`) and `usePantryItem(id)`. Fetches merge with core row-state rules; `pantry_items` broadcasts apply live.
+  Query key `queryKeys.pantry(id)` sits under `['household']`, so resume and household refetches include it.
+- Components: `Toast` (`useToast().show({ message, action })`, app-wide, renders under native modals), `Sheet` (iOS page
+  sheet with title, Close, pinned footer), `SelectField`, `Chip`; `features/pantry/components/PantryFields.tsx`
+  (`CategoryField`, `UnitField`, `ExpiryField`). `src/lib/use-today.ts`, `src/lib/db-error.ts`.
+- Stubs with fixed props: pantry screen, `AddFoodSheet`, `ReviewList`, `AddSeveralInput`, `EditItemSheet`.
+- Deferred: "Add to shopping list" on ran-out items (P3), Spoonacular categorizing (Edge Function), barcode (P5),
+  the "This week" card (P4). Delete keeps the web's confirm, no Undo.
+
+Workers (branch from `origin/feature/p2-pantry`, all Sonnet: typical feature work): W1 `feature/p2-pantry-screen`,
+W2 `feature/p2-add-food`, W3 `feature/p2-review`, W4 `feature/p2-edit`.
+
+W3 review (`feature/p2-review`, Sonnet): `ReviewList` (one `Card` per draft: emoji, name, amount, `UnitField`,
+`CategoryField` with source hint or "We'll remember this for next time.", `ExpiryField`, "Always on hand" `Switch`,
+"Remove <name>" button, inline `draftError` text when `showErrors`; a plain map, no nested lists) and `AddSeveralInput`
+(160pt multi-line box, live count via `parseLines`, help line when empty, error line). `insertPastedLines` is not used:
+RN has no paste event and a multi-line `TextInput` keeps pasted line breaks itself. Helper `lib/add-several-hint.ts`
+with a test. No shared-file changes. Not checked: simulator layout (emoji and remove button alignment against the
+name field, VoiceOver, Dynamic Type), sheet scrolling with many drafts.
+
+W4 edit (`feature/p2-edit`):
+- `EditItemSheet`: header with emoji, name, amount and category, who added it and when; "Used some?" (units converted),
+  "We ran out", the edit form (name, amount and unit, category, expiry, Always on hand), Save (disabled until something
+  changes; errors show inside the sheet, with a rollback), Delete with an `Alert` confirm. If a housemate deletes the
+  item while it is open, the sheet says so with a Close button. The form starts fresh each time the sheet opens.
+- Toasts wait until the sheet has closed (`src/lib/after-close.ts`, with tests), since they render under native modals.
+- Skipped: "Add to shopping list" (P3). No shared-file changes.
+- Not checked on a device or against the live backend (no simulator or signed-in account). Checks: mobile typecheck,
+  lint, `npm test`, `npx expo export -p ios`.
+
+W1 pantry screen (`feature/p2-pantry-screen`):
+- `(tabs)/pantry.tsx` ported from the web pantry view: summary line, search with clear and "Nothing called X / Add X",
+  Expiring soon, one card per category, "Always on hand" chips, collapsible "Ran out" (open while searching), "-1" with a
+  light haptic and a toast with Undo (gives back only what was taken), getting-started card with kitchen basics
+  (`addStaples`), floating "Add food" pill. One FlatList over flattened rows; pull to refresh; loading, error with
+  retry, and an offline note when nothing is cached.
+- Code: `src/lib/pantry-rows.ts` (rows builder and `amountTaken`, tested), and `features/pantry/components/`
+  `PantryItemRow`, `PantrySectionRows`, `PantrySearch`, `GettingStarted`. No shared files changed.
+- Not checked on a device or simulator. Known gaps: "Add to shopping list" on ran-out rows waits for P3.
+
+W2 add food (`feature/p2-add-food`):
+- `AddFoodSheet` (stub props kept): quick mode with one input, autocomplete from `searchIngredients` for the name at the
+  caret (`suggestionQuery`, `replaceNameAtCaret`, bold `matchRange`, in `SuggestionList.tsx`), "N items" hint, an "Add several"
+  toggle to W3's `AddSeveralInput` that keeps the text, then W3's `ReviewList` step with Back and "Add N to pantry".
+- Flow: `previewItems` then `draftsFromResolved`; `draftsToItems` null shows field errors; `addItems` errors show inside
+  the sheet; success closes, then the toast (`describeAdditions`) is held by `createAfterClose` until the sheet has closed.
+  Text and review survive a close; a new seed or a finished add starts fresh. Input autofocuses after the slide-in.
+- Pure helpers with tests: `src/lib/add-food.ts` (`highlightParts`, `reviewTitle`, `addButtonLabel`, `stateOnOpen`).
+- Not checked on a device: keyboard avoidance, autofocus timing in the page sheet, caret placement after picking a
+  suggestion (uses a controlled `selection` released on the next selection event), pasting a multi-line list into the
+  one-line box (iOS may flatten line breaks; "Add several" handles lists). No shared-file changes.
+
+Lead merge (P2): W3, W4, W1, W2 merged into `feature/p2-pantry` in that order. Every worker kept the stub props, so the
+merges were clean apart from PROGRESS.md. W3 skipped `/code-review`, so the lead reviewed its diff (no findings); the
+lead also read W1, W2 and W4's diffs. Fix on merge: the add sheet showed an error twice in "Add several" mode and put
+the review error under a long list (now above it). Checks: web typecheck, lint, 2,316 tests; mobile typecheck, lint, iOS
+and web exports.
+
+Open for P2's exit check (needs the user and a phone in Expo Go):
+- At 375pt, light and dark: pantry list, search, staples, ran out, the add sheet (autocomplete, Add several, review,
+  date picker), the edit sheet (Used some, We ran out, save, delete).
+- Keyboard and caret behaviour in the page sheet; "-1" haptic and Undo; toasts appear after a sheet closes. The toast
+  sits over the "Add food" pill while it shows.
+- Two phones: an add, -1 or edit on one shows on the other without a refresh.
+- Known gaps for later: a failed save rolls back over a housemate's newer change; the edit form doesn't refresh when a
+  housemate edits the same item; ran-out "Add to shopping list" is P3; categorizing unusual names needs a Spoonacular Edge Function.
