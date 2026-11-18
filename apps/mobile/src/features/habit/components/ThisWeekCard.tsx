@@ -61,13 +61,11 @@ export function ThisWeekCard() {
   const dismiss = useCallback(
     (id: NudgeId) => {
       const key = dismissKey(summaryToday, id);
-      setDismissed((current) => {
-        const next = new Set(current).add(key);
-        AsyncStorage.setItem(DISMISS_KEY, serializeDismissed(summaryToday, next)).catch(() => {});
-        return next;
-      });
+      const next = new Set(dismissed).add(key);
+      setDismissed(next);
+      AsyncStorage.setItem(DISMISS_KEY, serializeDismissed(summaryToday, next)).catch(() => {});
     },
-    [summaryToday],
+    [summaryToday, dismissed],
   );
 
   const expiring = useMemo(() => {
