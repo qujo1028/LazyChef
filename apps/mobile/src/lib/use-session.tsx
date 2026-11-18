@@ -15,12 +15,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     let active = true;
     supabase.auth
       .getSession()
+      // Only fills the first value: if the auth listener already reported, its session is newer.
       .then(({ data }) => {
-        if (active) setState({ session: data.session, loading: false });
+        if (active) setState((prev) => (prev.loading ? { session: data.session, loading: false } : prev));
       })
       .catch(() => {
         // Unreadable storage counts as signed out.
-        if (active) setState({ session: null, loading: false });
+        if (active) setState((prev) => (prev.loading ? { session: null, loading: false } : prev));
       });
 
     const { data } = supabase.auth.onAuthStateChange((_event, next) => {

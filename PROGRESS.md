@@ -514,3 +514,22 @@ W3 household (`feature/p1-household`):
   tests in `src/lib/household-settings.ts`.
 - Pull to refresh, loading, error-with-retry; cached data shows offline via the app-wide banner.
 - Not checked on a device or against the live backend (no signed-in account here). Needs no shared-file changes.
+
+Lead merge (P1): W4, W2, W1, W3 merged into `feature/p1-accounts` in that order. The workers ran on Sonnet (first
+launched on Opus by mistake, then relaunched). Each worker's `/code-review` reviewed the base stub instead of its own
+diff, so the lead reviewed every diff by hand. Fixes on merge:
+- Tabs layout always mounts `HouseholdChannelProvider` (null id means no channel), so the tabs never remount.
+- A cold start offline with nothing cached shows "You're offline" instead of a blank screen.
+- Realtime listeners are isolated (one throwing can't stop the others).
+- Onboarding: a retry after `create_household` succeeded could create a second household (stale state in a closure).
+- `auth/callback` also accepts `?token_hash=&type=` email links, like the web callback.
+- `useSession`: a late `getSession()` can no longer overwrite a newer session from the auth listener.
+Checks: web typecheck, lint, 2,298 tests, ingredients check, `scripts/audit.mjs`; mobile typecheck, lint, iOS and web exports.
+
+Open for P1's exit check (needs the user and real phones):
+- Supabase: add `app.lazychef://**` and `exp://**` to the redirect allow list; turn on the Google provider.
+- Email templates (README) link to `{{ .SiteURL }}`, so confirm and reset emails open the website, not the app. Changing
+  that affects the web app, so it's a separate decision.
+- Apple sign-in needs the Apple Developer account, the Supabase Apple provider with `app.lazychef.mobile`, and a dev build.
+- Two-phone live test: steps in the W4 section above. Nothing in P1 has run on a device yet.
+- For P2 worker briefs: tell workers to point `/code-review` at their own branch diff.
