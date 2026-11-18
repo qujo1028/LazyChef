@@ -865,7 +865,7 @@ checks the household's `household_barcodes` row (as the user, RLS), then calls O
 No tidy flag (AI tidy is out of v1). Not checked: a signed-in account, live RLS writes from a phone.
 W2 (Ideas sheet, `feature/p5-ideas`): `IdeasSheet` is built. Meal chips (default by time of day via core `autoSlot`),
 an optional hint, "Get ideas for dinner", per-device consent in AsyncStorage keyed to the `MEAL_IDEAS_SENDS` wording
-(the allowance call waits for consent too), the "7 of 10 free ideas left this week" line from `callAi` (updated from
+(the lead later made the allowance call load before consent: it sends only the household id), the "7 of 10 free ideas left this week" line from `callAi` (updated from
 each ideas response), up to 3 idea cards (have/need, steps, Save to Mine via `save_ai_recipe` then bookmark, Add missing
 to list), and a screen for loading, not set up, offline, rate limited, empty pantry, upstream error with Try again, and
 limit reached (core `limitMessage`; no purchase button until P7). Toasts wait for the sheet to close (`after-close`).
@@ -918,3 +918,25 @@ W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
   uses `AI_FREE_WEEKLY` (10), since only `take_ai_allowance` returns the database's limit; (4) `ai/groq.ts` is a port of
   `src/lib/llm/client.ts`, not shared code (moving the web client into core is a follow-up); (5) the web's
   `getMealIdeas` still takes the allowance before the rate limit.
+
+Lead merge (P5): W4, W2, W3, W1 merged into `feature/p5-barcodes-ideas` in that order; only PROGRESS.md conflicted. The
+lead read every diff; W1 was reviewed for auth (`getUser`, membership as the caller), no service role at all, rate limit
+and allowance failing closed, the key only in Groq's Authorization header, the hint as user-message data, and logs
+without pantry names or the hint. Fixes on merge: barcodes Open Food Facts doesn't know aren't cached (a housemate's
+name shows on the next scan); the Ideas count loads before consent (it sends only the household id); the empty pantry
+note names the Add food button; the scan list clears once its lines are in the box (no doubled lines after a failed
+check). Checks: web typecheck, lint, 2,515 tests, audit, ingredients check, edge sync check; mobile typecheck, lint, iOS
+and web exports; `deno check` on `ai` and `recipes`.
+
+Open for P5's exit check (needs the user and a phone in Expo Go):
+- Scan to add (the exit check): Add food, Scan barcodes, review, add; the scan haptic; a re-scan shows the saved name;
+  the camera permission prompt and the denied state; the torch; an unknown product named by hand.
+- The Ideas sheet at 375pt, light and dark; then end to end once `ai` is deployed with `GROQ_API_KEY`: consent, the
+  count line, 3 ideas, Save to Mine, Add missing to list, the limit message.
+- Known gaps: camera permission isn't re-checked after returning from Settings; the same idea can be saved twice; two
+  scans with identical line text share one barcode link (as on the web); `ownInputFromIdea` exists twice in core
+  (`ai/idea-save.ts` from W2 and `recipes/ai/meal-ideas.ts` from W1), to fold into one; the web's `getMealIdeas` still
+  takes the allowance before the rate limit (a web bug fix: swap the order); the `limit_reached` weekday is UTC;
+  `recipes` on the live project predates the shared `_shared/http.ts` move (same behavior; redeploy it next time it
+  changes).
+- Deploy (waits for the user's go-ahead): set `GROQ_API_KEY` on Supabase, deploy `ai`, diff the deployed files.
