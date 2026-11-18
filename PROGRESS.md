@@ -584,7 +584,7 @@ W2 add food (`feature/p2-add-food`):
   caret (`suggestionQuery`, `replaceNameAtCaret`, bold `matchRange`, in `SuggestionList.tsx`), "N items" hint, an "Add several"
   toggle to W3's `AddSeveralInput` that keeps the text, then W3's `ReviewList` step with Back and "Add N to pantry".
 - Flow: `previewItems` then `draftsFromResolved`; `draftsToItems` null shows field errors; `addItems` errors show inside
-  the sheet; success closes, then the toast (`describeAdditions`) shows from `onDismiss` (iOS) or right away (Android).
+  the sheet; success closes, then the toast (`describeAdditions`) is held by `createAfterClose` until the sheet has closed.
   Text and review survive a close; a new seed or a finished add starts fresh. Input autofocuses after the slide-in.
 - Pure helpers with tests: `src/lib/add-food.ts` (`highlightParts`, `reviewTitle`, `addButtonLabel`, `stateOnOpen`).
 - Not checked on a device: keyboard avoidance, autofocus timing in the page sheet, caret placement after picking a

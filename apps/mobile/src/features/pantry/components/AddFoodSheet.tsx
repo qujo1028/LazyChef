@@ -11,7 +11,8 @@ import { FormMessage } from '@/components/FormMessage';
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
 import { Sheet } from '@/components/Sheet';
 import { TextField } from '@/components/TextField';
-import { useToast } from '@/components/Toast';
+import { useToast, type ToastOptions } from '@/components/Toast';
+import { createAfterClose, type AfterClose } from '@/lib/after-close';
 import { addButtonLabel, reviewTitle, stateOnOpen } from '@/lib/add-food';
 import { useTheme } from '@/theme';
 import { useToday } from '@/lib/use-today';
@@ -36,15 +37,17 @@ const EMPTY_MESSAGE = 'Type something to add, like "2 lbs chicken breast".';
  */
 export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onClose: () => void; seed: AddFoodSeed }) {
   const { colors, spacing, type } = useTheme();
-  const toast = useToast();
+  const { show } = useToast(); // stable, so the gate can keep it
   const today = useToday();
   const { householdId } = usePantry();
 
   const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
   const batch = useRef(0);
-  const pendingToast = useRef<string | null>(null);
   // Latest values for async results that land after the user closed the sheet or kept typing.
   const latest = useRef({ visible, text: seed.text });
+
+  // The toast renders under the sheet, so it waits until the sheet has closed.
+  const [gate] = useState<AfterClose<ToastOptions>>(() => createAfterClose<ToastOptions>((t) => show(t)));
 
   const [text, setText] = useState(seed.text);
   const [seenSeed, setSeenSeed] = useState(seed.n);
@@ -79,6 +82,17 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
   useEffect(() => {
     latest.current = { visible, text };
   });
+
+  useEffect(() => {
+    if (visible) gate.opened();
+    // Android's Modal has no onDismiss, so release the held toast when it hides.
+    else if (Platform.OS !== 'ios') gate.closed();
+  }, [visible, gate]);
+
+  // A late dismiss from an earlier open must not release the toast while the sheet is open.
+  const dismissed = () => {
+    if (!visible) gate.closed();
+  };
 
   // Focus the box when the sheet opens or we come back to typing (after the slide-in).
   useEffect(() => {
@@ -172,19 +186,11 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
         return;
       }
       setCleared(true);
-      pendingToast.current = describeAdditions(result);
+      gate.send({ message: describeAdditions(result) });
       onClose();
-      // Android's Modal has no onDismiss, so show the toast now; iOS waits for the slide-out.
-      if (Platform.OS !== 'ios' || !latest.current.visible) flushToast();
     } finally {
       setPending(false);
     }
-  }
-
-  function flushToast() {
-    const message = pendingToast.current;
-    pendingToast.current = null;
-    if (message) toast.show({ message });
   }
 
   const footer = drafts ? (
@@ -206,7 +212,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     <Sheet
       visible={visible}
       onClose={onClose}
-      onDismiss={flushToast}
+      onDismiss={dismissed}
       title={drafts ? reviewTitle(drafts.length) : 'Add food'}
       subtitle={
         drafts
