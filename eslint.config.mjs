@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     // Native app projects (Capacitor copies its own JS into them).
     "ios/**",
     "android/**",
+    // Other Claude Code sessions' worktrees (their own checkouts, not app code).
+    ".claude/**",
   ]),
 ]);
 
