@@ -863,3 +863,13 @@ checks the household's `household_barcodes` row (as the user, RLS), then calls O
 (per household and code). `rememberBarcodes` inserts new codes and updates known ones (name, amount, unit only), ignores
 23505 and never fails the caller. Pure parts and tests: `lib/barcode-off.ts`, `barcode-cache.ts`, `barcode-memory.ts`.
 No tidy flag (AI tidy is out of v1). Not checked: a signed-in account, live RLS writes from a phone.
+W2 (Ideas sheet, `feature/p5-ideas`): `IdeasSheet` is built. Meal chips (default by time of day via core `autoSlot`),
+an optional hint, "Get ideas for dinner", per-device consent in AsyncStorage keyed to the `MEAL_IDEAS_SENDS` wording
+(the allowance call waits for consent too), the "7 of 10 free ideas left this week" line from `callAi` (updated from
+each ideas response), up to 3 idea cards (have/need, steps, Save to Mine via `save_ai_recipe` then bookmark, Add missing
+to list), and a screen for loading, not set up, offline, rate limited, empty pantry, upstream error with Try again, and
+limit reached (core `limitMessage`; no purchase button until P7). Toasts wait for the sheet to close (`after-close`).
+Dev only: "Dev: preview a state" chips in the sheet. New core files: `packages/core/src/ai/idea-save.ts` (+ test), which
+holds ports of `ownInputFromIdea`, `ingredientRows` and `MEAL_IDEAS_SENDS`; the web copies are untouched. Pure copy and
+state mapping: `apps/mobile/src/lib/ideas-copy.ts` (+ test). Not checked: a simulator or phone, a signed-in account,
+and the real function (not deployed, so everything past "not set up" ran only through the dev previews).
