@@ -19,7 +19,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 
 ## Commands
 - `npm run dev` (port 3000), `npm run build`, `npm run typecheck` (`next typegen` + `tsc`), `npm run lint`
-- `npm test`: Vitest, `src/**/*.test.ts`, `packages/*/src/**/*.test.ts` and `apps/mobile/src/lib/**/*.test.ts` (pure logic only). One file: `npx vitest run packages/core/src/habit/leaderboard.test.ts`;
+- `npm test`: Vitest, `src/**/*.test.ts`, `packages/*/src/**/*.test.ts`, `apps/mobile/src/lib/**/*.test.ts` and `supabase/functions/**/*.test.ts` (pure logic only). One file: `npx vitest run packages/core/src/habit/leaderboard.test.ts`;
   one test: add `-t "name"`.
 - `npm run test:db`: applies `supabase/migrations/*.sql` in filename order to PGlite with Supabase stand-ins
   (`supabase/tests/harness.mjs`: roles, `auth.uid()`, realtime, storage) and runs `supabase/tests/*.test.mjs`.

@@ -770,3 +770,31 @@ W4 habit ring and This week card (`feature/p4-habit`, Sonnet):
   overrides the summary shown, never written anywhere.
 - Pure helpers with tests: `lib/week-card.ts`. No shared-file changes.
 - Not checked on a device: ring animation, layout at 375px, dark mode, reduce motion, dismissal persistence.
+
+W5 recipes Edge Function (`feature/p4-edge-recipes`, Opus, 2026-11-18):
+- `supabase/functions/recipes/`: `suggest`, `info`, `quota` per `edge-contract.ts` (contract unchanged). Caller's JWT
+  checked with `auth.getUser()`, household membership read as the caller (RLS), `take_rate_limit` as the caller
+  (`recipe_search` per search that misses the cache, `recipe_open` per uncached recipe in `info`), failing closed if
+  any check errors. Service role only for `spoonacular_cache` / `spoonacular_usage` (same keys as the web, so the web
+  and the phone share the hourly cache). Quota headers recorded (estimate as fallback); 3-point reserve for searches,
+  1 for details; 402 rests until midnight UTC. Status codes: 400, 401, 403 (not a member), 405, 429, 502, 503,
+  and 200 for `resting`. No migration needed.
+- Pure parts (`handler.ts`, `validate.ts`, `cache.ts`, `spoonacular.ts`) have Vitest tests; Deno-only files are
+  `index.ts` and `db.ts` (`deno check index.ts` passes with deno 2.9). Root `tsconfig.json` now excludes
+  `supabase/functions`; `npm run typecheck` checks the pure modules and tests through `supabase/functions/tsconfig.json`.
+  Vitest includes `supabase/functions/**/*.test.ts`.
+- Shared modules (recipe-shapes, edge-contract, ingredient normalize, Spoonacular cost) are generated copies in
+  `supabase/functions/_shared/core/` (`node scripts/sync-edge-shared.mjs`; a test fails when a copy is stale),
+  because the Supabase bundler resolves files under `supabase/functions` and Deno needs `.ts` import paths.
+- Deploy (lead, after the user's go-ahead; not done): in your own terminal `supabase login`, then
+  `supabase link --project-ref <ref>`, put `SPOONACULAR_API_KEY=...` in the gitignored `supabase/functions/.env` and run
+  `supabase secrets set --env-file supabase/functions/.env`, then `supabase functions deploy recipes` (JWT verification
+  stays on). Smoke test with the curl in `supabase/functions/recipes/README.md`. CI has no Deno, so `deno check` is
+  manual for now.
+- Self-review fixes: names are sent to Spoonacular as their normalized keys (no cache poisoning across households),
+  `take_rate_limit` only counts an explicit true, the body is read after auth with a streaming 16 KB cap, `info`
+  fetches as many uncached recipes as today's points cover. Open for the lead: (1) the diet and intolerance filters the
+  web applies to Spoonacular ideas aren't in the Edge contract, so mobile ideas ignore allergies unless the app filters
+  them (contract change); (2) a partial `info` answer doesn't say why the rest are missing (only `quota.resting`);
+  (3) one account can still drain the shared 50 daily points in about an hour (same as the web); a household or
+  global bucket needs a migration.
