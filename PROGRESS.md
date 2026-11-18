@@ -367,6 +367,13 @@ Step 0 scaffold (lead):
 - Root `tsconfig.json` and `eslint.config.mjs` skip `apps/`; Vitest also runs `packages/*/src/**/*.test.ts`.
 - Checks: web typecheck, lint, 2,207 tests and `next build` pass; mobile typecheck, lint, and iOS and web bundles pass.
 
+W2 shell (`feature/p0-shell`):
+- Theme in `apps/mobile/src/theme` (light and derived dark palette with measured contrast, radius, spacing, type scale, `useTheme()`).
+- Fonts (Libre Caslon Display, Source Sans 3) load in the root layout; splash stays up until loaded.
+- Four JS tabs in `(tabs)` (Pantry, Recipes, List, Household) with a custom `BottomTabBar`; Activity is a header icon pushing `activity`.
+- Components: `AppScreenHeader`, `PrimaryPillButton`, `MetadataPill`, `CircleIconButton`, `BottomTabBar`, `Screen`, `EmptyState`.
+- Reduce motion respected (`useReduceMotion`, `usePressScale`). Not checked visually (no simulator run); only tsc, lint and iOS/web exports.
+
 Workers (branch from `feature/p0-scaffold`): W1 `feature/p0-core` (packages/core extraction), W2 `feature/p0-shell`
 (theme, tabs, components), W3 `feature/p0-data` (Supabase, Query, offline), W4 `feature/p0-config` (db-types, CI, EAS).
 Migration lock: nobody (P0 has no schema changes).
