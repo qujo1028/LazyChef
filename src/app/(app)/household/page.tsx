@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { PartyPopper, Plus } from "lucide-react"
+import { ChevronRight, PartyPopper, Plus, Sparkles } from "lucide-react"
 
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { HouseholdSwitcher, LeaveHouseholdButton } from "@/features/household/co
 import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/components/household-forms"
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
+import { ProStatusLabel } from "@/features/subscription/components/pro-view"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
 import { firstParam } from "@/lib/search-params"
 
@@ -81,6 +82,13 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
           </Button>
         </CardContent>
       </Card>
+
+      <Link href="/pro" className="flex min-h-14 items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm">
+        <Sparkles className="size-5 shrink-0 text-primary" aria-hidden />
+        <span className="flex-1 font-medium">LazyChef Pro</span>
+        <ProStatusLabel />
+        <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+      </Link>
 
       <Card>
         <CardHeader>

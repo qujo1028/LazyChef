@@ -2,11 +2,13 @@ import { AppHeader } from "@/components/app-shell/app-header"
 import { BottomNav } from "@/components/app-shell/bottom-nav"
 import { HouseholdChannelProvider } from "@/features/household/components/household-channel"
 import { requireHousehold } from "@/features/household/queries"
+import { SubscriptionProvider } from "@/features/subscription/components/subscription-provider"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { household, profile } = await requireHousehold()
+  const { viewer, household, profile } = await requireHousehold()
 
   return (
+    <SubscriptionProvider appUserId={viewer.id}>
     <HouseholdChannelProvider householdId={household.id}>
       <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col">
         <AppHeader
@@ -20,5 +22,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <BottomNav />
       </div>
     </HouseholdChannelProvider>
+    </SubscriptionProvider>
   )
 }
