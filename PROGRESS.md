@@ -446,3 +446,25 @@ Workers (branch from `origin/feature/p1-accounts`): W1 `feature/p1-auth` (welcom
 Apple, callback), W2 `feature/p1-onboarding` (onboarding, join by code and link), W3 `feature/p1-household`
 (Household tab: members, invite, rename, leave, switch, sign out), W4 `feature/p1-realtime` (household channel,
 resume refetch).
+
+W4 realtime (`feature/p1-realtime`):
+- `apps/mobile/src/providers/household-channel.tsx`: private channel `household:<id>` after `supabase.realtime.setAuth()`.
+  Exports unchanged (`HouseholdChannelProvider`, `useHouseholdChanges`, `HouseholdChange`) plus
+  `useHouseholdChannelStatus()` (`connecting | live | offline`) and a `__DEV__` status log.
+- `households` / `household_members` broadcasts invalidate `queryKeys.all`; other tables go to `useHouseholdChanges`
+  listeners with the web's payload mapping.
+- Background drops the channel; `active` and NetInfo reconnect resubscribe and, once subscribed, invalidate household
+  queries (missed broadcasts). `CHANNEL_ERROR`, `TIMED_OUT` and unexpected `CLOSED` retry with capped, jittered backoff
+  (1s to 30s). `TOKEN_REFRESHED` calls `setAuth(token)`. Channel operations are serialized so a remount or household
+  switch never stacks channels; unmount and sign out remove the channel.
+- Pure logic and tests: `apps/mobile/src/lib/household-realtime.ts` and `.test.ts` (payload mapping, backoff, status).
+- Manual two-phone check (two accounts in one household, both signed in on real devices):
+  1. Phone A renames the household. Phone B's header and Household tab show the new name without a refresh.
+  2. A second account joins by invite code. Both phones' member lists gain the member without a refresh.
+  3. Background phone B (home screen), change the household name on A, wait 30s, reopen B. It catches up within a
+     second or two of resuming.
+  4. Turn airplane mode on for B, change something on A, turn it off. B catches up.
+  5. Switch households on A and check B is unaffected; sign out on B and confirm no console errors from the channel.
+  Dev builds log `[realtime] household channel live/connecting/offline`.
+- Not verified here: any of the above on a device (needs two signed-in devices). Item/pantry listeners
+  (`useHouseholdChanges`) have no consumers until P2.
