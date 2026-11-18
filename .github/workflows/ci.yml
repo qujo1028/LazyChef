@@ -23,8 +23,8 @@ jobs:
       - run: npm run lint -w @lazychef/mobile
       - run: npx expo export -p ios --output-dir /tmp/expo-ios
         working-directory: apps/mobile
-      # Fails on known high or critical vulnerabilities in what ships (not dev tools).
-      - run: npm audit --omit=dev --audit-level=high
+      # Fails on known high or critical vulnerabilities in what ships (not dev tools). Exceptions are listed in the script.
+      - run: node scripts/audit.mjs
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test

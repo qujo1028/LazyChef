@@ -24,7 +24,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - `npm run test:db`: applies `supabase/migrations/*.sql` in filename order to PGlite with Supabase stand-ins
   (`supabase/tests/harness.mjs`: roles, `auth.uid()`, realtime, storage) and runs `supabase/tests/*.test.mjs`.
   One file: `node --test supabase/tests/undo-cook.test.mjs`. Add a test file for each migration's RLS rules.
-- CI (`.github/workflows/ci.yml`) also runs `npm audit --omit=dev --audit-level=high` and
+- CI (`.github/workflows/ci.yml`) also runs `node scripts/audit.mjs` (npm audit, failing on high or critical, with listed exceptions) and
   `npm run ingredients -- --check` (the generated ingredient library must be up to date).
 - `npm run db:types` regenerates `src/types/database.ts` from the live schema.
 - Mobile (Expo, once `apps/mobile` exists; see `docs/react-native-app.md`): `npx expo start` for the dev server,
