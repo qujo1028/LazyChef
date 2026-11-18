@@ -578,3 +578,13 @@ W4 edit (`feature/p2-edit`):
 - Skipped: "Add to shopping list" (P3). No shared-file changes.
 - Not checked on a device or against the live backend (no simulator or signed-in account). Checks: mobile typecheck,
   lint, `npm test`, `npx expo export -p ios`.
+
+W1 pantry screen (`feature/p2-pantry-screen`):
+- `(tabs)/pantry.tsx` ported from the web pantry view: summary line, search with clear and "Nothing called X / Add X",
+  Expiring soon, one card per category, "Always on hand" chips, collapsible "Ran out" (open while searching), "-1" with a
+  light haptic and a toast with Undo (gives back only what was taken), getting-started card with kitchen basics
+  (`addStaples`), floating "Add food" pill. One FlatList over flattened rows; pull to refresh; loading, error with
+  retry, and an offline note when nothing is cached.
+- Code: `src/lib/pantry-rows.ts` (rows builder and `amountTaken`, tested), and `features/pantry/components/`
+  `PantryItemRow`, `PantrySectionRows`, `PantrySearch`, `GettingStarted`. No shared files changed.
+- Not checked on a device or simulator. Known gaps: "Add to shopping list" on ran-out rows waits for P3.
