@@ -62,7 +62,7 @@ export function RecipeIngredients({
           </div>
         </div>
       ) : null}
-      <IngredientChecklist recipeId={recipeId} lines={lines} scale={factor} />
+      <IngredientChecklist recipeId={recipeId} lines={lines} scale={factor} recipeTitle={title} />
       <CookSheet recipeId={recipeId} title={title} lines={cook} saved={saved} scale={factor} />
     </>
   )

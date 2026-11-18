@@ -4,6 +4,7 @@ import Link from "next/link"
 import { displayName } from "@/features/pantry/display"
 
 import type { Suggestion } from "../match"
+import { NeedSwaps } from "./need-swaps"
 import { RecipeImage } from "./recipe-image"
 import { SaveButton } from "./save-button"
 
@@ -43,6 +44,7 @@ export function RecipeCard({ recipe, saved }: { recipe: Suggestion; saved: boole
           ) : null}
         </div>
       </Link>
+      <NeedSwaps names={recipe.need} recipeTitle={recipe.title} />
       <SaveButton recipeId={recipe.id} title={recipe.title} saved={saved} className="absolute top-1 right-1" />
     </li>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ListPlus } from "lucide-react"
+import { Check, ListPlus, Replace } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -15,6 +15,7 @@ import { describeListAdditions } from "@/features/list/plan"
 import { addRecipeIngredientsToList } from "../actions"
 import type { IngredientStatus } from "../match"
 import { scaleOriginal } from "../scale"
+import { SwapSheet } from "./swap-sheet"
 
 export type ChecklistLine = {
   /** Position in the recipe's ingredient list (what the server action takes). */
@@ -31,7 +32,18 @@ function plural(n: number, word: string) {
 }
 
 /** The recipe's ingredients: what you have, and what you need with boxes to add to the list. */
-export function IngredientChecklist({ recipeId, lines, scale = 1 }: { recipeId: number; lines: ChecklistLine[]; scale?: number }) {
+export function IngredientChecklist({
+  recipeId,
+  lines,
+  scale = 1,
+  recipeTitle,
+}: {
+  recipeId: number
+  lines: ChecklistLine[]
+  scale?: number
+  recipeTitle: string
+}) {
+  const [swapping, setSwapping] = useState<string | null>(null)
   const [added, setAdded] = useState<ReadonlySet<number>>(() => new Set())
   const isOnList = (line: ChecklistLine) => line.onList || added.has(line.index)
   const addable = lines.filter((line) => line.status === "need" && !isOnList(line))
@@ -107,6 +119,14 @@ export function IngredientChecklist({ recipeId, lines, scale = 1 }: { recipeId: 
                         : "Need"}
                 </span>
               </label>
+              <button
+                type="button"
+                onClick={() => setSwapping(line.name)}
+                aria-label={`Swap ${line.name}`}
+                className="-mr-2 inline-flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <Replace className="size-4" aria-hidden />
+              </button>
             </li>
           )
         })}
@@ -117,6 +137,7 @@ export function IngredientChecklist({ recipeId, lines, scale = 1 }: { recipeId: 
           {pending ? "Adding…" : chosen.length === 0 ? "Pick what to add" : `Add ${plural(chosen.length, "item")} to the list`}
         </Button>
       ) : null}
+      <SwapSheet ingredient={swapping} recipeTitle={recipeTitle} onClose={() => setSwapping(null)} />
     </div>
   )
 }
