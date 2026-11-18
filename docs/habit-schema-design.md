@@ -2,6 +2,13 @@
 
 Output of the 1a Plan agent, 2026-11-18. W6 follows this; flag disagreements to the lead.
 
+## UPDATE 2026-11-18: PR #39 merged
+`supabase/migrations/20261117000100_undo_cook.sql` is on main. `cook_recipe` now also returns `batch_id`, and `undo_cook()`
+already puts amounts back and deletes the cook's rows. W6 must build on that instead of adding its own `undo_cook`: read that
+migration first, keep its signature, and only add what is still missing (the fallback 'cooked' row for zero-deduction cooks,
+quick log, goals, challenges, the after-delete broadcast if #39 lacks one). Tests 11 and 12 below may already exist in
+supabase/tests/undo-cook.test.mjs.
+
 ## Findings about today's code
 - Latest `cook_recipe` is in `20261005000100_local_recipes.sql`, signature `(uuid, integer, text, jsonb, uuid)`. Latest
   `private.log_pantry_activity` is in `20261001000100_saved_recipes.sql`.
