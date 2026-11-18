@@ -660,3 +660,18 @@ W3 put away (`feature/p3-put-away`):
 - Pure helpers with tests: `src/lib/put-away.ts`. No shared-file changes.
 - Not checked on a device or against the live backend (no simulator or account): the sheet flow, the confirm alert,
   the toast timing, and the pantry showing the new rows on a second phone.
+
+W4 pantry to list (`feature/p3-pantry-to-list`, Haiku):
+- `features/list/add-to-list.ts`: `useAddPantryItemToList()` calls `addListItems` for the household and returns the toast
+  text. The message choice is pure in `lib/add-to-list-message.ts` (with tests).
+- Pantry rows: items that ran out (`quantity === 0`, not staple) get a 44pt "Add <name> to the shopping list" button
+  (list icon). The screen shows the result with `useToast().show`.
+- Edit sheet: "Add to shopping list" under the ran-out and used-some buttons. It closes the sheet, then sends the result
+  through the sheet's `send`. The "Moved X to Ran out" toast gets an "Add to list" action using the item as it was before.
+- Not checked on a device or simulator (no signed-in account). Checks: mobile typecheck, lint, `npm test`, `npx expo export -p ios`.
+- Found, not changed: the edit sheet's "We ran out" shows when `quantity === null` (the "On hand" untracked case), while
+  "ran out" is `quantity === 0`. Looks like a P2 mismatch; worth a look in the lead's review.
+- Review (`/code-review`, medium) fixes: a second tap on a row's list button while its add is in flight is ignored.
+  Left as they are: the sheet's held toast can wait if the sheet is reopened before the add settles (`send` is per spec);
+  `useAddPantryItemToList` reads `householdId` via `useList()` as specified (re-renders on list changes); casing
+  (lowercase on add, display case on "already on the list") as specified; the hook has no unit test (needs a provider).
