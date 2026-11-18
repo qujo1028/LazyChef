@@ -648,3 +648,14 @@ W1 list screen (`feature/p3-list-screen`):
 - Code: `src/lib/list-rows.ts` (rows builder, `listMeta`, `putAwayLabel`, tested), `features/list/components/`
   `ListLineRow` and `ListQuickAdd`. Reuses the pantry's `SectionHeading`. No shared files changed.
 - Not checked on a device or simulator. Skipped: ingredient suggestions under the quick add (optional).
+
+W4 pantry to list (`feature/p3-pantry-to-list`, Haiku):
+- `features/list/add-to-list.ts`: `useAddPantryItemToList()` calls `addListItems` for the household and returns the toast
+  text. The message choice is pure in `lib/add-to-list-message.ts` (with tests).
+- Pantry rows: items that ran out (`quantity === 0`, not staple) get a 44pt "Add <name> to the shopping list" button
+  (list icon). The screen shows the result with `useToast().show`.
+- Edit sheet: "Add to shopping list" under the ran-out and used-some buttons. It closes the sheet, then sends the result
+  through the sheet's `send`. The "Moved X to Ran out" toast gets an "Add to list" action using the item as it was before.
+- Not checked on a device or simulator (no signed-in account). Checks: mobile typecheck, lint, `npm test`, `npx expo export -p ios`.
+- Found, not changed: the edit sheet's "We ran out" shows when `quantity === null` (the "On hand" untracked case), while
+  "ran out" is `quantity === 0`. Looks like a P2 mismatch; worth a look in the lead's review.
