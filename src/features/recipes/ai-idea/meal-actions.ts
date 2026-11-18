@@ -2,6 +2,7 @@
 
 import { requireViewer } from "@/features/household/queries"
 import type { ActionResult } from "@/features/pantry/types"
+import { takeAiAllowance, type AiLimited } from "@/features/pro/ai-allowance"
 import { askAiJson } from "@/lib/llm/ai"
 
 import { getHouseholdTaste } from "../taste-queries"
@@ -23,7 +24,7 @@ const withMissing = (recipe: AiRecipe): MealIdea => ({
  * with the viewer's session; only the meal comes from the client. Answers are cached per
  * household, meal, pantry and diet for an hour (ai_idea_cache) and re-checked when read.
  */
-export async function getMealIdeas(meal: string): Promise<ActionResult<{ ideas: MealIdea[] }>> {
+export async function getMealIdeas(meal: string): Promise<ActionResult<{ ideas: MealIdea[] }> | AiLimited> {
   await requireViewer()
   const parsedMeal = ideaMealSchema.safeParse(meal)
   if (!parsedMeal.success) return { error: "Pick a meal first." }
@@ -36,6 +37,9 @@ export async function getMealIdeas(meal: string): Promise<ActionResult<{ ideas: 
   const key = mealIdeasCacheKey(parsedMeal.data, names, diet, hints)
   const cached = await getCachedMealIdeas(householdId, key, diet, names)
   if (cached) return { ideas: cached.map(withMissing) }
+
+  const limited = await takeAiAllowance(householdId)
+  if (limited) return limited
 
   const result = await askAiJson(buildMealIdeasMessages(names, parsedMeal.data, diet, hints), mealIdeasReplySchema, {
     maxTokens: 4000,

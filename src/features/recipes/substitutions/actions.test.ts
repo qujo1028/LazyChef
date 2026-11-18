@@ -17,6 +17,9 @@ vi.mock("@/features/pantry/queries", () => ({ getPantryItems: (id: string) => ge
 const getMyPreferences = vi.fn()
 vi.mock("@/features/preferences/queries", () => ({ getMyPreferences: () => getMyPreferences() }))
 
+const takeAiAllowance = vi.fn(async (): Promise<unknown> => null)
+vi.mock("@/features/pro/ai-allowance", () => ({ takeAiAllowance: () => takeAiAllowance() }))
+
 const askAiJson = vi.fn()
 const isAiAvailable = vi.fn(() => true)
 vi.mock("@/lib/llm/ai", () => ({
@@ -53,6 +56,25 @@ beforeEach(() => {
 afterEach(() => {
   vi.clearAllMocks()
   isAiAvailable.mockReturnValue(true)
+})
+
+describe("suggestSubstitutions free allowance", () => {
+  it("stops before the AI when the free week is used up", async () => {
+    takeAiAllowance.mockResolvedValueOnce({ error: "Used up", proLimit: true, resetsAt: null })
+    const result = await suggestSubstitutions({ ref: "715538", index: 1 })
+    expect(result).toMatchObject({ error: "Used up", proLimit: true })
+    expect(askAiJson).not.toHaveBeenCalled()
+  })
+
+  it("doesn't take a use for a refusal", async () => {
+    loadSubstitutionRecipe.mockResolvedValue({
+      title: "Pan-seared steak",
+      ingredients: [{ original: "1 lb ribeye steak", name: "ribeye steak" }],
+      from: "cache",
+    })
+    await suggestSubstitutions({ ref: "715538", index: 0 })
+    expect(takeAiAllowance).not.toHaveBeenCalled()
+  })
 })
 
 describe("suggestSubstitutions", () => {

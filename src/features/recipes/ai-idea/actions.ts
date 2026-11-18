@@ -3,6 +3,7 @@
 import { requireViewer } from "@/features/household/queries"
 import { firstIssue } from "@/features/pantry/schemas"
 import type { ActionResult } from "@/features/pantry/types"
+import { takeAiAllowance, type AiLimited } from "@/features/pro/ai-allowance"
 import { askAiJson } from "@/lib/llm/ai"
 
 import { getHouseholdTaste } from "../taste-queries"
@@ -20,7 +21,7 @@ const DIET_ATTEMPTS = 2
  * viewer's diet and allergies (if any) are followed: conflicting pantry items aren't sent,
  * the model is told, and its answer is checked.
  */
-export async function getAiRecipeIdea(hint: string, avoidTitle?: string): Promise<ActionResult<AiIdea>> {
+export async function getAiRecipeIdea(hint: string, avoidTitle?: string): Promise<ActionResult<AiIdea> | AiLimited> {
   await requireViewer()
   const parsedHint = hintSchema.safeParse(typeof hint === "string" ? hint : "")
   if (!parsedHint.success) return { error: firstIssue(parsedHint.error) }
@@ -30,6 +31,10 @@ export async function getAiRecipeIdea(hint: string, avoidTitle?: string): Promis
   if (pantry.error !== undefined) return { error: pantry.error }
   const { householdId, diet, names } = pantry
   const { hints } = await getHouseholdTaste(householdId)
+
+  // One use per request, however many times the diet check retries.
+  const limited = await takeAiAllowance(householdId)
+  if (limited) return limited
 
   for (let attempt = 0; attempt < DIET_ATTEMPTS; attempt++) {
     const result = await askAiJson(buildIdeaMessages(names, parsedHint.data, avoid, diet, hints), aiRecipeSchema, {

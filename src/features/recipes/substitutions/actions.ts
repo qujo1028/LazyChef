@@ -5,6 +5,7 @@ import { localDateKey } from "@/features/pantry/dates"
 import { getPantryItems } from "@/features/pantry/queries"
 import { getMyPreferences } from "@/features/preferences/queries"
 import type { ActionResult } from "@/features/pantry/types"
+import { takeAiAllowance, type AiLimited } from "@/features/pro/ai-allowance"
 import { askAiJson, isAiAvailable } from "@/lib/llm/ai"
 
 import { buildPantryIndex, pantrySearchNames } from "../match"
@@ -32,7 +33,7 @@ export type SubstitutionResult = SubstitutionAnswer & { ingredient: string }
  * in the vetted table only gets swaps from its entry; anything else keeps the AI's answer only
  * where each swap is plausible; swaps that clash with the viewer's diet or allergies are dropped.
  */
-export async function suggestSubstitutions(input: SubstitutionInput): Promise<ActionResult<SubstitutionResult>> {
+export async function suggestSubstitutions(input: SubstitutionInput): Promise<ActionResult<SubstitutionResult> | AiLimited> {
   await requireViewer()
   if (!isAiAvailable()) return { error: "The AI assistant isn't set up yet." }
 
@@ -61,6 +62,10 @@ export async function suggestSubstitutions(input: SubstitutionInput): Promise<Ac
   const name = ingredient.name || ingredient.original
   const plan = planSubstitution(name, recipe.title)
   if (plan.kind === "refuse") return { swaps: [], none: plan.reason, ingredient: name }
+
+  // Refusals above cost nothing; only a real AI request takes one of the free weekly uses.
+  const limited = await takeAiAllowance(household.id)
+  if (limited) return limited
 
   const today = localDateKey()
   const pantry = buildPantryIndex(items, today)

@@ -7,13 +7,15 @@ import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { displayName } from "@/features/pantry/display"
+import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 
 import { IngredientChecklist, type ChecklistLine } from "../../components/ingredient-checklist"
 import { scaleOriginal } from "../../scale"
 import { suggestSubstitutions, type SubstitutionResult } from "../actions"
 
-type Answer = { status: "loading" } | { status: "error"; error: string } | { status: "done"; result: SubstitutionResult }
+type Answer = { status: "loading" } | { status: "error"; error: string; limit?: boolean } | { status: "done"; result: SubstitutionResult }
 
 /**
  * The ingredient checklist plus "What can I use instead?": a swap button on each missing
@@ -70,7 +72,7 @@ export function IngredientsWithSwaps({
     const result = await callAction(() => suggestSubstitutions({ ref: recipeId, index: line.index, fallback }))
     setAnswer(
       line.index,
-      result.error !== undefined ? { status: "error", error: result.error } : { status: "done", result },
+      result.error !== undefined ? { status: "error", error: result.error, limit: isAiLimited(result) } : { status: "done", result },
     )
   }
 
@@ -162,6 +164,8 @@ function SwapAnswer({
           <p className="flex items-center gap-2 py-6 text-sm text-muted-foreground">
             <LoaderCircle className="size-4 animate-spin" aria-hidden /> Thinking of swaps…
           </p>
+        ) : answer.status === "error" && answer.limit ? (
+          <AiLimitNotice message={answer.error} className="grid gap-3 py-2 text-sm" />
         ) : answer.status === "error" ? (
           <div className="grid gap-3 py-2">
             <p className="flex items-start gap-2 text-sm">

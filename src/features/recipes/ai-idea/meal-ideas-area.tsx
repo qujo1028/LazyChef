@@ -9,6 +9,8 @@ import { hasAiConsent, useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { displayName } from "@/features/pantry/display"
+import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 import { cn } from "@/lib/utils"
 
@@ -35,7 +37,7 @@ const noSubscribe = () => () => {}
 
 async function fetchIdeas(meal: IdeaMeal): Promise<Fetched> {
   const result = await callAction(() => getMealIdeas(meal))
-  if (result.error !== undefined) return { status: "note", message: result.error }
+  if (result.error !== undefined) return { status: "note", message: result.error, limit: isAiLimited(result) }
   return { status: "ready", ideas: result.ideas }
 }
 
@@ -76,6 +78,7 @@ export function MealIdeas({ meal }: { meal: IdeaMeal }) {
   const phrase = mealPhrase(meal)
 
   if (state.status === "note") {
+    if (state.limit) return <AiLimitNotice message={state.message} />
     return <p className="text-center text-xs text-muted-foreground">AI ideas: {state.message}</p>
   }
 
