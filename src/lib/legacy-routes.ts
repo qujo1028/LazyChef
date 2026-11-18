@@ -10,7 +10,7 @@ export const LEGACY_REDIRECTS = [
   { source: "/recipes/ours", destination: "/recipes?view=ours" },
   { source: "/recipes/new", destination: "/recipes?view=ours&new=1" },
   { source: "/recipes/:id/edit", destination: "/recipes/:id?edit=1" },
-  { source: "/activity/stats", destination: "/activity?view=stats" },
+  { source: "/activity/stats", destination: "/activity?view=chart" },
   { source: "/pro", destination: "/household?pro=1" },
 ] as const satisfies readonly { source: string; destination: string }[]
 
