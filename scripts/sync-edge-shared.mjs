@@ -20,15 +20,35 @@ export const COPIES = {
   "packages/core/src/ai/edge-contract.ts": "ai-contract.ts",
   "packages/core/src/ingredients/library/normalize.ts": "normalize.ts",
   "src/lib/spoonacular/cost.ts": "cost.ts",
+  // The `ai` function's meal ideas (and the small modules they import).
+  "packages/core/src/recipes/ai/idea.ts": "ai-idea.ts",
+  "packages/core/src/recipes/ai/meal-ideas.ts": "ai-meal-ideas.ts",
+  "packages/core/src/recipes/ai-limits.ts": "ai-limits.ts",
+  "packages/core/src/recipes/basics.ts": "basics.ts",
+  "packages/core/src/recipes/pantry-names.ts": "pantry-names.ts",
+  "packages/core/src/recipes/taste-hints.ts": "taste-hints.ts",
+  "packages/core/src/preferences/diet.ts": "diet.ts",
+  "packages/core/src/preferences/options.ts": "options.ts",
+  "packages/core/src/dates/days.ts": "days.ts",
+  "packages/core/src/activity/cooked-recipe.ts": "cooked-recipe.ts",
+  "packages/core/src/pro/ai-allowance-core.ts": "ai-allowance-core.ts",
 }
 
-/** The copy's expected text: a header, then the source with relative imports given a ".ts" extension. */
+/**
+ * The copy's expected text: a header, then the source with each relative import pointed at its
+ * copy ("../../preferences/diet" becomes "./diet.ts"), since the copies sit side by side. A
+ * relative import of a file that isn't copied throws, so a copy never points at nothing. Bare
+ * imports ("zod") are left for the function's deno.json import map.
+ */
 export function expectedCopy(source) {
   const text = readFileSync(path.join(root, source), "utf8")
-  const withExtensions = text.replace(/(from\s+["'])(\.{1,2}\/[^"']+?)(["'])/g, (match, open, specifier, close) =>
-    specifier.endsWith(".ts") ? match : `${open}${specifier}.ts${close}`,
-  )
-  return `// Generated from ${source} by scripts/sync-edge-shared.mjs. Edit the source, then rerun it.\n${withExtensions}`
+  const copied = text.replace(/(from\s+["'])(\.{1,2}\/[^"']+?)(["'])/g, (match, open, specifier, close) => {
+    const target = path.posix.join(path.posix.dirname(source), specifier.endsWith(".ts") ? specifier : `${specifier}.ts`)
+    const name = COPIES[target]
+    if (!name) throw new Error(`${source} imports ${specifier}, which isn't in COPIES (scripts/sync-edge-shared.mjs).`)
+    return `${open}./${name}${close}`
+  })
+  return `// Generated from ${source} by scripts/sync-edge-shared.mjs. Edit the source, then rerun it.\n${copied}`
 }
 
 /** Copies whose file doesn't match the source, as [source, copy path]. */

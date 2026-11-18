@@ -23,6 +23,9 @@ import {
 } from "./cache.ts"
 import { bulkCost, findCost, searchCost, SpoonacularError, type Spoonacular } from "./spoonacular.ts"
 import { parseRequest } from "./validate.ts"
+import { bearerToken, CORS_HEADERS, json, readJson } from "../_shared/http.ts"
+
+export { bearerToken, CORS_HEADERS, MAX_BODY_BYTES, readJson } from "../_shared/http.ts"
 
 export type RateLimitBucket = "recipe_search" | "recipe_open"
 
@@ -45,16 +48,6 @@ export type HandlerDeps = {
   log?: (message: string) => void
 }
 
-/** Larger bodies are refused before parsing (60 names of 100 characters fit easily). */
-export const MAX_BODY_BYTES = 16 * 1024
-
-export const CORS_HEADERS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Max-Age": "86400",
-}
-
 const STATUS: Record<EdgeErrorCode, number> = {
   bad_request: 400,
   unauthorized: 401,
@@ -74,59 +67,12 @@ const MESSAGES = {
   not_member: "You're not in that household.",
 } as const
 
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...CORS_HEADERS, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
-  })
-}
-
 function failure(code: EdgeErrorCode, error: string, quota?: RecipeQuota, status = STATUS[code]): Response {
   const body: EdgeFailure = quota ? { error, code, quota } : { error, code }
   return json(body, status)
 }
 
 class RateLimited extends Error {}
-
-/** The bearer token from the Authorization header, or null. */
-export function bearerToken(header: string | null): string | null {
-  const match = header?.match(/^Bearer\s+(\S+)$/i)
-  return match ? match[1] : null
-}
-
-/**
- * Reads the body as JSON, stopping as soon as it passes MAX_BODY_BYTES (a chunked request has no
- * Content-Length, so the stream itself is capped). Undefined when it's too big or isn't JSON.
- */
-export async function readJson(req: Request): Promise<unknown> {
-  const declared = Number(req.headers.get("Content-Length"))
-  if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) return undefined
-  if (!req.body) return undefined
-  const reader = req.body.getReader()
-  const chunks: Uint8Array[] = []
-  let size = 0
-  for (;;) {
-    const { done, value } = await reader.read()
-    if (done) break
-    size += value.byteLength
-    if (size > MAX_BODY_BYTES) {
-      await reader.cancel().catch(() => {})
-      return undefined
-    }
-    chunks.push(value)
-  }
-  const bytes = new Uint8Array(size)
-  let offset = 0
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset)
-    offset += chunk.byteLength
-  }
-  try {
-    return JSON.parse(new TextDecoder().decode(bytes))
-  } catch {
-    return undefined
-  }
-}
 
 export function createHandler(deps: HandlerDeps): (req: Request) => Promise<Response> {
   const now = deps.now ?? (() => new Date())
