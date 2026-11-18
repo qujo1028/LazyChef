@@ -1,5 +1,7 @@
 import "server-only"
 
+import { bumpMetric } from "@/features/admin/metrics"
+
 // Low-level Spoonacular access: the key, timeouts, quota headers and friendly errors.
 //
 // Free plan limits: 50 points a day (reset at midnight UTC), 60 requests a minute,
@@ -146,7 +148,20 @@ export type SpoonacularRequest = {
  */
 export async function spoonacularFetch<T = unknown>(
   path: string,
-  { method = "GET", query, form }: SpoonacularRequest = {},
+  request: SpoonacularRequest = {},
+): Promise<{ data: T; quota: SpoonacularQuota }> {
+  try {
+    return await fetchOnce<T>(path, request)
+  } catch (error) {
+    // Counted for the admin dashboard, never awaited. A missing key is just dev noise.
+    if (error instanceof SpoonacularError && error.code !== "no_key") void bumpMetric(`spoonacular_error:${error.code}`)
+    throw error
+  }
+}
+
+async function fetchOnce<T>(
+  path: string,
+  { method = "GET", query, form }: SpoonacularRequest,
 ): Promise<{ data: T; quota: SpoonacularQuota }> {
   const key = apiKey()
   if (!key) throw new SpoonacularError("no_key")

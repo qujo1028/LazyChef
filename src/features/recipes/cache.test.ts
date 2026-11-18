@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest"
 
 vi.mock("server-only", () => ({}))
+const bumpMetric = vi.fn<(metric: string) => Promise<void>>()
+vi.mock("@/features/admin/metrics", () => ({ bumpMetric: (metric: string) => bumpMetric(metric) }))
 
 import { SpoonacularError } from "@/lib/spoonacular/client"
 
@@ -145,5 +147,23 @@ describe("cachedSpoonacular", () => {
     })
     await expect(cachedSpoonacular(store, "find:y", load, { cost: 1.4, beforeSpend: blocked })).rejects.toThrow("limited")
     expect(load).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("counted", () => {
+  it("counts one hit or miss per single lookup, and at most one of each per bulk lookup", async () => {
+    const { counted } = await import("./cache")
+    const store = counted(memoryStore())
+    await store.put("a", 1)
+    bumpMetric.mockClear()
+
+    await store.get("a")
+    expect(bumpMetric).toHaveBeenLastCalledWith("spoonacular_cache:hit")
+    await store.get("b")
+    expect(bumpMetric).toHaveBeenLastCalledWith("spoonacular_cache:miss")
+
+    bumpMetric.mockClear()
+    await store.getMany(["a", "b", "c"])
+    expect(bumpMetric.mock.calls.map((c) => c[0]).sort()).toEqual(["spoonacular_cache:hit", "spoonacular_cache:miss"])
   })
 })
