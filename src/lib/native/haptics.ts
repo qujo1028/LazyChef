@@ -16,7 +16,6 @@ export const WEB_PATTERNS: Record<HapticKind, number | number[]> = {
 export type HapticDeps = {
   /** True on the server: nothing to do. */
   server: boolean
-  reducedMotion: boolean
   enabled: boolean
   /** Plays the kind with the native plugin, or null in a browser. */
   native: ((kind: HapticKind) => void) | null
@@ -26,9 +25,9 @@ export type HapticDeps = {
 
 export type HapticOutcome = "native" | "web" | "skipped"
 
-/** Pure routing: gating first (server, reduced motion, setting), then native, then vibrate. */
+/** Pure routing: gating first (server, setting), then native, then vibrate. */
 export function fireHaptic(kind: HapticKind, deps: HapticDeps): HapticOutcome {
-  if (deps.server || deps.reducedMotion || !deps.enabled) return "skipped"
+  if (deps.server || !deps.enabled) return "skipped"
   if (deps.native) {
     try {
       deps.native(kind)
@@ -111,12 +110,14 @@ function playNative(kind: HapticKind) {
     })
 }
 
-/** Plays a haptic. Safe anywhere: no-ops on the server, under reduced motion, or when switched off. */
+/**
+ * Plays a haptic. Safe anywhere: no-ops on the server or when switched off. Reduced motion does not
+ * gate it (taps are functional feedback); only the decorative reward timeline drops haptics for it.
+ */
 export function haptic(kind: HapticKind): HapticOutcome {
   const server = typeof window === "undefined"
   return fireHaptic(kind, {
     server,
-    reducedMotion: server ? false : prefersReducedMotion(),
     enabled: getHapticsEnabled(),
     native: !server && getNativePlatform() ? playNative : null,
     vibrate:

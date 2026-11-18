@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest"
 import { fireHaptic, WEB_PATTERNS, type HapticDeps } from "./haptics"
 
 function deps(over: Partial<HapticDeps> = {}): HapticDeps {
-  return { server: false, reducedMotion: false, enabled: true, native: null, vibrate: null, ...over }
+  return { server: false, enabled: true, native: null, vibrate: null, ...over }
 }
 
 describe("fireHaptic", () => {
@@ -25,10 +25,10 @@ describe("fireHaptic", () => {
     expect(fireHaptic("tap", deps())).toBe("skipped")
   })
 
-  it("is gated by the setting, reduced motion and the server", () => {
+  it("is gated by the setting and the server", () => {
     const native = vi.fn()
     const vibrate = vi.fn()
-    for (const over of [{ enabled: false }, { reducedMotion: true }, { server: true }]) {
+    for (const over of [{ enabled: false }, { server: true }]) {
       expect(fireHaptic("tap", deps({ ...over, native, vibrate }))).toBe("skipped")
     }
     expect(native).not.toHaveBeenCalled()

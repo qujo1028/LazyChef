@@ -36,6 +36,12 @@ describe("housemateCookMessage", () => {
 })
 
 describe("createBannerGate", () => {
+  it("does not dedupe cooks without a batch id, but still rate limits", () => {
+    const gate = createBannerGate()
+    expect(gate.shouldShow(null, 0)).toBe(true)
+    expect(gate.shouldShow(null, 1000)).toBe(false)
+    expect(gate.shouldShow(null, BANNER_INTERVAL_MS + 1)).toBe(true)
+  })
   it("dedupes by batch", () => {
     const gate = createBannerGate()
     expect(gate.shouldShow(1, 0)).toBe(true)

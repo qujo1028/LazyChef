@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { rewardBeats, rewardDuration, scheduleReward, type RewardBeat } from "./reward"
+import { rewardBeats, scheduleReward, type RewardBeat } from "./reward"
 
 describe("rewardBeats", () => {
   it("cook is four beats, ending in success + flame, in time order", () => {
@@ -29,10 +29,6 @@ describe("rewardBeats", () => {
   it("does not hand out the shared timeline", () => {
     rewardBeats("cook")[0].at = 999
     expect(rewardBeats("cook")[0].at).toBe(0)
-  })
-
-  it("milestones last longer than cooks", () => {
-    expect(rewardDuration("milestone")).toBeGreaterThan(rewardDuration("cook"))
   })
 })
 

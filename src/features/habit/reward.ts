@@ -30,11 +30,6 @@ export function rewardBeats(kind: RewardKind, reducedMotion = false): RewardBeat
   return visuals.map((visual, i) => ({ at: i * 40, visual }))
 }
 
-/** How long the whole thing lasts, for cleanup. */
-export function rewardDuration(kind: RewardKind): number {
-  return Math.max(...TIMELINES[kind].map((beat) => beat.at)) + (kind === "milestone" ? 1600 : 900)
-}
-
 export type Scheduler = {
   setTimeout: (fn: () => void, ms: number) => unknown
   clearTimeout: (handle: unknown) => void

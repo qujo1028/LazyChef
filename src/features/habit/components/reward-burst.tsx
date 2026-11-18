@@ -2,6 +2,7 @@
 
 import { CookingPot, Flame } from "lucide-react"
 import { useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
 
 import { cn } from "@/lib/utils"
 
@@ -111,5 +112,9 @@ function Confetti() {
     return () => cancelAnimationFrame(frame)
   }, [])
 
-  return <canvas ref={ref} aria-hidden className="pointer-events-none fixed inset-0 z-[100] size-full" />
+  // Portaled out: the drawer has a transform, which would position and clip a fixed child.
+  return createPortal(
+    <canvas ref={ref} aria-hidden className="pointer-events-none fixed inset-0 z-[100] size-full" />,
+    document.body,
+  )
 }
