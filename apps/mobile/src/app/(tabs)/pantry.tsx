@@ -199,11 +199,7 @@ export default function PantryScreen() {
         contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingBottom: 112 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
         ListHeaderComponent={
-          searching ? undefined : (
-            <View style={{ paddingBottom: spacing.lg }}>
-              <ThisWeekCard />
-            </View>
-          )
+          searching ? undefined : <ThisWeekCard />
         }
         ListEmptyComponent={
           searching && shown.total === 0 ? (

@@ -46,6 +46,7 @@ export function WeekRing({ cooks, goal }: { cooks: number; goal: number }) {
           strokeLinecap="round"
           fill="none"
           strokeDasharray={LENGTH}
+          strokeDashoffset={LENGTH * (1 - fill)}
           animatedProps={animatedProps}
           // Start at 12 o'clock.
           transform={`rotate(-90 ${SIZE / 2} ${SIZE / 2})`}

@@ -50,7 +50,13 @@ export function ThisWeekCard() {
     let active = true;
     AsyncStorage.getItem(DISMISS_KEY)
       .then((raw) => {
-        if (active) setDismissed((current) => new Set([...parseDismissed(raw, summaryToday), ...current]));
+        if (!active) return;
+        // Keep this visit's dismissals, but only today's (yesterday's keys are stale).
+        setDismissed((current) => {
+          const next = parseDismissed(raw, summaryToday);
+          for (const key of current) if (key.startsWith(`${summaryToday}:`)) next.add(key);
+          return next;
+        });
       })
       .catch(() => {});
     return () => {
@@ -91,112 +97,138 @@ export function ThisWeekCard() {
   const challenge = summary.challenge;
 
   return (
-    <Card>
-      <View accessibilityLabel="This week" style={{ gap: spacing.md }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.lg }}>
-          <WeekRing cooks={summary.cooksThisWeek} goal={goal} />
-          <View style={{ flex: 1, gap: spacing.xs }}>
-            <Text accessibilityRole="header" style={[type.heading, { color: colors.ink }]}>
-              {headline}
-            </Text>
-            <Text style={[type.bodySmall, { color: colors.muted }]}>{sub}</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.xs }}>
-              {tier ? <Badge icon="medal" text={tier} /> : null}
-              {streak ? <Badge icon="flame" text={streak} accent /> : null}
-            </View>
-            {hint && tier ? <Text style={[type.meta, { color: colors.muted }]}>{hint}</Text> : null}
-          </View>
-        </View>
-
-        <WeekDots today={summary.today} days={summary.days} />
-
-        <View
-          accessible
-          accessibilityLabel={challenge ? `${challenge.title}, ${challenge.label}` : 'Both challenges done this week'}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: spacing.md,
-            padding: spacing.md,
-            borderRadius: radius.md,
-            backgroundColor: colors.pill,
-          }}
-        >
-          <Ionicons name="trophy" size={18} color={colors.primary} />
-          {challenge ? (
-            <>
-              <View style={{ flex: 1 }}>
-                <Text style={[type.recipeTitle, { color: colors.onPill }]}>{challenge.title}</Text>
-                <Text style={[type.meta, { color: colors.onPill }]}>{challenge.label}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', gap: 4 }}>
-                {Array.from({ length: challenge.target }, (_, i) => (
-                  <View
-                    key={i}
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: i < challenge.progress ? colors.primary : colors.outline,
-                    }}
-                  />
-                ))}
-              </View>
-            </>
-          ) : (
-            <Text style={[type.bodySmall, { color: colors.onPill, flex: 1 }]}>Both challenges done this week.</Text>
-          )}
-        </View>
-
-        {nudge ? (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 1, paddingVertical: spacing.sm }}>
-              <Text style={[type.bodySmall, { color: colors.ink }]}>{nudge.text}</Text>
-              <Pressable
-                accessibilityRole="link"
-                accessibilityLabel={nudge.cta}
-                onPress={() => router.push(nudge.href as never)}
-                style={{ minHeight: 44, justifyContent: 'center' }}
+    <View style={{ paddingBottom: spacing.lg }}>
+      <Card>
+        <View style={{ gap: spacing.md }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: spacing.lg,
+            }}
+          >
+            <WeekRing cooks={summary.cooksThisWeek} goal={goal} />
+            <View style={{ flex: 1, gap: spacing.xs }}>
+              <Text accessibilityRole="header" style={[type.heading, { color: colors.ink }]}>
+                {headline}
+              </Text>
+              <Text style={[type.bodySmall, { color: colors.muted }]}>{sub}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  gap: spacing.xs,
+                  marginTop: spacing.xs,
+                }}
               >
-                <Text style={[type.button, { color: colors.primary }]}>{nudge.cta}</Text>
+                {tier ? <Badge icon="medal" text={tier} /> : null}
+                {streak ? <Badge icon="flame" text={streak} accent /> : null}
+              </View>
+              {hint && tier ? <Text style={[type.meta, { color: colors.muted }]}>{hint}</Text> : null}
+            </View>
+          </View>
+
+          <WeekDots today={summary.today} days={summary.days} />
+
+          <View
+            accessible
+            accessibilityLabel={challenge ? `${challenge.title}, ${challenge.label}` : 'Both challenges done this week'}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: spacing.md,
+              padding: spacing.md,
+              borderRadius: radius.md,
+              backgroundColor: colors.pill,
+            }}
+          >
+            <Ionicons name="trophy" size={18} color={colors.primary} />
+            {challenge ? (
+              <>
+                <View style={{ flex: 1 }}>
+                  <Text style={[type.recipeTitle, { color: colors.onPill }]}>{challenge.title}</Text>
+                  <Text style={[type.meta, { color: colors.onPill }]}>{challenge.label}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', gap: 4 }}>
+                  {Array.from({ length: challenge.target }, (_, i) => (
+                    <View
+                      key={i}
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: i < challenge.progress ? colors.primary : colors.outline,
+                      }}
+                    />
+                  ))}
+                </View>
+              </>
+            ) : (
+              <Text style={[type.bodySmall, { color: colors.onPill, flex: 1 }]}>Both challenges done this week.</Text>
+            )}
+          </View>
+
+          {nudge ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flex: 1, paddingVertical: spacing.sm }}>
+                <Text style={[type.bodySmall, { color: colors.ink }]}>{nudge.text}</Text>
+                <Pressable
+                  accessibilityRole="link"
+                  accessibilityLabel={nudge.cta}
+                  onPress={() => router.push(nudge.href as never)}
+                  style={{ minHeight: 44, justifyContent: 'center' }}
+                >
+                  <Text style={[type.button, { color: colors.primary }]}>{nudge.cta}</Text>
+                </Pressable>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Dismiss: ${nudge.text}`}
+                onPress={() => dismiss(nudge.id)}
+                hitSlop={4}
+                style={{
+                  width: 44,
+                  height: 44,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Ionicons name="close" size={20} color={colors.muted} />
               </Pressable>
             </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Dismiss: ${nudge.text}`}
-              onPress={() => dismiss(nudge.id)}
-              hitSlop={4}
-              style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}
-            >
-              <Ionicons name="close" size={20} color={colors.muted} />
-            </Pressable>
-          </View>
-        ) : null}
+          ) : null}
 
-        {__DEV__ ? (
-          <View style={{ gap: spacing.sm }}>
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => setDevOpen((open) => !open)}
-              style={{ minHeight: 44, justifyContent: 'center' }}
-            >
-              <Text style={[type.meta, { color: colors.muted }]}>
-                {devOpen ? 'Hide dev preview' : 'Dev preview'}
-                {preset ? ' (on)' : ''}
-              </Text>
-            </Pressable>
-            {devOpen ? (
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-                {DEV_PRESETS.map(({ label, preset: p }) => (
-                  <Chip key={label} label={label} onPress={() => setPreset(p)} />
-                ))}
-                <Chip label="Reset" onPress={() => setPreset(null)} />
-              </View>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
-    </Card>
+          {__DEV__ ? (
+            <View style={{ gap: spacing.sm }}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => setDevOpen((open) => !open)}
+                style={{ minHeight: 44, justifyContent: 'center' }}
+              >
+                <Text style={[type.meta, { color: colors.muted }]}>
+                  {devOpen ? 'Hide dev preview' : 'Dev preview'}
+                  {preset ? ' (on)' : ''}
+                </Text>
+              </Pressable>
+              {devOpen ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    gap: spacing.sm,
+                  }}
+                >
+                  {DEV_PRESETS.map(({ label, preset: p }) => (
+                    <Chip key={label} label={label} onPress={() => setPreset(p)} />
+                  ))}
+                  <Chip label="Reset" onPress={() => setPreset(null)} />
+                </View>
+              ) : null}
+            </View>
+          ) : null}
+        </View>
+      </Card>
+    </View>
   );
 }
 
