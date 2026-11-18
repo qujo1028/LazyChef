@@ -1,7 +1,6 @@
-// The viewer's time zone. The server cannot know it, so the browser keeps it in a cookie
-// (see TimeZoneSync) and the server reads it; until the first visit it falls back to UTC.
+// The viewer's time zone. The server cannot know it, so the browser keeps it in the shared
+// TIMEZONE_COOKIE (see TimezoneSync) and the server reads it; until the first visit it falls back to UTC.
 
-export const TZ_COOKIE = "lc_tz"
 export const FALLBACK_TIME_ZONE = "UTC"
 
 /** The zone if it is a real IANA name, else null. */

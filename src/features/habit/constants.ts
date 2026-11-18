@@ -12,5 +12,9 @@ export const STREAK_MILESTONES = [3, 7, 14, 30] as const
 /** Days without a cook before the card says "Welcome back". */
 export const COMEBACK_DAYS = 3
 
-/** Most cook rows the week card reads (newest first). Rows are per ingredient, batches are far fewer. */
-export const COOK_ROW_LIMIT = 3000
+/**
+ * Most cook rows the week card reads (newest first). Supabase's PostgREST caps a response at 1000
+ * rows whatever the limit says, so this is 1000: plenty for the week, streak and challenges
+ * (rows are per ingredient, so it is the last several dozen cooks).
+ */
+export const COOK_ROW_LIMIT = 1000

@@ -3,7 +3,7 @@
 import { addDays, weekStart } from "@/features/activity/stats"
 import { dayKey } from "@/features/activity/time"
 
-import type { CookEvent } from "./cook-days"
+import type { CookEvent } from "./cook-events"
 import { weekDayKeys } from "./week"
 
 export type ChallengeKind = "streak3" | "try_new"

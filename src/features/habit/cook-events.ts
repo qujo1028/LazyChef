@@ -50,3 +50,12 @@ export function cookDaySet(events: readonly CookEvent[], timeZone?: string): Set
   for (const event of events) days.add(dayKey(Date.parse(event.at), timeZone))
   return days
 }
+
+/**
+ * The event for a cook that just succeeded, so "after" can be derived as `before + this` instead of
+ * re-reading the history. The key matches recipeKeyOf for the row cook_recipe writes (recipe_id for
+ * Spoonacular, local_recipe_id for ours); the negative batch id cannot clash with a real one.
+ */
+export function syntheticCookEvent(ref: { id: string | number }, nowMs: number): CookEvent {
+  return { batchId: -1, at: new Date(nowMs).toISOString(), recipeKey: `id:${ref.id}` }
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { activeChallenge, challengeProgress, doneChallenges } from "./challenges"
-import { cookDaySet, mergeCookEvents, toCookEvents, type CookEvent } from "./cook-days"
+import { cookDaySet, mergeCookEvents, syntheticCookEvent, toCookEvents, type CookEvent } from "./cook-events"
 import { pickNudges, type NudgeInput } from "./nudges"
 import { streakInfo, streakMilestone } from "./streak"
 import { habitResult, summarize } from "./summary"
@@ -207,5 +207,44 @@ describe("nudges", () => {
 
   it("uses a plural line for several expiring items", () => {
     expect(pickNudges({ ...none, expiring: { count: 3, first: "Milk" } }, new Set(), MON)[0].text).toBe("3 things are about to expire.")
+  })
+})
+
+describe("derived after (cookRecipe)", () => {
+  // A real re-read would return the same history plus the row cook_recipe wrote.
+  function both(history: CookEvent[], ref: { id: string | number }, nowIso: string, details: object) {
+    const now = Date.parse(nowIso)
+    const real = toCookEvents([
+      ...history.map((e) => ({ batchId: e.batchId, createdAt: e.at, details: e.recipeKey ? { recipe_id: Number(e.recipeKey.slice(3)), recipe_title: "X" } : {} })),
+      { batchId: 999, createdAt: nowIso, details: details as never },
+    ])
+    const before = summarize(history, now, "UTC")
+    return {
+      derived: habitResult(before, summarize([...history, syntheticCookEvent(ref, now)], now, "UTC")),
+      reread: habitResult(before, summarize(real, now, "UTC")),
+    }
+  }
+
+  it("gives the same tier-up as a re-read", () => {
+    const history = [cook("2026-11-16T12:00:00Z", "id:1")]
+    const { derived, reread } = both(history, { id: 2 }, "2026-11-17T20:00:00Z", { recipe_id: 2, recipe_title: "Soup" })
+    expect(derived).toEqual(reread)
+    expect(derived.milestone).toEqual({ kind: "tier", tier: "bronze" })
+  })
+
+  it("gives the same try_new result for a new and a repeated recipe", () => {
+    const history = [cook("2026-11-10T12:00:00Z", "id:1"), cook("2026-11-16T12:00:00Z", "id:1")]
+    const fresh = both(history, { id: 5 }, "2026-11-16T20:00:00Z", { recipe_id: 5, recipe_title: "New" })
+    expect(fresh.derived).toEqual(fresh.reread)
+    expect(fresh.derived.milestone).toEqual({ kind: "challenge", challenge: "try_new" })
+    const again = both(history, { id: 1 }, "2026-11-16T20:00:00Z", { recipe_id: 1, recipe_title: "X" })
+    expect(again.derived).toEqual(again.reread)
+    expect(again.derived.milestone).toBeNull()
+  })
+
+  it("matches a local recipe's key", () => {
+    const uuid = "123e4567-e89b-12d3-a456-426614174000"
+    const real = toCookEvents([{ batchId: 1, createdAt: "2026-11-16T12:00:00Z", details: { local_recipe_id: uuid, recipe_title: "Mine" } }])
+    expect(syntheticCookEvent({ id: uuid }, Date.parse("2026-11-16T12:00:00Z")).recipeKey).toBe(real[0].recipeKey)
   })
 })

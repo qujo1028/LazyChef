@@ -13,18 +13,23 @@ import type { PantryItem } from "@/features/pantry/types"
 import { spoonacularDiet } from "@/features/preferences/diet"
 import { getMyPreferences } from "@/features/preferences/queries"
 import { hasRestrictions } from "@/features/preferences/options"
-import { NO_FILTERS } from "@/features/recipes/filters"
+import { NO_FILTERS, TIMEZONE_COOKIE } from "@/features/recipes/filters"
 import type { RecipeSummary } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 
 import { COOK_ROW_LIMIT } from "./constants"
-import { toCookEvents, type CookEvent } from "./cook-days"
-import { FALLBACK_TIME_ZONE, TZ_COOKIE, validTimeZone } from "./timezone"
+import { toCookEvents, type CookEvent } from "./cook-events"
+import { FALLBACK_TIME_ZONE, validTimeZone } from "./timezone"
 
-/** The viewer's time zone from the cookie the browser set, or UTC. */
-export async function getViewerTimeZone(): Promise<string> {
-  const store = await cookies()
-  return validTimeZone(store.get(TZ_COOKIE)?.value) ?? FALLBACK_TIME_ZONE
+/** The viewer's time zone from the cookie TimezoneSync set (decoded, validated), or null before the first visit. */
+export async function getViewerTimeZone(): Promise<string | null> {
+  const raw = (await cookies()).get(TIMEZONE_COOKIE)?.value
+  if (!raw) return null
+  try {
+    return validTimeZone(decodeURIComponent(raw))
+  } catch {
+    return null
+  }
 }
 
 /** One person's cooks in a household, one event per batch (newest rows first, capped). */
@@ -105,6 +110,8 @@ async function getCardRecipes(householdId: string, items: readonly PantryItem[])
 
 export type WeekCardData = {
   events: CookEvent[]
+  /** The zone cookie, or null until the browser has set it (the card then uses UTC and TimezoneSync fills it in). */
+  zone: string | null
   timeZone: string
   /** Server time (ms), so the first render's day matches between server and browser. */
   serverNow: number
@@ -119,7 +126,7 @@ export async function getWeekCardData(
   items: readonly PantryItem[],
 ): Promise<WeekCardData> {
   const serverNow = Date.now()
-  const [timeZone, events, householdCooked, recipes] = await Promise.all([
+  const [zone, events, householdCooked, recipes] = await Promise.all([
     getViewerTimeZone(),
     getViewerCookEvents(householdId, viewerId).catch((error) => {
       console.error("Loading cooks for the week card failed:", error instanceof Error ? error.message : error)
@@ -128,5 +135,5 @@ export async function getWeekCardData(
     householdHasCooked(householdId).catch(() => true),
     getCardRecipes(householdId, items).catch(() => ({ makeNow: null, almost: null }) as CardRecipes),
   ])
-  return { events, timeZone, serverNow, householdCooked, recipes }
+  return { events, zone, timeZone: zone ?? FALLBACK_TIME_ZONE, serverNow, householdCooked, recipes }
 }

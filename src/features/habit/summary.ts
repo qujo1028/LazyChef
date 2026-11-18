@@ -4,7 +4,7 @@ import { daysBetween } from "@/features/pantry/dates"
 
 import { activeChallenge, doneChallenges, type ChallengeProgress } from "./challenges"
 import { COMEBACK_DAYS } from "./constants"
-import { cookDaySet, type CookEvent } from "./cook-days"
+import { cookDaySet, type CookEvent } from "./cook-events"
 import { streakInfo, type StreakInfo } from "./streak"
 import { cookMilestone, tierFor, type CookMilestone, type HabitSnapshot, type Tier } from "./tiers"
 import { cooksThisWeek, lastCookDay } from "./week"

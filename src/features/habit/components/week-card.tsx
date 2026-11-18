@@ -2,18 +2,18 @@
 
 import { Flame, Medal, Target, X } from "lucide-react"
 import Link from "next/link"
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react"
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react"
 
 import { useNow } from "@/features/pantry/components/use-clock"
 import { useHouseholdChanges } from "@/features/household/components/household-channel"
 import { cn } from "@/lib/utils"
 
 import { DEFAULT_GOAL } from "../constants"
-import { mergeCookEvents, recipeKeyOf, type CookEvent } from "../cook-days"
+import { mergeCookEvents, recipeKeyOf, type CookEvent } from "../cook-events"
 import { dismissKey, pickNudges, type NudgeId } from "../nudges"
 import type { WeekCardData } from "../queries"
 import { summarize } from "../summary"
-import { TZ_COOKIE, validTimeZone } from "../timezone"
+import { validTimeZone } from "../timezone"
 import { nextTier, TIER_LABELS, type Tier } from "../tiers"
 import { weekDayKeys } from "../week"
 
@@ -107,15 +107,6 @@ export function WeekCard({
   // Dismissed this visit even if storage is blocked.
   const [sessionDismissed, setSessionDismissed] = useState<Set<string>>(() => new Set())
   const rawDismissed = useSyncExternalStore(subscribeDismissed, readDismissedRaw, () => "")
-
-  // Remember the zone for the server (it cannot know it otherwise).
-  useEffect(() => {
-    try {
-      document.cookie = `${TZ_COOKIE}=${encodeURIComponent(timeZone)}; path=/; max-age=31536000; samesite=lax`
-    } catch {
-      // Cookies blocked: the server keeps using UTC.
-    }
-  }, [timeZone])
 
   // Your own cooks from another device (or this one) arrive live, one row each; a batch is one cook.
   useHouseholdChanges("activity_log", (change) => {

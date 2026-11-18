@@ -7,7 +7,9 @@ import type { ActionResult } from "@/features/pantry/types"
 import { requireHousehold, requireViewer } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
 import { addListItems } from "@/features/list/actions"
+import { syntheticCookEvent } from "@/features/habit/cook-events"
 import { getViewerCookEvents, getViewerTimeZone } from "@/features/habit/queries"
+import { FALLBACK_TIME_ZONE } from "@/features/habit/timezone"
 import { habitResult, summarize, type HabitResult } from "@/features/habit/summary"
 import { categoryFromAisle } from "@/lib/ingredients/aisles"
 import { findIngredient, guessCategory } from "@/lib/ingredients/catalog"
@@ -109,8 +111,11 @@ export async function cookRecipe(
   const supabase = await createClient()
   const { ref: recipe } = parsed.data
   // The habit before this cook, to tell what it earned. Never allowed to fail the cook.
-  const timeZone = await getViewerTimeZone()
-  const before = await getViewerCookEvents(household.id, viewer.id).catch(() => null)
+  // One parallel read; "after" is derived below instead of re-reading the history.
+  const [zone, before] = await Promise.all([
+    getViewerTimeZone(),
+    getViewerCookEvents(household.id, viewer.id).catch(() => null),
+  ])
   const { data, error } = await supabase.rpc("cook_recipe", {
     p_household_id: household.id,
     p_recipe_id: recipe.kind === "spoonacular" ? recipe.id : null,
@@ -126,13 +131,12 @@ export async function cookRecipe(
 
   let habit: HabitResult | null = null
   if (before) {
-    try {
-      const after = await getViewerCookEvents(household.id, viewer.id)
-      const now = Date.now()
-      habit = habitResult(summarize(before, now, timeZone), summarize(after, now, timeZone))
-    } catch (error) {
-      console.error("Reading the habit after a cook failed:", error instanceof Error ? error.message : error)
-    }
+    const timeZone = zone ?? FALLBACK_TIME_ZONE
+    const now = Date.now()
+    habit = habitResult(
+      summarize(before, now, timeZone),
+      summarize([...before, syntheticCookEvent(recipe, now)], now, timeZone),
+    )
   }
   return {
     results: (data ?? []).map((row) => ({
