@@ -1,5 +1,5 @@
 // Pure: turns recipe ingredient lines into shopping list lines. The list's own planner
-// (src/features/list/plan.ts) then tops up or skips what's already on the list.
+// (../list/plan.ts) then tops up or skips what's already on the list.
 import type { NewListLine } from "../list/types"
 import type { Category } from "../ingredients/types"
 import type { RecipeIngredient } from "./recipe-shapes"

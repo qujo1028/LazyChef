@@ -1,8 +1,8 @@
 // Haptic feedback: the Capacitor plugin inside the app, navigator.vibrate in browsers that have it.
 // The decision logic is in fireHaptic() with injected dependencies so it can be tested without a device.
-import { getNativePlatform } from "./platform"
+import type { HapticKind } from "@lazychef/core/haptics/kinds"
 
-import type { HapticKind } from "@lazychef/core/habit/reward"
+import { getNativePlatform } from "./platform"
 
 export type { HapticKind }
 

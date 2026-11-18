@@ -7,19 +7,34 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // packages/core is shared with the Expo app: plain TypeScript only, no framework or app imports.
   {
-    files: ["packages/core/**/*.ts"],
+    files: ["packages/core/**/*.{ts,tsx,mts,cts,js,mjs}"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
-          paths: ["next", "react", "react-dom", "react-native", "server-only"].map((name) => ({
+          paths: ["next", "react", "react-dom", "react-native", "server-only", "expo"].map((name) => ({
             name,
             message: "packages/core is framework-free: keep this import in the app.",
           })),
           patterns: [
             {
-              group: ["next/*", "react/*", "react-dom/*", "react-native/*", "@/*", "expo", "expo-*", "@capacitor/*"],
-              message: "packages/core is framework-free and can't import app code (@/...): use relative imports.",
+              group: [
+                "next/*",
+                "react/*",
+                "react-dom/*",
+                "react-native/*",
+                "react-native-*",
+                "@react-native/*",
+                "@react-native-*/*",
+                "expo-*",
+                "@expo/*",
+                "@capacitor/*",
+              ],
+              message: "packages/core is framework-free: keep this import in the app.",
+            },
+            {
+              group: ["@/*"],
+              message: "packages/core can't import web app code (@/...): move the module into core or use a relative import.",
             },
           ],
         },

@@ -1,8 +1,6 @@
 // The reward timeline, pure. Haptics and visuals share ONE clock: scheduleReward() fires each beat
 // from a single place, so the buzz and the animation step together and cannot drift.
-
-/** The haptic patterns a beat can play. Each app maps them to its own haptics API. */
-export type HapticKind = "tap" | "light" | "rise" | "success" | "milestone"
+import type { HapticKind } from "../haptics/kinds"
 
 export type RewardKind = "cook" | "milestone"
 export type RewardVisual = "ring" | "flame" | "confetti"

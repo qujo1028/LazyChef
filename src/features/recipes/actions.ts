@@ -75,7 +75,7 @@ export async function addRecipeIngredientsToList(ref: string, lines: number[]): 
     // The list keeps Spoonacular's id (their terms allow it); ours are named by title only.
     recipe: { id: recipe.spoonacularId, title: recipe.title },
   })
-  // Tops up or skips what's already on the list (see src/features/list/plan.ts).
+  // Tops up or skips what's already on the list (see @lazychef/core/list/plan).
   const result = await addListItems(listLines)
   if (result.error !== undefined) return result
 

@@ -1,3 +1,6 @@
+// Needs a WHATWG URL. React Native's built-in URL mis-parses these inputs, so the Expo app must
+// import "react-native-url-polyfill/auto" before using this module.
+
 /**
  * Google blocks its sign-in page inside app web views, so the iOS/Android app opens it in an
  * in-app browser tab instead. Supabase then sends the user back to the app through this link

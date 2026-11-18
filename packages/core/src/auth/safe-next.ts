@@ -1,3 +1,6 @@
+// Needs a WHATWG URL. React Native's built-in URL mis-parses these inputs, so the Expo app must
+// import "react-native-url-polyfill/auto" before using this module.
+
 const PROBE_ORIGIN = "http://safe-next.invalid"
 
 /**
