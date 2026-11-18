@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest"
 
 vi.mock("server-only", () => ({}))
+const bumpMetric = vi.fn<(metric: string) => Promise<void>>()
+vi.mock("@/features/admin/metrics", () => ({ bumpMetric: (metric: string) => bumpMetric(metric) }))
 
 import { SpoonacularError } from "@/lib/spoonacular/client"
 
@@ -33,6 +35,13 @@ describe("suggestionsCacheKey", () => {
     const curry = suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: "Chicken Curry" })
     expect(curry).not.toBe(base)
     expect(suggestionsCacheKey(["rice", "eggs"], { type: null, maxTime: null, query: "chicken curry" })).toBe(curry)
+    // Auto resolves to a real type before it reaches the key: a different slot is a different key.
+    const dinner = suggestionsCacheKey(["eggs", "rice"], { type: "main course", maxTime: null, query: null })
+    const lunch = suggestionsCacheKey(["eggs", "rice"], { type: "main course", maxTime: 30, query: null })
+    expect(dinner).not.toBe(lunch)
+    expect(dinner).not.toBe(breakfast)
+    // Any meal (type null) keeps the plain find key.
+    expect(suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: null })).toBe(base)
     // A diet turns a plain find into a search, keyed by the diet; no diet keeps the old key.
     const vegan = suggestionsCacheKey(["eggs", "rice"], NO_FILTERS, { diet: "vegan", intolerances: [] })
     expect(vegan).toMatch(/^search:/)
@@ -138,5 +147,23 @@ describe("cachedSpoonacular", () => {
     })
     await expect(cachedSpoonacular(store, "find:y", load, { cost: 1.4, beforeSpend: blocked })).rejects.toThrow("limited")
     expect(load).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("counted", () => {
+  it("counts one hit or miss per single lookup, and at most one of each per bulk lookup", async () => {
+    const { counted } = await import("./cache")
+    const store = counted(memoryStore())
+    await store.put("a", 1)
+    bumpMetric.mockClear()
+
+    await store.get("a")
+    expect(bumpMetric).toHaveBeenLastCalledWith("spoonacular_cache:hit")
+    await store.get("b")
+    expect(bumpMetric).toHaveBeenLastCalledWith("spoonacular_cache:miss")
+
+    bumpMetric.mockClear()
+    await store.getMany(["a", "b", "c"])
+    expect(bumpMetric.mock.calls.map((c) => c[0]).sort()).toEqual(["spoonacular_cache:hit", "spoonacular_cache:miss"])
   })
 })

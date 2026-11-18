@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 import { cn } from "@/lib/utils"
 
-import { filtersHref, MEAL_FILTERS, NO_FILTERS, TIME_FILTERS, type RecipeFilters, type TimeFilter } from "../filters"
+import { filtersHref, isAuto, MEAL_FILTERS, NO_FILTERS, TIME_FILTERS, type RecipeFilters, type TimeFilter } from "../filters"
 
 function timeLabel(minutes: TimeFilter) {
   return minutes === 60 ? "Under 1 hr" : `Under ${minutes} min`
@@ -18,6 +18,11 @@ function timeLabel(minutes: TimeFilter) {
 
 function mealLabel(type: RecipeFilters["type"]) {
   return MEAL_FILTERS.find((meal) => meal.value === type)?.label ?? null
+}
+
+/** The filters with the meal set by hand (or back to Auto / Any meal). */
+function withMeal(filters: RecipeFilters, meal: RecipeFilters["type"] | "any"): RecipeFilters {
+  return { ...filters, type: meal === "any" ? null : meal, anyMeal: meal === "any" }
 }
 
 function Chip({
@@ -48,12 +53,12 @@ function Chip({
 }
 
 /** "Filters" button that opens a sheet of meal and cook-time options. Each tap applies right away. */
-export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
+export function RecipeFilterButton({ filters, autoMeal = null }: { filters: RecipeFilters; autoMeal?: string | null }) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
   const router = useRouter()
   const worldId = useId()
-  const count = (filters.type ? 1 : 0) + (filters.maxTime ? 1 : 0) + (filters.world ? 1 : 0)
+  const count = (filters.type || filters.anyMeal ? 1 : 0) + (filters.maxTime ? 1 : 0) + (filters.world ? 1 : 0)
   const close = () => setOpen(false)
 
   function setWorld(world: boolean) {
@@ -96,11 +101,14 @@ export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
           <section className="grid gap-2.5" aria-label="Meal">
             <h3 className="text-sm font-semibold">Meal</h3>
             <div className="flex flex-wrap gap-2">
-              <Chip href={filtersHref({ ...filters, type: null })} active={filters.type === null} onPick={close}>
+              <Chip href={filtersHref(withMeal(filters, null))} active={isAuto(filters)} onPick={close}>
+                {autoMeal ? `Auto: ${autoMeal}` : "Auto"}
+              </Chip>
+              <Chip href={filtersHref(withMeal(filters, "any"))} active={!!filters.anyMeal} onPick={close}>
                 Any meal
               </Chip>
               {MEAL_FILTERS.map((meal) => (
-                <Chip key={meal.value} href={filtersHref({ ...filters, type: meal.value })} active={filters.type === meal.value} onPick={close}>
+                <Chip key={meal.value} href={filtersHref(withMeal(filters, meal.value))} active={filters.type === meal.value} onPick={close}>
                   {meal.label}
                 </Chip>
               ))}
@@ -136,7 +144,8 @@ export function RecipeFilterButton({ filters }: { filters: RecipeFilters }) {
 /** The filters that are on, as small removable pills under the search box. */
 export function ActiveFilters({ filters }: { filters: RecipeFilters }) {
   const pills = [
-    filters.type ? { label: mealLabel(filters.type), href: filtersHref({ ...filters, type: null }) } : null,
+    filters.type ? { label: mealLabel(filters.type), href: filtersHref(withMeal(filters, null)) } : null,
+    filters.anyMeal ? { label: "Any meal", href: filtersHref(withMeal(filters, null)) } : null,
     filters.maxTime ? { label: timeLabel(filters.maxTime), href: filtersHref({ ...filters, maxTime: null }) } : null,
     filters.world ? { label: "World recipes", href: filtersHref({ ...filters, world: false }) } : null,
   ].filter((pill) => pill !== null)

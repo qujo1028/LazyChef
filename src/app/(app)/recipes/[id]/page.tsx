@@ -4,20 +4,24 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { EmptyState } from "@/components/empty-state"
-import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { CookSheet } from "@/features/recipes/components/cook-sheet"
-import { IngredientChecklist, type ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import type { ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
+import { RecipeIngredients } from "@/features/recipes/components/recipe-ingredients"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { SaveButton } from "@/features/recipes/components/save-button"
 import { SourceTag } from "@/features/recipes/components/source-tag"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
+import { RatingButtons } from "@/features/recipes/components/rating-buttons"
+import { RecipeSheet } from "@/features/recipes/components/recipe-sheet"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
+import { getLocalRecipe } from "@/features/recipes/local"
+import { draftFromRecipe } from "@/features/recipes/own-recipe"
+import { getMyRating, hasCooked } from "@/features/recipes/ratings"
 import { parseRecipeRef } from "@/features/recipes/ref"
-import { IngredientsWithSwaps } from "@/features/recipes/substitutions/components/ingredients-with-swaps"
 import { isAiAvailable } from "@/lib/llm/ai"
+import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -32,7 +36,7 @@ function BackLink() {
   )
 }
 
-export default async function RecipePage({ params }: PageProps<"/recipes/[id]">) {
+export default async function RecipePage({ params, searchParams }: PageProps<"/recipes/[id]">) {
   const ref = parseRecipeRef((await params).id)
   if (ref === null) notFound()
 
@@ -82,8 +86,13 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
   }))
   const have = lines.filter((line) => line.status !== "need").length
   const saved = savedIds.has(recipe.ref)
+  const myRating = await getMyRating(household.id, recipe.ref)
+  // Only people who cooked it can vote (the database enforces it too).
+  const canRate = myRating !== null || (await hasCooked(household.id, recipe.ref))
   const image = recipe.source === "spoonacular" ? recipe.image : null
   const editable = recipe.source === "user" && recipe.householdId === household.id
+  // The edit sheet starts from the saved recipe's own lines (/recipes/<id>/edit redirects here as ?edit=1).
+  const own = editable && ref.kind === "local" ? await getLocalRecipe(ref.id, household.id) : null
 
   return (
     <article className="grid grid-cols-1 gap-5">
@@ -102,7 +111,7 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
           />
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-          <SourceTag source={recipe.source} />
+          <SourceTag source={recipe.source} aiGenerated={recipe.aiGenerated} />
           {recipe.readyInMinutes ? (
             <span className="inline-flex items-center gap-1.5">
               <Clock className="size-4" aria-hidden /> {recipe.readyInMinutes} min
@@ -115,12 +124,23 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
           ) : null}
           {recipe.cuisine ? <span>{recipe.cuisine}</span> : null}
         </div>
-        {editable ? (
-          <Button asChild variant="outline" size="lg" className="mt-1 h-11 w-full">
-            <Link href={`/recipes/${recipe.ref}/edit`}>
-              <Pencil aria-hidden /> Edit recipe
-            </Link>
-          </Button>
+        {canRate ? (
+          <div className="flex items-center gap-3 text-sm">
+            <span className="font-medium">Your vote</span>
+            <RatingButtons recipeId={recipe.ref} title={recipe.title} initial={myRating} />
+          </div>
+        ) : null}
+        {own ? (
+          <RecipeSheet
+            householdId={household.id}
+            recipeId={own.id}
+            initial={draftFromRecipe(own)}
+            initialPhotoUrl={own.photoPath ? own.image : null}
+            defaultOpen={firstParam((await searchParams).edit) === "1"}
+            className="mt-1 h-11 w-full"
+          >
+            <Pencil aria-hidden /> Edit recipe
+          </RecipeSheet>
         ) : null}
       </header>
 
@@ -131,17 +151,17 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
             · you have {have} of {lines.length}
           </span>
         </h2>
-        {isAiAvailable() ? (
-          <IngredientsWithSwaps
-            recipeId={recipe.ref}
-            title={recipe.title}
-            lines={lines}
-            sendCopy={recipe.source === "spoonacular"}
-          />
-        ) : (
-          <IngredientChecklist recipeId={recipe.ref} lines={lines} />
-        )}
-        <CookSheet recipeId={recipe.ref} title={recipe.title} image={image} lines={cook} saved={saved} />
+        <RecipeIngredients
+          recipeId={recipe.ref}
+          title={recipe.title}
+          image={image}
+          lines={lines}
+          cook={cook}
+          saved={saved}
+          baseServings={recipe.servings}
+          withSwaps={isAiAvailable()}
+          sendCopy={recipe.source === "spoonacular"}
+        />
       </section>
 
       {recipe.steps.length > 0 ? (

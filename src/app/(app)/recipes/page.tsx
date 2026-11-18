@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ChefHat, CircleAlert, MoonStar, Plus, Search, Sparkles } from "lucide-react"
+import { cookies } from "next/headers"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/empty-state"
@@ -9,19 +10,42 @@ import { requireHousehold } from "@/features/household/queries"
 import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from "@/features/preferences/options"
 import { getMyPreferences } from "@/features/preferences/queries"
 import { AiIdeaCard } from "@/features/recipes/ai-idea/ai-idea-card"
+import { MealIdeas } from "@/features/recipes/ai-idea/meal-ideas-area"
+import { ideaMealFor, THIN_MEAL_BELOW } from "@/features/recipes/ai-idea/meal-ideas"
 import type { Usage } from "@/features/recipes/cache-core"
+import { CookAgain } from "@/features/recipes/components/cook-again"
+import { RatingPrompt } from "@/features/recipes/components/rating-prompt"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
-import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
+import { OursTab } from "@/features/recipes/components/ours-tab"
+import { RecipeSheet } from "@/features/recipes/components/recipe-sheet"
+import { parseRecipeView, RecipesTabs } from "@/features/recipes/components/recipes-tabs"
+import { SavedTab } from "@/features/recipes/components/saved-tab"
 import { ActiveFilters, RecipeFilterButton } from "@/features/recipes/components/recipe-filters"
 import { RecipeSearch } from "@/features/recipes/components/recipe-search"
+import { MealStrip } from "@/features/recipes/components/meal-strip"
+import { TimezoneSync } from "@/features/recipes/components/timezone-sync"
 import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
 import { ShowMoreGrid } from "@/features/recipes/components/show-more-grid"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
-import { filtersHref, hasFilters, NO_FILTERS, parseFilters, parseMore, type RecipeFilters } from "@/features/recipes/filters"
+import {
+  autoLabel,
+  filtersHref,
+  hasFilters,
+  hourInZone,
+  isAuto,
+  NO_FILTERS,
+  parseFilters,
+  parseMore,
+  resolveMeals,
+  TIMEZONE_COOKIE,
+  type RecipeFilters,
+} from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
+import { getCookAgain, getMyUnratedCooks } from "@/features/recipes/ratings"
 import { isAiAvailable } from "@/lib/llm/ai"
+import { firstParam } from "@/lib/search-params"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
@@ -44,15 +68,16 @@ function SectionHeading({ title, count, hint }: { title: string; count: number; 
   )
 }
 
-function SearchRow({ filters, prefs }: { filters: RecipeFilters; prefs: FoodPreferences }) {
+function SearchRow({ filters, prefs, autoMeal }: { filters: RecipeFilters; prefs: FoodPreferences; autoMeal: string | null }) {
   return (
     <>
       <div className="flex gap-2">
         <div className="min-w-0 flex-1">
           <RecipeSearch filters={filters} />
         </div>
-        <RecipeFilterButton filters={filters} />
+        <RecipeFilterButton filters={filters} autoMeal={autoMeal} />
       </div>
+      <MealStrip filters={filters} autoMeal={autoMeal} />
       <ActiveFilters filters={filters} />
       <DietNote filters={filters} prefs={prefs} />
     </>
@@ -127,7 +152,7 @@ function SpoonacularNote({ part, filters }: { part: SpoonacularPart; filters: Re
   return <p className="text-center text-xs text-muted-foreground">{text}</p>
 }
 
-function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: RecipeFilters }) {
+function SpoonacularEmpty({ part, filters, autoMeal }: { part: SpoonacularPart; filters: RecipeFilters; autoMeal: string | null }) {
   if (part.status === "resting") {
     return (
       <EmptyState icon={MoonStar} title="Recipe searches are resting until tomorrow">
@@ -153,7 +178,14 @@ function SpoonacularEmpty({ part, filters }: { part: SpoonacularPart; filters: R
   }
   return (
     <EmptyState icon={filters.query ? Search : Sparkles} title={filters.query ? `Nothing called “${filters.query}”` : "No matches yet"}>
-      {hasFilters(filters) ? (
+      {isAuto(filters) && autoMeal && !filters.query ? (
+        <>
+          Nothing fits {autoMeal.toLowerCase()} right now with what you have.{" "}
+          <Link href={filtersHref({ ...filters, type: null, anyMeal: true })} scroll={false} className="font-medium text-primary underline underline-offset-2">
+            Show any meal
+          </Link>
+        </>
+      ) : hasFilters(filters) ? (
         <>
           Nothing fits with what you have. <ClearFilters filters={filters} />
         </>
@@ -190,21 +222,31 @@ function Credits({ recipes, part }: { recipes: Suggestion[]; part: SpoonacularPa
   )
 }
 
-export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
+/** Recipes, "Ideas" view: what you can cook now, search, filters, AI ideas. */
+async function IdeasTab({ params }: { params: Awaited<PageProps<"/recipes">["searchParams"]> }) {
   const [{ household }, prefs] = await Promise.all([requireHousehold(), getMyPreferences()])
-  const params = await searchParams
   const filters = parseFilters(params, { worldDefault: prefs.worldRecipes })
   const more = parseMore(params)
   const recipePrefs = { diet: !filters.all && hasRestrictions(prefs) ? prefs : null, cuisines: prefs.cuisines }
-  const [result, savedIds] = await Promise.all([
-    getRecipeIdeas(household.id, filters, more, recipePrefs),
+  // The server only knows UTC: TimezoneSync saves the phone's zone in a cookie. Without it
+  // (first visit) Auto acts as Any meal for this render.
+  const zone = (await cookies()).get(TIMEZONE_COOKIE)?.value
+  const hour = hourInZone(new Date(), zone)
+  const autoMeal = autoLabel(hour)
+  const meals = resolveMeals(filters, hour)
+  const [result, savedIds, unratedCooks, cookAgain] = await Promise.all([
+    getRecipeIdeas(household.id, filters, more, recipePrefs, meals),
     getSavedIds(household.id),
+    getMyUnratedCooks(household.id, zone ? decodeURIComponent(zone) : undefined),
+    getCookAgain(household.id),
   ])
 
   const heading = (
     <>
+      <TimezoneSync current={zone ? decodeURIComponent(zone) : null} />
       <PageHeading title="Recipes" description="What you can cook with what you have." />
-      <RecipesTabs current="/recipes" />
+      <RecipesTabs current="ideas" />
+      <RatingPrompt cooks={unratedCooks} />
     </>
   )
 
@@ -212,11 +254,11 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     return (
       <>
         {heading}
-        <SearchRow filters={filters} prefs={prefs} />
+        <SearchRow filters={filters} prefs={prefs} autoMeal={autoMeal} />
         <EmptyState icon={ChefHat} title="Add some food first">
           <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back, or search for a recipe above.</p>
           <Button asChild size="lg" className="mt-4 h-12 w-full text-base">
-            <Link href="/pantry/add">
+            <Link href="/pantry?add=bulk">
               <Plus aria-hidden /> Add food
             </Link>
           </Button>
@@ -230,9 +272,10 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
   return (
     <>
       {heading}
-      <SearchRow filters={filters} prefs={prefs} />
+      <SearchRow filters={filters} prefs={prefs} autoMeal={autoMeal} />
+      {result.mode === "ideas" ? <CookAgain cards={cookAgain} /> : null}
       {shown.length === 0 ? (
-        <SpoonacularEmpty part={result.spoonacular} filters={filters} />
+        <SpoonacularEmpty part={result.spoonacular} filters={filters} autoMeal={autoMeal} />
       ) : result.mode === "search" ? (
         <section className="grid gap-3" aria-label="Search results">
           <SectionHeading title="Results" count={result.results.length} />
@@ -256,14 +299,22 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
           ) : null}
         </>
       )}
+      {result.mode === "ideas" && isAiAvailable() && shown.length < THIN_MEAL_BELOW ? <MealIdeas meal={ideaMealFor(meals)} /> : null}
       {result.mode === "ideas" && isAiAvailable() ? <AiIdeaCard /> : null}
       {shown.length > 0 ? <SpoonacularNote part={result.spoonacular} filters={filters} /> : null}
-      <Button asChild variant="ghost" size="lg" className="h-12 w-full text-base">
-        <Link href="/recipes/new">
-          <Plus aria-hidden /> Add your own recipe
-        </Link>
-      </Button>
+      <RecipeSheet householdId={household.id} variant="ghost" className="h-12 w-full text-base">
+        <Plus aria-hidden /> Add your own recipe
+      </RecipeSheet>
       <Credits recipes={shown} part={result.spoonacular} />
     </>
   )
+}
+
+/** One screen, three views: Ideas | Saved | Ours (?view=). Each loads only its own data. */
+export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
+  const params = await searchParams
+  const view = parseRecipeView(params.view)
+  if (view === "saved") return <SavedTab sortParam={params.sort} />
+  if (view === "ours") return <OursTab openNew={firstParam(params.new) === "1"} />
+  return <IdeasTab params={params} />
 }

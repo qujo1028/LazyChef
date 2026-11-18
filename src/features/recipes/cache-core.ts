@@ -6,8 +6,6 @@ import { nextQuotaReset } from "@/lib/spoonacular/cost"
 import { SpoonacularError, type SpoonacularQuota } from "@/lib/spoonacular/client"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 
-import type { RecipeFilters } from "./filters"
-
 /** Spoonacular's terms: keep responses for at most an hour. */
 export const CACHE_TTL_MS = 60 * 60 * 1000
 
@@ -48,10 +46,14 @@ export function cacheKey(kind: string, parts: readonly (string | number | null)[
  * filters. Order and spelling ("Eggs" vs "egg") don't matter, so a new expiry date or a
  * re-sort doesn't cost a search, and two households with the same food share results.
  */
-/** Only what Spoonacular is asked counts: "world recipes" is about our library, not theirs. */
+/**
+ * Only what Spoonacular is asked counts: "world recipes" is about our library, not theirs.
+ * `type` is the RESOLVED meal (Auto becomes the slot's primary type, lunch becomes a
+ * main course of at most 30 minutes), so the hourly shared cache stays correct.
+ */
 export function suggestionsCacheKey(
   names: readonly string[],
-  filters: Pick<RecipeFilters, "type" | "maxTime" | "query">,
+  filters: { type: string | null; maxTime: number | null; query: string | null },
   /** Spoonacular diet and intolerances, when the person has any (see spoonacularDiet). */
   diet: { diet: string | null; intolerances: readonly string[] } | null = null,
 ): string {

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
 import type { ActionResult } from "@/features/pantry/types"
-import { requireHousehold } from "@/features/household/queries"
+import { requireHousehold, requireViewer } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
 import { addListItems } from "@/features/list/actions"
 import { categoryFromAisle } from "@/lib/ingredients/aisles"
@@ -17,6 +17,7 @@ import type { CookResult, Deduction } from "./cook"
 import { recipeListLines } from "./list"
 import { loadRecipe } from "./queries"
 import { parseRecipeRef, type RecipeRef } from "./ref"
+import { NOT_COOKED_MESSAGE, rateInput, type Rating } from "./ratings-core"
 
 /** A recipe's ref (Spoonacular's id or our uuid, see ref.ts), parsed. */
 const refSchema = z
@@ -214,4 +215,27 @@ export async function unsaveRecipe(ref: string): Promise<ActionResult> {
 
   revalidatePath("/recipes", "layout")
   return {}
+}
+
+/**
+ * Thumbs up (1) or down (-1) on a recipe the viewer has cooked; rating again changes the
+ * vote. The database (rate_recipe) checks membership and that they cooked it.
+ */
+export async function rateRecipe(ref: string, rating: number): Promise<ActionResult<{ rating: Rating }>> {
+  const parsed = rateInput.safeParse({ ref, rating })
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Pick thumbs up or thumbs down." }
+
+  await requireViewer()
+  const { household } = await requireHousehold()
+  const supabase = await createClient()
+  const { error } = await supabase.rpc("rate_recipe", {
+    p_household_id: household.id,
+    p_recipe_ref: parsed.data.ref,
+    p_rating: parsed.data.rating,
+  })
+  if (error) return { error: error.code === "42501" ? NOT_COOKED_MESSAGE : dbError("rate_recipe", error) }
+
+  revalidatePath("/recipes")
+  revalidatePath(`/recipes/${parsed.data.ref}`)
+  return { rating: parsed.data.rating }
 }

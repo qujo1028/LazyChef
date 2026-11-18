@@ -50,6 +50,8 @@ export type SavedRecipe = {
   /** Null when the recipe's details couldn't be loaded (no points left, no key). */
   match: SavedMatch | null
   history: CookHistory | null
+  /** A household recipe saved from an AI idea. */
+  aiGenerated?: boolean
 }
 
 export const SAVED_SORTS = [

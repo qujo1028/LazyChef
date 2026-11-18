@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { callAction } from "@/lib/call-action"
+import { haptic } from "@/lib/native/haptics"
 import { ReviewList } from "@/features/pantry/components/review-list"
 import { describeAdditions, type ExistingItem } from "@/features/pantry/merge"
 import { draftsToItems, type ReviewDraft } from "@/features/pantry/review"
@@ -100,6 +101,7 @@ function PutAwayContent({
         router.refresh()
         return
       }
+      haptic("success")
       for (const id of ids) apply({ type: "remove", id })
       const pantryText = items.length > 0 ? describeAdditions(result) : null
       toast.success(pantryText ? `Put away: ${pantryText.toLowerCase()}` : `Cleared ${plural(result.cleared, "item")}`, {

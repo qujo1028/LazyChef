@@ -146,3 +146,103 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
+/* ── AI ideas: a looping gradient border and a shimmer (meal-ideas-area.tsx) ── */
+
+@property --ai-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes ai-border-spin {
+  to {
+    --ai-angle: 360deg;
+  }
+}
+
+@keyframes ai-border-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.62 0.2 295 / 0);
+  }
+  50% {
+    box-shadow: 0 0 14px 1px oklch(0.62 0.2 295 / 0.45);
+  }
+}
+
+@keyframes ai-shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@layer components {
+  .ai-border {
+    background: conic-gradient(
+      from var(--ai-angle),
+      oklch(0.62 0.2 295),
+      oklch(0.72 0.16 38),
+      oklch(0.78 0.14 85),
+      oklch(0.66 0.14 150),
+      oklch(0.62 0.2 295)
+    );
+    animation:
+      ai-border-spin 4s linear infinite,
+      ai-border-pulse 2.4s ease-in-out infinite;
+  }
+
+  .ai-shimmer {
+    background-color: var(--card);
+    background-image: linear-gradient(
+      100deg,
+      oklch(0.62 0.2 295 / 0.08) 20%,
+      oklch(0.62 0.2 295 / 0.24) 40%,
+      oklch(0.72 0.16 38 / 0.2) 50%,
+      oklch(0.62 0.2 295 / 0.08) 70%
+    );
+    background-size: 250% 100%;
+    animation: ai-shimmer 2.2s ease-in-out infinite;
+  }
+
+  /* Reduced motion: the same colors, standing still. */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-border,
+    .ai-shimmer {
+      animation: none;
+    }
+  }
+}
+
+/* Cook reward: the flame pops in; banners and the flame stand still under reduced motion. */
+@keyframes reward-flame-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.25) rotate(6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.reward-flame {
+  animation: reward-flame-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reward-flame {
+    animation: none;
+    opacity: 1;
+  }
+  [data-sonner-toast] {
+    transition: none !important;
+    animation: none !important;
+  }
+}

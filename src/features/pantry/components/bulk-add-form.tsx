@@ -1,8 +1,7 @@
 "use client"
 
 import { Info, LoaderCircle, Pencil, ScanBarcode, Sparkles } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useId, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
@@ -26,22 +25,24 @@ import { useToday } from "./use-clock"
 
 const PLACEHOLDER = ["2 lbs chicken breast", "1 dozen eggs", "milk", "3 cans black beans", "a bunch of cilantro"].join("\n")
 
-/** /pantry/add: paste, type or scan a whole haul, check it, add it in one go. */
+/** Paste, type or scan a whole haul, check it, add it in one go (in the Pantry's bulk add sheet). */
 export function BulkAddForm({
   defaultText,
   serverToday,
   startScanning = false,
   aiAvailable = false,
+  onDone,
 }: {
   defaultText: string
   serverToday: string
   /** Offer "Use AI to split this" (only when the AI assistant is set up). */
   aiAvailable?: boolean
-  /** Open the barcode scanner right away (?scan=1, from the quick add sheet). */
+  /** Open the barcode scanner right away (from "Scan barcodes" in the quick add sheet, or ?scan=1). */
   startScanning?: boolean
+  /** After the items are added (the sheet closes). */
+  onDone?: () => void
 }) {
   const id = useId()
-  const router = useRouter()
   const today = useToday(serverToday)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const batch = useRef(0)
@@ -55,7 +56,13 @@ export function BulkAddForm({
   const [showErrors, setShowErrors] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
-  const [scanning, setScanning] = useState(startScanning)
+  // Opens after the sheet has mounted (?scan=1, "Scan barcodes"), since the scanner is a drawer nested in it.
+  const [scanning, setScanning] = useState(false)
+  useEffect(() => {
+    if (!startScanning) return
+    const frame = requestAnimationFrame(() => setScanning(true))
+    return () => cancelAnimationFrame(frame)
+  }, [startScanning])
   // Scanned lines (as parseLine reads them) → their barcode, and each code's package size.
   const scannedLines = useRef(new Map<string, string>())
   const packages = useRef(new Map<string, ScanPackage>())
@@ -161,9 +168,7 @@ export function BulkAddForm({
         return
       }
       toast.success(describeAdditions(result))
-      // Its own transition (updates after an await aren't part of the first one), so the
-      // button stays disabled until /pantry shows instead of re-enabling mid-navigation.
-      startTransition(() => router.replace("/pantry"))
+      onDone?.()
     })
   }
 
@@ -237,7 +242,7 @@ export function BulkAddForm({
         <ScanBarcode aria-hidden />
         Scan barcodes
       </Button>
-      <ScanToAddSheet open={scanning} onOpenChange={setScanning} onDone={addScanned} />
+      <ScanToAddSheet nested open={scanning} onOpenChange={setScanning} onDone={addScanned} />
       <Label htmlFor={`${id}-text`}>What did you get?</Label>
       <Textarea
         ref={textareaRef}

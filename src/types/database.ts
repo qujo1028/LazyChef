@@ -67,6 +67,67 @@ export type Database = {
           },
         ]
       }
+      ai_idea_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          household_id?: string
+          response?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_idea_cache_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_usage: {
+        Row: {
+          household_id: string
+          id: number
+          used_at: string
+          user_id: string | null
+        }
+        Insert: {
+          household_id: string
+          id?: never
+          used_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          household_id?: string
+          id?: never
+          used_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       apple_refresh_tokens: {
         Row: {
           created_at: string
@@ -386,8 +447,51 @@ export type Database = {
           },
         ]
       }
+      recipe_ratings: {
+        Row: {
+          created_at: string
+          household_id: string
+          rating: number
+          recipe_ref: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          rating: number
+          recipe_ref: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          rating?: number
+          recipe_ref?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ratings_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipes: {
         Row: {
+          ai_generated: boolean
           created_at: string
           created_by: string | null
           cuisine: string | null
@@ -408,6 +512,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_generated?: boolean
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
@@ -428,6 +533,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_generated?: boolean
           created_at?: string
           created_by?: string | null
           cuisine?: string | null
@@ -775,6 +881,190 @@ export type Database = {
         Args: { p_delta: number; p_item_id: string }
         Returns: number
       }
+      admin_activation_funnel: {
+        Args: { p_since: string | null }
+        Returns: { step: number; label: string; users: number }[]
+      }
+      admin_activity_daily: {
+        Args: { p_days?: number }
+        Returns: { day: string; action: string; n: number }[]
+      }
+      admin_ai_top_households: {
+        Args: { p_limit?: number }
+        Returns: { household_id: string; household_name: string; uses_7d: number; at_limit: boolean }[]
+      }
+      admin_ai_usage_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          uses_24h: number
+          uses_7d: number
+          households_active_7d: number
+          households_at_limit: number
+          free_weekly_limit: number
+        }[]
+      }
+      admin_audit_recent: {
+        Args: { p_limit?: number }
+        Returns: {
+          id: number
+          at: string
+          admin_user_id: string | null
+          admin_email: string | null
+          action: string
+          target: string
+          details: Json
+        }[]
+      }
+      admin_capture_daily_snapshot: {
+        Args: { p_day?: string }
+        Returns: undefined
+      }
+      admin_daily_counters: {
+        Args: { p_from: string; p_to: string }
+        Returns: { day: string; metric: string; n: number }[]
+      }
+      admin_daily_snapshots: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          day: string
+          captured_at: string
+          users_total: number | null
+          households_total: number | null
+          multi_member_households: number | null
+          pro_households: number | null
+          paying_users: number | null
+          trials_active: number | null
+          comps_active: number | null
+          mrr_est_usd: number | null
+          pantry_items_total: number | null
+          shopping_items_open: number | null
+          saved_recipes_total: number | null
+          spoonacular_points_used: number | null
+        }[]
+      }
+      admin_find_user: {
+        Args: { p_email: string }
+        Returns: {
+          user_id: string
+          email: string
+          display_name: string | null
+          created_at: string | null
+          last_sign_in_at: string | null
+          pro_source: string | null
+          comp_expires_at: string | null
+          comp_note: string | null
+          households: Json
+        }[]
+      }
+      admin_grant_comp: {
+        Args: { p_user_id: string; p_expires_at: string | null; p_note: string | null }
+        Returns: undefined
+      }
+      admin_log_action: {
+        Args: {
+          p_admin_user_id: string | null
+          p_admin_email: string | null
+          p_action: string
+          p_target: string
+          p_details?: Json
+        }
+        Returns: number
+      }
+      admin_popular: {
+        Args: { p_days?: number; p_limit?: number }
+        Returns: { list: string; name: string; n: number }[]
+      }
+      admin_pro_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active_subscriptions: number
+          trials: number
+          not_renewing: number
+          sandbox: number
+          comps_active: number
+          pro_households: number
+          by_store: Json
+        }[]
+      }
+      admin_rate_limit_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          bucket: string
+          max_hits: number
+          window_length: string
+          active_users: number
+          users_at_limit: number
+          hits_24h: number
+        }[]
+      }
+      admin_retention_cohorts: {
+        Args: { p_weeks?: number }
+        Returns: { cohort_week: string; size: number; week_n: number; active: number }[]
+      }
+      admin_revenue_monthly: {
+        Args: { p_months?: number }
+        Returns: { month: string; gross: number; refunds: number }[]
+      }
+      admin_revenue_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          gross_all_time: number
+          gross_30d: number
+          gross_month: number
+          refunds_30d: number
+          net_30d_est: number
+          mrr_est: number
+          paying_users: number
+          trials_started_30d: number
+          expirations_30d: number
+          sandbox_events_30d: number
+        }[]
+      }
+      admin_revenuecat_recent: {
+        Args: { p_limit?: number }
+        Returns: {
+          type: string
+          product_id: string | null
+          store: string | null
+          environment: string | null
+          event_at: string | null
+          received_at: string
+        }[]
+      }
+      admin_revoke_comp: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
+      admin_signups_daily: {
+        Args: { p_days?: number }
+        Returns: { day: string; users: number; households: number }[]
+      }
+      admin_usage_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: { metric: string; all_time: number; d30: number | null; d7: number | null }[]
+      }
+      admin_user_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          users_total: number
+          new_24h: number
+          new_7d: number
+          new_30d: number
+          dau: number
+          wau: number
+          mau: number
+          households_total: number
+          households_new_7d: number
+          households_new_30d: number
+          avg_members: number
+          multi_member_share: number
+          empty_households: number
+        }[]
+      }
+      bump_daily_metric: {
+        Args: { p_metric: string }
+        Returns: undefined
+      }
       complete_shopping_trip: {
         Args: { p_household_id: string; p_list_item_ids: string[]; p_pantry_items: Json }
         Returns: string[]
@@ -856,9 +1146,17 @@ export type Database = {
         Args: never
         Returns: number
       }
+      put_ai_idea_cache: {
+        Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
+        Returns: string
+      }
       put_spoonacular_cache: {
         Args: { p_cache_key: string; p_response: Json; p_ttl_seconds?: number }
         Returns: string
+      }
+      rate_recipe: {
+        Args: { p_household_id: string; p_rating: number; p_recipe_ref: string }
+        Returns: number
       }
       record_spoonacular_usage: {
         Args: {
@@ -881,6 +1179,10 @@ export type Database = {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
       }
+      save_ai_recipe: {
+        Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json }
+        Returns: string
+      }
       save_household_recipe: {
         Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json; p_recipe_id: string | null }
         Returns: string
@@ -888,6 +1190,10 @@ export type Database = {
       set_my_preferences: {
         Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
         Returns: undefined
+      }
+      take_ai_allowance: {
+        Args: { p_household_id: string }
+        Returns: { allowed: boolean; pro: boolean; used: number; lim: number; resets_at: string | null }[]
       }
       take_rate_limit: {
         Args: { p_bucket: string }

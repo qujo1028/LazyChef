@@ -4,6 +4,9 @@ import type { ChatMessage } from "@/lib/llm/client"
 
 vi.mock("server-only", () => ({}))
 
+const getHouseholdTaste = vi.fn(async () => ({ profile: { net: new Map(), liked: [], disliked: [] }, hints: { liked: ["Shakshuka"], disliked: ["Liver"] } }))
+vi.mock("../taste-queries", () => ({ getHouseholdTaste: () => getHouseholdTaste() }))
+
 const requireViewer = vi.fn(async () => ({ id: "user-1", email: null }))
 const requireHousehold = vi.fn(async () => ({ household: { id: "house-1" } }))
 vi.mock("@/features/household/queries", () => ({
@@ -19,6 +22,9 @@ type Prefs = { diet: string; allergies: string[]; cuisines: string[]; worldRecip
 const NONE: Prefs = { diet: "none", allergies: [], cuisines: [], worldRecipes: false }
 const getMyPreferences = vi.fn(async (): Promise<Prefs> => NONE)
 vi.mock("@/features/preferences/queries", () => ({ getMyPreferences: () => getMyPreferences() }))
+
+const takeAiAllowance = vi.fn(async (): Promise<unknown> => null)
+vi.mock("@/features/pro/ai-allowance", () => ({ takeAiAllowance: () => takeAiAllowance() }))
 
 const askAiJson = vi.fn<(messages: ChatMessage[], schema: unknown, options: unknown) => Promise<unknown>>()
 vi.mock("@/lib/llm/ai", () => ({
@@ -49,6 +55,16 @@ const recipe = {
 }
 
 afterEach(() => vi.clearAllMocks())
+
+describe("getAiRecipeIdea free allowance", () => {
+  it("stops before the AI when the free week is used up", async () => {
+    getPantryItems.mockResolvedValueOnce([row("eggs")])
+    takeAiAllowance.mockResolvedValueOnce({ error: "Used up", proLimit: true, resetsAt: null })
+    const result = await getAiRecipeIdea("quick")
+    expect(result).toMatchObject({ error: "Used up", proLimit: true })
+    expect(askAiJson).not.toHaveBeenCalled()
+  })
+})
 
 describe("getAiRecipeIdea", () => {
   it("sends the household's own pantry, soonest-expiring first, and skips what ran out", async () => {
@@ -94,8 +110,9 @@ describe("getAiRecipeIdea", () => {
     const content = askAiJson.mock.calls[0][0][1].content
     expect(content).toContain('["eggs","spinach"]')
     expect(content).toContain('Dietary needs: "Vegetarian; allergic to: peanut"')
-    // The first answer used chicken stock, so it asked once more.
+    // The first answer used chicken stock, so it asked once more, for one free use.
     expect(askAiJson).toHaveBeenCalledTimes(2)
+    expect(takeAiAllowance).toHaveBeenCalledTimes(1)
     expect(result).toMatchObject({ recipe: { title: "Spinach omelette" } })
   })
 

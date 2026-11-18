@@ -7,12 +7,15 @@ import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { displayName } from "@/features/pantry/display"
+import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 
 import { IngredientChecklist, type ChecklistLine } from "../../components/ingredient-checklist"
+import { scaleOriginal } from "../../scale"
 import { suggestSubstitutions, type SubstitutionResult } from "../actions"
 
-type Answer = { status: "loading" } | { status: "error"; error: string } | { status: "done"; result: SubstitutionResult }
+type Answer = { status: "loading" } | { status: "error"; error: string; limit?: boolean } | { status: "done"; result: SubstitutionResult }
 
 /**
  * The ingredient checklist plus "What can I use instead?": a swap button on each missing
@@ -24,6 +27,7 @@ export function IngredientsWithSwaps({
   title,
   lines,
   sendCopy,
+  scale = 1,
 }: {
   recipeId: string
   title: string
@@ -33,6 +37,8 @@ export function IngredientsWithSwaps({
    * only if its hour-long cache has expired, rather than spending a point to fetch it again.
    */
   sendCopy: boolean
+  /** Servings multiplier for the amounts shown. The AI is still asked about the recipe as written. */
+  scale?: number
 }) {
   const { ensureConsent, dialog } = useAiConsent("this recipe's title and ingredients and the names of the items in your pantry")
   const consented = useRef(false)
@@ -66,7 +72,7 @@ export function IngredientsWithSwaps({
     const result = await callAction(() => suggestSubstitutions({ ref: recipeId, index: line.index, fallback }))
     setAnswer(
       line.index,
-      result.error !== undefined ? { status: "error", error: result.error } : { status: "done", result },
+      result.error !== undefined ? { status: "error", error: result.error, limit: isAiLimited(result) } : { status: "done", result },
     )
   }
 
@@ -82,7 +88,7 @@ export function IngredientsWithSwaps({
 
   return (
     <>
-      <IngredientChecklist recipeId={recipeId} lines={lines} onSwap={(line) => void openFor(line)} />
+      <IngredientChecklist recipeId={recipeId} lines={lines} scale={scale} onSwap={(line) => void openFor(line)} />
       <Button type="button" variant="ghost" size="lg" className="-mt-1 h-11 w-full" onClick={() => void openFor(null)}>
         <ArrowLeftRight aria-hidden /> Missing something?
       </Button>
@@ -106,7 +112,7 @@ export function IngredientsWithSwaps({
                       className="flex min-h-12 w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-sm hover:bg-muted"
                       onClick={() => void ask(line)}
                     >
-                      <span className="min-w-0 flex-1 break-words">{line.original}</span>
+                      <span className="min-w-0 flex-1 break-words">{scaleOriginal(line.original, scale)}</span>
                       {line.status === "need" ? (
                         <span className="shrink-0 text-xs text-amber-700 dark:text-amber-400">Missing</span>
                       ) : null}
@@ -118,6 +124,7 @@ export function IngredientsWithSwaps({
           ) : (
             <SwapAnswer
               line={target}
+              scale={scale}
               answer={answers.get(target.index) ?? { status: "loading" }}
               onBack={() => setTarget(null)}
               onRetry={() => void ask(target)}
@@ -131,11 +138,13 @@ export function IngredientsWithSwaps({
 
 function SwapAnswer({
   line,
+  scale,
   answer,
   onBack,
   onRetry,
 }: {
   line: ChecklistLine
+  scale: number
   answer: Answer
   onBack: () => void
   onRetry: () => void
@@ -144,7 +153,7 @@ function SwapAnswer({
     <>
       <DrawerHeader className="text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
         <DrawerTitle className="text-lg">Instead of {line.name}</DrawerTitle>
-        <DrawerDescription className="break-words">{line.original}</DrawerDescription>
+        <DrawerDescription className="break-words">{scaleOriginal(line.original, scale)}</DrawerDescription>
       </DrawerHeader>
       <div
         className="grid min-h-0 flex-1 grid-cols-1 content-start gap-3 overflow-y-auto overscroll-contain px-4 pb-2"
@@ -155,6 +164,8 @@ function SwapAnswer({
           <p className="flex items-center gap-2 py-6 text-sm text-muted-foreground">
             <LoaderCircle className="size-4 animate-spin" aria-hidden /> Thinking of swaps…
           </p>
+        ) : answer.status === "error" && answer.limit ? (
+          <AiLimitNotice message={answer.error} className="grid gap-3 py-2 text-sm" />
         ) : answer.status === "error" ? (
           <div className="grid gap-3 py-2">
             <p className="flex items-start gap-2 text-sm">
@@ -188,6 +199,11 @@ function SwapAnswer({
                         </span>
                       ) : null}
                     </div>
+                    {swap.allergens.length > 0 ? (
+                      <p className="flex items-center gap-1 text-xs text-amber-700 dark:text-amber-400">
+                        <CircleAlert className="size-3.5 shrink-0" aria-hidden /> Contains {swap.allergens.join(", ")}
+                      </p>
+                    ) : null}
                     <p className="text-sm break-words">{swap.amount}</p>
                     <p className="text-sm break-words text-muted-foreground">{swap.note}</p>
                   </li>

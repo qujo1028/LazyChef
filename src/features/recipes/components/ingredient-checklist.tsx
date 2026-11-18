@@ -13,6 +13,7 @@ import { describeListAdditions } from "@/features/list/plan"
 
 import { addRecipeIngredientsToList } from "../actions"
 import type { IngredientStatus } from "../match"
+import { scaleOriginal } from "../scale"
 
 export type ChecklistLine = {
   /** Position in the recipe's ingredient list (what the server action takes). */
@@ -38,10 +39,13 @@ export function IngredientChecklist({
   recipeId,
   lines,
   onSwap,
+  scale = 1,
 }: {
   recipeId: string
   lines: ChecklistLine[]
   onSwap?: (line: ChecklistLine) => void
+  /** Servings multiplier for the amounts shown (1 = as the recipe wrote them). */
+  scale?: number
 }) {
   const [added, setAdded] = useState<ReadonlySet<number>>(() => new Set())
   const isOnList = (line: ChecklistLine) => line.onList || added.has(line.index)
@@ -109,7 +113,7 @@ export function IngredientChecklist({
                     />
                   )}
                   <label htmlFor={onList ? undefined : id} className="grid min-w-0 flex-1 gap-0.5">
-                    <span className="text-sm leading-snug">{line.original}</span>
+                    <span className="text-sm leading-snug">{scaleOriginal(line.original, scale)}</span>
                     {onList ? (
                       <span className="text-xs text-muted-foreground">On the shopping list</span>
                     ) : line.optional ? (
@@ -160,7 +164,7 @@ export function IngredientChecklist({
                   <Check className="size-3" />
                 </span>
                 <div className="grid min-w-0 flex-1 gap-0.5">
-                  <span className="text-sm leading-snug">{line.original}</span>
+                  <span className="text-sm leading-snug">{scaleOriginal(line.original, scale)}</span>
                   <span className="text-xs text-muted-foreground">
                     {line.status === "basic"
                       ? "Pantry basic"

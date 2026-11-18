@@ -13,6 +13,7 @@ import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/compo
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { OpenPaywallOnArrival } from "@/features/pro/components/open-paywall-on-arrival"
 import { ProCard } from "@/features/pro/components/pro-card"
 import { FoodPreferencesSheet } from "@/features/preferences/components/food-preferences-sheet"
 import { getMyPreferences } from "@/features/preferences/queries"
@@ -44,6 +45,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
       ) : null}
 
       <ProCard />
+      {firstParam(params.pro) === "1" ? <OpenPaywallOnArrival /> : null}
 
       <InviteCard householdId={household.id} householdName={household.name} inviteCode={household.inviteCode} isOwner={isOwner} />
 

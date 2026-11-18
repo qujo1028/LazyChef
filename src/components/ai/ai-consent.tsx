@@ -34,6 +34,11 @@ function hasStoredConsent(sends: string) {
   }
 }
 
+/** Whether this device already agreed to send `sends` (false on the server). For features that start on their own. */
+export function hasAiConsent(sends: string): boolean {
+  return typeof window !== "undefined" && hasStoredConsent(sends)
+}
+
 function storeConsent(sends: string) {
   try {
     window.localStorage.setItem(consentKey(sends), "yes")

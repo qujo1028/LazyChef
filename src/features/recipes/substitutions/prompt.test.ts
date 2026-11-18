@@ -91,12 +91,13 @@ describe("finalizeSubstitutions", () => {
     })
     const answer = finalizeSubstitutions(reply, { target: "buttermilk", pantry })
     expect(answer.none).toBeNull()
+    // Pantry first. The claimed "lemons" is in the pantry and named in the suggestion.
     expect(answer.swaps.map((swap) => [swap.use, swap.pantryName])).toEqual([
       ["Greek yogurt", "plain greek yogurt"],
-      ["Sour cream", null],
-      // The claimed "lemons" is in the pantry and named in the suggestion.
       ["Milk + lemon juice", "lemons"],
+      ["Sour cream", null],
     ])
+    expect(answer.swaps.every((swap) => swap.allergens.length === 0)).toBe(true)
   })
 
   it("passes on why nothing works", () => {

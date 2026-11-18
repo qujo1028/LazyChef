@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("server-only", () => ({}))
+const bumpMetric = vi.fn<(metric: string) => Promise<void>>()
+vi.mock("@/features/admin/metrics", () => ({ bumpMetric: (metric: string) => bumpMetric(metric) }))
 
 type Module = typeof import("./index")
 
@@ -22,6 +24,7 @@ const QUOTA_HEADERS = { "X-API-Quota-Request": "2", "X-API-Quota-Used": "12.5", 
 let fetchMock: ReturnType<typeof vi.fn>
 
 beforeEach(() => {
+  bumpMetric.mockClear()
   fetchMock = vi.fn()
   vi.stubGlobal("fetch", fetchMock)
   vi.stubEnv("SPOONACULAR_API_KEY", "test-key")
@@ -42,6 +45,14 @@ describe("spoonacularFetch", () => {
     expect(error).toBeInstanceOf(SpoonacularError)
     expect(error).toMatchObject({ code: "no_key" })
     expect(fetchMock).not.toHaveBeenCalled()
+    expect(bumpMetric).not.toHaveBeenCalled()
+  })
+
+  it("counts failures except a missing key", async () => {
+    fetchMock.mockResolvedValue(jsonResponse({}, 401))
+    const { spoonacularFetch } = await load()
+    await spoonacularFetch("/recipes/random").catch(() => {})
+    expect(bumpMetric).toHaveBeenCalledWith("spoonacular_error:bad_key")
   })
 
   it("sends the key as a header only and reads the quota headers", async () => {

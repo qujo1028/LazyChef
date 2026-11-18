@@ -2,6 +2,7 @@ import "server-only"
 
 import type { z } from "zod"
 
+import { bumpMetric } from "@/features/admin/metrics"
 import { chat, isLlmConfigured, LlmError, type ChatMessage } from "@/lib/llm/client"
 import { takeRateLimit } from "@/lib/rate-limit"
 
@@ -46,6 +47,7 @@ export async function askAiJson<S extends z.ZodType>(
     reply = await chat(messages, { ...options, json: true })
   } catch (error) {
     if (error instanceof LlmError) {
+      void bumpMetric(`ai_error:${error.code}`)
       console.error(`[ai] ${error.code}`, error.status ?? "", error.cause ?? "")
       return { ok: false, error: error.message }
     }
@@ -56,10 +58,12 @@ export async function askAiJson<S extends z.ZodType>(
   try {
     parsed = extractJson(reply)
   } catch {
+    void bumpMetric("ai_error:bad_json")
     return { ok: false, error: BAD_ANSWER_MESSAGE }
   }
   const result = schema.safeParse(parsed)
   if (!result.success) {
+    void bumpMetric("ai_error:schema")
     console.error("[ai] reply didn't match the schema:", result.error.issues.slice(0, 3))
     return { ok: false, error: BAD_ANSWER_MESSAGE }
   }

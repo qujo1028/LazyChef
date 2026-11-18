@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowRight, Check, Plus, Refrigerator } from "lucide-react"
-import Link from "next/link"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -25,11 +24,14 @@ export function GettingStarted({
   onlyStaples,
   existingNames,
   onAddFood,
+  onBulkAdd,
 }: {
   onlyStaples: boolean
   /** Lowercased names already in the pantry. */
   existingNames: ReadonlySet<string>
   onAddFood: () => void
+  /** Opens the "Just went shopping" bulk add sheet. */
+  onBulkAdd: () => void
 }) {
   const [pending, setPending] = useState<ReadonlySet<string>>(() => new Set())
   const [added, setAdded] = useState<ReadonlySet<string>>(() => new Set())
@@ -70,13 +72,14 @@ export function GettingStarted({
           <Plus className="size-5" aria-hidden />
           Add food
         </Button>
-        <Link
-          href="/pantry/add"
+        <button
+          type="button"
+          onClick={onBulkAdd}
           className="inline-flex min-h-11 items-center gap-1 rounded-md text-sm font-medium text-primary outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           Just went shopping? Add it all at once
           <ArrowRight className="size-4" aria-hidden />
-        </Link>
+        </button>
       </div>
 
       <Separator />
