@@ -99,9 +99,12 @@ SETUP
 HABIT DESIGN CONSTANTS (use these exactly so parallel workers agree)
 - Habit: cook at home. One "cook" = one distinct batch_id of activity_log rows with action 'cooked' (see
   supabase/migrations/20260930000100_cook_mode.sql), attributed to actor_id. details jsonb has recipe_id and recipe_title.
+- COUNTING RULE (user decision): the ring, tiers, and leaderboard (weekly and all-time) count DISTINCT COOK DAYS per user in the
+  viewer's timezone, not batches. Two cooks on the same day count as 1. Batches still define a single cook for the feed, undo,
+  and try_new.
 - Week starts Monday in the viewer's timezone (computeStats in src/features/activity/stats.ts already takes timeZone).
 - Personal weekly goal: nights per week, 1 to 7, default 3 (export as DEFAULT_GOAL from src/features/habit/constants.ts).
-- Weekly tiers by cooks that week: Bronze 2, Silver 4, Gold 6 (independent of the goal; the ring target is the goal).
+- Weekly tiers by cook days that week: Bronze 2, Silver 4, Gold 6 (independent of the goal; the ring target is the goal).
 - Streak: days in a row with a cook (reuse cookingStreak in src/features/activity/stats.ts as the base). Forgiveness: one missed day
   per Monday-week is forgiven. Milestones at 3, 7, 14, 30 days.
 - Challenges (one active at a time): "streak3" = cook 3 days in a row. "try_new" = cook a recipe (by details.recipe_id) this user has

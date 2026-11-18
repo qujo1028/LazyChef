@@ -101,8 +101,8 @@ Land push notifications first, rebase onto origin/main, then name this file with
 
 ## Open questions and lead answers
 1. reminder_time here or in notification_prefs? Lead: here (habit_goals), per the user's plan. W7 reads the timezone from device_tokens.
-2. Ring counts cooks or distinct nights? USER DECISION, see below.
-3. Rate-limit quick log? Lead: depends on 2. If counting distinct days, no limit needed.
+2. Ring counts cooks or distinct nights? USER: distinct cook days everywhere (ring, tiers, leaderboard).
+3. Rate-limit quick log? Lead: no, counting days caps padding at 1 per day.
 4. Challenge expiry and server verification? Lead: expiry = started_at + 7 days (computed, no column). complete_challenge verifies
    progress on the server and takes p_time_zone.
 5. Streaks across households? Lead: current household only.
