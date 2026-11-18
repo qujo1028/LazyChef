@@ -36,7 +36,7 @@ Five tab screens plus recipe detail. Everything else is a sheet or a tab inside 
 | Pantry | `/pantry` | Add food and the "Just went shopping" bulk add (with barcode scanning) as sheets |
 | Recipes | `/recipes` | Ideas, Saved (`?view=saved`) and Ours (`?view=ours`) as tabs; add or edit your own recipe as a sheet |
 | List | `/list` | |
-| Activity | `/activity` | Log and Stats (`?view=stats`) |
+| Activity | `/activity` | Log, Chart and Board (`?view=log`, `chart` or `board`; `stats` still works as `chart`) |
 | Household | `/household` | Members, invites, your food preferences, and the LazyChef Pro card and paywall |
 | Recipe detail | `/recipes/[id]` | Cook sheet, ratings, the edit sheet for your own recipes |
 
@@ -45,7 +45,7 @@ First-run and account pages (`/welcome`, `/onboarding`, `/login`, `/join/[code]`
 Old addresses still work. `next.config.ts` permanently redirects them (query strings kept), from the
 map in `src/lib/legacy-routes.ts`: `/pantry/add` to `/pantry?add=bulk`, `/recipes/saved` and `/recipes/ours`
 to `/recipes?view=saved|ours`, `/recipes/new` to `/recipes?view=ours&new=1`, `/recipes/[id]/edit` to
-`/recipes/[id]?edit=1`, `/activity/stats` to `/activity?view=stats`, and `/pro` to `/household?pro=1`.
+`/recipes/[id]?edit=1`, `/activity/stats` to `/activity?view=chart`, and `/pro` to `/household?pro=1`.
 
 ## Setup
 

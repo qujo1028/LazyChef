@@ -2,24 +2,54 @@ import type { Metadata } from "next"
 
 import { PageHeading } from "@/components/page-heading"
 import { ActivityFeed } from "@/features/activity/components/activity-feed"
-import { ActivityTabs, parseActivityView } from "@/features/activity/components/activity-tabs"
+import { ActivityTabs } from "@/features/activity/components/activity-tabs"
 import { StatsView } from "@/features/activity/components/stats-view"
-import { getActivityFeed, getStatsRows } from "@/features/activity/queries"
+import { getActivityFeed, getBoardRows, getStatsRows } from "@/features/activity/queries"
+import { parseActivityView } from "@/features/activity/view"
+import { LeaderboardView } from "@/features/habit/components/leaderboard-view"
 import { requireHousehold } from "@/features/household/queries"
 
 export const metadata: Metadata = { title: "Activity" }
 
-/** One screen, two views: Log | Stats (?view=stats). Each loads only its own data. */
+/** One screen, three views: Log | Chart | Board (?view=). Each loads only its own data. */
 export default async function ActivityPage({ searchParams }: PageProps<"/activity">) {
   const { viewer, household } = await requireHousehold()
+  const view = parseActivityView((await searchParams).view)
 
-  if (parseActivityView((await searchParams).view) === "stats") {
+  if (view === "chart") {
     const stats = await getStatsRows(household.id)
     return (
       <>
         <PageHeading title="Activity" description="How your household cooks and shops." />
-        <ActivityTabs current="stats" />
-        <StatsView rows={stats.rows} members={stats.members} viewerId={viewer.id} serverNow={stats.fetchedAt} />
+        <ActivityTabs current="chart" />
+        <StatsView
+          rows={stats.rows}
+          members={stats.members}
+          viewerId={viewer.id}
+          serverNow={stats.fetchedAt}
+          truncated={stats.truncated}
+        />
+      </>
+    )
+  }
+
+  if (view === "board") {
+    const board = await getBoardRows(household.id)
+    return (
+      <>
+        <PageHeading title="Activity" description="Who has cooked the most days." />
+        <ActivityTabs current="board" />
+        <LeaderboardView
+          // A refresh brings new rows; remounting drops the live ones already folded in.
+          key={`${household.id}:${board.fetchedAt}`}
+          rows={board.rows}
+          members={board.members}
+          viewerId={viewer.id}
+          serverNow={board.fetchedAt}
+          truncated={board.truncated}
+          householdName={household.name}
+          inviteCode={household.inviteCode}
+        />
       </>
     )
   }
