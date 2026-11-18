@@ -35,7 +35,6 @@ export async function lookupBarcode(householdId: string, input: string): Promise
 
 async function resolveCode(householdId: string, code: string): Promise<LookupOutcome> {
   try {
-
     const { data: known, error } = await supabase
       .from('household_barcodes')
       .select('name, quantity, unit')
@@ -60,7 +59,8 @@ async function resolveCode(householdId: string, code: string): Promise<LookupOut
     const result: LookupResult = scan
       ? { found: true, hit: { code, source: 'openfoodfacts', ...scan, line: scanLine(scan) } }
       : { found: false, code };
-    cache.set(householdId, code, result);
+    // "Not found" isn't cached, so a name a housemate saves later shows on the next scan.
+    if (result.found) cache.set(householdId, code, result);
     return result;
   } catch (error) {
     console.warn('[barcode] lookup failed:', error instanceof Error ? `${error.name}: ${error.message}` : 'unexpected error');
@@ -80,7 +80,6 @@ export async function rememberBarcodes(householdId: string, rows: readonly Barco
     if (valid.length < rows.length) console.warn(`Skipped ${rows.length - valid.length} invalid barcode rows.`);
     if (valid.length === 0) return;
     codes.push(...new Set(valid.map((row) => row.code)));
-    const parsed = { data: valid };
 
     const { data: known, error: readError } = await supabase
       .from('household_barcodes')
@@ -92,7 +91,7 @@ export async function rememberBarcodes(householdId: string, rows: readonly Barco
       return;
     }
     // Last one wins when the same code shows up twice (planBarcodeWrites dedupes).
-    const plan = planBarcodeWrites(householdId, parsed.data, new Set(known.map((row) => row.code)));
+    const plan = planBarcodeWrites(householdId, valid, new Set(known.map((row) => row.code)));
 
     const writes = [
       plan.inserts.length > 0 ? supabase.from('household_barcodes').insert(plan.inserts) : null,
