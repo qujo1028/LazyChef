@@ -636,3 +636,5 @@ Workers (branch from `origin/feature/p3-list`): W1 `feature/p3-list-screen` (Son
 check off), W2 `feature/p3-list-edit` (Sonnet: edit sheet with delete and Undo), W3 `feature/p3-put-away` (Sonnet:
 put away into the pantry), W4 `feature/p3-pantry-to-list` (Haiku: small, well-specified wiring of "Add to shopping
 list" into the pantry screens).
+
+W2 list edit (`feature/p3-list-edit`): `ListEditSheet` ports the web edit sheet on the P2 `EditItemSheet` pattern (live row, fresh form per open, held toasts). Fields: name, amount (empty = any) + unit, Aisle (with the remember hint), note. Save is optimistic with rollback; Delete has no confirm and shows "Removed X" with Undo (re-adds via `addListItems`); a checked line shows who checked it and an Uncheck button. Helpers in `src/lib/list-edit.ts` with tests. Not checked: simulator or a signed-in account.
