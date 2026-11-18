@@ -2,6 +2,7 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 
+import { runAlerts } from "@/features/admin/alerts"
 import { isAuthorized } from "@/features/pro/revenuecat-core"
 import { getServerDb } from "@/lib/supabase/service"
 
@@ -37,10 +38,14 @@ export async function GET(request: Request) {
     }
   }
 
-  // Alerts (worker L): runAlerts() goes here
+  // Runs whether or not the snapshot failed, and never throws.
+  const alerts = await runAlerts()
 
   if (results.snapshot.failed.length > 0) {
-    return NextResponse.json({ ok: false, captured: results.snapshot.captured, failed: results.snapshot.failed }, { status: 500 })
+    return NextResponse.json(
+      { ok: false, captured: results.snapshot.captured, failed: results.snapshot.failed, alerts },
+      { status: 500 },
+    )
   }
-  return NextResponse.json({ ok: true, captured: results.snapshot.captured })
+  return NextResponse.json({ ok: true, captured: results.snapshot.captured, alerts })
 }
