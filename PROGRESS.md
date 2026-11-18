@@ -714,3 +714,17 @@ Workers (branch from `origin/feature/p4-recipes`): W1 `feature/p4-recipes-screen
 `feature/p4-recipe-detail` (Sonnet), W3 `feature/p4-cook` (Sonnet), W5 `feature/p4-edge-recipes` (Opus: server code
 holding the Spoonacular key, auth, quota and rate limits). W4 `feature/p4-habit` (Sonnet: ring and This week card)
 starts when the first slot frees up (max 4 at once).
+
+W2 recipe detail (`feature/p4-recipe-detail`, Sonnet):
+- `app/recipe/[id].tsx`: loads by ref (`queryKeys.recipe`, 10 minute stale time since Spoonacular lookups cost points).
+  Local recipes read from `recipes` + `recipe_ingredients` as the user (household photos signed from `recipe-photos`);
+  Spoonacular ones through `callRecipes({ action: 'info' })`. Not found, not set up, resting, rate limited and offline each
+  show a message with "Try again"; a cached copy shows with a one-line offline note.
+- Page: image (expo-image), title, source and time pills, "Cooked N times · last Sep 12" (from `useHouseholdCooks`),
+  save heart, checklist against the live pantry (have, basic, need, "On the shopping list"), "Add missing to list"
+  (`addListItems`, toast from `describeListAdditions`), numbered steps, source link and TheMealDB or Spoonacular credit
+  (expo-web-browser), sticky "I cooked this" opening `CookSheet`. Header title set with `Stack.Screen options`.
+- Files: `lib/recipe-view.ts` (+ tests), `features/recipes/recipe-api.ts`, `components/IngredientChecklist.tsx`,
+  `components/RecipeSaveButton.tsx` (own heart; the lead can dedupe with W1's). No shared-file changes.
+- Not checked: simulator, signed-in account, the Edge Function (not deployed), household photo signing, the heart on a
+  real saved list. Not ported: serving scaler, rating thumbs, edit own recipe, AI swaps (not in this task).
