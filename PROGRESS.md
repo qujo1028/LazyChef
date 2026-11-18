@@ -659,3 +659,7 @@ W4 pantry to list (`feature/p3-pantry-to-list`, Haiku):
 - Not checked on a device or simulator (no signed-in account). Checks: mobile typecheck, lint, `npm test`, `npx expo export -p ios`.
 - Found, not changed: the edit sheet's "We ran out" shows when `quantity === null` (the "On hand" untracked case), while
   "ran out" is `quantity === 0`. Looks like a P2 mismatch; worth a look in the lead's review.
+- Review (`/code-review`, medium) fixes: a second tap on a row's list button while its add is in flight is ignored.
+  Left as they are: the sheet's held toast can wait if the sheet is reopened before the add settles (`send` is per spec);
+  `useAddPantryItemToList` reads `householdId` via `useList()` as specified (re-renders on list changes); casing
+  (lowercase on add, display case on "already on the list") as specified; the hook has no unit test (needs a provider).
