@@ -11,7 +11,18 @@ import { createClient } from "@/lib/supabase/server"
 import type { Json } from "@/types/database"
 
 import { PHOTO_BUCKET } from "./local"
-import { fieldErrors, isHouseholdPhoto, recipePayload, validateOwnRecipe, type OwnRecipeDraft, type OwnRecipeInput } from "./own-recipe"
+import { saveRecipe } from "./actions"
+import { aiRecipeSchema } from "./ai-idea/idea"
+import { ideaMealSchema, ownInputFromIdea } from "./ai-idea/meal-ideas"
+import {
+  fieldErrors,
+  isHouseholdPhoto,
+  recipePayload,
+  validateOwnRecipe,
+  type OwnRecipe,
+  type OwnRecipeDraft,
+  type OwnRecipeInput,
+} from "./own-recipe"
 
 export type SaveOwnResult = ActionResult<{ id: string }> & { fields?: Partial<Record<keyof OwnRecipeDraft, string>> }
 
@@ -23,6 +34,15 @@ async function removePhoto(supabase: Db, path: string | null, householdId: strin
   if (!path || !isHouseholdPhoto(path, householdId)) return
   const { error } = await supabase.storage.from(PHOTO_BUCKET).remove([path])
   if (error) console.error("Removing a recipe photo failed:", error.message)
+}
+
+/** The library id and name key come from the server's copy of the ingredient library. */
+function ingredientRows(recipe: OwnRecipe) {
+  return recipe.ingredients.map((line) => ({
+    ...line,
+    name_key: normalizeIngredientName(line.name).slice(0, 120),
+    ingredient_id: findIngredient(line.name)?.id ?? null,
+  }))
 }
 
 /**
@@ -58,12 +78,7 @@ export async function saveOwnRecipe(input: OwnRecipeInput, id: string | null = n
     previousPhoto = data.photo_path
   }
 
-  // The library id and name key come from the server's copy of the ingredient library.
-  const ingredients = recipe.ingredients.map((line) => ({
-    ...line,
-    name_key: normalizeIngredientName(line.name).slice(0, 120),
-    ingredient_id: findIngredient(line.name)?.id ?? null,
-  }))
+  const ingredients = ingredientRows(recipe)
 
   const { data, error } = await supabase.rpc("save_household_recipe", {
     p_household_id: household.id,
@@ -77,6 +92,34 @@ export async function saveOwnRecipe(input: OwnRecipeInput, id: string | null = n
 
   revalidatePath("/recipes", "layout")
   return { id: data }
+}
+
+/**
+ * "Save to our recipes" on an AI idea: a household recipe flagged as AI-made (save_ai_recipe),
+ * then added to the household's saved recipes. The idea comes back from the browser, so it's
+ * checked again with the same schemas as the model's answer and the recipe form.
+ */
+export async function saveAiRecipe(idea: unknown, meal: unknown): Promise<ActionResult<{ id: string }>> {
+  const parsedIdea = aiRecipeSchema.safeParse(idea)
+  const parsedMeal = ideaMealSchema.safeParse(meal)
+  if (!parsedIdea.success || !parsedMeal.success) return { error: "Couldn't save that idea." }
+  const parsed = validateOwnRecipe(ownInputFromIdea(parsedIdea.data, parsedMeal.data))
+  if (!parsed.success) return { error: Object.values(fieldErrors(parsed.error))[0] ?? "Couldn't save that idea." }
+
+  const { household } = await requireHousehold()
+  const recipe = parsed.data
+  const supabase = await createClient()
+  const { data: id, error } = await supabase.rpc("save_ai_recipe", {
+    p_household_id: household.id,
+    p_recipe: { ...recipePayload(recipe), summary: parsedIdea.data.description || null } as unknown as Json,
+    p_ingredients: ingredientRows(recipe) as unknown as Json,
+  })
+  if (error) return { error: dbError("save_ai_recipe", error) }
+
+  const saved = await saveRecipe(id, recipe.title)
+  if (saved.error !== undefined) console.error("Saving the new AI recipe to saved recipes failed:", saved.error)
+  revalidatePath("/recipes", "layout")
+  return { id }
 }
 
 /** Deletes one of the household's own recipes (and its photo). Saves and ingredients go with it. */

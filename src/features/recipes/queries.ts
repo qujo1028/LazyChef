@@ -250,6 +250,8 @@ export type RecipeView = {
   ingredients: RecipeIngredient[]
   /** Per ingredient line: "to serve" and the like (local recipes only). */
   optional: boolean[]
+  /** A household recipe saved from an AI idea. */
+  aiGenerated?: boolean
 }
 
 export type RecipeDetailResult =
@@ -317,6 +319,7 @@ function localView(recipe: LocalRecipe): RecipeView {
     steps: recipe.steps,
     ingredients: recipe.ingredients,
     optional: recipe.optional,
+    aiGenerated: recipe.aiGenerated,
   }
 }
 
@@ -446,6 +449,7 @@ export async function getSavedRecipes(householdId: string): Promise<SavedRecipes
           readyInMinutes: card.readyInMinutes,
           match: { have: suggestion.have.length, need: suggestion.need },
           history: history.get(card.id) ?? null,
+          aiGenerated: card.aiGenerated,
         },
       ]
     }
