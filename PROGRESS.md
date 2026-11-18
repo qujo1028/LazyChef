@@ -714,3 +714,19 @@ Workers (branch from `origin/feature/p4-recipes`): W1 `feature/p4-recipes-screen
 `feature/p4-recipe-detail` (Sonnet), W3 `feature/p4-cook` (Sonnet), W5 `feature/p4-edge-recipes` (Opus: server code
 holding the Spoonacular key, auth, quota and rate limits). W4 `feature/p4-habit` (Sonnet: ring and This week card)
 starts when the first slot frees up (max 4 at once).
+
+W3 cook and reward (`feature/p4-cook`, Sonnet):
+- `CookSheet` (same props and `CookRecipe`): plans against the live pantry with `planCook` once per open, deduct lines with an
+  editable amount and a Skip switch, "check this" lines (start skipped), staples, basics and missing items just listed.
+  Confirm "Take N items out" calls `cook_recipe` through `features/recipes/cook-api.ts` (`cookRecipe`, `undoCook`: fail fast
+  offline, `{ error }` results). The habit before and after is computed on the phone with `useHabit` events, then the cooks
+  query is invalidated and the pantry refetched.
+- Reward: `features/habit/use-reward.tsx` and `components/RewardBurst.tsx` (reanimated ring pulse, flame pop, confetti).
+  `lib/reward-plan.ts` wraps the core timeline: under reduce motion it keeps ONE haptic (success, or milestone) and static
+  visuals, no confetti motion (the core timeline alone has no haptics under reduce motion; this follows the brief).
+- Done view: "Nice! You cooked X", what came out, the habit line ("3 of 3 this week", "4 day streak"), a milestone line,
+  "Add to list" for anything that ran out, and Undo (`undo_cook`). A "Cooked X" toast with Undo is held with
+  `createAfterClose` until the sheet closes; undoing inside the sheet replaces it.
+- Dev only (`__DEV__`): "Dev: play milestone reward" and "Dev: play cook reward" in the sheet.
+- Pure helpers with tests: `lib/cook-done.ts`, `lib/reward-plan.ts`. No shared-file changes.
+- Not checked on a device (no simulator or account): haptics, confetti, the sheet flow, the held toast, the live RPCs.
