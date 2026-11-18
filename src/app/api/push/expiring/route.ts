@@ -25,6 +25,22 @@ export const dynamic = "force-dynamic"
 const DAY_MS = 24 * 60 * 60 * 1000
 const CHUNK = 200
 
+// Supabase caps one response at its max-rows setting (1000 on hosted projects), whatever .limit() says,
+// so every query here is read a page at a time, in a stable order, until a short page comes back.
+const PAGE = 1000
+
+type Page<T> = PromiseLike<{ data: T[] | null; error: { message: string } | null }>
+
+async function fetchAll<T>(what: string, page: (from: number, to: number) => Page<T>): Promise<T[]> {
+  const rows: T[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await page(from, from + PAGE - 1)
+    if (error) throw new Error(`loading ${what}: ${error.message}`)
+    rows.push(...(data ?? []))
+    if (!data || data.length < PAGE) return rows
+  }
+}
+
 const dayKey = (ms: number) => new Date(ms).toISOString().slice(0, 10)
 
 function chunks<T>(list: T[], size: number): T[][] {
@@ -48,12 +64,9 @@ export async function GET(request: Request) {
   const now = new Date()
 
   try {
-    const { data: devices, error: deviceError } = await db
-      .from("device_tokens")
-      .select("user_id, timezone")
-      .order("last_seen_at", { ascending: false })
-      .limit(10_000)
-    if (deviceError) throw new Error(`loading devices: ${deviceError.message}`)
+    const devices = await fetchAll("devices", (a, b) =>
+      db.from("device_tokens").select("user_id, timezone").order("id").range(a, b),
+    )
 
     const due = devices.filter((d) => inWindow(localTime(now, d.timezone).hour, window))
     const userIds = [...new Set(due.map((d) => d.user_id))]
@@ -62,8 +75,9 @@ export async function GET(request: Request) {
     // Households of the people who are due, then their pantries. Local dates are within a day of UTC's.
     const householdsByUser = new Map<string, string[]>()
     for (const ids of chunks(userIds, CHUNK)) {
-      const { data, error } = await db.from("household_members").select("user_id, household_id").in("user_id", ids)
-      if (error) throw new Error(`loading households: ${error.message}`)
+      const data = await fetchAll("households", (a, b) =>
+        db.from("household_members").select("user_id, household_id").in("user_id", ids).order("user_id").order("household_id").range(a, b),
+      )
       for (const row of data) householdsByUser.set(row.user_id, [...(householdsByUser.get(row.user_id) ?? []), row.household_id])
     }
     const householdIds = [...new Set([...householdsByUser.values()].flat())]
@@ -71,13 +85,16 @@ export async function GET(request: Request) {
     const from = dayKey(now.getTime() - DAY_MS)
     const to = dayKey(now.getTime() + 4 * DAY_MS)
     for (const ids of chunks(householdIds, CHUNK)) {
-      const { data, error } = await db
-        .from("pantry_items")
-        .select("household_id, name, expires_on, quantity, is_staple")
-        .in("household_id", ids)
-        .gte("expires_on", from)
-        .lte("expires_on", to)
-      if (error) throw new Error(`loading pantry: ${error.message}`)
+      const data = await fetchAll("pantry", (a, b) =>
+        db
+          .from("pantry_items")
+          .select("household_id, name, expires_on, quantity, is_staple")
+          .in("household_id", ids)
+          .gte("expires_on", from)
+          .lte("expires_on", to)
+          .order("id")
+          .range(a, b),
+      )
       for (const row of data) {
         itemsByHousehold.set(row.household_id, [...(itemsByHousehold.get(row.household_id) ?? []), row])
       }
