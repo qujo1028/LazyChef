@@ -2,15 +2,14 @@
 
 Status: brief received and direction set (2026-11-18). Not yet built. Target is the React Native (Expo) app in [react-native-app.md](react-native-app.md). Scope decisions are in [product-scope.md](product-scope.md).
 
-Direction: take Mealvana's design principles, and fit them to LazyChef's own identity. Don't copy Mealvana's palette, logos, icons, photos, or layouts.
+Direction: borrow ideas from Mealvana's UI design only, and fit them to LazyChef's own identity. No Mealvana features or functions are part of this. That includes meal planning, date-based plans, the shuffle feature, and serving planners. Don't copy Mealvana's palette, logos, icons, photos, or layouts.
 
 Source: the "LazyChef UI Redesign" prompt. It refers to Mealvana screenshots, but none have been shared yet, so visual details below come from the written brief only.
 
 ## Conflicts to resolve before building
 
 1. **Platform.** The prompt describes the web app in an Xcode wrapper and says not to rebuild. The RN plan replaces that shell. Treat this doc as the design spec for the Expo app. Section 9 of the prompt (viewport, `env(safe-area-*)`, keyboard jumps) is for the web app only. The RN equivalents are the safe-area context, `KeyboardAvoidingView`, and the tab bar's bottom inset.
-2. **Meal planning is a new feature.** Nothing in `product-scope.md` covers it. Options: (a) leave it out of v1 and map Recipes to the discovery layout; (b) add a planner as a later phase after launch. Recommendation: (a).
-3. **Tab count.** The brief says four destinations. The scope has five (Pantry, Recipes, List, Activity, Household). Pick one before the nav is built.
+2. **Tab count.** The brief says four destinations. The scope has five (Pantry, Recipes, List, Activity, Household). Pick one before the nav is built.
 
 ## Palette: LazyChef first
 
@@ -52,10 +51,9 @@ Radius and spacing: LazyChef's `--radius` is 0.75rem. Use the brief's scale (8, 
 
 | Brief screen | Maps to | Notes |
 |---|---|---|
-| Recipe discovery (circles, carousels, see all) | Recipes tab | Circular images, horizontal carousels, favourite hearts. Replaces the card grid. Ideas / Saved / Ours tabs stay as the filter. |
-| Meal planning | Not in v1 | See conflict 2. |
-| Meal selection and editing | Recipe edit sheet, plus the cook flow | Rounded rectangle images, serving stepper, and the save button apply here. |
-| Bottom navigation | Tab bar | Five tabs, pending conflict 3. Sage active state, muted inactive. |
+| Recipe discovery (circles, carousels, see all) | Recipes tab | Visual pattern only: circular images, horizontal carousels, favourite hearts. Replaces the card grid. Ideas / Saved / Ours tabs stay as the filter. |
+| Recipe editing (rounded images, stepper, save button) | Recipe edit sheet | Visual pattern only, applied to LazyChef's existing add and edit recipe form. |
+| Bottom navigation | Tab bar | Five tabs, pending conflict 2. Sage active state, muted inactive. |
 
 Screens outside the brief still use the same tokens and components: Pantry, List, Activity, Household, sign-in, and onboarding.
 
@@ -67,10 +65,9 @@ Names are for the Expo app, under `apps/mobile/components`.
 - `RecipeCircleCard`, `RecipeRectangleCard`, `RecipeCarousel`, `RecipeSectionHeader`
 - `FavoriteButton` (tomato heart, small scale pulse)
 - `SelectedRecipeIndicator`
-- `ServingStepper`
+- `ServingStepper` (for recipe servings, which LazyChef already tracks)
 - `PrimaryPillButton` (primary colour, pill, text in the card colour)
 - `BottomTabBar`
-- Only if a planner is added later: `OutlinedDateSelector`, `MealSection`, `ShuffleButton`
 
 Before building, check the existing shared components in `src/components/ui` (shadcn). Reuse them in RN where the behaviour matches. Don't duplicate them.
 
@@ -97,7 +94,6 @@ The haptic and reward rules from the habit plan (PR #62) apply to the same actio
 ## Open questions
 
 - Primary colour: keep sage (recommended), or move to a deeper navy-leaning shade?
-- Meal planner: v1 or later? (Recommendation: later.)
 - Tab count: five (recommended) or four?
 - Display font for titles: which one?
 - Screenshots: share them so spacing and type can be checked against the references.
