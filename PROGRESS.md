@@ -468,3 +468,20 @@ W4 realtime (`feature/p1-realtime`):
   Dev builds log `[realtime] household channel live/connecting/offline`.
 - Not verified here: any of the above on a device (needs two signed-in devices). Item/pantry listeners
   (`useHouseholdChanges`) have no consumers until P2.
+
+W2 onboarding (`feature/p1-onboarding`):
+- `app/onboarding.tsx`: "Welcome, <first name>!", then Start a household (name, then "What's in your kitchen?" with typed
+  lines plus staple chips, "Skip for now") or Join with a code. The household is created on the last step only, so the
+  gate doesn't switch away mid-flow; `add_pantry_items` failures are ignored (the household exists). If the refresh
+  after creating fails, a "Your household is ready" retry replaces the form so nobody creates a duplicate. A pending
+  invite shows "You're invited to <household>" first with Join and "Not now". A failed household load with no data
+  shows "Couldn't load your household" with Retry. Small Sign out button.
+- `app/join/[code].tsx` (`app.lazychef://join/CODE`): signed out stores the code (AsyncStorage, 7 days) and goes to
+  `/welcome`; signed in previews it (invalid, rate limited, network error, already a member then set active and open
+  the pantry, or "Join <household>?" with member count).
+- Files: `features/invite/` (`join.ts`, `InviteCard.tsx`, `pending-invite-store.ts`), `features/onboarding/StapleChips.tsx`,
+  `components/Card.tsx` (the one card style), `components/FormScreen.tsx` (keyboard avoiding), `lib/first-pantry.ts`,
+  `lib/invite-code.ts`, `lib/invite-preview.ts`, `lib/pending-invite.ts` with Vitest tests.
+- Not built: universal links on the website domain (needs an Apple Developer account and an apple-app-site-association file).
+- Unverified: nothing was run on a device or simulator, and nothing was written to the live project. The join and create
+  flows, keyboard behaviour, Dynamic Type and the 375pt layout are untested on screen.
