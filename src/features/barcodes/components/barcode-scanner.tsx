@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { normalizeBarcode } from "@/lib/barcode/codes"
+import { haptic } from "@/lib/native/haptics"
 import { cn } from "@/lib/utils"
 
 const FORMATS = ["ean_13", "ean_8", "upc_a", "upc_e"]
@@ -126,7 +127,7 @@ function CameraView({ onCode }: { onCode: (code: string) => void }) {
                   continue
                 }
                 recent.set(code, now)
-                navigator.vibrate?.(60)
+                haptic("tap")
                 setFlash((n) => n + 1)
                 onCodeRef.current(code)
               }
