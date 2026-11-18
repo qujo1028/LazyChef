@@ -8,7 +8,6 @@ import {
   hashKey,
   ideaSections,
   localIdeaCount,
-  savedInsert,
   savedRefOf,
   searchQuery,
   withSaved,
@@ -99,17 +98,6 @@ describe('saved', () => {
     const added = withSaved([], UUID_B, { title: 'X', image: null }, 'now');
     expect(added[0]!.local_recipe_id).toBe(UUID_B);
     expect(withSaved(rows, '715538', { title: 'Bowl', image: null }, 'now')).toHaveLength(3);
-  });
-
-  it('builds the insert like the web action', () => {
-    expect(savedInsert('h', '715538', ' Bowl ', 'http://x/y.jpg')).toEqual({
-      household_id: 'h',
-      recipe_id: 715538,
-      title: 'Bowl',
-      image_url: 'http://x/y.jpg',
-    });
-    expect(savedInsert('h', UUID_A, 'Pancakes', null)).toEqual({ household_id: 'h', local_recipe_id: UUID_A, title: 'Pancakes' });
-    expect(savedInsert('h', 'nope', 'x', null)).toBeNull();
   });
 });
 

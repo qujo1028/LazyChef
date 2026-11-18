@@ -18,7 +18,7 @@ import {
   type Suggestions,
 } from '@lazychef/core/recipes/match';
 import type { RecipeSummary } from '@lazychef/core/recipes/recipe-shapes';
-import { parseRecipeRef, type RecipeRef } from '@lazychef/core/recipes/ref';
+import { parseRecipeRef } from '@lazychef/core/recipes/ref';
 import type { SavedRecipe } from '@lazychef/core/recipes/saved';
 
 import { spoonacularImage } from './recipe-cards';
@@ -154,21 +154,6 @@ export function buildSaved(
       },
     ];
   });
-}
-
-/** The row to write when saving a recipe, like the web `saveRecipe`. */
-export function savedInsert(
-  householdId: string,
-  ref: string,
-  title: string,
-  image: string | null,
-): { household_id: string; title: string; recipe_id?: number; image_url?: string | null; local_recipe_id?: string } | null {
-  const parsed: RecipeRef | null = parseRecipeRef(ref);
-  if (!parsed) return null;
-  const cleanTitle = title.trim().slice(0, 200) || 'Recipe';
-  return parsed.kind === 'spoonacular'
-    ? { household_id: householdId, recipe_id: parsed.id, title: cleanTitle, image_url: image }
-    : { household_id: householdId, local_recipe_id: parsed.id, title: cleanTitle };
 }
 
 /** Adds or removes a saved row in a list, for the instant heart. */

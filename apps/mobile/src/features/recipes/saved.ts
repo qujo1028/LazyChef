@@ -2,17 +2,16 @@
 // app's saveRecipe / unsaveRecipe actions (src/features/recipes/actions.ts). saved_recipes
 // broadcasts on the household channel, so every phone refetches when one changes.
 import { parseRecipeRef } from '@lazychef/core/recipes/ref';
-import { keepPreviousData, onlineManager, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
-import { dbErrorMessage } from '@/lib/db-error';
 import { queryKeys } from '@/lib/household';
-import { OFFLINE_ACTION_MESSAGE } from '@/lib/household-settings';
-import { savedInsert, savedLocalIds, savedRefOf, withSaved, type SavedRow } from '@/lib/recipe-ideas';
+import { savedLocalIds, savedRefOf, withSaved, type SavedRow } from '@/lib/recipe-ideas';
 import { supabase } from '@/lib/supabase';
 import { useHouseholdChanges } from '@/providers/household-channel';
 
 import { getLocalCards } from './local';
+import { setSaved } from './recipe-api';
 
 async function fetchSavedRows(householdId: string): Promise<SavedRow[]> {
   const { data, error } = await supabase
@@ -24,28 +23,11 @@ async function fetchSavedRows(householdId: string): Promise<SavedRow[]> {
   return data;
 }
 
-async function writeSave(householdId: string, ref: string, title: string, image: string | null): Promise<string | null> {
-  if (!onlineManager.isOnline()) return OFFLINE_ACTION_MESSAGE;
-  const row = savedInsert(householdId, ref, title, image);
-  if (!row) return "Couldn't save that recipe.";
-  const { error } =
-    row.recipe_id !== undefined
-      ? await supabase
-          .from('saved_recipes')
-          .upsert(row, { onConflict: 'household_id,recipe_id', ignoreDuplicates: true })
-      : await supabase
-          .from('saved_recipes')
-          .upsert(row, { onConflict: 'household_id,local_recipe_id', ignoreDuplicates: true });
-  return error ? dbErrorMessage('saveRecipe', error) : null;
-}
-
-async function writeUnsave(householdId: string, ref: string): Promise<string | null> {
-  if (!onlineManager.isOnline()) return OFFLINE_ACTION_MESSAGE;
+async function write(householdId: string, ref: string, title: string, image: string | null, save: boolean): Promise<string | null> {
   const parsed = parseRecipeRef(ref);
-  if (!parsed) return "Couldn't unsave that recipe.";
-  const query = supabase.from('saved_recipes').delete().eq('household_id', householdId);
-  const { error } = await (parsed.kind === 'spoonacular' ? query.eq('recipe_id', parsed.id) : query.eq('local_recipe_id', parsed.id));
-  return error ? dbErrorMessage('unsaveRecipe', error) : null;
+  if (!parsed) return "Couldn't save that recipe.";
+  const { error } = await setSaved(householdId, parsed, title.trim().slice(0, 200) || 'Recipe', image, save);
+  return error ?? null;
 }
 
 export type ToggleSaved = (ref: string, title: string, image: string | null, onError?: (message: string) => void) => void;
@@ -93,7 +75,7 @@ export function useSavedRecipes(householdId: string | null) {
         client.setQueryData<SavedRow[]>(key, (current) =>
           withSaved(current ?? [], ref, previous ? { title: previous.title, image: previous.image_url } : null, previous?.created_at ?? ''),
         );
-      void (save ? writeSave(householdId, ref, title, image) : writeUnsave(householdId, ref))
+      void write(householdId, ref, title, image, save)
         .then((error) => {
           if (error) {
             undo();
