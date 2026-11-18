@@ -72,7 +72,7 @@ export async function listOpenIssues(): Promise<BoardIssue[]> {
 export async function listRecentlyClosedIssues(days = 7, now: number = Date.now()): Promise<BoardIssue[]> {
   const cutoff = now - days * 86_400_000
   const since = new Date(cutoff).toISOString()
-  const data = await gh<unknown>(`/issues?state=closed&since=${encodeURIComponent(since)}&per_page=50`)
+  const data = await gh<unknown>(`/issues?state=closed&sort=updated&direction=desc&since=${encodeURIComponent(since)}&per_page=100`)
   return parseList(issueSchema, data)
     .filter((i) => !i.pull_request && i.closed_at && new Date(i.closed_at).getTime() >= cutoff)
     .map(toBoardIssue)

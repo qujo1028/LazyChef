@@ -14,6 +14,10 @@
 --     else about them changes: same signatures, same allowlist, same grants.
 --   * bump_daily_metric: lets the server count a few fixed kinds of event (AI errors,
 --     Spoonacular cache hits and errors). The metric name must match a strict pattern.
+--
+-- Unlike the household functions, these have no auth.uid() check: no signed-in user can run
+-- them at all (EXECUTE is granted to service_role only), and the server re-checks the admin
+-- with requireAdmin() (ADMIN_EMAILS) before calling them with the secret key.
 
 -- ── Tables (private) ──────────────────────────────────────────────────────────
 
@@ -250,7 +254,7 @@ as $$
       nullif(e.payload ->> 'purchased_at_ms', '')::numeric as purchased_ms,
       nullif(e.payload ->> 'expiration_at_ms', '')::numeric as expires_ms
     from public.revenuecat_events e
-    where coalesce(e.environment, e.payload ->> 'environment') = 'PRODUCTION'
+    where upper(coalesce(e.environment, e.payload ->> 'environment', '')) = 'PRODUCTION'
       and e.type in ('INITIAL_PURCHASE', 'RENEWAL')
       and e.app_user_id in (select u::text from private.admin_paying_user_ids() as u)
       and nullif(e.payload ->> 'price', '')::numeric > 0

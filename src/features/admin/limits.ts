@@ -1,3 +1,4 @@
+import { addDays } from "@/features/admin/overview-format"
 import type { DailyCounter, SpoonacularDay } from "@/features/admin/stats"
 
 // Pure helpers for the admin Limits tab. No database or server-only imports, so they can be tested directly.
@@ -6,12 +7,7 @@ const DAY_SECONDS = 86400
 const HOUR_SECONDS = 3600
 const MINUTE_SECONDS = 60
 
-/** Shifts a UTC day (YYYY-MM-DD) by whole days. */
-export function addDays(day: string, delta: number): string {
-  const date = new Date(`${day}T00:00:00Z`)
-  date.setUTCDate(date.getUTCDate() + delta)
-  return date.toISOString().slice(0, 10)
-}
+export { addDays }
 
 /**
  * Exactly `days` entries ending on `today` (UTC YYYY-MM-DD), oldest first. Days with no row

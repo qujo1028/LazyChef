@@ -7,7 +7,9 @@ import { latestProductionDeploy } from "@/features/admin/github-deploys"
 import { gh, GitHubError, githubConfig, type GitHubConfig } from "@/features/admin/github"
 import { getRevenueCatRecent } from "@/features/admin/insights"
 import { getRevenueStats } from "@/features/admin/overview"
+import { addDays } from "@/features/admin/overview-format"
 import { getDailyCounters, getSpoonacularDaily } from "@/features/admin/stats"
+import { utcDay } from "@/lib/spoonacular/cost"
 
 // The daily check. The cron route calls runAlerts(), which gathers a few numbers, evaluates
 // the alert rules and opens (or comments on) a GitHub issue labelled "alert" for each one.
@@ -59,16 +61,6 @@ function openAlertIssues(data: unknown): { number: number; title: string; body: 
     out.push({ number: parsed.data.number, title: parsed.data.title, body: parsed.data.body ?? "" })
   }
   return out
-}
-
-/** The UTC calendar day of `date`, as YYYY-MM-DD. */
-function utcDay(date: Date): string {
-  return date.toISOString().slice(0, 10)
-}
-
-/** `day` (YYYY-MM-DD) moved by `days` whole days. */
-function shiftDay(day: string, days: number): string {
-  return new Date(Date.parse(`${day}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10)
 }
 
 /** Total of one metric on one day. Missing days and metrics count as 0. */
@@ -123,7 +115,7 @@ export function evaluateAlerts(input: AlertInputs): Alert[] {
     const y = countOn(input.counters, yesterday, metric)
     let prior = 0
     for (let back = 1; back <= AI_SPIKE_BASELINE_DAYS; back++) {
-      prior += countOn(input.counters, shiftDay(yesterday, -back), metric)
+      prior += countOn(input.counters, addDays(yesterday, -back), metric)
     }
     const avg = prior / AI_SPIKE_BASELINE_DAYS
     return y >= AI_SPIKE_MIN && y >= AI_SPIKE_FACTOR * avg ? { y, avg } : null
@@ -184,11 +176,11 @@ async function attempt<T>(what: string, neutral: T, read: () => Promise<T>): Pro
 /** Reads everything the rules need. Each source fails on its own, to a value that raises no alert. */
 export async function gatherAlertInputs(now = new Date()): Promise<AlertInputs> {
   const today = utcDay(now)
-  const yesterday = shiftDay(today, -1)
+  const yesterday = addDays(today, -1)
 
   const [counters, spoonacularYesterdayExhausted, productionDeployState, services, payingUsers, lastWebhookAt] =
     await Promise.all([
-      attempt("daily counters", [], () => getDailyCounters(shiftDay(yesterday, -AI_SPIKE_BASELINE_DAYS), yesterday)),
+      attempt("daily counters", [], () => getDailyCounters(addDays(yesterday, -AI_SPIKE_BASELINE_DAYS), yesterday)),
       attempt("Spoonacular usage", false, async () =>
         (await getSpoonacularDaily(3)).some((row) => row.day === yesterday && row.exhaustedAt !== null),
       ),

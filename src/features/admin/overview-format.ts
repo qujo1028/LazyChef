@@ -3,10 +3,9 @@
 
 const DAY_MS = 86_400_000
 
-/** UTC day as YYYY-MM-DD. */
-export function utcDay(date: Date): string {
-  return date.toISOString().slice(0, 10)
-}
+import { utcDay } from "@/lib/spoonacular/cost"
+
+export { utcDay }
 
 /** `day` (YYYY-MM-DD) moved by `n` days, UTC. */
 export function addDays(day: string, n: number): string {
