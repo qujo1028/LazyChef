@@ -1,0 +1,8 @@
+{
+  // Type-checks the Edge Functions' pure modules and their Vitest tests with Node's tsc (npm run
+  // typecheck). The Deno entry points (index.ts, db.ts) are checked with `deno check` instead.
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "allowImportingTsExtensions": true, "incremental": false, "plugins": [] },
+  "include": ["**/*.test.ts"],
+  "exclude": []
+}
