@@ -806,10 +806,15 @@ Fix on merge: Recipes showed a spinner forever offline with nothing cached; it n
 Checks: web typecheck, lint, 2,434 tests, audit, ingredients check; mobile typecheck, lint, iOS and web exports;
 `deno check` on the function.
 
+Edge Function deployed (2026-11-18, user approved): `recipes` v1 is live on the LazyChef project with JWT
+verification on, deployed through the Supabase connector; the deployed files were diffed against the repo (all 11
+identical). `SPOONACULAR_API_KEY` is set as a function secret (the Vercel copy is marked sensitive and can't be pulled,
+so the user supplied the key; it was pasted in chat, so rotate it in the Spoonacular console and update Supabase,
+Vercel and `.env.local`). Smoke test: no auth 401, a non-user token 401 with the function's own JSON, CORS preflight
+204. Not yet tested with a signed-in session (do it from the app on a phone). Redeploy after changes with
+`npx supabase functions deploy recipes --project-ref gldppemwlecnbarxamcb` (the CLI is logged in on this Mac now).
+
 Open before P4's exit check:
-- Deploy the `recipes` Edge Function (needs the user's go-ahead): `supabase login` and `supabase link` in the user's
-  terminal, `SPOONACULAR_API_KEY` as a function secret, `supabase functions deploy recipes`, then the README curl test.
-  Until then Suggested shows library recipes and says Spoonacular ideas aren't set up.
 - Diet and allergies are not applied on mobile yet (library ranking or Spoonacular calls). The web filters both. This
   matters for allergies, so it's the first P4 follow-up: filter library results with core `localFits`, and add
   diet/intolerances to the edge contract for Spoonacular.
