@@ -215,3 +215,20 @@ export function rankSpoonacularSearch(index: PantryIndex, recipes: readonly Reci
     recipes.map((recipe) => toSuggestion(index, spoonacularMatchable(recipe))),
   ).sort(compareSuggestions)
 }
+
+/** The recipe ids of several match lists, each already best-first: interleaved, without repeats. */
+export function mergeRecipeIds(lists: readonly (readonly { recipe_id: string }[])[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  const longest = Math.max(0, ...lists.map((list) => list.length))
+  for (let i = 0; i < longest; i++) {
+    for (const list of lists) {
+      const id = list[i]?.recipe_id
+      if (id !== undefined && !seen.has(id)) {
+        seen.add(id)
+        out.push(id)
+      }
+    }
+  }
+  return out
+}

@@ -26,7 +26,7 @@ import { cachedRecipeDetails, cachedSpoonacular, getCacheStore, getUsageToday } 
 import { recipeCacheKey, restingUntil, suggestionsCacheKey, type Usage } from "./cache-core"
 import type { CookLine } from "./cook"
 import { planCook } from "./cook-plan"
-import { hasFilters, type RecipeFilters } from "./filters"
+import { mealQueries, type MealFilter, type MealQuery, type RecipeFilters } from "./filters"
 import { findLocalCandidates, getHouseholdRecipes, getLocalCards, getLocalRecipe, type LocalRecipe } from "./local"
 import {
   localSuggestion,
@@ -114,14 +114,19 @@ async function spoonacularRecipes(
   names: string[],
   filters: RecipeFilters,
   prefs: RecipePrefs,
+  /** The slot's meal queries; Spoonacular's `type` takes one value, so only the first is asked. */
+  meals: readonly MealQuery[] | null,
 ): Promise<{ part: SpoonacularPart; recipes: RecipeSummary[] }> {
   if (!isSpoonacularConfigured()) return { part: { status: "no-key" }, recipes: [] }
   // findByIngredients can't filter by diet, so a diet or allergy makes it a search: the
   // same single call, a little dearer (searchCost vs findCost), and still cached an hour.
   const diet = prefs.diet ? spoonacularDiet(prefs.diet) : null
   const restricted = diet !== null && (diet.diet !== null || diet.intolerances.length > 0)
-  const filtered = hasFilters(filters) || restricted
-  const key = suggestionsCacheKey(names, filters, diet)
+  // What Spoonacular is actually asked (the RESOLVED meal, so the hourly shared cache stays correct).
+  const primary = meals?.[0] ?? null
+  const asked = { type: primary?.type ?? null, maxTime: primary ? primary.maxMinutes : filters.maxTime, query: filters.query }
+  const filtered = asked.type !== null || asked.maxTime !== null || asked.query !== null || restricted
+  const key = suggestionsCacheKey(names, asked, diet)
   try {
     const result = await cachedSpoonacular<RecipeSummary[]>(
       getCacheStore(),
@@ -130,9 +135,9 @@ async function spoonacularRecipes(
         const { recipes, quota } = filtered
           ? await searchRecipes({
               ingredients: names,
-              type: filters.type,
-              maxReadyTime: filters.maxTime,
-              query: filters.query,
+              type: asked.type,
+              maxReadyTime: asked.maxTime,
+              query: asked.query,
               diet: diet?.diet ?? null,
               intolerances: diet?.intolerances ?? [],
               number: SEARCH_SIZE,
@@ -160,7 +165,13 @@ export async function getRecipeIdeas(
   filters: RecipeFilters,
   more = false,
   prefs: RecipePrefs = { diet: null, cuisines: [] },
+  /**
+   * The meals to show, once Auto has been resolved from the viewer's clock (see resolveMeals);
+   * null for every meal. Defaults to the manually picked meal, if any.
+   */
+  meals: readonly MealFilter[] | null = filters.type ? [filters.type] : null,
 ): Promise<IdeasResult> {
+  const queries = mealQueries(meals, filters.maxTime)
   const items = await getPantryItems(householdId)
   const today = localDateKey()
   const names = pantrySearchNames(items, today)
@@ -170,7 +181,7 @@ export async function getRecipeIdeas(
   const index = buildPantryIndex(items, today)
   let candidates: Awaited<ReturnType<typeof findLocalCandidates>> = []
   try {
-    candidates = (await findLocalCandidates(householdId, items, filters)).filter((recipe) => localFits(recipe, prefs.diet))
+    candidates = (await findLocalCandidates(householdId, items, filters, queries)).filter((recipe) => localFits(recipe, prefs.diet))
   } catch (error) {
     // Before the migration is applied (or on a hiccup), fall back to Spoonacular alone.
     console.error("Matching local recipes failed:", error instanceof Error ? error.message : error)
@@ -181,7 +192,7 @@ export async function getRecipeIdeas(
   if (search) {
     const local = rankSearch(index, candidates)
     const { part, recipes } = wantsSpoonacular(local.length, more)
-      ? await spoonacularRecipes(names, filters, prefs)
+      ? await spoonacularRecipes(names, filters, prefs, queries)
       : { part: { status: "skipped" } as const, recipes: [] }
     return {
       status: "ok",
@@ -198,7 +209,7 @@ export async function getRecipeIdeas(
   if (!wantsSpoonacular(localCount, more)) {
     return { status: "ok", mode: "ideas", ...local, localCount, spoonacular: { status: "skipped" } }
   }
-  const { part, recipes } = await spoonacularRecipes(names, filters, prefs)
+  const { part, recipes } = await spoonacularRecipes(names, filters, prefs, queries)
   const extra = part.status === "ok" ? sortSuggestions(index, recipes) : null
   return { status: "ok", mode: "ideas", ...mergeSuggestions(local, extra), localCount, spoonacular: part }
 }

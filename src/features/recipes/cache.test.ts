@@ -33,6 +33,13 @@ describe("suggestionsCacheKey", () => {
     const curry = suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: "Chicken Curry" })
     expect(curry).not.toBe(base)
     expect(suggestionsCacheKey(["rice", "eggs"], { type: null, maxTime: null, query: "chicken curry" })).toBe(curry)
+    // Auto resolves to a real type before it reaches the key: a different slot is a different key.
+    const dinner = suggestionsCacheKey(["eggs", "rice"], { type: "main course", maxTime: null, query: null })
+    const lunch = suggestionsCacheKey(["eggs", "rice"], { type: "main course", maxTime: 30, query: null })
+    expect(dinner).not.toBe(lunch)
+    expect(dinner).not.toBe(breakfast)
+    // Any meal (type null) keeps the plain find key.
+    expect(suggestionsCacheKey(["eggs", "rice"], { type: null, maxTime: null, query: null })).toBe(base)
     // A diet turns a plain find into a search, keyed by the diet; no diet keeps the old key.
     const vegan = suggestionsCacheKey(["eggs", "rice"], NO_FILTERS, { diet: "vegan", intolerances: [] })
     expect(vegan).toMatch(/^search:/)
