@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every migration on `main` is applied to the live Supabase project. Security advisor was last run 2026-09-30.
+- **Database:** every migration on `main` is applied to the live Supabase project except `20261118060000_admin_dashboard.sql`, which must be applied before the deploy that ships the admin dashboard. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Supabase project is on the free plan. Upgrade to Pro before launch, or it pauses after a week idle.
