@@ -181,6 +181,8 @@ export type Suggestion = {
   need: string[]
   /** Pantry items expiring soon that this recipe would use up. */
   usesExpiring: string[]
+  /** A household recipe saved from an AI idea (see withAiFlags in queries.ts). */
+  aiGenerated?: boolean
 }
 
 export type Suggestions = { makeNow: Suggestion[]; almostThere: Suggestion[] }

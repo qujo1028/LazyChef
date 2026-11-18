@@ -17,6 +17,7 @@ export function RecipeCard({ recipe, saved }: { recipe: Suggestion; saved: boole
       readyInMinutes={recipe.readyInMinutes}
       saved={saved}
       expiring={expiring}
+      aiGenerated={recipe.aiGenerated}
     >
       {recipe.need.length === 0 ? (
         <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">

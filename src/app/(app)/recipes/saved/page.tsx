@@ -6,10 +6,12 @@ import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
+import { CookAgain } from "@/features/recipes/components/cook-again"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
 import { SavedRecipeCard } from "@/features/recipes/components/saved-recipe-card"
 import { getSavedRecipes } from "@/features/recipes/queries"
+import { getCookAgain } from "@/features/recipes/ratings"
 import { canMakeNow, parseSavedSort, SAVED_SORTS, sortSaved } from "@/features/recipes/saved"
 import { cn } from "@/lib/utils"
 
@@ -22,7 +24,10 @@ export default async function SavedRecipesPage({
 }) {
   const { household } = await requireHousehold()
   const sort = parseSavedSort((await searchParams).sort)
-  const { recipes, unmatched, fetchedAt: serverNow } = await getSavedRecipes(household.id)
+  const [{ recipes, unmatched, fetchedAt: serverNow }, cookAgain] = await Promise.all([
+    getSavedRecipes(household.id),
+    getCookAgain(household.id),
+  ])
   const sorted = sortSaved(recipes, sort)
   const ready = recipes.filter(canMakeNow).length
 
@@ -37,6 +42,7 @@ export default async function SavedRecipesPage({
         }
       />
       <RecipesTabs current="/recipes/saved" />
+      <CookAgain cards={cookAgain} />
 
       {recipes.length === 0 ? (
         <EmptyState icon={Heart} title="Nothing saved yet">
