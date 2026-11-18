@@ -615,3 +615,24 @@ Open for P2's exit check (needs the user and a phone in Expo Go):
 - Two phones: an add, -1 or edit on one shows on the other without a refresh.
 - Known gaps for later: a failed save rolls back over a housemate's newer change; the edit form doesn't refresh when a
   housemate edits the same item; ran-out "Add to shopping list" is P3; categorizing unusual names needs a Spoonacular Edge Function.
+
+## P3 Shopping list (2026-11-18, lead: `feature/p3-list`)
+Based on `origin/feature/p2-pantry`, because P2 (PR #69) isn't merged yet and P3 builds on its toast, sheet, fields and
+pantry provider. Rebase onto `origin/main` once #69 merges. Migration lock: nobody (P3 uses the existing
+`shopping_list_items`, `add_to_shopping_list` and `complete_shopping_trip`).
+
+Step 0 (lead):
+- `src/features/list/api.ts`: same rules as the web list actions (`addListText`, `addListItems`, `setChecked`,
+  `updateListItem`, `deleteListItems`, `putAway`), each returning `{ error }` and failing fast offline. The web's
+  "added to the list" push is server-only and waits for P6.
+- `src/features/list/list-provider.tsx`: `ListProvider` in the tabs layout (inside `PantryProvider`), `useList()`
+  (`items`, `query`, `apply`, `setItemChecked`, `toggle` with an Undo toast) and `useListItem(id)`. Query key
+  `queryKeys.list(id)`.
+- `ReviewList` gained an optional `hints` prop (per draft key) for put away's "Adds to your ..." notes.
+- Stubs: list screen, `ListEditSheet`, `PutAwaySheet`, `features/list/add-to-list.ts` (`useAddPantryItemToList`).
+- Deferred: scan to check off (barcodes, P5).
+
+Workers (branch from `origin/feature/p3-list`): W1 `feature/p3-list-screen` (Sonnet: screen with grouping, quick add,
+check off), W2 `feature/p3-list-edit` (Sonnet: edit sheet with delete and Undo), W3 `feature/p3-put-away` (Sonnet:
+put away into the pantry), W4 `feature/p3-pantry-to-list` (Haiku: small, well-specified wiring of "Add to shopping
+list" into the pantry screens).

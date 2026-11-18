@@ -25,6 +25,7 @@ export function ReviewList({
   today,
   showErrors,
   disabled,
+  hints,
 }: {
   drafts: readonly ReviewDraft[];
   onChange: (drafts: ReviewDraft[]) => void;
@@ -32,6 +33,8 @@ export function ReviewList({
   /** Show field errors (after a failed Add). */
   showErrors: boolean;
   disabled?: boolean;
+  /** Per draft key, a note under the card (put away: "Adds to your milk (1 gal now)"). */
+  hints?: ReadonlyMap<string, string>;
 }) {
   const { spacing } = useTheme();
   return (
@@ -43,6 +46,7 @@ export function ReviewList({
           today={today}
           showErrors={showErrors}
           disabled={disabled}
+          note={hints?.get(draft.key)}
           onChange={(next) => onChange(drafts.map((d) => (d.key === draft.key ? next : d)))}
           onRemove={() => onChange(drafts.filter((d) => d.key !== draft.key))}
         />
@@ -58,8 +62,10 @@ function ReviewItemCard({
   disabled,
   onChange,
   onRemove,
+  note,
 }: {
   draft: ReviewDraft;
+  note?: string;
   today: string;
   showErrors: boolean;
   disabled?: boolean;
@@ -145,6 +151,7 @@ function ReviewItemCard({
           thumbColor="#FFFFFF"
         />
       </View>
+      {note ? <Text style={[type.bodySmall, { color: colors.primary }]}>{note}</Text> : null}
     </Card>
   );
 }
