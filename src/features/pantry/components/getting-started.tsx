@@ -6,13 +6,13 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { ingredientEmoji } from "@/lib/ingredients/emoji"
+import { ingredientEmoji } from "@lazychef/core/ingredients/emoji"
 import { cn } from "@/lib/utils"
 
 import { addStaples } from "../actions"
-import { displayName } from "../display"
-import { describeAdditions } from "../merge"
-import { COMMON_STAPLES } from "../staples"
+import { displayName } from "@lazychef/core/pantry/display"
+import { describeAdditions } from "@lazychef/core/pantry/merge"
+import { COMMON_STAPLES } from "@lazychef/core/pantry/staples"
 import { callAction } from "@/lib/call-action"
 
 /**

@@ -14,8 +14,8 @@ import {
   type ActivityAction,
   type ActivityEntry,
   type ActivityMember,
-} from "../feed"
-import { shortTime } from "../time"
+} from "@lazychef/core/activity/feed"
+import { shortTime } from "@lazychef/core/dates/time"
 
 type ActionStyle = { icon: LucideIcon; badge: string; text: string }
 

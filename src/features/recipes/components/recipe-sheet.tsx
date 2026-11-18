@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 import { useStripParams } from "@/lib/use-strip-params"
 
-import type { OwnRecipeDraft } from "../own-recipe"
+import type { OwnRecipeDraft } from "@lazychef/core/recipes/own-recipe"
 import { RecipeForm } from "./recipe-form"
 
 /**

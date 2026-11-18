@@ -1,8 +1,8 @@
 import { CircleCheck } from "lucide-react"
 
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 
-import { canMakeNow, type SavedRecipe } from "../saved"
+import { canMakeNow, type SavedRecipe } from "@lazychef/core/recipes/saved"
 import { CookedLabel } from "./cooked-label"
 import { RecipeTile } from "./recipe-tile"
 

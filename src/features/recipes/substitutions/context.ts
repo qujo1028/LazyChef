@@ -5,7 +5,7 @@ import type { RecipeDetail } from "@/lib/spoonacular"
 import { getCacheStore } from "../cache"
 import { recipeCacheKey } from "../cache-core"
 import { loadRecipe } from "../queries"
-import type { RecipeRef } from "../ref"
+import type { RecipeRef } from "@lazychef/core/recipes/ref"
 
 export type SubstitutionRecipe = {
   title: string

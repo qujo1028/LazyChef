@@ -1,6 +1,6 @@
 import "server-only"
 
-import type { Category } from "@/lib/ingredients/types"
+import type { Category } from "@lazychef/core/ingredients/types"
 import type { createClient } from "@/lib/supabase/server"
 
 type Supabase = Awaited<ReturnType<typeof createClient>>

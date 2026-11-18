@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-import { TIMEZONE_COOKIE } from "../filters"
+import { TIMEZONE_COOKIE } from "@lazychef/core/recipes/filters"
 
 /**
  * The server can't see the phone's clock, so this saves the phone's time zone in a cookie and

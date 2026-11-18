@@ -1,7 +1,7 @@
 import "server-only"
 
 import { askAiJson, type AiResult } from "@/lib/llm/ai"
-import type { OffProduct } from "@/lib/barcode/product"
+import type { OffProduct } from "@lazychef/core/barcodes/product"
 
 import { catalogCandidates, tidyMessages, tidyProduct, tidyReplySchema, toSuggestion, type TidySuggestion } from "./prompt"
 

@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache"
 
 import { requireViewer } from "@/features/household/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { createClient } from "@/lib/supabase/server"
 
-import { preferencesSchema, type FoodPreferences } from "./options"
+import { preferencesSchema, type FoodPreferences } from "@lazychef/core/preferences/options"
 
 /** Saves the signed-in person's diet, allergies, cuisines and world-recipes default. */
 export async function savePreferences(input: FoodPreferences): Promise<ActionResult> {

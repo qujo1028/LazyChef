@@ -1,9 +1,9 @@
 "use server"
 
 import { requireViewer } from "@/features/household/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { fetchOffProduct, OpenFoodFactsError } from "@/lib/barcode/open-food-facts"
-import { normalizeBarcode } from "@/lib/barcode/product"
+import { normalizeBarcode } from "@lazychef/core/barcodes/product"
 import { isAiAvailable } from "@/lib/llm/ai"
 
 import type { TidySuggestion } from "./prompt"

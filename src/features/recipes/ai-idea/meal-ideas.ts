@@ -3,13 +3,13 @@
 // browser can use the labels and the rules are easy to test.
 import { z } from "zod"
 
-import type { DietInput } from "@/features/preferences/diet"
+import type { DietInput } from "@lazychef/core/preferences/diet"
 import type { ChatMessage } from "@/lib/llm/client"
-import { normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 
-import type { MealFilter } from "../filters"
-import type { OwnRecipeInput } from "../own-recipe"
-import { hintLines, hintsKeySource, NO_HINTS, type TasteHints } from "../taste"
+import type { MealFilter } from "@lazychef/core/recipes/filters"
+import type { OwnRecipeInput } from "@lazychef/core/recipes/own-recipe"
+import { hintLines, hintsKeySource, NO_HINTS, type TasteHints } from "@lazychef/core/recipes/taste"
 import { aiRecipeSchema, breaksDiet, markPantryIngredients, pantryLines, RECIPE_JSON_SHAPE, RECIPE_RULES, type AiRecipe } from "./idea"
 
 /** How many ideas one request asks for (and the most ever shown). */

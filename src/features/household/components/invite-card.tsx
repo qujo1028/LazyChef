@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { regenerateInviteCode } from "@/features/household/actions"
 import { callAction } from "@/lib/call-action"
-import { formatInviteCode } from "@/lib/invite"
+import { formatInviteCode } from "@lazychef/core/household/invite"
 
 export function InviteCard({
   householdId,

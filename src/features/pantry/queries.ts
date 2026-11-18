@@ -4,8 +4,8 @@ import { cache } from "react"
 
 import { getHouseholdMembers } from "@/features/household/queries"
 import { createClient } from "@/lib/supabase/server"
-import { localDateKey } from "./dates"
-import type { PantryItem, PantryMember } from "./types"
+import { localDateKey } from "@lazychef/core/dates/days"
+import type { PantryItem, PantryMember } from "@lazychef/core/pantry/types"
 
 /** Everything in a household's pantry (RLS limits it to households you belong to). */
 export const getPantryItems = cache(async (householdId: string): Promise<PantryItem[]> => {

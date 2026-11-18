@@ -2,7 +2,7 @@ import "server-only"
 
 import { createClient } from "@/lib/supabase/server"
 
-import { allowanceResult, type AiLimited } from "./ai-allowance-core"
+import { allowanceResult, type AiLimited } from "@lazychef/core/pro/ai-allowance-core"
 
 export type { AiLimited }
 

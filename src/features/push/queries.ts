@@ -5,7 +5,7 @@ import { cache } from "react"
 import { requireViewer } from "@/features/household/queries"
 import { createClient } from "@/lib/supabase/server"
 
-import { DEFAULT_PREFS, type NotificationPrefs } from "./prefs"
+import { DEFAULT_PREFS, type NotificationPrefs } from "@lazychef/core/push/prefs"
 
 /** The signed-in person's three switches (all on until they change one). */
 export const getMyNotificationPrefs = cache(async (): Promise<NotificationPrefs> => {

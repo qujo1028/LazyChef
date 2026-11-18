@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 import { cn } from "@/lib/utils"
 
-import { filtersHref, isAuto, MEAL_FILTERS, NO_FILTERS, TIME_FILTERS, type RecipeFilters, type TimeFilter } from "../filters"
+import { filtersHref, isAuto, MEAL_FILTERS, NO_FILTERS, TIME_FILTERS, type RecipeFilters, type TimeFilter } from "@lazychef/core/recipes/filters"
 
 function timeLabel(minutes: TimeFilter) {
   return minutes === 60 ? "Under 1 hr" : `Under ${minutes} min`

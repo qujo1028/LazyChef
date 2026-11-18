@@ -4,10 +4,10 @@
 //  - Anything else keeps the AI's free-form answer only if each swap is plausible: same
 //    family of grocery categories, not a protein, not the ingredient itself.
 //  - Swaps that clash with the viewer's diet or allergies are dropped.
-import type { Category } from "@/lib/ingredients/types"
-import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { lookupSubstitutions, namedInTitle, type SubEntry } from "@/lib/ingredients/substitutions"
-import { conflicts, type DietInput } from "@/features/preferences/diet"
+import type { Category } from "@lazychef/core/ingredients/types"
+import { findIngredient, guessCategory, normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
+import { lookupSubstitutions, namedInTitle, type SubEntry } from "@lazychef/core/ingredients/substitutions"
+import { conflicts, type DietInput } from "@lazychef/core/preferences/diet"
 
 export const STAR_OF_THE_DISH = "This is the star of the dish, so swapping it would make a different recipe."
 export const NO_GOOD_SWAP = "Nothing we know of would work well here."

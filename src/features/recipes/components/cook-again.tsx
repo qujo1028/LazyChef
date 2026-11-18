@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import type { CookAgainCard } from "../ratings"
-import { recipeHref } from "../ref"
+import { recipeHref } from "@lazychef/core/recipes/ref"
 import { RecipeImage } from "./recipe-image"
 
 /** The household's thumbs-up recipes as a short horizontal row. Hidden when there are none. */

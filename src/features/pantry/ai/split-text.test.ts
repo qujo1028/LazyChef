@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { parseLines } from "@/lib/ingredients/parse-line"
+import { parseLines } from "@lazychef/core/ingredients/parse-line"
 
 import { aiNote, buildSplitMessages, MAX_AI_ITEMS, replyToLines, splitReplySchema } from "./split-text"
 

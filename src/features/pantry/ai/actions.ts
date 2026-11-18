@@ -6,8 +6,8 @@ import { requireHousehold } from "@/features/household/queries"
 import { askAiJson, isAiAvailable } from "@/lib/llm/ai"
 
 import { resolveItems, type ResolveResult } from "../resolve"
-import { firstIssue } from "../schemas"
-import type { ActionResult } from "../types"
+import { firstIssue } from "@lazychef/core/pantry/schemas"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { aiNote, buildSplitMessages, MAX_AI_TEXT, replyToLines, splitReplySchema } from "./split-text"
 
 export type AiPreviewResult = ResolveResult & {

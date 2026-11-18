@@ -5,7 +5,7 @@ import { useState, useSyncExternalStore } from "react"
 
 import { Button } from "@/components/ui/button"
 
-import { nextPrompt, type UnratedCook } from "../ratings-core"
+import { nextPrompt, type UnratedCook } from "@lazychef/core/recipes/ratings-core"
 import { RatingButtons } from "./rating-buttons"
 
 const STORAGE_KEY = "lazychef:dismissed-rating-prompts"

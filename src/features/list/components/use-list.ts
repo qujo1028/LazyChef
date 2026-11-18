@@ -5,7 +5,7 @@ import { toast } from "sonner"
 
 import { useHouseholdChanges } from "@/features/household/components/household-channel"
 import { callAction } from "@/lib/call-action"
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 
 import { setChecked } from "../actions"
 import {
@@ -18,8 +18,8 @@ import {
   type CheckedOverrides,
   type ListChange,
   type ListItems,
-} from "../list-state"
-import type { ListItem } from "../types"
+} from "@lazychef/core/list/list-state"
+import type { ListItem } from "@lazychef/core/list/types"
 
 /**
  * The list as the screen shows it: the server's lines, kept in sync with fresh server

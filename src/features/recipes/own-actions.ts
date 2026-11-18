@@ -5,8 +5,8 @@ import { z } from "zod"
 
 import { requireHousehold } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
-import type { ActionResult } from "@/features/pantry/types"
-import { findIngredient, normalizeIngredientName } from "@/lib/ingredients/catalog"
+import type { ActionResult } from "@lazychef/core/pantry/types"
+import { findIngredient, normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 import { createClient } from "@/lib/supabase/server"
 import type { Json } from "@/types/database"
 
@@ -22,7 +22,7 @@ import {
   type OwnRecipe,
   type OwnRecipeDraft,
   type OwnRecipeInput,
-} from "./own-recipe"
+} from "@lazychef/core/recipes/own-recipe"
 
 export type SaveOwnResult = ActionResult<{ id: string }> & { fields?: Partial<Record<keyof OwnRecipeDraft, string>> }
 

@@ -13,8 +13,8 @@ import {
   rowFromRecord,
   type ActivityMember,
   type ActivityRow,
-} from "../feed"
-import { groupByDay } from "../time"
+} from "@lazychef/core/activity/feed"
+import { groupByDay } from "@lazychef/core/dates/time"
 import { ActivityEntryItem } from "./activity-entry"
 
 // Relative times re-render every 30 s. The server doesn't know the viewer's time

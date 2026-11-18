@@ -2,7 +2,7 @@ import type { EmailOtpType } from "@supabase/supabase-js"
 import { after, NextResponse, type NextRequest } from "next/server"
 
 import { storeAppleRefreshToken } from "@/features/auth/apple-tokens"
-import { safeNext } from "@/lib/safe-next"
+import { safeNext } from "@lazychef/core/auth/safe-next"
 import { createClient } from "@/lib/supabase/server"
 
 /**

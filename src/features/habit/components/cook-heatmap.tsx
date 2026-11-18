@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-import type { Heatmap, HeatmapCell } from "../heatmap"
+import type { Heatmap, HeatmapCell } from "@lazychef/core/habit/heatmap"
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const
 /** Only these rows get a visible label; the rest are named for screen readers. */

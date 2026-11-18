@@ -10,15 +10,15 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { callAction } from "@/lib/call-action"
 import { haptic } from "@/lib/native/haptics"
 import { ReviewList } from "@/features/pantry/components/review-list"
-import { describeAdditions, type ExistingItem } from "@/features/pantry/merge"
-import { draftsToItems, type ReviewDraft } from "@/features/pantry/review"
-import { normalizeIngredientName } from "@/lib/ingredients/library/normalize"
-import { convertQuantity } from "@/lib/units"
+import { describeAdditions, type ExistingItem } from "@lazychef/core/pantry/merge"
+import { draftsToItems, type ReviewDraft } from "@lazychef/core/pantry/review"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/library/normalize"
+import { convertQuantity } from "@lazychef/core/units"
 
 import { putAway } from "../actions"
-import type { ListChange } from "../list-state"
-import { draftsFromListItems, mergeHints } from "../put-away"
-import type { ListItem } from "../types"
+import type { ListChange } from "@lazychef/core/list/list-state"
+import { draftsFromListItems, mergeHints } from "@lazychef/core/list/put-away"
+import type { ListItem } from "@lazychef/core/list/types"
 
 const MERGE_DEPS = { normalize: normalizeIngredientName, convert: convertQuantity }
 

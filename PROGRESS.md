@@ -393,3 +393,24 @@ W3 data layer (`feature/p0-data`):
 - `use-session.ts` hook, `providers/app-providers.tsx`, `providers/offline-banner.tsx`, `apps/mobile/.env.example`.
 - Chunk tests are not in the root Vitest include; run with a config whose `include` is `apps/mobile/src/lib/**/*.test.ts`.
 
+W1 core extraction (`feature/p0-core`):
+- 134 files (`git mv`) from `src/` into `packages/core/src/<domain>/`: units, ingredients (library, parsing, aisles,
+  emoji, substitutions), dates (`days.ts` was `pantry/dates.ts`, `time.ts` was `activity/time.ts`), state (row-state),
+  pantry, list, recipes (match, local-match, cook, scale, taste, TheMealDB import, recipe-shapes), activity (feed,
+  stats), habit (all of it, including the reward timeline), auth (safe-next, native callback, password schemas),
+  preferences, pro, barcodes, household (invite codes), push (prefs).
+- Import as `@lazychef/core/<domain>/<module>` (units: `@lazychef/core/units`). Core uses relative imports only; row
+  types come from `@lazychef/db-types` via `packages/core/src/db.ts`. An ESLint rule blocks next, react, react-dom,
+  react-native, expo, Capacitor and `@/` imports in `packages/core`.
+- Splits: `HapticKind` now lives in `haptics/kinds.ts` (used by `habit/reward.ts` and the web haptics); the first-run draft's shape and parsing are in
+  `preferences/draft.ts`, with localStorage reads and writes left in `src/features/preferences/draft.ts`.
+- Left in `src/`: anything server-only or AI-prompt related (Spoonacular, LLM prompts, substitution guards, push
+  delivery, RevenueCat), Capacitor code (`native-auth`, haptics, `apple.ts`), Next-specific helpers (legacy routes,
+  search params, `?view=` parsing, site env), and admin logic.
+- `scripts/build-ingredient-library.mjs` and `scripts/import-themealdb.mjs` point at the new paths.
+- `auth/safe-next` and `auth/native-callback` need a WHATWG `URL`: on mobile import `react-native-url-polyfill/auto`
+  first (RN's built-in URL mis-parses `///evil.com` and custom schemes).
+- For the lead (outside W1's files): CLAUDE.md (the one-test example `src/features/habit/leaderboard.test.ts`,
+  `src/lib/row-state.ts`, `src/features/pro/plans.ts`), README.md:315 and docs/handoff-*.md, docs/mobile-apps.md
+  still name moved paths. `packages/core/src/db.ts` copies the `Tables`/`Enums` helpers; once
+  `@lazychef/db-types` exports them, core should import them from there.

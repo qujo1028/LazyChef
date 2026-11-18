@@ -5,8 +5,8 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 
-import type { CookLine } from "../cook"
-import { clampServings, MAX_SERVINGS, MIN_SERVINGS, scaleFactor } from "../scale"
+import type { CookLine } from "@lazychef/core/recipes/cook"
+import { clampServings, MAX_SERVINGS, MIN_SERVINGS, scaleFactor } from "@lazychef/core/recipes/scale"
 import { IngredientsWithSwaps } from "../substitutions/components/ingredients-with-swaps"
 import { CookSheet } from "./cook-sheet"
 import { IngredientChecklist, type ChecklistLine } from "./ingredient-checklist"

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 
-import { ALLERGIES, CUISINES, DIETS, labelOf } from "../options"
+import { ALLERGIES, CUISINES, DIETS, labelOf } from "@lazychef/core/preferences/options"
 import { useFirstRunDraft } from "../use-draft"
 
 /**

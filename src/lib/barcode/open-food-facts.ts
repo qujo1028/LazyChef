@@ -1,6 +1,6 @@
 import "server-only"
 
-import type { OffProduct } from "./product"
+import type { OffProduct } from "@lazychef/core/barcodes/product"
 
 // Open Food Facts: a free, open product database (no key). Its data is under the Open
 // Database License, so the scanner credits it. https://openfoodfacts.github.io/openfoodfacts-server/api/

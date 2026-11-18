@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 
-import { fitWithin, MAX_PHOTO_BYTES, photoPathFor } from "../own-recipe"
+import { fitWithin, MAX_PHOTO_BYTES, photoPathFor } from "@lazychef/core/recipes/own-recipe"
 
 /** Longest side after resizing. Plenty for a phone screen, a fraction of a camera photo's size. */
 const MAX_SIDE = 1600

@@ -7,7 +7,7 @@ import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { SignupForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
 import { FirstRunSummary } from "@/features/preferences/components/first-run-summary"
-import { safeNext } from "@/lib/safe-next"
+import { safeNext } from "@lazychef/core/auth/safe-next"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Create an account" }

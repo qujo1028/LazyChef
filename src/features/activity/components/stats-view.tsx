@@ -9,15 +9,15 @@ import { EmptyState } from "@/components/empty-state"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
 import { CookHeatmap } from "@/features/habit/components/cook-heatmap"
-import { buildHeatmap } from "@/features/habit/heatmap"
+import { buildHeatmap } from "@lazychef/core/habit/heatmap"
 import { addListItems } from "@/features/list/actions"
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 import { callAction } from "@/lib/call-action"
 import { useViewerTime } from "@/lib/use-viewer-time"
 import { cn } from "@/lib/utils"
 
-import { resolveActor, type ActivityMember } from "../feed"
-import { computeStats, weekLabel, type HouseholdStats, type StatsRow } from "../stats"
+import { resolveActor, type ActivityMember } from "@lazychef/core/activity/feed"
+import { computeStats, weekLabel, type HouseholdStats, type StatsRow } from "@lazychef/core/activity/stats"
 
 function plural(n: number, one: string, many = `${one}s`) {
   return `${n} ${n === 1 ? one : many}`

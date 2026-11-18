@@ -1,7 +1,7 @@
 // What the "What can I use instead?" action accepts. Pure, shared by the action and its tests.
 import { z } from "zod"
 
-import { parseRecipeRef, type RecipeRef } from "../ref"
+import { parseRecipeRef, type RecipeRef } from "@lazychef/core/recipes/ref"
 import { MAX_LINE_LENGTH, MAX_RECIPE_LINES, MAX_TITLE_LENGTH } from "./prompt"
 
 /** One recipe line as the page shows it. Long ones are cut, not rejected. */

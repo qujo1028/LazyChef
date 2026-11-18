@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 
-import { lookupSubstitutions } from "@/lib/ingredients/substitutions"
+import { lookupSubstitutions } from "@lazychef/core/ingredients/substitutions"
 
-import { buildPantryIndex } from "../match"
+import { buildPantryIndex } from "@lazychef/core/recipes/match"
 import { NO_DIET_SWAP, NO_GOOD_SWAP, planSubstitution, plausibleSwap, STAR_OF_THE_DISH } from "./guards"
 import { buildTableMessages, finalizeSubstitutions, finalizeTableSwaps, substitutionReplySchema, tableReplySchema } from "./prompt"
 

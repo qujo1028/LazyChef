@@ -4,7 +4,7 @@ import { ScanBarcode, X } from "lucide-react"
 
 import { useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
-import { ingredientEmoji } from "@/lib/ingredients/emoji"
+import { ingredientEmoji } from "@lazychef/core/ingredients/emoji"
 
 import { BarcodeScanner } from "./barcode-scanner"
 import { ScanRows } from "./scan-rows"

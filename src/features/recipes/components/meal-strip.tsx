@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 
-import { filtersHref, isAuto, type MealFilter, type RecipeFilters } from "../filters"
+import { filtersHref, isAuto, type MealFilter, type RecipeFilters } from "@lazychef/core/recipes/filters"
 
 const STRIP_MEALS: { value: MealFilter; label: string }[] = [
   { value: "breakfast", label: "Breakfast" },

@@ -2,8 +2,8 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
 import { TOUR_COOKIE } from "@/lib/first-run"
-import { PENDING_INVITE_COOKIE } from "@/lib/invite"
-import { safeNext } from "@/lib/safe-next"
+import { PENDING_INVITE_COOKIE } from "@lazychef/core/household/invite"
+import { safeNext } from "@lazychef/core/auth/safe-next"
 import type { Database } from "@/types/database"
 import { getSupabaseConfig, secureCookies } from "./config"
 

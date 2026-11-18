@@ -10,13 +10,13 @@ import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui
 import { Input } from "@/components/ui/input"
 import { callAction } from "@/lib/call-action"
 import { CategorySelect, UnitSelect } from "@/features/pantry/components/selects"
-import { categoryLabel, displayName } from "@/features/pantry/display"
+import { categoryLabel, displayName } from "@lazychef/core/pantry/display"
 
 import { addListItems, deleteListItems, updateListItem } from "../actions"
-import { amountText } from "../display"
-import { listChangedFields, listFormErrors, listFormFromItem, type ListItemForm } from "../item-form"
-import type { ListChange } from "../list-state"
-import type { ListItem } from "../types"
+import { amountText } from "@lazychef/core/list/display"
+import { listChangedFields, listFormErrors, listFormFromItem, type ListItemForm } from "@lazychef/core/list/item-form"
+import type { ListChange } from "@lazychef/core/list/list-state"
+import type { ListItem } from "@lazychef/core/list/types"
 
 /**
  * Tap a line's pencil → fix its name, amount, category or note, or delete it (with Undo).

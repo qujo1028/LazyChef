@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { Input } from "@/components/ui/input"
 
-import { filtersHref, MAX_QUERY_LENGTH, type RecipeFilters } from "../filters"
+import { filtersHref, MAX_QUERY_LENGTH, type RecipeFilters } from "@lazychef/core/recipes/filters"
 
 /**
  * Searches recipe titles (ours first, then Spoonacular's if there are few). A plain GET

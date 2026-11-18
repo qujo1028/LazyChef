@@ -47,6 +47,9 @@ const csp = [
 const nextConfig: NextConfig = {
   // A package-lock.json in a parent folder would otherwise be mistaken for the root.
   turbopack: { root: path.join(__dirname) },
+  // Shared TypeScript source from the workspace (Turbopack compiles workspace packages anyway;
+  // listing it keeps a webpack build doing the same).
+  transpilePackages: ["@lazychef/core"],
   poweredByHeader: false,
   // Screens folded into the five tabs (see src/lib/legacy-routes.ts). Checked before the filesystem and the proxy.
   async redirects() {

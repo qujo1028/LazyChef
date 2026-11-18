@@ -1,7 +1,7 @@
 import { AlarmClock, Clock } from "lucide-react"
 import Link from "next/link"
 
-import { recipeHref, type RecipeSource } from "../ref"
+import { recipeHref, type RecipeSource } from "@lazychef/core/recipes/ref"
 import { RecipeImage } from "./recipe-image"
 import { SaveButton } from "./save-button"
 import { SourceTag } from "./source-tag"

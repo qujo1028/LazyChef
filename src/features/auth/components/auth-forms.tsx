@@ -15,7 +15,7 @@ import {
   updatePassword,
   type AuthFormState,
 } from "@/features/auth/actions"
-import { PASSWORD_HINT, PASSWORD_MIN_LENGTH } from "@/features/auth/schemas"
+import { PASSWORD_HINT, PASSWORD_MIN_LENGTH } from "@lazychef/core/auth/schemas"
 import { withConnectionErrors } from "@/lib/call-action"
 
 export function LoginForm({

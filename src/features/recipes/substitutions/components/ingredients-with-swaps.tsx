@@ -6,13 +6,13 @@ import { useRef, useState } from "react"
 import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
-import { displayName } from "@/features/pantry/display"
-import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { displayName } from "@lazychef/core/pantry/display"
+import { isAiLimited } from "@lazychef/core/pro/ai-allowance-core"
 import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 
 import { IngredientChecklist, type ChecklistLine } from "../../components/ingredient-checklist"
-import { scaleOriginal } from "../../scale"
+import { scaleOriginal } from "@lazychef/core/recipes/scale"
 import { suggestSubstitutions, type SubstitutionResult } from "../actions"
 
 type Answer = { status: "loading" } | { status: "error"; error: string; limit?: boolean } | { status: "done"; result: SubstitutionResult }

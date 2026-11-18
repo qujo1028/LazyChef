@@ -1,9 +1,9 @@
 import "server-only"
 
-import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { categoryFromAisle } from "@/lib/ingredients/aisles"
-import { MAX_KEY_LENGTH } from "@/lib/ingredients/library/normalize"
-import { parseLines } from "@/lib/ingredients/parse-line"
+import { findIngredient, guessCategory, normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
+import { categoryFromAisle } from "@lazychef/core/ingredients/aisles"
+import { MAX_KEY_LENGTH } from "@lazychef/core/ingredients/library/normalize"
+import { parseLines } from "@lazychef/core/ingredients/parse-line"
 import { isSpoonacularConfigured, parseIngredients, SpoonacularError } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 import { recordUsage } from "@/features/recipes/cache"
@@ -16,9 +16,9 @@ import {
   spoonacularFailureMessage,
   type ResolveResult,
   type SpoonacularLookup,
-} from "./resolve-core"
+} from "@lazychef/core/pantry/resolve-core"
 
-export type { ResolveResult, SpoonacularStatus } from "./resolve-core"
+export type { ResolveResult, SpoonacularStatus } from "@lazychef/core/pantry/resolve-core"
 
 /** Enough for any real pantry; only name/category/id are read. */
 const MAX_PANTRY_ROWS = 2000

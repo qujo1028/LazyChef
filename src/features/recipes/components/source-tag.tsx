@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import { SOURCE_LABELS, type RecipeSource } from "../ref"
+import { SOURCE_LABELS, type RecipeSource } from "@lazychef/core/recipes/ref"
 
 const STYLES: Record<RecipeSource, string> = {
   user: "bg-primary/10 text-primary",

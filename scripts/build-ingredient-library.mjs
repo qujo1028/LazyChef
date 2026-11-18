@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Builds src/lib/ingredients/library/data.ts, the ingredient library behind autocomplete and
-// categorizing (src/lib/ingredients/catalog.ts).
+// Builds packages/core/src/ingredients/library/data.ts, the ingredient library behind autocomplete and
+// categorizing (packages/core/src/ingredients/catalog.ts).
 //
 //   node scripts/build-ingredient-library.mjs          write data.ts and print a summary
 //   node scripts/build-ingredient-library.mjs --check  exit 1 if data.ts is out of date
@@ -32,7 +32,7 @@ process.on("warning", (warning) => {
 })
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const LIBRARY_DIR = path.join(ROOT, "src/lib/ingredients/library")
+const LIBRARY_DIR = path.join(ROOT, "packages/core/src/ingredients/library")
 const { normalizeIngredientName, ingredientWords, foldText } = await import(path.join(LIBRARY_DIR, "normalize.ts"))
 const { categoryByRules, qualifierCategory, ruleAtEnd } = await import(path.join(LIBRARY_DIR, "rules.ts"))
 const { createMatcher } = await import(path.join(LIBRARY_DIR, "match.ts"))
@@ -42,7 +42,7 @@ const CURATED_DIR = path.join(ROOT, "data/ingredients")
 const FIXES_PATH = path.join(CURATED_DIR, "spoonacular.txt")
 const OUT_PATH = path.join(LIBRARY_DIR, "data.ts")
 
-/** Same order as CATEGORIES in src/lib/ingredients/types.ts. */
+/** Same order as CATEGORIES in packages/core/src/ingredients/types.ts. */
 const CATEGORY_KEYS = [
   "produce",
   "bakery",
@@ -60,7 +60,7 @@ const CATEGORY_KEYS = [
   "other",
 ]
 
-/** Canonical unit keys from src/lib/units. */
+/** Canonical unit keys from packages/core/src/units. */
 const UNIT_KEYS = new Set(
   "g kg oz lb ml l tsp tbsp cup fl_oz pt qt gal count can jar bottle bag box package bunch head clove slice stick loaf carton"
     .split(" ")
@@ -515,7 +515,7 @@ if (args[0] === "--list" && args[1] === "ids") {
   }
 } else if (args[0] === "--check") {
   const current = fs.existsSync(OUT_PATH) ? fs.readFileSync(OUT_PATH, "utf8") : ""
-  if (current !== output) fail(["src/lib/ingredients/library/data.ts is out of date: run node scripts/build-ingredient-library.mjs"])
+  if (current !== output) fail(["packages/core/src/ingredients/library/data.ts is out of date: run node scripts/build-ingredient-library.mjs"])
   console.log("data.ts is up to date")
 } else {
   fs.writeFileSync(OUT_PATH, output)

@@ -2,7 +2,7 @@ import "server-only"
 
 import { cache } from "react"
 
-import { cookedRecipe } from "@/features/activity/feed"
+import { cookedRecipe } from "@lazychef/core/activity/feed"
 import { createClient } from "@/lib/supabase/server"
 
 import { getLocalCards } from "./local"
@@ -15,7 +15,7 @@ import {
   tasteHints,
   type TasteHints,
   type TasteProfile,
-} from "./taste"
+} from "@lazychef/core/recipes/taste"
 
 const isSpoonRef = (ref: string) => /^\d+$/.test(ref)
 

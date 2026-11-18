@@ -18,7 +18,7 @@ import { Switch } from "@/components/ui/switch"
 import { actionError, callAction } from "@/lib/call-action"
 
 import { savePreferences } from "../actions"
-import { ALLERGIES, CUISINES, DIETS, labelOf, type FoodPreferences } from "../options"
+import { ALLERGIES, CUISINES, DIETS, labelOf, type FoodPreferences } from "@lazychef/core/preferences/options"
 import { ChipGroup, ChoiceChip } from "./choice-chip"
 
 function toggle<T>(list: readonly T[], value: T, on: boolean): T[] {

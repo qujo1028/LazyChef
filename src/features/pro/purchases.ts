@@ -7,8 +7,8 @@
 import type { PurchasesOffering, PurchasesPackage, PurchasesStoreProduct } from "@revenuecat/purchases-capacitor"
 
 import { getNativePlatform, type NativePlatform } from "@/lib/native/platform"
-import { PRO_ENTITLEMENT_ID } from "./entitlement"
-import type { PlanId } from "./plans"
+import { PRO_ENTITLEMENT_ID } from "@lazychef/core/pro/entitlement"
+import type { PlanId } from "@lazychef/core/pro/plans"
 
 export type StorePlan = {
   id: PlanId

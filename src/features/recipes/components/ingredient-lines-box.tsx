@@ -5,7 +5,7 @@ import { useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { SuggestionOption } from "@/features/pantry/components/ingredient-combobox"
 import { useCatalogSearch } from "@/features/pantry/components/use-catalog-search"
-import { replaceNameAtCaret, suggestionQuery } from "@/features/pantry/suggest"
+import { replaceNameAtCaret, suggestionQuery } from "@lazychef/core/pantry/suggest"
 
 const MAX_SUGGESTIONS = 5
 

@@ -6,12 +6,12 @@ import { useId, useState } from "react"
 import { AiLabel } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { cleanScanName, scanLine } from "@/lib/barcode/product"
+import { cleanScanName, scanLine } from "@lazychef/core/barcodes/product"
 import { callAction } from "@/lib/call-action"
 
 import { tidyScannedName } from "../ai/actions"
 import type { TidySuggestion } from "../ai/prompt"
-import type { ScanHit } from "../types"
+import type { ScanHit } from "@lazychef/core/barcodes/types"
 
 type State =
   | { kind: "idle"; error?: string }

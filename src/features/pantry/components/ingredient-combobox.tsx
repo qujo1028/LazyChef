@@ -3,12 +3,12 @@
 import { useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
-import { ingredientEmoji } from "@/lib/ingredients/emoji"
-import { CATEGORY_META, type CatalogEntry } from "@/lib/ingredients/types"
+import { ingredientEmoji } from "@lazychef/core/ingredients/emoji"
+import { CATEGORY_META, type CatalogEntry } from "@lazychef/core/ingredients/types"
 import { cn } from "@/lib/utils"
 
-import { insertPastedLines } from "../autocomplete"
-import { matchRange, replaceNameAtCaret, suggestionQuery } from "../suggest"
+import { insertPastedLines } from "@lazychef/core/pantry/autocomplete"
+import { matchRange, replaceNameAtCaret, suggestionQuery } from "@lazychef/core/pantry/suggest"
 import { useCatalogSearch } from "./use-catalog-search"
 
 const MAX_SUGGESTIONS = 6

@@ -16,8 +16,8 @@ import {
   type PantryChange,
   type PantryItems,
   type QuantityOverrides,
-} from "../pantry-state"
-import type { PantryItem } from "../types"
+} from "@lazychef/core/pantry/pantry-state"
+import type { PantryItem } from "@lazychef/core/pantry/types"
 import { callAction } from "@/lib/call-action"
 
 export type AdjustOptions = {
