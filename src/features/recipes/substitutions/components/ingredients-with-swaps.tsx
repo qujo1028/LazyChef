@@ -195,6 +195,11 @@ function SwapAnswer({
                         </span>
                       ) : null}
                     </div>
+                    {swap.allergens.length > 0 ? (
+                      <p className="flex items-center gap-1 text-xs text-amber-700 dark:text-amber-400">
+                        <CircleAlert className="size-3.5 shrink-0" aria-hidden /> Contains {swap.allergens.join(", ")}
+                      </p>
+                    ) : null}
                     <p className="text-sm break-words">{swap.amount}</p>
                     <p className="text-sm break-words text-muted-foreground">{swap.note}</p>
                   </li>
