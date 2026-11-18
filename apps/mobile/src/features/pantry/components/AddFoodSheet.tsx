@@ -43,6 +43,8 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
   const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
   const batch = useRef(0);
   const pendingToast = useRef<string | null>(null);
+  // Latest values for async results that land after the user closed the sheet or kept typing.
+  const latest = useRef({ visible, text: seed.text });
 
   const [text, setText] = useState(seed.text);
   const [seenSeed, setSeenSeed] = useState(seed.n);
@@ -74,14 +76,16 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     }
   }
 
-  const reviewing = drafts !== null;
+  useEffect(() => {
+    latest.current = { visible, text };
+  });
 
   // Focus the box when the sheet opens or we come back to typing (after the slide-in).
   useEffect(() => {
-    if (!visible || reviewing) return;
+    if (!visible || drafts) return;
     const timer = setTimeout(() => inputRef.current?.focus(), 350);
     return () => clearTimeout(timer);
-  }, [visible, reviewing, several]);
+  }, [visible, drafts, several]);
 
   const count = useMemo(() => (text.trim() ? parseLines(text).length : 0), [text]);
 
@@ -105,6 +109,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
 
   function change(value: string) {
     setText(value);
+    setForcedCaret(null);
     setDismissedFor(null);
     if (error) setError(null);
   }
@@ -130,6 +135,8 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     setPending(true);
     try {
       const result = await previewItems(householdId, text);
+      // Closed or edited while it was working: drop the stale answer.
+      if (!latest.current.visible || latest.current.text !== text) return;
       if (result.error !== undefined) {
         setError(result.error);
         return;
@@ -168,7 +175,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       pendingToast.current = describeAdditions(result);
       onClose();
       // Android's Modal has no onDismiss, so show the toast now; iOS waits for the slide-out.
-      if (Platform.OS !== 'ios') flushToast();
+      if (Platform.OS !== 'ios' || !latest.current.visible) flushToast();
     } finally {
       setPending(false);
     }
@@ -202,7 +209,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       onDismiss={flushToast}
       title={drafts ? reviewTitle(drafts.length) : 'Add food'}
       subtitle={
-        reviewing
+        drafts
           ? 'Fix a name, amount or category if it looks off.'
           : 'Type what you have, like "2 lbs chicken breast". Separate items with commas.'
       }
@@ -265,7 +272,10 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
             <PrimaryPillButton
               title={several ? 'Add one at a time' : 'Add several'}
               variant="text"
-              onPress={() => setSeveral((value) => !value)}
+              onPress={() => {
+                setFocused(false);
+                setSeveral((value) => !value);
+              }}
               disabled={pending}
             />
           </View>
