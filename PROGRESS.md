@@ -560,3 +560,11 @@ Step 0 (lead):
 
 Workers (branch from `origin/feature/p2-pantry`, all Sonnet: typical feature work): W1 `feature/p2-pantry-screen`,
 W2 `feature/p2-add-food`, W3 `feature/p2-review`, W4 `feature/p2-edit`.
+
+W3 review (`feature/p2-review`, Sonnet): `ReviewList` (one `Card` per draft: emoji, name, amount, `UnitField`,
+`CategoryField` with source hint or "We'll remember this for next time.", `ExpiryField`, "Always on hand" `Switch`,
+"Remove <name>" button, inline `draftError` text when `showErrors`; a plain map, no nested lists) and `AddSeveralInput`
+(160pt multi-line box, live count via `parseLines`, help line when empty, error line). `insertPastedLines` is not used:
+RN has no paste event and a multi-line `TextInput` keeps pasted line breaks itself. Helper `lib/add-several-hint.ts`
+with a test. No shared-file changes. Not checked: simulator layout (emoji and remove button alignment against the
+name field, VoiceOver, Dynamic Type), sheet scrolling with many drafts.
