@@ -884,3 +884,27 @@ keeps a renamed item under its new name. Pure logic with tests: `lib/scan-dedupe
 `scan-rows.ts`, `scan-links.ts`. State hook: `features/barcodes/use-scan-rows.ts`. Dev only: "Dev: fake scan" (3017620422003).
 Not checked: the camera, the permission prompt, the torch and haptics (need a real phone), or a signed-in lookup.
 The `barcodes` query key isn't invalidated after remembering (W4 owns reads, if any).
+
+W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
+- `supabase/functions/ai/`: `ideas` and `allowance` per `ai/edge-contract.ts` (contract unchanged). JWT checked with
+  `auth.getUser()`, then membership; everything runs as the caller (pantry, preferences, ratings and titles,
+  `ai_idea_cache` / `put_ai_idea_cache`, `take_ai_allowance`, `get_pro_status` + `ai_usage` for the read-only allowance,
+  `take_rate_limit('ai')`). No service role client at all. Order as the web: pantry (`empty_pantry`), cache (free hit),
+  allowance (`limit_reached`), rate limit (`rate_limited`), Groq. Fails closed on any check error. One use per request;
+  the model gets one retry when nothing in its answer is usable. Status codes: 200 (also `empty_pantry`), 400, 401, 403,
+  405, 429 (`limit_reached`, `rate_limited`), 502, 503. No migration needed.
+- Hint: cleaned (control, zero-width and bidi characters out, single-spaced, at most 100), sent as quoted data in the user
+  message, and part of the cache key (an object entry, lowercased). Without a hint the key is byte for byte the web's,
+  so web and phone share cached ideas.
+- Shared code: the pure meal-ideas parts moved to `packages/core/src/recipes/ai/{idea,meal-ideas}.ts`; the web files
+  re-export them. To keep the 2 MB ingredient catalog out of the function, `BASICS` (`recipes/basics.ts`),
+  `pantrySearchNames` / `isAvailable` (`recipes/pantry-names.ts`), the taste hints (`recipes/taste-hints.ts`) and the
+  cooked-recipe reader (`activity/cooked-recipe.ts`) are split out and re-exported from `match.ts`, `taste.ts` and
+  `feed.ts` (no exported signature changed). Name matching uses `ingredients/library/normalize.ts`, which is what the
+  catalog's `normalizeIngredientName` already calls. `scripts/sync-edge-shared.mjs` now rewrites relative imports to the
+  flat copy names and throws if a copied file imports one that isn't copied. CORS, the bearer token and the capped body
+  reader moved to `supabase/functions/_shared/http.ts`; `recipes/handler.ts` re-exports them (same behavior, so the
+  deployed `recipes` needs no redeploy).
+- `deno check` passes for `ai/index.ts` and `recipes/index.ts` (deno 2.9.8). Not deployed, no secrets set: see
+  `supabase/functions/ai/README.md` (deploy, dashboard secret, curl smoke test). Not checked: a live Groq call, a
+  signed-in session, the deployed function.
