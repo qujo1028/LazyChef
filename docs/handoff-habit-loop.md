@@ -15,7 +15,7 @@ Decisions from the user:
 - Pro: all core free (goal, ring, haptics, streak, challenges, leaderboard). Pro extras: history past 12 weeks, custom
   tiers, extra challenge packs.
 - Surface area stays at 5 screens: Pantry, Recipes, List, Activity, Household. Everything new is a card, sheet, or tab.
-- Models: W1 (push) and W6 (migration, RLS, onboarding) on Opus. W2, W3, W4, W5, W7 on Sonnet. 0a audit on Haiku.
+- Models: no worker uses Opus. All workers (W1 to W7) on Sonnet, read-only audit on Haiku.
 
 ## Phase 0: surface area (no database changes)
 Run Prompt B from `docs/handoff-retention-and-surface-area.md` (PR #55) with one change: its "pick up where you left off"
@@ -28,13 +28,13 @@ redirect.
 | # | Part | Agent | Notes |
 |---|---|---|---|
 | 0a | Serves-the-loop audit | Explore, read-only | Feeds W2. |
-| W1 | Push notifications (Prompt A in the PR #55 doc) | general-purpose, worktree, Opus | Owns the migration slot first. |
+| W1 | Push notifications (Prompt A in the PR #55 doc) | general-purpose, worktree, Sonnet | Owns the migration slot first. |
 | W2 | Trim to 5 screens (Prompt B, Part 1 only) | general-purpose, worktree, Sonnet | Must merge before W4 and W5. |
 | W3 | Reward core: haptics, `reward.ts`, `useReward()`, cook reward, top banners | general-purpose, worktree, Sonnet | Parallel with W1/W2. |
 | 1a | Phase 2 schema design | Plan | Runs while W1 to W3 build. |
 | W4 | Activity Log / Chart / Board | general-purpose, worktree, Sonnet | After W2 merges. |
 | W5 | Pantry "This week" card | general-purpose, worktree, Sonnet | After W2 and W3 merge. |
-| W6 | Phase 2 migration, goals, challenges, quick log, onboarding | general-purpose, worktree, Opus | After W1, W4, W5 merge. |
+| W6 | Phase 2 migration, goals, challenges, quick log, onboarding | general-purpose, worktree, Sonnet | After W1, W4, W5 merge. |
 | W7 | Phase 3 push nudges | general-purpose, worktree, Sonnet | After W1 and W6 merge. |
 | R | Review each branch (`/code-review`, then `/simplify`) | Lead | |
 
