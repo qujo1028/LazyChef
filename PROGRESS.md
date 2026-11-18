@@ -503,3 +503,14 @@ W1 auth (`feature/p1-auth`):
   Go, `exp://**`; the Google provider (works in Expo Go through the in-app browser); for Apple, the Apple Developer
   account, the Supabase Apple provider with the bundle id `app.lazychef.mobile` as a client id, then set
   `EXPO_PUBLIC_APPLE_SIGN_IN=1` and make a dev build (Expo Go does not carry the Apple entitlement for this app).
+
+W3 household (`feature/p1-household`):
+- Household tab (`apps/mobile/src/app/(tabs)/household.tsx`) with one card style: household name with owner-only inline
+  rename, invite card (large code, Share via the web `/join/<code>` link, Copy code with expo-clipboard, owner-only Reset
+  with confirm), members (name, role, "You", joined date, owner-only Remove with `Alert`), switch household (only with
+  more than one), leave (danger, confirm, owner hand-over copy), and a Sign out card (temporary until P6).
+- Code: `src/features/household/api.ts` (members query under `queryKeys.members`, mutations that fail fast with
+  "You're offline" and invalidate `queryKeys.all`), `src/features/household/components/*`, and pure helpers with 
+  tests in `src/lib/household-settings.ts`.
+- Pull to refresh, loading, error-with-retry; cached data shows offline via the app-wide banner.
+- Not checked on a device or against the live backend (no signed-in account here). Needs no shared-file changes.
