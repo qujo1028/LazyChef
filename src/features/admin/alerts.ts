@@ -1,6 +1,7 @@
 import "server-only"
 
-import { parseAlertIssues } from "@/features/admin/alert-issues"
+import { z } from "zod"
+
 import { checkServices } from "@/features/admin/health"
 import { latestProductionDeploy } from "@/features/admin/github-deploys"
 import { gh, GitHubError, githubConfig, type GitHubConfig } from "@/features/admin/github"
@@ -36,6 +37,30 @@ const FOOTER = "Opened by the LazyChef admin cron. Close this issue when it's ha
 
 const LABEL = { name: "alert", color: "d73a4a", description: "Opened by the LazyChef admin cron" }
 
+/** The hidden line at the end of every alert body that ties its issue to the alert key. */
+export function alertMarker(key: string): string {
+  return `<!-- alert-key: ${key} -->`
+}
+
+const openIssueSchema = z.object({
+  number: z.number(),
+  title: z.string(),
+  body: z.string().nullish(),
+  pull_request: z.unknown().optional(),
+})
+
+/** Open issues from the list endpoint, pull requests dropped, with their bodies. Bad rows are skipped. */
+function openAlertIssues(data: unknown): { number: number; title: string; body: string }[] {
+  if (!Array.isArray(data)) return []
+  const out: { number: number; title: string; body: string }[] = []
+  for (const item of data) {
+    const parsed = openIssueSchema.safeParse(item)
+    if (!parsed.success || parsed.data.pull_request !== undefined) continue
+    out.push({ number: parsed.data.number, title: parsed.data.title, body: parsed.data.body ?? "" })
+  }
+  return out
+}
+
 /** The UTC calendar day of `date`, as YYYY-MM-DD. */
 function utcDay(date: Date): string {
   return date.toISOString().slice(0, 10)
@@ -62,12 +87,19 @@ function webhookIsStale(lastWebhookAt: string | null, now: Date): boolean {
 export function evaluateAlerts(input: AlertInputs): Alert[] {
   const alerts: Alert[] = []
   const { today, yesterday } = input
+  // Titles never carry dates or counts: GitHub matches on the title, so a stable title keeps
+  // one open issue per alert. The numbers go in the body, and the hidden marker line lets
+  // deliverAlerts find the issue even if the title is edited.
   const add = (key: string, title: string, lines: string[]) =>
-    alerts.push({ key, title, body: [...lines, "", `Checked ${today} (UTC).`, FOOTER].join("\n") })
+    alerts.push({
+      key,
+      title,
+      body: [...lines, "", `Checked ${today} (UTC).`, FOOTER, alertMarker(key)].join("\n"),
+    })
 
   // 1. Spoonacular ran out of points yesterday.
   if (input.spoonacularYesterdayExhausted) {
-    add("spoonacular-exhausted", `[alert] Spoonacular ran out of points on ${yesterday}`, [
+    add("spoonacular-exhausted", "[alert] Spoonacular ran out of points", [
       `Spoonacular reported no points left on ${yesterday}. Recipe search and parsing stopped for the rest of that day.`,
     ])
   }
@@ -99,7 +131,7 @@ export function evaluateAlerts(input: AlertInputs): Alert[] {
 
   const refusals = spike("ai_allowance_denied")
   if (refusals) {
-    add("ai-denials-spike", `[alert] AI allowance refusals spiked (${refusals.y} yesterday)`, [
+    add("ai-denials-spike", "[alert] AI allowance refusals spiked", [
       `${refusals.y} AI requests were refused for the weekly allowance on ${yesterday}.`,
       `The 7 days before averaged ${refusals.avg.toFixed(1)} a day.`,
     ])
@@ -107,7 +139,7 @@ export function evaluateAlerts(input: AlertInputs): Alert[] {
 
   const limited = spike("rate_limited:ai")
   if (limited) {
-    add("ai-rate-limit-spike", `[alert] AI rate-limit hits spiked (${limited.y} yesterday)`, [
+    add("ai-rate-limit-spike", "[alert] AI rate-limit hits spiked", [
       `${limited.y} AI requests hit the rate limit on ${yesterday}.`,
       `The 7 days before averaged ${limited.avg.toFixed(1)} a day.`,
     ])
@@ -130,7 +162,7 @@ export function evaluateAlerts(input: AlertInputs): Alert[] {
     const byCode = errorCounters
       .map((c) => ({ code: c.metric.slice("ai_error:".length), n: c.n }))
       .sort((a, b) => b.n - a.n)
-    add("ai-errors", `[alert] ${errorTotal} AI errors yesterday`, [
+    add("ai-errors", "[alert] AI errors spiked", [
       `AI requests failed ${errorTotal} times on ${yesterday}:`,
       ...byCode.map((row) => `- ${row.code}: ${row.n}`),
     ])
@@ -191,7 +223,8 @@ async function ensureAlertLabel(config: GitHubConfig): Promise<void> {
 }
 
 /**
- * Opens a GitHub issue for each alert, or comments on the open issue with the same title.
+ * Opens a GitHub issue for each alert, or comments on an open issue that has the same title or
+ * the alert's marker line.
  * Returns zeros when GitHub isn't configured. Throws only if the open issues can't be listed,
  * since then duplicates can't be avoided. A failure on one alert doesn't stop the others.
  */
@@ -200,8 +233,8 @@ export async function deliverAlerts(alerts: Alert[]): Promise<{ opened: number; 
   if (!config || alerts.length === 0) return { opened: 0, commented: 0 }
 
   await ensureAlertLabel(config)
-  const openAlerts = parseAlertIssues(
-    await gh<unknown[]>("/issues?state=open&labels=alert&per_page=100", { revalidate: 0 }, config),
+  const openAlerts = openAlertIssues(
+    await gh<unknown>("/issues?state=open&labels=alert&per_page=100", { revalidate: 0 }, config),
   )
   const today = utcDay(new Date())
 
@@ -209,7 +242,10 @@ export async function deliverAlerts(alerts: Alert[]): Promise<{ opened: number; 
   let commented = 0
   for (const alert of alerts) {
     try {
-      const existing = openAlerts.find((issue) => issue.title === alert.title)
+      // Same key (marker in the body) or same title counts as the same alert.
+      const existing = openAlerts.find(
+        (issue) => issue.title === alert.title || issue.body.includes(alertMarker(alert.key)),
+      )
       if (existing) {
         await gh(
           `/issues/${existing.number}/comments`,

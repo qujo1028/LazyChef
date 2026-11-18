@@ -20,7 +20,7 @@ vi.mock("@/features/admin/insights", () => ({ getRevenueCatRecent: mocks.getReve
 vi.mock("@/features/admin/github-deploys", () => ({ latestProductionDeploy: mocks.latestProductionDeploy }))
 vi.mock("@/features/admin/health", () => ({ checkServices: mocks.checkServices }))
 
-import { deliverAlerts, evaluateAlerts, runAlerts, type Alert, type AlertInputs } from "./alerts"
+import { alertMarker, deliverAlerts, evaluateAlerts, runAlerts, type Alert, type AlertInputs } from "./alerts"
 
 const NOW = new Date("2026-11-17T06:00:00Z")
 
@@ -54,8 +54,40 @@ describe("evaluateAlerts", () => {
   it("flags Spoonacular running out of points yesterday", () => {
     const [alert] = evaluateAlerts({ ...base, spoonacularYesterdayExhausted: true })
     expect(alert.key).toBe("spoonacular-exhausted")
-    expect(alert.title).toBe("[alert] Spoonacular ran out of points on 2026-11-16")
+    expect(alert.title).toBe("[alert] Spoonacular ran out of points")
+    expect(alert.body).toContain("Spoonacular reported no points left on 2026-11-16.")
     expect(alert.body).toContain("Close this issue when it's handled.")
+    expect(alert.body.endsWith("<!-- alert-key: spoonacular-exhausted -->")).toBe(true)
+  })
+
+  it("keeps every title free of dates and counts", () => {
+    const service = (name: string) => ({ name, state: "down" as const, detail: "x" })
+    const alerts = evaluateAlerts({
+      ...base,
+      spoonacularYesterdayExhausted: true,
+      productionDeployState: "failure",
+      payingUsers: 3,
+      lastWebhookAt: null,
+      services: [service("Supabase"), service("Groq (AI recipes)")],
+      counters: [
+        yesterdayCount("ai_allowance_denied", 50),
+        yesterdayCount("rate_limited:ai", 50),
+        yesterdayCount("ai_error:timeout", 12),
+      ],
+    })
+    expect(alerts.map((a) => a.title)).toEqual([
+      "[alert] Spoonacular ran out of points",
+      "[alert] Latest production deploy failed",
+      "[alert] No RevenueCat webhooks for 14+ days",
+      "[alert] AI allowance refusals spiked",
+      "[alert] AI rate-limit hits spiked",
+      "[alert] Supabase is down",
+      "[alert] Groq (AI recipes) is down",
+      "[alert] AI errors spiked",
+    ])
+    for (const alert of alerts) {
+      expect(alert.body.split("\n").at(-1)).toBe(`<!-- alert-key: ${alert.key} -->`)
+    }
   })
 
   it("flags a failed production deploy but not a pending one", () => {
@@ -118,7 +150,8 @@ describe("evaluateAlerts", () => {
 
     const [alert] = evaluateAlerts({ ...base, counters: errors(10) })
     expect(alert.key).toBe("ai-errors")
-    expect(alert.title).toBe("[alert] 10 AI errors yesterday")
+    expect(alert.title).toBe("[alert] AI errors spiked")
+    expect(alert.body).toContain("AI requests failed 10 times on 2026-11-16:")
     expect(alert.body).toContain("- timeout: 7")
     expect(alert.body).toContain("- parse: 3")
   })
@@ -156,9 +189,15 @@ describe("deliverAlerts", () => {
 
   const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), { status })
 
-  const openIssues = [
-    { number: 7, title: "[alert] Known", html_url: "https://github.com/acme/app/issues/7", created_at: "2026-11-15T00:00:00Z" },
-  ]
+  const openIssue = (number: number, title: string, body: string) => ({
+    number,
+    title,
+    body,
+    html_url: `https://github.com/acme/app/issues/${number}`,
+    created_at: "2026-11-15T00:00:00Z",
+  })
+
+  const openIssues = [openIssue(7, "[alert] Known", "")]
 
   it("comments on an open issue with the same title and opens one otherwise", async () => {
     const calls = fakeGitHub((method, path) => {
@@ -198,6 +237,49 @@ describe("deliverAlerts", () => {
     })
 
     await expect(deliverAlerts([alertA, alertB])).resolves.toEqual({ opened: 1, commented: 0 })
+  })
+
+  it("a later day with a different count comments on the same issue", async () => {
+    const dayOne = evaluateAlerts({
+      ...base,
+      counters: [{ day: "2026-11-16", metric: "ai_error:timeout", n: 10 }],
+    })
+    const dayTwo = evaluateAlerts({
+      ...base,
+      today: "2026-11-18",
+      yesterday: "2026-11-17",
+      counters: [{ day: "2026-11-17", metric: "ai_error:timeout", n: 14 }],
+    })
+    expect(dayTwo[0].title).toBe(dayOne[0].title)
+    expect(dayTwo[0].body).not.toBe(dayOne[0].body)
+
+    const calls = fakeGitHub((method) => {
+      if (method === "GET") return json([openIssue(9, dayOne[0].title, dayOne[0].body)])
+      return json({}, 201)
+    })
+
+    await expect(deliverAlerts(dayTwo)).resolves.toEqual({ opened: 0, commented: 1 })
+    expect(calls.some((c) => c.path === "/issues/9/comments")).toBe(true)
+    expect(calls.some((c) => c.method === "POST" && c.path === "/issues")).toBe(false)
+  })
+
+  it("matches an open issue by its marker even when the title was edited", async () => {
+    const [alert] = evaluateAlerts({ ...base, spoonacularYesterdayExhausted: true })
+    const calls = fakeGitHub((method) => {
+      if (method === "GET") return json([openIssue(4, "[alert] Renamed by hand", `Notes\n${alertMarker(alert.key)}`)])
+      return json({}, 201)
+    })
+
+    await expect(deliverAlerts([alert])).resolves.toEqual({ opened: 0, commented: 1 })
+    expect(calls.some((c) => c.path === "/issues/4/comments")).toBe(true)
+  })
+
+  it("ignores pull requests that carry the marker", async () => {
+    const [alert] = evaluateAlerts({ ...base, spoonacularYesterdayExhausted: true })
+    const pr = { ...openIssue(5, alert.title, alert.body), pull_request: {} }
+    fakeGitHub((method) => (method === "GET" ? json([pr]) : json({}, 201)))
+
+    await expect(deliverAlerts([alert])).resolves.toEqual({ opened: 1, commented: 0 })
   })
 
   it("returns zeros and makes no calls without GitHub configured", async () => {
