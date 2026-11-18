@@ -15,7 +15,7 @@ import {
   type ActionState,
 } from "@/features/household/actions"
 import { withConnectionErrors } from "@/lib/call-action"
-import { formatInviteCode, normalizeInviteCode } from "@/lib/invite"
+import { formatInviteCode, normalizeInviteCode } from "@lazychef/core/household/invite"
 
 export function CreateHouseholdForm() {
   const [state, action, pending] = useActionState<ActionState, FormData>(withConnectionErrors(createHousehold), undefined)

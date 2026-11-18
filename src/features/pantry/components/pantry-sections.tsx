@@ -4,14 +4,14 @@ import { AlarmClock, ChevronRight, Infinity as InfinityIcon, ListPlus } from "lu
 import { useId, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
-import { ingredientEmoji } from "@/lib/ingredients/emoji"
-import { CATEGORY_META } from "@/lib/ingredients/types"
+import { ingredientEmoji } from "@lazychef/core/ingredients/emoji"
+import { CATEGORY_META } from "@lazychef/core/ingredients/types"
 import { cn } from "@/lib/utils"
 
-import { expiryInfo, type ExpiryInfo } from "../dates"
-import { amountLabel, canUseOne, displayName } from "../display"
-import type { PantrySections } from "../group"
-import type { PantryItem } from "../types"
+import { expiryInfo, type ExpiryInfo } from "@lazychef/core/dates/days"
+import { amountLabel, canUseOne, displayName } from "@lazychef/core/pantry/display"
+import type { PantrySections } from "@lazychef/core/pantry/group"
+import type { PantryItem } from "@lazychef/core/pantry/types"
 
 type RowActions = {
   onOpen: (item: PantryItem) => void

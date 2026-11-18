@@ -6,9 +6,9 @@ import { createClient } from "@/lib/supabase/server"
 import { getCacheStore } from "./cache"
 import { recipeCacheKey } from "./cache-core"
 import { getLocalCards } from "./local"
-import { cookAgainRefs, unratedCooks, type Rating, type UnratedCook } from "./ratings-core"
-import { cookedRecipe } from "@/features/activity/feed"
-import type { RecipeSource } from "./ref"
+import { cookAgainRefs, unratedCooks, type Rating, type UnratedCook } from "@lazychef/core/recipes/ratings-core"
+import { cookedRecipe } from "@lazychef/core/activity/feed"
+import type { RecipeSource } from "@lazychef/core/recipes/ref"
 
 /** The viewer's vote on one recipe, if any. */
 export async function getMyRating(householdId: string, ref: string): Promise<Rating | null> {

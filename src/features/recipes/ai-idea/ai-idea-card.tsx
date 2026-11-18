@@ -7,13 +7,13 @@ import { toast } from "sonner"
 import { useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { isAiLimited } from "@lazychef/core/pro/ai-allowance-core"
 import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 
 import { getAiRecipeIdea, type AiIdea } from "./actions"
 import { AiRecipeSheet } from "./ai-recipe-sheet"
-import { MAX_HINT_LENGTH } from "./limits"
+import { MAX_HINT_LENGTH } from "@lazychef/core/recipes/ai-limits"
 
 /**
  * "Ask AI for an idea": one simple recipe from what's in the pantry. Only rendered when the AI

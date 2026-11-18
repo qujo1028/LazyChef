@@ -2,9 +2,9 @@ import "server-only"
 
 import { SpoonacularError, spoonacularFetch, type SpoonacularQuota } from "./client"
 import { complexSearchCost, findByIngredientsCost, informationBulkCost, type ComplexSearchOptions } from "./cost"
-import { toRecipeDetail, toRecipeSummary, type RecipeDetail, type RecipeSummary } from "./recipe-shapes"
+import { toRecipeDetail, toRecipeSummary, type RecipeDetail, type RecipeSummary } from "@lazychef/core/recipes/recipe-shapes"
 
-export type { RecipeDetail, RecipeIngredient, RecipeSummary } from "./recipe-shapes"
+export type { RecipeDetail, RecipeIngredient, RecipeSummary } from "@lazychef/core/recipes/recipe-shapes"
 
 // Costs are in ./cost.ts (free plan, 50 points a day). Callers cache results for up to
 // the 1 hour the terms allow, shared by every household.

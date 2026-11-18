@@ -1,12 +1,12 @@
 import "server-only"
 
 import { createClient } from "@/lib/supabase/server"
-import type { RecipeIngredient } from "@/lib/spoonacular/recipe-shapes"
+import type { RecipeIngredient } from "@lazychef/core/recipes/recipe-shapes"
 
-import { basicKeys, LOCAL_CANDIDATES, mergeRecipeIds, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "./local-match"
-import type { PantryRow } from "./match"
-import { EVERYDAY_CUISINES, type MealQuery, type RecipeFilters } from "./filters"
-import { mealDbUrl } from "./ref"
+import { basicKeys, LOCAL_CANDIDATES, mergeRecipeIds, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "@lazychef/core/recipes/local-match"
+import type { PantryRow } from "@lazychef/core/recipes/match"
+import { EVERYDAY_CUISINES, type MealQuery, type RecipeFilters } from "@lazychef/core/recipes/filters"
+import { mealDbUrl } from "@lazychef/core/recipes/ref"
 
 // Our own recipe library (TheMealDB imports + household recipes), read as the signed-in
 // user, so RLS decides what's visible. Nothing here costs Spoonacular points.

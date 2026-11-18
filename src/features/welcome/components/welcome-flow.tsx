@@ -16,7 +16,7 @@ import {
   STAPLE_LABELS,
   STARTER_STAPLES,
   type FoodPreferences,
-} from "@/features/preferences/options"
+} from "@lazychef/core/preferences/options"
 import { useFirstRunDraft } from "@/features/preferences/use-draft"
 import { markTourSeen } from "@/lib/first-run"
 import { cn } from "@/lib/utils"

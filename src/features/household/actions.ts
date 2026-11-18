@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 import { after } from "next/server"
 import { z } from "zod"
 
-import { normalizeInviteCode, PENDING_INVITE_COOKIE } from "@/lib/invite"
+import { normalizeInviteCode, PENDING_INVITE_COOKIE } from "@lazychef/core/household/invite"
 import { notifyJoined } from "@/lib/push/notify"
 import { createClient } from "@/lib/supabase/server"
 import { requireViewer } from "./queries"

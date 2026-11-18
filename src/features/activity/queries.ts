@@ -1,11 +1,11 @@
 import "server-only"
 
-import type { CookRow } from "@/features/habit/cook-days"
+import type { CookRow } from "@lazychef/core/habit/cook-days"
 import { getHouseholdMembers } from "@/features/household/queries"
 import { createClient } from "@/lib/supabase/server"
 
-import { ACTIVITY_LIMIT, type ActivityMember, type ActivityRow } from "./feed"
-import type { StatsRow } from "./stats"
+import { ACTIVITY_LIMIT, type ActivityMember, type ActivityRow } from "@lazychef/core/activity/feed"
+import type { StatsRow } from "@lazychef/core/activity/stats"
 
 /** The household's latest activity (newest first), its members for naming live rows, and when it was read. */
 export async function getActivityFeed(householdId: string): Promise<{

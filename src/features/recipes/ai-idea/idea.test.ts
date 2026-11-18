@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { aiRecipeSchema, buildIdeaMessages, cleanNames, hintSchema, markPantryIngredients, missingIngredients } from "./idea"
-import { MAX_AI_NAMES } from "./limits"
+import { MAX_AI_NAMES } from "@lazychef/core/recipes/ai-limits"
 
 const reply = {
   title: "Spinach omelette",

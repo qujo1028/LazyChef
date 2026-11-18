@@ -6,7 +6,7 @@ import { useId, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-import type { ScanHit } from "../types"
+import type { ScanHit } from "@lazychef/core/barcodes/types"
 import type { ScanRow } from "./use-barcode-lookups"
 
 function NameIt({ code, onName }: { code: string; onName: (name: string) => void }) {

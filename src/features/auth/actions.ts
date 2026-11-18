@@ -13,9 +13,9 @@ import {
   type AppleIdTokenInput,
 } from "@/features/auth/apple"
 import { storeAppleAuthorizationCode } from "@/features/auth/apple-tokens"
-import { newPassword } from "@/features/auth/schemas"
-import { nativeCallbackUrl } from "@/lib/native-callback"
-import { safeNext } from "@/lib/safe-next"
+import { newPassword } from "@lazychef/core/auth/schemas"
+import { nativeCallbackUrl } from "@lazychef/core/auth/native-callback"
+import { safeNext } from "@lazychef/core/auth/safe-next"
 import { createClient } from "@/lib/supabase/server"
 
 export type AuthFormState = { error?: string; notice?: string; email?: string } | undefined
@@ -124,7 +124,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
 /**
  * On the website this redirects to Google. In the iOS/Android app (`native` in the form) it
  * returns Google's URL instead, for the app to open in an in-app browser tab, and Supabase
- * sends the user back through the app link (see src/lib/native-callback.ts).
+ * sends the user back through the app link (see @lazychef/core/auth/native-callback).
  */
 export async function signInWithGoogle(formData: FormData): Promise<{ url?: string; error?: string }> {
   return signInWithOAuthProvider("google", formData)

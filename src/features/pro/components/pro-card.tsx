@@ -10,7 +10,7 @@ import { useNativePlatform } from "@/lib/native/platform"
 import { useViewerTime } from "@/lib/use-viewer-time"
 
 import { presentCustomerCenter } from "../purchases"
-import { proStatusLine } from "../status-line"
+import { proStatusLine } from "@lazychef/core/pro/status-line"
 import { usePro } from "./pro-provider"
 
 /** "LazyChef Pro" on the Household page: what plan you're on, and the way to Pro or to manage it. */

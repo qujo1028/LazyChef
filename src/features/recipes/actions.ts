@@ -3,25 +3,25 @@
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { requireHousehold, requireViewer } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
 import { addListItems } from "@/features/list/actions"
-import { syntheticCookEvent } from "@/features/habit/cook-events"
+import { syntheticCookEvent } from "@lazychef/core/habit/cook-events"
 import { getViewerCookEvents, getViewerTimeZone } from "@/features/habit/queries"
-import { FALLBACK_TIME_ZONE } from "@/features/habit/timezone"
-import { habitResult, summarize, type HabitResult } from "@/features/habit/summary"
-import { categoryFromAisle } from "@/lib/ingredients/aisles"
-import { findIngredient, guessCategory } from "@/lib/ingredients/catalog"
+import { FALLBACK_TIME_ZONE } from "@lazychef/core/habit/timezone"
+import { habitResult, summarize, type HabitResult } from "@lazychef/core/habit/summary"
+import { categoryFromAisle } from "@lazychef/core/ingredients/aisles"
+import { findIngredient, guessCategory } from "@lazychef/core/ingredients/catalog"
 import { SpoonacularError } from "@/lib/spoonacular"
 import { createClient } from "@/lib/supabase/server"
 import type { Json } from "@/types/database"
 
-import type { CookResult, Deduction } from "./cook"
-import { recipeListLines } from "./list"
+import type { CookResult, Deduction } from "@lazychef/core/recipes/cook"
+import { recipeListLines } from "@lazychef/core/recipes/list"
 import { loadRecipe } from "./queries"
-import { parseRecipeRef, type RecipeRef } from "./ref"
-import { NOT_COOKED_MESSAGE, rateInput, type Rating } from "./ratings-core"
+import { parseRecipeRef, type RecipeRef } from "@lazychef/core/recipes/ref"
+import { NOT_COOKED_MESSAGE, rateInput, type Rating } from "@lazychef/core/recipes/ratings-core"
 
 /** A recipe's ref (Spoonacular's id or our uuid, see ref.ts), parsed. */
 const refSchema = z
@@ -75,7 +75,7 @@ export async function addRecipeIngredientsToList(ref: string, lines: number[]): 
     // The list keeps Spoonacular's id (their terms allow it); ours are named by title only.
     recipe: { id: recipe.spoonacularId, title: recipe.title },
   })
-  // Tops up or skips what's already on the list (see src/features/list/plan.ts).
+  // Tops up or skips what's already on the list (see @lazychef/core/list/plan).
   const result = await addListItems(listLines)
   if (result.error !== undefined) return result
 

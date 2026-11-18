@@ -13,9 +13,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { callAction } from "@/lib/call-action"
 import { cn } from "@/lib/utils"
 
-import { MEAL_FILTERS } from "../filters"
+import { MEAL_FILTERS } from "@lazychef/core/recipes/filters"
 import { deleteOwnRecipe, discardRecipePhoto, saveOwnRecipe } from "../own-actions"
-import { fieldErrors, MAX_STEP_LENGTH, MAX_STEPS, MAX_TITLE_LENGTH, parseIngredientLines, validateOwnRecipe, type OwnRecipeDraft } from "../own-recipe"
+import { fieldErrors, MAX_STEP_LENGTH, MAX_STEPS, MAX_TITLE_LENGTH, parseIngredientLines, validateOwnRecipe, type OwnRecipeDraft } from "@lazychef/core/recipes/own-recipe"
 import { IngredientLinesBox } from "./ingredient-lines-box"
 import { PhotoField } from "./photo-field"
 

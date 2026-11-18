@@ -3,7 +3,7 @@ import "server-only"
 import { cache } from "react"
 
 import { createClient } from "@/lib/supabase/server"
-import { FREE_STATUS, type ProStatus } from "./status"
+import { FREE_STATUS, type ProStatus } from "@lazychef/core/pro/status"
 
 export type { ProStatus }
 

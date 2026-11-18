@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { cleanScanName } from "@/lib/barcode/product"
+import { cleanScanName } from "@lazychef/core/barcodes/product"
 import { callAction } from "@/lib/call-action"
 
 import { lookupBarcode } from "../actions"
-import type { LookupResult, ScanHit } from "../types"
+import type { LookupResult, ScanHit } from "@lazychef/core/barcodes/types"
 
 export type ScanRow =
   | { key: number; code: string; status: "looking" }

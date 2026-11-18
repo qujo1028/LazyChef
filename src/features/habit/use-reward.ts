@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { haptic, prefersReducedMotion } from "@/lib/native/haptics"
 
-import { rewardBeats, scheduleReward, type RewardKind } from "./reward"
+import { rewardBeats, scheduleReward, type RewardKind } from "@lazychef/core/habit/reward"
 
 export type RewardState = {
   /** Bumps on every play, so a replay restarts the animation. */

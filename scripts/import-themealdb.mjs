@@ -23,7 +23,7 @@ import { parseArgs } from "node:util"
 import "./lib/ts-paths.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const { convertMeals, mealsFromResponse } = await import(path.join(ROOT, "src/features/recipes/import/themealdb.ts"))
+const { convertMeals, mealsFromResponse } = await import(path.join(ROOT, "packages/core/src/recipes/import/themealdb.ts"))
 
 const { values: args } = parseArgs({
   options: {

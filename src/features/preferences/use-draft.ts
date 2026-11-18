@@ -2,7 +2,9 @@
 
 import { useCallback, useSyncExternalStore } from "react"
 
-import { clearDraft, EMPTY_DRAFT, readDraft, writeDraft, type FirstRunDraft } from "./draft"
+import { EMPTY_DRAFT, type FirstRunDraft } from "@lazychef/core/preferences/draft"
+
+import { clearDraft, readDraft, writeDraft } from "./draft"
 
 // The first-run draft as a tiny external store: the server (and the first client render)
 // sees an empty draft, then the browser's saved one, without a hydration mismatch.

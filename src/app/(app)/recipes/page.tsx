@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
-import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from "@/features/preferences/options"
+import { ALLERGIES, DIETS, hasRestrictions, labelOf, type FoodPreferences } from "@lazychef/core/preferences/options"
 import { getMyPreferences } from "@/features/preferences/queries"
 import { AiIdeaCard } from "@/features/recipes/ai-idea/ai-idea-card"
 import { MealIdeas } from "@/features/recipes/ai-idea/meal-ideas-area"
@@ -40,8 +40,8 @@ import {
   resolveMeals,
   TIMEZONE_COOKIE,
   type RecipeFilters,
-} from "@/features/recipes/filters"
-import type { Suggestion } from "@/features/recipes/match"
+} from "@lazychef/core/recipes/filters"
+import type { Suggestion } from "@lazychef/core/recipes/match"
 import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
 import { getCookAgain, getMyUnratedCooks } from "@/features/recipes/ratings"
 import { isAiAvailable } from "@/lib/llm/ai"

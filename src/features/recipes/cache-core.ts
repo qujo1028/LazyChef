@@ -4,7 +4,7 @@ import { createHash } from "node:crypto"
 
 import { nextQuotaReset } from "@/lib/spoonacular/cost"
 import { SpoonacularError, type SpoonacularQuota } from "@/lib/spoonacular/client"
-import { normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 
 /** Spoonacular's terms: keep responses for at most an hour. */
 export const CACHE_TTL_MS = 60 * 60 * 1000

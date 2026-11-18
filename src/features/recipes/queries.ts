@@ -3,9 +3,9 @@ import "server-only"
 import { cache } from "react"
 
 import { getPantryItems } from "@/features/pantry/queries"
-import { localDateKey } from "@/features/pantry/dates"
-import { spoonacularDiet } from "@/features/preferences/diet"
-import { normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { localDateKey } from "@lazychef/core/dates/days"
+import { spoonacularDiet } from "@lazychef/core/preferences/diet"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 import {
   findCost,
   findRecipesByIngredients,
@@ -24,9 +24,9 @@ import { createClient } from "@/lib/supabase/server"
 
 import { cachedRecipeDetails, cachedSpoonacular, getCacheStore, getUsageToday } from "./cache"
 import { recipeCacheKey, restingUntil, suggestionsCacheKey, type Usage } from "./cache-core"
-import type { CookLine } from "./cook"
-import { planCook } from "./cook-plan"
-import { mealQueries, type MealFilter, type MealQuery, type RecipeFilters } from "./filters"
+import type { CookLine } from "@lazychef/core/recipes/cook"
+import { planCook } from "@lazychef/core/recipes/cook-plan"
+import { mealQueries, type MealFilter, type MealQuery, type RecipeFilters } from "@lazychef/core/recipes/filters"
 import { findLocalCandidates, getHouseholdRecipes, getLocalCards, getLocalRecipe, type LocalRecipe } from "./local"
 import {
   localSuggestion,
@@ -36,7 +36,7 @@ import {
   rankSearch,
   rankSpoonacularSearch,
   wantsSpoonacular,
-} from "./local-match"
+} from "@lazychef/core/recipes/local-match"
 import {
   buildPantryIndex,
   checkIngredients,
@@ -47,11 +47,11 @@ import {
   type CheckedIngredient,
   type Suggestion,
   type Suggestions,
-} from "./match"
-import type { RecipeRef, RecipeSource } from "./ref"
-import { likesCuisine, localFits, preferCuisines, spoonacularFits, type RecipePrefs } from "./prefs"
-import { cookHistory, type SavedRecipe } from "./saved"
-import { applyTaste, suggestionScores, type TasteProfile } from "./taste"
+} from "@lazychef/core/recipes/match"
+import type { RecipeRef, RecipeSource } from "@lazychef/core/recipes/ref"
+import { likesCuisine, localFits, preferCuisines, spoonacularFits, type RecipePrefs } from "@lazychef/core/recipes/prefs"
+import { cookHistory, type SavedRecipe } from "@lazychef/core/recipes/saved"
+import { applyTaste, suggestionScores, type TasteProfile } from "@lazychef/core/recipes/taste"
 import { getHouseholdTaste } from "./taste-queries"
 
 /**

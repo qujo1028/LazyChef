@@ -5,14 +5,14 @@
 // until it's closed.
 import { z } from "zod"
 
-import { conflicts, type DietInput } from "@/features/preferences/diet"
-import { ALLERGIES, DIETS, labelOf } from "@/features/preferences/options"
+import { conflicts, type DietInput } from "@lazychef/core/preferences/diet"
+import { ALLERGIES, DIETS, labelOf } from "@lazychef/core/preferences/options"
 import type { ChatMessage } from "@/lib/llm/client"
-import { normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 
-import { BASICS } from "../match"
-import { hintLines, NO_HINTS, type TasteHints } from "../taste"
-import { MAX_AI_NAMES, MAX_HINT_LENGTH } from "./limits"
+import { BASICS } from "@lazychef/core/recipes/match"
+import { hintLines, NO_HINTS, type TasteHints } from "@lazychef/core/recipes/taste"
+import { MAX_AI_NAMES, MAX_HINT_LENGTH } from "@lazychef/core/recipes/ai-limits"
 
 const MAX_NAME_LENGTH = 60
 

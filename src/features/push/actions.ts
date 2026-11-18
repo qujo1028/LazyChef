@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
 import { requireViewer } from "@/features/household/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { createClient } from "@/lib/supabase/server"
 
-import { deviceSchema, notificationPrefsSchema, type DeviceRegistration, type NotificationPrefs } from "./prefs"
+import { deviceSchema, notificationPrefsSchema, type DeviceRegistration, type NotificationPrefs } from "@lazychef/core/push/prefs"
 
 /** Saves this phone's push token for the signed-in person (also refreshes its time zone and last-seen time). */
 export async function registerDeviceToken(input: DeviceRegistration): Promise<ActionResult> {

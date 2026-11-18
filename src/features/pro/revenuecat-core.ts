@@ -9,7 +9,7 @@ import { timingSafeEqual } from "node:crypto"
 import { z } from "zod"
 
 import type { Database } from "@/types/database"
-import { PRO_ENTITLEMENT_ID } from "./entitlement"
+import { PRO_ENTITLEMENT_ID } from "@lazychef/core/pro/entitlement"
 
 export type SubscriptionRow = Omit<Database["public"]["Tables"]["subscriptions"]["Insert"], "synced_at">
 

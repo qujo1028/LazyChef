@@ -5,7 +5,7 @@ import { cache } from "react"
 import { requireViewer } from "@/features/household/queries"
 import { createClient } from "@/lib/supabase/server"
 
-import { NO_PREFERENCES, preferencesSchema, type FoodPreferences } from "./options"
+import { NO_PREFERENCES, preferencesSchema, type FoodPreferences } from "@lazychef/core/preferences/options"
 
 /** The signed-in person's food preferences (defaults when they haven't set any). */
 export const getMyPreferences = cache(async (): Promise<FoodPreferences> => {

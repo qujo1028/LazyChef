@@ -3,8 +3,8 @@
 import { toast } from "sonner"
 
 import { callAction } from "@/lib/call-action"
-import { displayName } from "@/features/pantry/display"
-import type { PantryItem } from "@/features/pantry/types"
+import { displayName } from "@lazychef/core/pantry/display"
+import type { PantryItem } from "@lazychef/core/pantry/types"
 
 import { addListItems } from "../actions"
 

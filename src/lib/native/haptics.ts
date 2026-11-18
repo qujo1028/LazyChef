@@ -1,8 +1,10 @@
 // Haptic feedback: the Capacitor plugin inside the app, navigator.vibrate in browsers that have it.
 // The decision logic is in fireHaptic() with injected dependencies so it can be tested without a device.
+import type { HapticKind } from "@lazychef/core/haptics/kinds"
+
 import { getNativePlatform } from "./platform"
 
-export type HapticKind = "tap" | "light" | "rise" | "success" | "milestone"
+export type { HapticKind }
 
 /** Vibration patterns (ms) for browsers. iOS Safari has no vibrate(); that is expected. */
 export const WEB_PATTERNS: Record<HapticKind, number | number[]> = {

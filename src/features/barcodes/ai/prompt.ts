@@ -3,8 +3,8 @@
 import { z } from "zod"
 
 import type { ChatMessage } from "@/lib/llm/client"
-import { packageSize, scanLine, type OffProduct } from "@/lib/barcode/product"
-import { findIngredient, searchIngredients } from "@/lib/ingredients/catalog"
+import { packageSize, scanLine, type OffProduct } from "@lazychef/core/barcodes/product"
+import { findIngredient, searchIngredients } from "@lazychef/core/ingredients/catalog"
 
 /** What the model sees about a product. */
 export type TidyProduct = {

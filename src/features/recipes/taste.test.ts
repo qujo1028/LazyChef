@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
-import { compareSuggestions, rankLocal, type LocalIngredient, type LocalRecipeCard } from "./local-match"
-import { buildPantryIndex, type Suggestion } from "./match"
+import { compareSuggestions, rankLocal, type LocalIngredient, type LocalRecipeCard } from "@lazychef/core/recipes/local-match"
+import { buildPantryIndex, type Suggestion } from "@lazychef/core/recipes/match"
 import { buildMealIdeasMessages, ideasCacheKeySource } from "./ai-idea/meal-ideas"
 import { buildIdeaMessages } from "./ai-idea/idea"
 import {
@@ -14,7 +14,7 @@ import {
   tasteHints,
   tasteScore,
   type TasteRating,
-} from "./taste"
+} from "@lazychef/core/recipes/taste"
 
 const rate = (ref: string, rating: number, day = 1, user = "u1"): TasteRating & { user_id: string } => ({
   user_id: user,

@@ -9,7 +9,7 @@ import { callAction } from "@/lib/call-action"
 import { cn } from "@/lib/utils"
 
 import { rateRecipe } from "../actions"
-import type { Rating } from "../ratings-core"
+import type { Rating } from "@lazychef/core/recipes/ratings-core"
 
 /** Thumbs up / down for a recipe the viewer cooked. Tapping the other one changes the vote. */
 export function RatingButtons({

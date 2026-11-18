@@ -1,8 +1,8 @@
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
-import { CATEGORIES, type Category } from "@/lib/ingredients/types"
+import { CATEGORIES, type Category } from "@lazychef/core/ingredients/types"
 import { cn } from "@/lib/utils"
 
-import { unitOptions } from "../display"
+import { unitOptions } from "@lazychef/core/pantry/display"
 
 // Touch-sized (44px) with 16px text so iOS doesn't zoom in on focus.
 const SELECT = "w-full [&>select]:h-11 [&>select]:pr-7 [&>select]:pl-3 [&>select]:text-base md:[&>select]:text-sm"

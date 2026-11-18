@@ -8,14 +8,14 @@ import { useNow } from "@/features/pantry/components/use-clock"
 import { useHouseholdChanges } from "@/features/household/components/household-channel"
 import { cn } from "@/lib/utils"
 
-import { DEFAULT_GOAL } from "../constants"
-import { mergeCookEvents, recipeKeyOf, type CookEvent } from "../cook-events"
-import { dismissKey, pickNudges, type NudgeId } from "../nudges"
+import { DEFAULT_GOAL } from "@lazychef/core/habit/constants"
+import { mergeCookEvents, recipeKeyOf, type CookEvent } from "@lazychef/core/habit/cook-events"
+import { dismissKey, pickNudges, type NudgeId } from "@lazychef/core/habit/nudges"
 import type { WeekCardData } from "../queries"
-import { summarize } from "../summary"
-import { validTimeZone } from "../timezone"
-import { nextTier, TIER_LABELS, type Tier } from "../tiers"
-import { weekDayKeys } from "../week"
+import { summarize } from "@lazychef/core/habit/summary"
+import { validTimeZone } from "@lazychef/core/habit/timezone"
+import { nextTier, TIER_LABELS, type Tier } from "@lazychef/core/habit/tiers"
+import { weekDayKeys } from "@lazychef/core/habit/week"
 
 const RADIUS = 30
 const LENGTH = 2 * Math.PI * RADIUS

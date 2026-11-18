@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { buildPantryIndex } from "../match"
+import { buildPantryIndex } from "@lazychef/core/recipes/match"
 import { recipeLines, substitutionInputSchema } from "./input"
 import {
   buildSubstitutionMessages,

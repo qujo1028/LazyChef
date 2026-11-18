@@ -1,7 +1,7 @@
 "use server"
 
 import { requireViewer } from "@/features/household/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { takeAiAllowance, type AiLimited } from "@/features/pro/ai-allowance"
 import { askAiJson } from "@/lib/llm/ai"
 

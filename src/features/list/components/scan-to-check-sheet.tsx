@@ -9,14 +9,14 @@ import { rememberBarcode } from "@/features/barcodes/actions"
 import { BarcodeScanner } from "@/features/barcodes/components/barcode-scanner"
 import { ScanRows } from "@/features/barcodes/components/scan-rows"
 import { useBarcodeLookups } from "@/features/barcodes/components/use-barcode-lookups"
-import type { ScanHit } from "@/features/barcodes/types"
-import { displayName } from "@/features/pantry/display"
+import type { ScanHit } from "@lazychef/core/barcodes/types"
+import { displayName } from "@lazychef/core/pantry/display"
 import { callAction } from "@/lib/call-action"
 
 import { addListItems, setChecked } from "../actions"
-import type { ListChange } from "../list-state"
-import { findListLine } from "../scan-match"
-import type { ListItem } from "../types"
+import type { ListChange } from "@lazychef/core/list/list-state"
+import { findListLine } from "@lazychef/core/list/scan-match"
+import type { ListItem } from "@lazychef/core/list/types"
 
 type Outcome =
   | { kind: "checked"; id: string; name: string }

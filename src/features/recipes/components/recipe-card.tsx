@@ -1,8 +1,8 @@
 import { CircleCheck } from "lucide-react"
 
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 
-import type { Suggestion } from "../match"
+import type { Suggestion } from "@lazychef/core/recipes/match"
 import { RecipeTile } from "./recipe-tile"
 
 /** A suggestion as a grid tile: what you have, or what's missing. */

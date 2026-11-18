@@ -2,7 +2,7 @@
 
 import { useViewerTime } from "@/lib/use-viewer-time"
 
-import { historyLabel, type CookHistory } from "../saved"
+import { historyLabel, type CookHistory } from "@lazychef/core/recipes/saved"
 
 /** "Cooked 3 times · last Sep 12", in the viewer's time zone. */
 export function CookedLabel({ history, serverNow }: { history: CookHistory; serverNow: number }) {

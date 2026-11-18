@@ -1,16 +1,16 @@
 "use server"
 
 import { requireHousehold } from "@/features/household/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { fetchOffProduct, OpenFoodFactsError } from "@/lib/barcode/open-food-facts"
-import { normalizeBarcode, productToScan, scanLine } from "@/lib/barcode/product"
+import { normalizeBarcode, productToScan, scanLine } from "@lazychef/core/barcodes/product"
 import { isAiAvailable } from "@/lib/llm/ai"
 import { createClient } from "@/lib/supabase/server"
 
-import { looksMessy } from "./ai/heuristic"
-import { barcodeMemorySchema } from "./schemas"
+import { looksMessy } from "@lazychef/core/barcodes/heuristic"
+import { barcodeMemorySchema } from "@lazychef/core/barcodes/schemas"
 import { rememberBarcodes } from "./server"
-import type { BarcodeMemory, LookupResult } from "./types"
+import type { BarcodeMemory, LookupResult } from "@lazychef/core/barcodes/types"
 
 /**
  * What a scanned (or typed) barcode is: the household's own name for it if anyone

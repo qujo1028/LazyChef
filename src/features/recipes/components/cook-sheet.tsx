@@ -10,10 +10,10 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { addListItems } from "@/features/list/actions"
 import { callAction } from "@/lib/call-action"
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 import { RewardBurst } from "@/features/habit/components/reward-burst"
 import { useReward, type RewardState } from "@/features/habit/use-reward"
-import { formatUnit } from "@/lib/units"
+import { formatUnit } from "@lazychef/core/units"
 import { cn } from "@/lib/utils"
 
 import { cookRecipe, saveRecipe, undoCook } from "../actions"
@@ -26,8 +26,8 @@ import {
   type CookChoice,
   type CookLine,
   type CookResult,
-} from "../cook"
-import { scaleCookLines, scaleOriginal } from "../scale"
+} from "@lazychef/core/recipes/cook"
+import { scaleCookLines, scaleOriginal } from "@lazychef/core/recipes/scale"
 import { RatingButtons } from "./rating-buttons"
 
 type Done = { results: CookResult[]; batchId: number; undone: boolean }

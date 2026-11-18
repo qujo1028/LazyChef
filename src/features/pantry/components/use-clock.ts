@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react"
 
-import { localDateKey } from "../dates"
+import { localDateKey } from "@lazychef/core/dates/days"
 
 // The server doesn't know the viewer's time zone, so the server render and hydration
 // use the server's day and clock; the browser switches to its own right after. Both

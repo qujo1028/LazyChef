@@ -4,7 +4,7 @@
 import { z } from "zod"
 
 import type { ChatMessage } from "@/lib/llm/client"
-import { normalizeUnit, UNITS } from "@/lib/units"
+import { normalizeUnit, UNITS } from "@lazychef/core/units"
 
 /** Most characters sent to the AI in one go. */
 export const MAX_AI_TEXT = 1000

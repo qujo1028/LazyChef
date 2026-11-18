@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerNested, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
-import { normalizeBarcode } from "@/lib/barcode/codes"
+import { normalizeBarcode } from "@lazychef/core/barcodes/codes"
 import { haptic } from "@/lib/native/haptics"
 import { cn } from "@/lib/utils"
 

@@ -7,7 +7,7 @@ import { addStaples } from "@/features/pantry/actions"
 import { actionError, callAction } from "@/lib/call-action"
 
 import { savePreferences } from "../actions"
-import { hasPending } from "../draft"
+import { hasPending } from "@lazychef/core/preferences/draft"
 import { resetDraft, setDraft, useFirstRunDraft } from "../use-draft"
 
 /**

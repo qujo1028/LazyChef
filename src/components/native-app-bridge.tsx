@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 
 import { isNativeApp } from "@/lib/native-app"
-import { callbackPathFromAppLink, markAppLinkHandled } from "@/lib/native-callback"
+import { callbackPathFromAppLink, markAppLinkHandled } from "@lazychef/core/auth/native-callback"
 
 // Links handled by this page, in case session storage isn't usable.
 const handledHere = new Set<string>()

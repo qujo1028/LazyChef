@@ -355,3 +355,69 @@ Not done / to do:
   differ. Renamed the file to `20261118074317_undo_cook.sql`. The file's SQL is unchanged.
 - `20261118060000_admin_dashboard.sql` was already live (hash matches the file).
 - `npm run test:db`: 216 passing.
+
+## P0 Foundations (2026-11-18, lead: `feature/p0-scaffold`)
+Step 0 scaffold (lead):
+- npm workspaces (`apps/*`, `packages/*`). The web app stays at the repo root until the planned move to `apps/web`.
+- `apps/mobile`: Expo SDK 58, Expo Router (`src/app`), bundle ID `app.lazychef.mobile`, scheme `app.lazychef`. All P0
+  packages are installed, so workers don't change `package-lock.json`.
+- React pinned to 19.3.0 for both apps so the workspace has one copy.
+- NativeWind dropped: v4 needs Tailwind 3 and broke next to the web app's Tailwind 4. Styling is `StyleSheet` plus a theme object.
+- Phone testing is Expo Go via QR code until P7 (no Apple Developer account yet).
+- Root `tsconfig.json` and `eslint.config.mjs` skip `apps/`; Vitest also runs `packages/*/src/**/*.test.ts`.
+- Checks: web typecheck, lint, 2,207 tests and `next build` pass; mobile typecheck, lint, and iOS and web bundles pass.
+
+W2 shell (`feature/p0-shell`):
+- Theme in `apps/mobile/src/theme` (light and derived dark palette with measured contrast, radius, spacing, type scale, `useTheme()`).
+- Fonts (Libre Caslon Display, Source Sans 3) load in the root layout; splash stays up until loaded.
+- Four JS tabs in `(tabs)` (Pantry, Recipes, List, Household) with a custom `BottomTabBar`; Activity is a header icon pushing `activity`.
+- Components: `AppScreenHeader`, `PrimaryPillButton`, `MetadataPill`, `CircleIconButton`, `BottomTabBar`, `Screen`, `EmptyState`.
+- Reduce motion respected (`useReduceMotion`, `usePressScale`). Not checked visually (no simulator run); only tsc, lint and iOS/web exports.
+
+Workers (branch from `feature/p0-scaffold`): W1 `feature/p0-core` (packages/core extraction), W2 `feature/p0-shell`
+(theme, tabs, components), W3 `feature/p0-data` (Supabase, Query, offline), W4 `feature/p0-config` (db-types, CI, EAS).
+Migration lock: nobody (P0 has no schema changes).
+
+W4 config (`feature/p0-config`):
+- CI runs `typecheck`, `lint` and an iOS `expo export` for `apps/mobile` after `npm ci`. No secrets needed.
+- `apps/mobile/eas.json`: `appVersionSource: remote`; profiles `development` (dev client, internal), `preview` (internal),
+  `production` (autoIncrement). No EAS project ID yet, so nothing has been run against EAS.
+- `app.json`: `ios.config.usesNonExemptEncryption: false`, Android adaptive icon background `#F8F6EC`, splash dark
+  background `#1B1A12` via the `dark` key of the expo-splash-screen plugin.
+- `packages/db-types` re-exports the generated `Database` type and typechecks from the mobile app.
+
+W3 data layer (`feature/p0-data`):
+- `apps/mobile/src/lib/supabase.ts`: publishable-key client, no throw when env is missing, auto refresh follows AppState.
+- Session tokens in expo-secure-store, chunked across keys (`chunked-storage.ts`, 8 Vitest cases); localStorage on Expo web.
+- `query-client.ts`: TanStack Query persisted to AsyncStorage (24h, buster = app version), focus via AppState, online via NetInfo, cache cleared on sign out or account switch.
+- `use-session.ts` hook, `providers/app-providers.tsx`, `providers/offline-banner.tsx`, `apps/mobile/.env.example`.
+- Chunk tests are not in the root Vitest include; run with a config whose `include` is `apps/mobile/src/lib/**/*.test.ts`.
+
+W1 core extraction (`feature/p0-core`):
+- 134 files (`git mv`) from `src/` into `packages/core/src/<domain>/`: units, ingredients (library, parsing, aisles,
+  emoji, substitutions), dates (`days.ts` was `pantry/dates.ts`, `time.ts` was `activity/time.ts`), state (row-state),
+  pantry, list, recipes (match, local-match, cook, scale, taste, TheMealDB import, recipe-shapes), activity (feed,
+  stats), habit (all of it, including the reward timeline), auth (safe-next, native callback, password schemas),
+  preferences, pro, barcodes, household (invite codes), push (prefs).
+- Import as `@lazychef/core/<domain>/<module>` (units: `@lazychef/core/units`). Core uses relative imports only; row
+  types come from `@lazychef/db-types` via `packages/core/src/db.ts`. An ESLint rule blocks next, react, react-dom,
+  react-native, expo, Capacitor and `@/` imports in `packages/core`.
+- Splits: `HapticKind` now lives in `haptics/kinds.ts` (used by `habit/reward.ts` and the web haptics); the first-run draft's shape and parsing are in
+  `preferences/draft.ts`, with localStorage reads and writes left in `src/features/preferences/draft.ts`.
+- Left in `src/`: anything server-only or AI-prompt related (Spoonacular, LLM prompts, substitution guards, push
+  delivery, RevenueCat), Capacitor code (`native-auth`, haptics, `apple.ts`), Next-specific helpers (legacy routes,
+  search params, `?view=` parsing, site env), and admin logic.
+- `scripts/build-ingredient-library.mjs` and `scripts/import-themealdb.mjs` point at the new paths.
+- `auth/safe-next` and `auth/native-callback` need a WHATWG `URL`: on mobile import `react-native-url-polyfill/auto`
+  first (RN's built-in URL mis-parses `///evil.com` and custom schemes).
+- For the lead (outside W1's files): CLAUDE.md (the one-test example `src/features/habit/leaderboard.test.ts`,
+  `src/lib/row-state.ts`, `src/features/pro/plans.ts`), README.md:315 and docs/handoff-*.md, docs/mobile-apps.md
+  still name moved paths. `packages/core/src/db.ts` copies the `Tables`/`Enums` helpers; once
+  `@lazychef/db-types` exports them, core should import them from there.
+
+Lead merge (P0): all four workers merged into `feature/p0-scaffold`. Follow-ups done by the lead: mobile loads
+`react-native-url-polyfill/auto` first (needed by supabase-js and the core auth helpers), Vitest also runs
+`apps/mobile/src/lib/**/*.test.ts`, stale paths in CLAUDE.md and README fixed. Checks: web typecheck, lint, 2,219 tests,
+`next build`, ingredients check; mobile typecheck, lint, iOS bundle. On a real iPhone via Expo Go (2026-11-18): tabs,
+header, fonts and theme look right (user checked). Still open: old file paths in `docs/handoff-*.md` and
+`docs/mobile-apps.md` (historical docs, left as is); `db.ts` in core repeats the `Tables`/`Enums` helpers.

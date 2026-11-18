@@ -19,16 +19,16 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 
 ## Commands
 - `npm run dev` (port 3000), `npm run build`, `npm run typecheck` (`next typegen` + `tsc`), `npm run lint`
-- `npm test`: Vitest, `src/**/*.test.ts` (pure logic only). One file: `npx vitest run src/features/habit/leaderboard.test.ts`;
+- `npm test`: Vitest, `src/**/*.test.ts`, `packages/*/src/**/*.test.ts` and `apps/mobile/src/lib/**/*.test.ts` (pure logic only). One file: `npx vitest run packages/core/src/habit/leaderboard.test.ts`;
   one test: add `-t "name"`.
 - `npm run test:db`: applies `supabase/migrations/*.sql` in filename order to PGlite with Supabase stand-ins
   (`supabase/tests/harness.mjs`: roles, `auth.uid()`, realtime, storage) and runs `supabase/tests/*.test.mjs`.
   One file: `node --test supabase/tests/undo-cook.test.mjs`. Add a test file for each migration's RLS rules.
-- CI (`.github/workflows/ci.yml`) also runs `npm audit --omit=dev --audit-level=high` and
+- CI (`.github/workflows/ci.yml`) also runs `node scripts/audit.mjs` (npm audit, failing on high or critical, with listed exceptions) and
   `npm run ingredients -- --check` (the generated ingredient library must be up to date).
 - `npm run db:types` regenerates `src/types/database.ts` from the live schema.
 - Mobile (Expo, once `apps/mobile` exists; see `docs/react-native-app.md`): `npx expo start` for the dev server,
-  `npm run typecheck -w apps/mobile`, `npm run lint -w apps/mobile`, `eas build -p ios --profile preview` for TestFlight.
+  `npm run typecheck -w @lazychef/mobile`, `npm run lint -w @lazychef/mobile` (run `npx expo start` from `apps/mobile`, scan the QR code with Expo Go), `eas build -p ios --profile preview` for TestFlight.
   Until then, the iOS shell runs with `npm run ios` (`docs/mobile-apps.md`).
 
 ## Architecture
@@ -51,7 +51,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
   `src/lib/call-action.ts`.
 - Realtime: triggers broadcast row changes to the private `household:<id>` channel. `HouseholdChannelProvider`
   (`src/features/household/components/household-channel.tsx`) owns it; components subscribe with
-  `useHouseholdChanges(table, cb)`. Pantry and list keep client state with `src/lib/row-state.ts` (newest row wins,
+  `useHouseholdChanges(table, cb)`. Pantry and list keep client state with `packages/core/src/state/row-state.ts` (newest row wins,
   deleted ids stay deleted).
 - Multi-row changes are single Postgres functions (`add_pantry_items`, `complete_shopping_trip`, `cook_recipe`,
   `undo_cook`) so each is one activity-feed entry. A cook is the `activity_log` rows with action `cooked` sharing a
@@ -77,7 +77,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
   Call it after cache hits and refusals so those cost nothing. The client asks per-device consent first
   (`useAiConsent` in `src/components/ai/ai-consent.tsx`); the server never sends pantry data to the AI unprompted.
 - Pro: one subscription covers the household (`private.household_is_pro()`, `get_pro_status()`); features and
-  paywall copy in `src/features/pro/plans.ts`. The paywall opens from `usePro().openPaywall()`.
+  paywall copy in `packages/core/src/pro/plans.ts`. The paywall opens from `usePro().openPaywall()`.
 - Rate limits live in Postgres (`private.rate_limit_rule()`, `take_rate_limit`), called via `src/lib/rate-limit.ts`.
 - `next.config.ts` sets a strict CSP. A new image host or browser-called API must be added there.
 
@@ -97,7 +97,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - The repo is public: never commit `.env.local` or keys.
 - UI copy is plain, short and friendly, with no em dashes anywhere (code, comments, copy, commits). Respect
   `prefers-reduced-motion`. Check UI at 375px width.
-- Shared logic (`packages/core`, once it exists) is pure TypeScript: no imports from `next`, `react`, `react-dom`, or `react-native`.
+- Shared logic (`packages/core`) is pure TypeScript: no imports from `next`, `react`, `react-dom`, `react-native` or `expo` (an ESLint rule enforces it). Mobile must load `react-native-url-polyfill/auto` before using the core auth helpers.
 - Mobile app: session tokens go in `expo-secure-store`. The app bundle gets only the publishable Supabase key, never the
   secret key. Spoonacular and AI calls go through Edge Functions, never directly from the app. Refetch on app resume.
 - Product decisions (keep / redo / cut, the design framework) live in `docs/product-scope.md`. Build to it, and update it before changing scope.

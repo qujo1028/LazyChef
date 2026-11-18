@@ -11,9 +11,9 @@ import { useNativePlatform } from "@/lib/native/platform"
 import { cn } from "@/lib/utils"
 
 import { refreshPro } from "../actions"
-import { DEFAULT_SAVINGS, FEATURE_HEADLINES, PLANS, PRO_BENEFITS, yearlySavings, type PlanId, type ProFeature } from "../plans"
+import { DEFAULT_SAVINGS, FEATURE_HEADLINES, PLANS, PRO_BENEFITS, yearlySavings, type PlanId, type ProFeature } from "@lazychef/core/pro/plans"
 import { buyPlan, loadStorePlans, restorePro, type StorePlans } from "../purchases"
-import type { ProStatus } from "../status"
+import type { ProStatus } from "@lazychef/core/pro/status"
 
 /** Apple's standard terms of use (EULA), which App Store subscriptions can link to. */
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"

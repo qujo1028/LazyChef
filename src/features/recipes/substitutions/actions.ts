@@ -1,14 +1,14 @@
 "use server"
 
 import { requireHousehold, requireViewer } from "@/features/household/queries"
-import { localDateKey } from "@/features/pantry/dates"
+import { localDateKey } from "@lazychef/core/dates/days"
 import { getPantryItems } from "@/features/pantry/queries"
 import { getMyPreferences } from "@/features/preferences/queries"
-import type { ActionResult } from "@/features/pantry/types"
+import type { ActionResult } from "@lazychef/core/pantry/types"
 import { takeAiAllowance, type AiLimited } from "@/features/pro/ai-allowance"
 import { askAiJson, isAiAvailable } from "@/lib/llm/ai"
 
-import { buildPantryIndex, pantrySearchNames } from "../match"
+import { buildPantryIndex, pantrySearchNames } from "@lazychef/core/recipes/match"
 import { loadSubstitutionRecipe } from "./context"
 import { recipeLines, substitutionInputSchema, type SubstitutionInput } from "./input"
 import { planSubstitution } from "./guards"

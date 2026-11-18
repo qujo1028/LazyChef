@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react"
 
-import type { CatalogEntry } from "@/lib/ingredients/types"
+import type { CatalogEntry } from "@lazychef/core/ingredients/types"
 
 type Search = (query: string, limit?: number) => CatalogEntry[]
 
@@ -17,7 +17,7 @@ export function useCatalogSearch(): { search: Search | null; load: () => void } 
   const load = useCallback(() => {
     if (started.current) return
     started.current = true
-    import("@/lib/ingredients/catalog")
+    import("@lazychef/core/ingredients/catalog")
       .then((catalog) => setSearch(() => catalog.searchIngredients))
       .catch((error: unknown) => {
         // Offline or a stale deploy: typing still works, just without suggestions. Retry next focus.

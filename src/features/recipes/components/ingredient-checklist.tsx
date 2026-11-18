@@ -7,13 +7,13 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { callAction } from "@/lib/call-action"
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 
-import { describeListAdditions } from "@/features/list/plan"
+import { describeListAdditions } from "@lazychef/core/list/plan"
 
 import { addRecipeIngredientsToList } from "../actions"
-import type { IngredientStatus } from "../match"
-import { scaleOriginal } from "../scale"
+import type { IngredientStatus } from "@lazychef/core/recipes/match"
+import { scaleOriginal } from "@lazychef/core/recipes/scale"
 
 export type ChecklistLine = {
   /** Position in the recipe's ingredient list (what the server action takes). */

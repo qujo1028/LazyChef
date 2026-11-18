@@ -14,7 +14,7 @@ import {
   suggestionsCacheKey,
   type Usage,
 } from "./cache-core"
-import { NO_FILTERS } from "./filters"
+import { NO_FILTERS } from "@lazychef/core/recipes/filters"
 
 const quota = (used: number, left: number) => ({ request: 1.4, used, left })
 

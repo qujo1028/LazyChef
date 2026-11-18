@@ -4,9 +4,9 @@ import { CalendarDays, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import { addDays } from "../dates"
-import { shortDate } from "../display"
-import { QUICK_EXPIRY } from "../staples"
+import { addDays } from "@lazychef/core/dates/days"
+import { shortDate } from "@lazychef/core/pantry/display"
+import { QUICK_EXPIRY } from "@lazychef/core/pantry/staples"
 
 const CHIP =
   "relative inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors outline-none select-none disabled:pointer-events-none disabled:opacity-50 focus-within:ring-3 focus-within:ring-ring/50 focus-visible:ring-3 focus-visible:ring-ring/50"

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { getSavedRecipes } from "@/features/recipes/queries"
 import { getCookAgain } from "@/features/recipes/ratings"
-import { canMakeNow, parseSavedSort, SAVED_SORTS, sortSaved } from "@/features/recipes/saved"
+import { canMakeNow, parseSavedSort, SAVED_SORTS, sortSaved } from "@lazychef/core/recipes/saved"
 import { cn } from "@/lib/utils"
 
 import { CookAgain } from "./cook-again"

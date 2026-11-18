@@ -1,5 +1,5 @@
 // Pure: who gets the "expiring soon" push, and what it says. No database, no clock of its own.
-import { expiryInfo } from "@/features/pantry/dates"
+import { expiryInfo } from "@lazychef/core/dates/days"
 
 import type { PushMessage } from "./types"
 

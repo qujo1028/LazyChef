@@ -6,7 +6,7 @@ import { AppleButton } from "@/features/auth/components/apple-button"
 import { AuthHeading, OrDivider } from "@/features/auth/components/auth-heading"
 import { LoginForm } from "@/features/auth/components/auth-forms"
 import { GoogleButton } from "@/features/auth/components/google-button"
-import { safeNext } from "@/lib/safe-next"
+import { safeNext } from "@lazychef/core/auth/safe-next"
 import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Sign in" }

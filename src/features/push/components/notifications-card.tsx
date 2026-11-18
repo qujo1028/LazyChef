@@ -14,7 +14,7 @@ import { pushPermission, requestAndRegister, type PushPermission } from "@/lib/n
 import { saveNotificationPrefs } from "../actions"
 import { forgetThisDevice, saveToken } from "../device"
 import { markAsked } from "../offer"
-import { PREF_LABELS, type NotificationPrefs } from "../prefs"
+import { PREF_LABELS, type NotificationPrefs } from "@lazychef/core/push/prefs"
 
 /** "Notifications" card on Household. Only in the iOS/Android app; the website has no push. */
 export function NotificationsCard({ initial }: { initial: NotificationPrefs }) {

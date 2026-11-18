@@ -9,9 +9,9 @@ import { callAction } from "@/lib/call-action"
 import { getNativePlatform } from "@/lib/native/platform"
 
 import { refreshPro } from "../actions"
-import type { ProFeature } from "../plans"
+import type { ProFeature } from "@lazychef/core/pro/plans"
 import { presentRevenueCatPaywall, setupPurchases } from "../purchases"
-import type { ProStatus } from "../status"
+import type { ProStatus } from "@lazychef/core/pro/status"
 import { Paywall } from "./paywall"
 
 type ProContextValue = {

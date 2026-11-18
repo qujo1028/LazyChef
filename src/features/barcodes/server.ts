@@ -2,7 +2,7 @@ import "server-only"
 
 import type { createClient } from "@/lib/supabase/server"
 
-import type { BarcodeMemory } from "./types"
+import type { BarcodeMemory } from "@lazychef/core/barcodes/types"
 
 type Supabase = Awaited<ReturnType<typeof createClient>>
 

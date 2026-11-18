@@ -15,7 +15,7 @@ import {
   ownInputFromIdea,
   readCachedIdeas,
 } from "./meal-ideas"
-import { validateOwnRecipe } from "../own-recipe"
+import { validateOwnRecipe } from "@lazychef/core/recipes/own-recipe"
 
 const idea = (title: string, names: string[] = ["eggs", "spinach"]) => ({
   title,

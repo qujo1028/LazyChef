@@ -2,12 +2,12 @@
 
 import { Check, Pencil } from "lucide-react"
 
-import { displayName } from "@/features/pantry/display"
+import { displayName } from "@lazychef/core/pantry/display"
 import { haptic } from "@/lib/native/haptics"
 import { cn } from "@/lib/utils"
 
-import { amountText } from "../display"
-import type { ListItem } from "../types"
+import { amountText } from "@lazychef/core/list/display"
+import type { ListItem } from "@lazychef/core/list/types"
 
 /**
  * One line. Most of the row is a single big tap target that checks it off (thumb-sized,

@@ -9,7 +9,7 @@ import { callAction } from "@/lib/call-action"
 import { IngredientCombobox } from "@/features/pantry/components/ingredient-combobox"
 
 import { addListText, deleteListItems } from "../actions"
-import { describeListAdditions } from "../plan"
+import { describeListAdditions } from "@lazychef/core/list/plan"
 
 /**
  * Always-there add box: "2 lbs chicken breast", "milk, eggs", or a pasted list. Adds right

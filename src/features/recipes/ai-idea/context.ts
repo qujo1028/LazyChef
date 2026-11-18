@@ -1,13 +1,13 @@
 import "server-only"
 
 import { requireHousehold } from "@/features/household/queries"
-import { localDateKey } from "@/features/pantry/dates"
+import { localDateKey } from "@lazychef/core/dates/days"
 import { getPantryItems } from "@/features/pantry/queries"
-import type { DietInput } from "@/features/preferences/diet"
-import { hasRestrictions } from "@/features/preferences/options"
+import type { DietInput } from "@lazychef/core/preferences/diet"
+import { hasRestrictions } from "@lazychef/core/preferences/options"
 import { getMyPreferences } from "@/features/preferences/queries"
 
-import { pantrySearchNames } from "../match"
+import { pantrySearchNames } from "@lazychef/core/recipes/match"
 import { cleanNames, namesForDiet } from "./idea"
 
 export type IdeaPantry =

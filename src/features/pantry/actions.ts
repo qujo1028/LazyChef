@@ -3,19 +3,19 @@
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
-import { barcodeMemoriesSchema } from "@/features/barcodes/schemas"
+import { barcodeMemoriesSchema } from "@lazychef/core/barcodes/schemas"
 import { rememberBarcodes } from "@/features/barcodes/server"
-import type { BarcodeMemory } from "@/features/barcodes/types"
+import type { BarcodeMemory } from "@lazychef/core/barcodes/types"
 import { requireHousehold } from "@/features/household/queries"
-import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
+import { findIngredient, guessCategory, normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 import { createClient } from "@/lib/supabase/server"
-import { convertQuantity } from "@/lib/units"
+import { convertQuantity } from "@lazychef/core/units"
 import type { Database } from "@/types/database"
-import { categoryOverrides, planAdditions, roundQuantity } from "./merge"
+import { categoryOverrides, planAdditions, roundQuantity } from "@lazychef/core/pantry/merge"
 import { resolveItems, type ResolveResult } from "./resolve"
-import { canonicalUnit, category, date, firstIssue, itemId, name, newItemSchema, quantity, unit } from "./schemas"
+import { canonicalUnit, category, date, firstIssue, itemId, name, newItemSchema, quantity, unit } from "@lazychef/core/pantry/schemas"
 import { dbError, saveCategoryOverrides } from "./server-helpers"
-import type { ActionResult, AddItemsSummary, NewPantryItem, PantryItem, PantryItemFields } from "./types"
+import type { ActionResult, AddItemsSummary, NewPantryItem, PantryItem, PantryItemFields } from "@lazychef/core/pantry/types"
 
 const fieldsSchema = z.strictObject({
   name: name.optional(),

@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
 
-import { PENDING_INVITE_COOKIE } from "@/lib/invite"
+import { PENDING_INVITE_COOKIE } from "@lazychef/core/household/invite"
 import { RATE_LIMITED_CODE } from "@/lib/rate-limit"
 import { createClient } from "@/lib/supabase/server"
 import type { Enums } from "@/types/database"

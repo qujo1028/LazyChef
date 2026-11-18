@@ -2,11 +2,11 @@ import "server-only"
 
 import { createHash } from "node:crypto"
 
-import type { DietInput } from "@/features/preferences/diet"
+import type { DietInput } from "@lazychef/core/preferences/diet"
 import { createClient } from "@/lib/supabase/server"
 import type { Json } from "@/types/database"
 
-import { NO_HINTS, type TasteHints } from "../taste"
+import { NO_HINTS, type TasteHints } from "@lazychef/core/recipes/taste"
 import type { AiRecipe } from "./idea"
 import { ideasCacheKeySource, MEAL_IDEAS_TTL_SECONDS, readCachedIdeas, type CachedIdeas, type IdeaMeal } from "./meal-ideas"
 

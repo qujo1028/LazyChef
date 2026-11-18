@@ -312,7 +312,7 @@ Data notes:
 - `supabase/migrations/`: the schema. Every table a household shares is guarded by `private.is_member()`.
   Creating, joining and leaving households only happen through Postgres functions.
 - Realtime: triggers broadcast row changes to a private `household:<id>` channel, which only members can
-  subscribe to. The pantry and list keep their client state with `src/lib/row-state.ts` (newest row wins,
+  subscribe to. The pantry and list keep their client state with `packages/core/src/state/row-state.ts` (newest row wins,
   deleted ids stay deleted).
 - Server actions re-check the session and validate input with zod; client calls go through
   `src/lib/call-action.ts`, so a dropped connection shows a toast instead of the error screen.

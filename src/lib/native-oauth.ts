@@ -1,5 +1,5 @@
 import { hasNativeAuth, isCanceled, LazyChefAuth } from "@/lib/native-auth"
-import { callbackPathFromAppLink } from "@/lib/native-callback"
+import { callbackPathFromAppLink } from "@lazychef/core/auth/native-callback"
 
 const CALLBACK_SCHEME = "app.lazychef"
 export const NATIVE_OAUTH_ERROR = "Sign-in didn't finish. Please try again."

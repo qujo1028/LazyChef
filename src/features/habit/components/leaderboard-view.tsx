@@ -6,13 +6,13 @@ import { useMemo, useState } from "react"
 
 import { EmptyState } from "@/components/empty-state"
 import { UserAvatar } from "@/components/user-avatar"
-import type { ActivityMember } from "@/features/activity/feed"
+import type { ActivityMember } from "@lazychef/core/activity/feed"
 import { useHouseholdChanges } from "@/features/household/components/household-channel"
 import { useViewerTime } from "@/lib/use-viewer-time"
 import { cn } from "@/lib/utils"
 
-import type { CookRow } from "../cook-days"
-import { computeLeaderboard, type BoardEntry } from "../leaderboard"
+import type { CookRow } from "@lazychef/core/habit/cook-days"
+import { computeLeaderboard, type BoardEntry } from "@lazychef/core/habit/leaderboard"
 import { InviteButton } from "./invite-button"
 
 type Mode = "week" | "allTime"

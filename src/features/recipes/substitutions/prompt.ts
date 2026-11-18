@@ -3,11 +3,11 @@
 import { z } from "zod"
 
 import type { ChatMessage } from "@/lib/llm/client"
-import { normalizeIngredientName } from "@/lib/ingredients/catalog"
-import { ROLES, type Allergen, type SubEntry } from "@/lib/ingredients/substitutions"
-import type { DietInput } from "@/features/preferences/diet"
+import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
+import { ROLES, type Allergen, type SubEntry } from "@lazychef/core/ingredients/substitutions"
+import type { DietInput } from "@lazychef/core/preferences/diet"
 
-import { findInPantry, type PantryIndex, type PantryRow } from "../match"
+import { findInPantry, type PantryIndex, type PantryRow } from "@lazychef/core/recipes/match"
 import { clashesWithDiet, NO_DIET_SWAP, NO_GOOD_SWAP, plausibleSwap } from "./guards"
 
 /** At most this many swaps are shown. */
