@@ -3,9 +3,9 @@ import "server-only"
 import { createClient } from "@/lib/supabase/server"
 import type { RecipeIngredient } from "@/lib/spoonacular/recipe-shapes"
 
-import { basicKeys, LOCAL_CANDIDATES, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "./local-match"
+import { basicKeys, LOCAL_CANDIDATES, mergeRecipeIds, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "./local-match"
 import type { PantryRow } from "./match"
-import { EVERYDAY_CUISINES, type RecipeFilters } from "./filters"
+import { EVERYDAY_CUISINES, type MealQuery, type RecipeFilters } from "./filters"
 import { mealDbUrl } from "./ref"
 
 // Our own recipe library (TheMealDB imports + household recipes), read as the signed-in
@@ -149,6 +149,8 @@ export async function findLocalCandidates(
   householdId: string,
   items: readonly PantryRow[],
   filters: RecipeFilters,
+  /** The meal queries to run (one database call each); null for every meal. */
+  meals: readonly MealQuery[] | null = filters.type ? [{ type: filters.type === "lunch" ? "main course" : filters.type, maxMinutes: filters.maxTime }] : null,
 ): Promise<LocalRecipeCard[]> {
   const supabase = await createClient()
   const pantry = pantryMatchKeys(items)
@@ -156,24 +158,30 @@ export async function findLocalCandidates(
   const search = filters.query !== null
   // Less familiar cuisines only with "Include world recipes", searches included.
   const everydayOnly = !filters.world
-  const { data, error } = await supabase.rpc("match_local_recipes", {
-    p_household_id: householdId,
-    p_ingredient_ids: pantry.ids,
-    p_name_keys: pantry.keys,
-    p_ignore_ids: basics.ids,
-    p_ignore_keys: basics.keys,
-    p_meal_type: filters.type,
-    p_max_minutes: filters.maxTime,
-    p_query: filters.query,
-    // The database's count is by exact keys; the exact check afterwards can only find
-    // more of the pantry, so leave a little room.
-    p_max_missing: search ? 100 : 5,
-    // Leave room for the less familiar cuisines dropped below.
-    p_limit: (search ? 60 : LOCAL_CANDIDATES) * (everydayOnly ? 2 : 1),
-  })
-  if (error) throw error
+  const queries: readonly { type: string | null; maxMinutes: number | null }[] = meals ?? [{ type: null, maxMinutes: filters.maxTime }]
+  // match_local_recipes takes one meal type, so a slot with several types is several calls.
+  const results = await Promise.all(
+    queries.map((query) =>
+      supabase.rpc("match_local_recipes", {
+        p_household_id: householdId,
+        p_ingredient_ids: pantry.ids,
+        p_name_keys: pantry.keys,
+        p_ignore_ids: basics.ids,
+        p_ignore_keys: basics.keys,
+        p_meal_type: query.type,
+        p_max_minutes: query.maxMinutes,
+        p_query: filters.query,
+        // The database's count is by exact keys; the exact check afterwards can only find
+        // more of the pantry, so leave a little room.
+        p_max_missing: search ? 100 : 5,
+        // Leave room for the less familiar cuisines dropped below.
+        p_limit: (search ? 60 : LOCAL_CANDIDATES) * (everydayOnly ? 2 : 1),
+      }),
+    ),
+  )
+  for (const { error } of results) if (error) throw error
   return getLocalCards(
-    data.map((row) => row.recipe_id),
+    mergeRecipeIds(results.map(({ data }) => data ?? [])),
     householdId,
     { everydayOnly },
   )
