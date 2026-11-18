@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # LazyChef
 
+Docs: `PROGRESS.md` (status and phase log), `docs/product-scope.md` (what the app does),
+`docs/react-native-app.md` (the Expo rebuild plan), `docs/app-design.md` (the design brief), `docs/mobile-apps.md`
+(current iOS/Android shell).
+
 Shared-household pantry tracker, shopping list and recipe finder, with a "cook at home" habit layer. Mobile-first.
 Next.js 16 (App Router, `src/proxy.ts` instead of middleware), React 19, Tailwind v4 + shadcn/ui (radix, "nova";
 buttons/inputs enlarged for touch), Supabase (auth, Postgres + RLS, realtime), Spoonacular, Groq for AI, RevenueCat
@@ -23,6 +27,9 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - CI (`.github/workflows/ci.yml`) also runs `npm audit --omit=dev --audit-level=high` and
   `npm run ingredients -- --check` (the generated ingredient library must be up to date).
 - `npm run db:types` regenerates `src/types/database.ts` from the live schema.
+- Mobile (Expo, once `apps/mobile` exists; see `docs/react-native-app.md`): `npx expo start` for the dev server,
+  `npm run typecheck -w apps/mobile`, `npm run lint -w apps/mobile`, `eas build -p ios --profile preview` for TestFlight.
+  Until then, the iOS shell runs with `npm run ios` (`docs/mobile-apps.md`).
 
 ## Architecture
 - `src/app/`: routes only. `(auth)` sign-in pages, `(app)` tab-bar pages for household members, `(admin)` internal
@@ -90,13 +97,22 @@ env vars, and the Pro/admin/TheMealDB runbooks.
 - The repo is public: never commit `.env.local` or keys.
 - UI copy is plain, short and friendly, with no em dashes anywhere (code, comments, copy, commits). Respect
   `prefers-reduced-motion`. Check UI at 375px width.
+- Shared logic (`packages/core`, once it exists) is pure TypeScript: no imports from `next`, `react`, `react-dom`, or `react-native`.
+- Mobile app: session tokens go in `expo-secure-store`. The app bundle gets only the publishable Supabase key, never the
+  secret key. Spoonacular and AI calls go through Edge Functions, never directly from the app. Refetch on app resume.
+- Product decisions (keep / redo / cut, the design framework) live in `docs/product-scope.md`. Build to it, and update it before changing scope.
+- Mobile palette and type come from `docs/app-design.md`, not from `src/app/globals.css`. The RN theme is its own file.
 
 ## Parallel work
 - Before planning or briefing parallel sessions, run `git fetch origin` and base every worktree on `origin/main`, never a stale local `main`. Check whether a feature already exists there first.
-- Only one branch at a time may change `supabase/migrations/` or `src/types/database.ts`. Other sessions stay out of those files until that branch is merged.
-- Split work by feature, not by layer. Each worker session owns one whole feature.
-- Workers commit to their own branch. They never push to `main` and never open PRs; the lead session does that.
-- Before reporting done, a worker runs `npm run typecheck && npm run lint && npm run test` (plus `npm run test:db` if it touched the DB).
-- The lead session reviews each branch (`/code-review`), fetches and merges `origin/main` into it, reruns all checks, then opens a PR. Pushes to `main` auto-deploy to Vercel, so the user merges the PR.
-- Keep to 2-3 workers at once. Use subagents for research or diff review inside a session.
+- Migration lock: only one branch at a time may change `supabase/migrations/` or `src/types/database.ts`. The lead names the holder in the worker brief and in PROGRESS.md, and clears it when that branch merges. Other workers don't touch those files; if they need a schema change, they write it into the holder's queue or wait. Don't hand out the lock to a second branch while the first is open.
+- New migration files need a timestamp later than every file already in `supabase/migrations/`; an older one is out of order against what production already applied. Migrations applied through the Supabase MCP get a new timestamp version; rename the file to match so the repo and `list_migrations` agree.
+- Split work by feature, not by layer. Each worker session owns one whole feature, including its tests and its screens for each target (web or mobile).
+- Shared packages (`packages/core`, `packages/db-types` once they exist): workers may add new files freely. Changing an existing exported function or type needs a note in the branch description, and the lead merges that change first.
+- Workers commit to their own branch and rebase onto `origin/main` at the start of each session and again before reporting done. They never push to `main` and never open PRs; the lead session does that.
+- Before reporting done, a worker runs `npm run typecheck && npm run lint && npm run test` (plus `npm run test:db` if it touched the DB), then runs `/code-review` on its own diff and fixes what it finds. The worker's report includes the review result, so the lead doesn't have to re-review from scratch.
+- The lead session checks the report, merges each branch as soon as it's green rather than batching, reruns the checks on the merged result, then opens a PR. Pushes to `main` auto-deploy to Vercel, so the user merges the PR.
+- Keep to 4 workers at once (up from 2-3). Use subagents for research or diff review inside a session.
 - Workers on this Mac have no Playwright and no signed-in test account; say what could not be checked in a browser.
+- Handoff: every session reads `PROGRESS.md` first and updates its entry before reporting done. Workers don't edit the status block at the top; the lead does.
+- Definition of done per feature is in `docs/react-native-app.md`. It applies to web and mobile work alike.
