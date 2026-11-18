@@ -347,3 +347,25 @@ pushed branch (the second wasn't committed at all). Copied here unchanged; both 
 Not brought over (still only in that worktree): the RevenueCat app code, the paywall, the "Extended search" UI,
 and `src/features/recipes/import/extended.ts`. Re-running `npm run recipes:import` from main leaves the
 `extended` flags as they are (the importer doesn't write that column), but newly imported recipes won't be flagged.
+
+## Admin dashboard (2026-11-18, branch `feature/build-the-rest-of-de-e73`)
+Built on the `/admin` foundation (`ADMIN_EMAILS` guard, from `feature/admin-dashboard-guar-828`). One director session
+(Opus) split the work across 8 subagents (Sonnet for data, Board, Overview, Support; Haiku for Health, Limits,
+Alerts), each on its own branch and file allowlist, tracked as Kandev subtasks. Every branch was reviewed and
+merged here.
+- Tabs: **Overview** (users, revenue/MRR, usage, trends, funnel, retention, popular, alert banner), **Board**
+  (GitHub issues with move/close/reopen, PRs), **Health** (deploys, CI, services, RevenueCat events, env),
+  **Limits** (Spoonacular, AI allowance, rate limits, errors, cache), **Support** (exact-email lookup, Pro comps,
+  audit log). Details in the README's "Admin dashboard" section.
+- Migration `20261118060000_admin_dashboard.sql`: 23 `admin_*` functions (service_role only), `private.daily_counters`,
+  `private.daily_snapshots`, append-only `private.admin_audit_log`; `take_rate_limit` and `take_ai_allowance` now
+  count (same signatures, grants and bucket allowlist). Tests in `supabase/tests/admin-stats.test.mjs`.
+- Daily Vercel Cron → `/api/admin/snapshot` (`CRON_SECRET`): snapshot + alerts as GitHub issues labelled `alert`.
+- E6 counters: AI errors, Spoonacular errors and cache hit/miss (fire-and-forget).
+
+Not done / to do:
+- **Apply the migration to the live database** before the deploy that ships this (the app calls the new RPCs).
+- Set `CRON_SECRET`, `GITHUB_DASHBOARD_TOKEN` (Issues: read & write; PRs, Deployments, Commit statuses,
+  Metadata: read), `GITHUB_REPO` and `ADMIN_EMAILS` in Vercel.
+- Not tried in a browser or against the real GitHub repo / live data; charts unchecked at 320 px and in dark mode.
+- `parse-line.test.ts` "stays fast" is timing-sensitive and can fail when the whole suite runs in parallel.
