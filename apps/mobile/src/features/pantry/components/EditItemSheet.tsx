@@ -12,6 +12,7 @@ import { Sheet } from '@/components/Sheet';
 import { TextField } from '@/components/TextField';
 import { useToast, type ToastOptions } from '@/components/Toast';
 import { useHouseholdMembers } from '@/features/household/api';
+import { useAddPantryItemToList } from '@/features/list/add-to-list';
 import { createAfterClose, type AfterClose } from '@/lib/after-close';
 import { useSession } from '@/lib/use-session';
 import { useToday } from '@/lib/use-today';
@@ -94,6 +95,8 @@ function EditItemContent({
 }) {
   const { colors, spacing, type } = useTheme();
   const { householdId, apply, adjust } = usePantry();
+  const addToList = useAddPantryItemToList();
+  const { show } = useToast(); // stable; for the toast action, which runs after the sheet has closed
   const { session } = useSession();
   const membersQuery = useHouseholdMembers(householdId);
   const members = useMemo(
@@ -159,7 +162,19 @@ function EditItemContent({
       return;
     }
     apply({ type: 'upsert', item: result.item });
-    send({ message: `Moved ${name} to Ran out` });
+    send({
+      message: `Moved ${name} to Ran out`,
+      action: {
+        label: 'Add to list',
+        onPress: () => void addToList(before).then((toast) => show(toast)),
+      },
+    });
+  }
+
+  async function addToShoppingList() {
+    if (pending || gone) return;
+    close();
+    send(await addToList(item));
   }
 
   function confirmDelete() {
@@ -242,6 +257,13 @@ function EditItemContent({
           {item.quantity === null && !item.is_staple ? (
             <PrimaryPillButton title="We ran out" variant="outline" onPress={() => void markRanOut()} />
           ) : null}
+
+          <PrimaryPillButton
+            title="Add to shopping list"
+            variant="outline"
+            disabled={pending}
+            onPress={() => void addToShoppingList()}
+          />
 
           <TextField
             label="Name"

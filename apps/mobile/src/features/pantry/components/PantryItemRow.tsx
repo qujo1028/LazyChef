@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { expiryInfo } from '@lazychef/core/dates/days';
 import { ingredientEmoji } from '@lazychef/core/ingredients/emoji';
 import { amountLabel, canUseOne, displayName } from '@lazychef/core/pantry/display';
@@ -17,15 +18,30 @@ type Props = {
   last: boolean;
   onOpen: (item: PantryItem) => void;
   onUseOne: (item: PantryItem) => void;
+  onAddToList: (item: PantryItem) => void;
 };
 
-/** One pantry row: name, amount, expiry badge, and a "-1" button. Rows stack into the one card style. */
-export const PantryItemRow = memo(function PantryItemRow({ item, today, showEmoji, muted, first, last, onOpen, onUseOne }: Props) {
+/**
+ * One pantry row: name, amount, expiry badge, a "-1" button, and for items that ran out an
+ * "add to list" button. Rows stack into the one card style.
+ */
+export const PantryItemRow = memo(function PantryItemRow({
+  item,
+  today,
+  showEmoji,
+  muted,
+  first,
+  last,
+  onOpen,
+  onUseOne,
+  onAddToList,
+}: Props) {
   const { colors, radius, spacing, type, minTouch } = useTheme();
   const name = displayName(item.name);
   const expiry = expiryInfo(item.expires_on, today);
   const badge = expiry && expiry.tone !== 'later' && !muted ? expiry : null;
   const amount = amountLabel(item);
+  const ranOut = item.quantity === 0 && !item.is_staple;
 
   return (
     <View
@@ -108,6 +124,26 @@ export const PantryItemRow = memo(function PantryItemRow({ item, today, showEmoj
           })}
         >
           <Text style={[type.button, { color: colors.ink }]}>{'−1'}</Text>
+        </Pressable>
+      ) : null}
+      {ranOut ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Add ${name} to the shopping list`}
+          onPress={() => onAddToList(item)}
+          hitSlop={4}
+          style={({ pressed }) => ({
+            width: minTouch,
+            height: minTouch,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: radius.pill,
+            borderWidth: 1,
+            borderColor: colors.outline,
+            backgroundColor: pressed ? colors.surfacePressed : colors.surface,
+          })}
+        >
+          <Ionicons name="list-outline" size={20} color={colors.ink} />
         </Pressable>
       ) : null}
     </View>

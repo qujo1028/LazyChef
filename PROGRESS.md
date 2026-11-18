@@ -615,3 +615,77 @@ Open for P2's exit check (needs the user and a phone in Expo Go):
 - Two phones: an add, -1 or edit on one shows on the other without a refresh.
 - Known gaps for later: a failed save rolls back over a housemate's newer change; the edit form doesn't refresh when a
   housemate edits the same item; ran-out "Add to shopping list" is P3; categorizing unusual names needs a Spoonacular Edge Function.
+
+## P3 Shopping list (2026-11-18, lead: `feature/p3-list`)
+Based on `origin/feature/p2-pantry`, because P2 (PR #69) isn't merged yet and P3 builds on its toast, sheet, fields and
+pantry provider. Rebase onto `origin/main` once #69 merges. Migration lock: nobody (P3 uses the existing
+`shopping_list_items`, `add_to_shopping_list` and `complete_shopping_trip`).
+
+Step 0 (lead):
+- `src/features/list/api.ts`: same rules as the web list actions (`addListText`, `addListItems`, `setChecked`,
+  `updateListItem`, `deleteListItems`, `putAway`), each returning `{ error }` and failing fast offline. The web's
+  "added to the list" push is server-only and waits for P6.
+- `src/features/list/list-provider.tsx`: `ListProvider` in the tabs layout (inside `PantryProvider`), `useList()`
+  (`items`, `query`, `apply`, `setItemChecked`, `toggle` with an Undo toast) and `useListItem(id)`. Query key
+  `queryKeys.list(id)`.
+- `ReviewList` gained an optional `hints` prop (per draft key) for put away's "Adds to your ..." notes.
+- Stubs: list screen, `ListEditSheet`, `PutAwaySheet`, `features/list/add-to-list.ts` (`useAddPantryItemToList`).
+- Deferred: scan to check off (barcodes, P5).
+
+Workers (branch from `origin/feature/p3-list`): W1 `feature/p3-list-screen` (Sonnet: screen with grouping, quick add,
+check off), W2 `feature/p3-list-edit` (Sonnet: edit sheet with delete and Undo), W3 `feature/p3-put-away` (Sonnet:
+put away into the pantry), W4 `feature/p3-pantry-to-list` (Haiku: small, well-specified wiring of "Add to shopping
+list" into the pantry screens).
+
+W2 list edit (`feature/p3-list-edit`): `ListEditSheet` ports the web edit sheet on the P2 `EditItemSheet` pattern (live row, fresh form per open, held toasts). Fields: name, amount (empty = any) + unit, Aisle (with the remember hint), note. Save is optimistic with rollback; Delete has no confirm and shows "Removed X" with Undo (re-adds via `addListItems`); a checked line shows who checked it and an Uncheck button. Helpers in `src/lib/list-edit.ts` with tests. Not checked: simulator or a signed-in account.
+
+W1 list screen (`feature/p3-list-screen`):
+- `(tabs)/list.tsx` ported from the web list: title and `listSummary`, quick add (`ListQuickAdd`, `addListText`, toast
+  from `describeListAdditions`, text kept and error shown on failure), one card per category in store order, round
+  checkbox (`toggle`, light haptic on check off) with name, amount, note and "For <recipe>", tap the body to open
+  `ListEditSheet`, "In the cart" card with struck-through lines and `checkedByLabel`, "Put away N items" opens
+  `PutAwaySheet` with `session + 1`, empty state, loading, error with retry, offline note, pull to refresh.
+- Code: `src/lib/list-rows.ts` (rows builder, `listMeta`, `putAwayLabel`, tested), `features/list/components/`
+  `ListLineRow` and `ListQuickAdd`. Reuses the pantry's `SectionHeading`. No shared files changed.
+- Not checked on a device or simulator. Skipped: ingredient suggestions under the quick add (optional).
+
+W3 put away (`feature/p3-put-away`):
+- `PutAwaySheet` (stub props kept): on each new `session` it takes the lines checked right then, builds drafts with
+  `draftsFromListItems`, and shows them in `ReviewList` with `mergeHints` notes from the live pantry. The full set of
+  line ids is kept apart from the drafts, so removing a card skips the pantry but still clears the line.
+- "Put away N items" calls `putAway(householdId, ids, draftsToItems(drafts))` (null shows field errors); "Clear without
+  adding" asks with `Alert.alert` first; with no cards left only "Clear N from the list" shows. On success: remove the
+  lines from `useList()`, refetch the pantry, close, then a toast held by `createAfterClose`. Errors stay in the sheet.
+  Nothing checked: "Check items off first" with Close.
+- Pure helpers with tests: `src/lib/put-away.ts`. No shared-file changes.
+- Not checked on a device or against the live backend (no simulator or account): the sheet flow, the confirm alert,
+  the toast timing, and the pantry showing the new rows on a second phone.
+
+W4 pantry to list (`feature/p3-pantry-to-list`, Haiku):
+- `features/list/add-to-list.ts`: `useAddPantryItemToList()` calls `addListItems` for the household and returns the toast
+  text. The message choice is pure in `lib/add-to-list-message.ts` (with tests).
+- Pantry rows: items that ran out (`quantity === 0`, not staple) get a 44pt "Add <name> to the shopping list" button
+  (list icon). The screen shows the result with `useToast().show`.
+- Edit sheet: "Add to shopping list" under the ran-out and used-some buttons. It closes the sheet, then sends the result
+  through the sheet's `send`. The "Moved X to Ran out" toast gets an "Add to list" action using the item as it was before.
+- Not checked on a device or simulator (no signed-in account). Checks: mobile typecheck, lint, `npm test`, `npx expo export -p ios`.
+- Found, not changed: the edit sheet's "We ran out" shows when `quantity === null` (the "On hand" untracked case), while
+  "ran out" is `quantity === 0`. Looks like a P2 mismatch; worth a look in the lead's review.
+- Review (`/code-review`, medium) fixes: a second tap on a row's list button while its add is in flight is ignored.
+  Left as they are: the sheet's held toast can wait if the sheet is reopened before the add settles (`send` is per spec);
+  `useAddPantryItemToList` reads `householdId` via `useList()` as specified (re-renders on list changes); casing
+  (lowercase on add, display case on "already on the list") as specified; the hook has no unit test (needs a provider).
+
+Lead merge (P3): W2, W1, W3, W4 merged into `feature/p3-list` in that order; only PROGRESS.md conflicted. The lead
+read every diff. Fix on merge: the list edit sheet closes before removing the line, so it never shows "someone removed
+this" for your own delete. W4 asked about "We ran out" showing for untracked items: that's intended (it sets an
+"On hand" item to 0, like the web). Checks: web typecheck, lint, 2,334 tests; mobile typecheck, lint, iOS and web exports.
+The P3 PR is stacked on P2 (base `feature/p2-pantry`) until PR #69 merges.
+
+Open for P3's exit check (needs the user and phones in Expo Go):
+- At 375pt, light and dark: quick add, check off with Undo, the edit sheet, put away (cards, hints, date picker),
+  "Clear without adding", and "Add to shopping list" from a ran-out row, the pantry edit sheet and the Ran out toast.
+- Two phones: an item added on one shows on the other; checking off and put away move it into the pantry on both.
+- Known gaps: a failed list edit rolls back over a housemate's newer change (same as the pantry sheet); a housemate's
+  change while put away is open makes the save fail with an error instead of refreshing the cards; scan to check
+  off waits for P5; the "added to the list" push waits for P6.

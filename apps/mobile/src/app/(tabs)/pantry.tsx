@@ -2,12 +2,13 @@ import { pantrySummary, remainingMessage } from '@lazychef/core/pantry/display';
 import { groupPantry } from '@lazychef/core/pantry/group';
 import type { PantryItem } from '@lazychef/core/pantry/types';
 import * as Haptics from 'expo-haptics';
-import { useCallback, useDeferredValue, useMemo, useState } from 'react';
+import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, Text, View } from 'react-native';
 
 import { FormMessage } from '@/components/FormMessage';
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
 import { useToast } from '@/components/Toast';
+import { useAddPantryItemToList } from '@/features/list/add-to-list';
 import { AddFoodSheet, type AddFoodSeed } from '@/features/pantry/components/AddFoodSheet';
 import { EditItemSheet } from '@/features/pantry/components/EditItemSheet';
 import { GettingStarted } from '@/features/pantry/components/GettingStarted';
@@ -79,6 +80,20 @@ export default function PantryScreen() {
     [adjust, toast],
   );
 
+  const addToList = useAddPantryItemToList();
+  // A second tap while the first add is in flight would add the item twice.
+  const addingIds = useRef(new Set<string>());
+  const addRowToList = useCallback(
+    (item: PantryItem) => {
+      if (addingIds.current.has(item.id)) return;
+      addingIds.current.add(item.id);
+      void addToList(item)
+        .then((result) => toast.show(result))
+        .finally(() => addingIds.current.delete(item.id));
+    },
+    [addToList, toast],
+  );
+
   const refresh = async () => {
     // Offline, a refetch waits for the network, so don't leave the spinner up.
     if (offline) return;
@@ -106,6 +121,7 @@ export default function PantryScreen() {
               last={row.last}
               onOpen={openEdit}
               onUseOne={takeOne}
+              onAddToList={addRowToList}
             />
           );
         case 'staples':
@@ -121,7 +137,7 @@ export default function PantryScreen() {
           );
       }
     },
-    [today, openEdit, takeOne, searching],
+    [today, openEdit, takeOne, addRowToList, searching],
   );
 
   const sheets = (
