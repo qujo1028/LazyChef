@@ -4,19 +4,22 @@ import { Tabs } from 'expo-router/js-tabs';
 import { AppScreenHeader } from '@/components/AppScreenHeader';
 import { BottomTabBar } from '@/components/BottomTabBar';
 import { CircleIconButton } from '@/components/CircleIconButton';
-
-// P1 wires the real household name here.
-const HOUSEHOLD_NAME = 'Your household';
+import { useActiveHousehold } from '@/lib/household';
+import { HouseholdChannelProvider } from '@/providers/household-channel';
 
 export default function TabsLayout() {
   const router = useRouter();
-  return (
+  const { household } = useActiveHousehold();
+  // The root gate only shows this group with a household, so this is a brief edge case.
+  const name = household?.name ?? 'LazyChef';
+
+  const tabs = (
     <Tabs
       tabBar={(props) => <BottomTabBar {...props} />}
       screenOptions={{
         header: () => (
           <AppScreenHeader
-            title={HOUSEHOLD_NAME}
+            title={name}
             right={<CircleIconButton icon="pulse-outline" label="Activity" onPress={() => router.push('/activity')} />}
           />
         ),
@@ -28,4 +31,6 @@ export default function TabsLayout() {
       <Tabs.Screen name="household" options={{ title: 'Household' }} />
     </Tabs>
   );
+
+  return household ? <HouseholdChannelProvider householdId={household.id}>{tabs}</HouseholdChannelProvider> : tabs;
 }

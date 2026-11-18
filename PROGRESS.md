@@ -421,3 +421,28 @@ Lead merge (P0): all four workers merged into `feature/p0-scaffold`. Follow-ups 
 `next build`, ingredients check; mobile typecheck, lint, iOS bundle. On a real iPhone via Expo Go (2026-11-18): tabs,
 header, fonts and theme look right (user checked). Still open: old file paths in `docs/handoff-*.md` and
 `docs/mobile-apps.md` (historical docs, left as is); `db.ts` in core repeats the `Tables`/`Enums` helpers.
+
+## P1 Accounts and household (2026-11-18, lead: `feature/p1-accounts`)
+Based on `feature/p0-scaffold` (PR #67), since P0 isn't on `main` yet. Rebase onto `main` once #67 merges.
+Migration lock: nobody (P1 uses the existing tables and RPCs: `create_household`, `join_household`,
+`get_invite_preview`, `regenerate_invite_code`, `remove_member`, `leave_household`).
+
+Step 0 (lead):
+- Packages installed so workers don't change `package-lock.json`: `expo-apple-authentication`, `expo-auth-session`,
+  `expo-crypto`, `expo-clipboard`.
+- Supabase client uses the PKCE flow (`flowType: 'pkce'`): OAuth and email links come back with `?code=`.
+- `useSession()` now reads one shared `SessionProvider` (`src/lib/use-session.tsx`, mounted in `AppProviders`).
+- `src/lib/household.ts`: `useHouseholdContext()`, `useActiveHousehold()`, `pickActiveMembership()` and `queryKeys`
+  (every key starts with `['household', ...]`).
+- Route gate in the root layout with `Stack.Protected`: signed out sees `(auth)`, signed in without a household sees
+  `onboarding`, otherwise `(tabs)` and `activity`. `index`, `auth/callback`, `reset-password` and `join/[code]` are
+  always reachable. Stub screens for each worker.
+- Components: `TextField`, `FormMessage`, and `PrimaryPillButton` gained `variant` (primary, outline, text, danger)
+  and `loading`.
+- `src/providers/household-channel.tsx` stub with the web app's `HouseholdChannelProvider` / `useHouseholdChanges`
+  signatures, mounted in the tabs layout. The header shows the active household's name.
+
+Workers (branch from `origin/feature/p1-accounts`): W1 `feature/p1-auth` (welcome, sign in and up, reset, Google,
+Apple, callback), W2 `feature/p1-onboarding` (onboarding, join by code and link), W3 `feature/p1-household`
+(Household tab: members, invite, rename, leave, switch, sign out), W4 `feature/p1-realtime` (household channel,
+resume refetch).

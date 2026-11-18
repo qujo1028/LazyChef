@@ -13,8 +13,11 @@ import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 
 import { AppScreenHeader } from '@/components/AppScreenHeader';
+import { useHouseholdContext } from '@/lib/household';
+import { useSession } from '@/lib/use-session';
 import { AppProviders } from '@/providers/app-providers';
 import { useTheme } from '@/theme';
 
@@ -41,18 +44,44 @@ export default function RootLayout() {
 function Navigation() {
   const { scheme, colors } = useTheme();
   const router = useRouter();
+  const { session, loading } = useSession();
+  const context = useHouseholdContext();
+
+  const signedIn = session !== null;
+  // Hold on a blank screen until we know which group to show, so nobody sees the wrong one flash.
+  const waiting = loading || (signedIn && context.isPending);
+  if (waiting) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+  const hasHousehold = (context.data?.memberships.length ?? 0) > 0;
+
   return (
     <>
       {/* Dark icons on cream, light icons in dark mode. */}
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-      <Stack screenOptions={{ contentStyle: { backgroundColor: colors.background } }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="activity"
-          options={{
-            header: () => <AppScreenHeader title="Activity" onBack={() => router.back()} />,
-          }}
-        />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
+        {/* Always reachable: they work out the session state themselves. */}
+        <Stack.Screen name="index" />
+        <Stack.Screen name="auth/callback" />
+        <Stack.Screen name="reset-password" />
+        <Stack.Screen name="join/[code]" />
+
+        <Stack.Protected guard={!signedIn}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={signedIn && !hasHousehold}>
+          <Stack.Screen name="onboarding" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={signedIn && hasHousehold}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="activity"
+            options={{
+              headerShown: true,
+              header: () => <AppScreenHeader title="Activity" onBack={() => router.back()} />,
+            }}
+          />
+        </Stack.Protected>
       </Stack>
     </>
   );

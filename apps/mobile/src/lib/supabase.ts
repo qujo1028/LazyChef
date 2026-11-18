@@ -27,6 +27,8 @@ export const supabase = createClient<Database>(
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: false,
+      // PKCE: OAuth and email links come back as ?code=..., exchanged with exchangeCodeForSession.
+      flowType: 'pkce',
     },
   },
 );

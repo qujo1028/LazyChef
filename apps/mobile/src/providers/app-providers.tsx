@@ -5,6 +5,7 @@ import { SafeAreaInsetsContext, useSafeAreaInsets } from 'react-native-safe-area
 
 import { cacheBuster, CACHE_MAX_AGE, queryClient, queryPersister } from '@/lib/query-client';
 import { useOffline } from '@/lib/use-offline';
+import { SessionProvider } from '@/lib/use-session';
 
 import { OfflineBanner } from './offline-banner';
 
@@ -31,7 +32,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
       client={queryClient}
       persistOptions={{ persister: queryPersister, maxAge: CACHE_MAX_AGE, buster: cacheBuster }}
     >
-      <OfflineLayer>{children}</OfflineLayer>
+      <SessionProvider>
+        <OfflineLayer>{children}</OfflineLayer>
+      </SessionProvider>
     </PersistQueryClientProvider>
   );
 }
