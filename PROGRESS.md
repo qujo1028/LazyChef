@@ -638,3 +638,13 @@ put away into the pantry), W4 `feature/p3-pantry-to-list` (Haiku: small, well-sp
 list" into the pantry screens).
 
 W2 list edit (`feature/p3-list-edit`): `ListEditSheet` ports the web edit sheet on the P2 `EditItemSheet` pattern (live row, fresh form per open, held toasts). Fields: name, amount (empty = any) + unit, Aisle (with the remember hint), note. Save is optimistic with rollback; Delete has no confirm and shows "Removed X" with Undo (re-adds via `addListItems`); a checked line shows who checked it and an Uncheck button. Helpers in `src/lib/list-edit.ts` with tests. Not checked: simulator or a signed-in account.
+
+W1 list screen (`feature/p3-list-screen`):
+- `(tabs)/list.tsx` ported from the web list: title and `listSummary`, quick add (`ListQuickAdd`, `addListText`, toast
+  from `describeListAdditions`, text kept and error shown on failure), one card per category in store order, round
+  checkbox (`toggle`, light haptic on check off) with name, amount, note and "For <recipe>", tap the body to open
+  `ListEditSheet`, "In the cart" card with struck-through lines and `checkedByLabel`, "Put away N items" opens
+  `PutAwaySheet` with `session + 1`, empty state, loading, error with retry, offline note, pull to refresh.
+- Code: `src/lib/list-rows.ts` (rows builder, `listMeta`, `putAwayLabel`, tested), `features/list/components/`
+  `ListLineRow` and `ListQuickAdd`. Reuses the pantry's `SectionHeading`. No shared files changed.
+- Not checked on a device or simulator. Skipped: ingredient suggestions under the quick add (optional).
