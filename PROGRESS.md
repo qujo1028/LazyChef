@@ -568,3 +568,13 @@ W3 review (`feature/p2-review`, Sonnet): `ReviewList` (one `Card` per draft: emo
 RN has no paste event and a multi-line `TextInput` keeps pasted line breaks itself. Helper `lib/add-several-hint.ts`
 with a test. No shared-file changes. Not checked: simulator layout (emoji and remove button alignment against the
 name field, VoiceOver, Dynamic Type), sheet scrolling with many drafts.
+
+W4 edit (`feature/p2-edit`):
+- `EditItemSheet`: header with emoji, name, amount and category, who added it and when; "Used some?" (units converted),
+  "We ran out", the edit form (name, amount and unit, category, expiry, Always on hand), Save (disabled until something
+  changes; errors show inside the sheet, with a rollback), Delete with an `Alert` confirm. If a housemate deletes the
+  item while it is open, the sheet says so with a Close button. The form starts fresh each time the sheet opens.
+- Toasts wait until the sheet has closed (`src/lib/after-close.ts`, with tests), since they render under native modals.
+- Skipped: "Add to shopping list" (P3). No shared-file changes.
+- Not checked on a device or against the live backend (no simulator or signed-in account). Checks: mobile typecheck,
+  lint, `npm test`, `npx expo export -p ios`.
