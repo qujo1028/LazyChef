@@ -11,41 +11,36 @@ Source: the "LazyChef UI Redesign" prompt. It refers to Mealvana screenshots, bu
 1. **Platform.** The prompt describes the web app in an Xcode wrapper and says not to rebuild. The RN plan replaces that shell. Treat this doc as the design spec for the Expo app. Section 9 of the prompt (viewport, `env(safe-area-*)`, keyboard jumps) is for the web app only. The RN equivalents are the safe-area context, `KeyboardAvoidingView`, and the tab bar's bottom inset.
 2. **Tab count.** The brief says four destinations. The scope has five (Pantry, Recipes, List, Activity, Household). Pick one before the nav is built.
 
-## Palette: LazyChef first
+## Palette: Olive and paprika (chosen 2026-11-18)
 
-LazyChef's existing tokens (in `src/app/globals.css`, OKLCH) are the base. The brief's principles map onto them:
+This replaces the app's current sage-and-tomato look. The OKLCH tokens in `src/app/globals.css` are the web app's values, and they stay until the web app is retired. The RN theme uses the values below. Hex values are starting points, measured against the cream background `#F8F6EC`. Tune them when the theme is written, then re-measure.
 
-| Role | LazyChef token | Value | Use |
+| Role | Hex | Contrast on cream | Use |
 |---|---|---|---|
-| Background | `--background` | `oklch(0.982 0.009 85)` (warm cream) | screen background |
-| Surface | `--card` | `oklch(0.997 0.004 85)` | cards, sheets |
-| Primary | `--primary` | `oklch(0.5 0.11 150)` (sage green) | save and main actions, active tab |
-| Accent | `--tomato` | `oklch(0.62 0.18 35)` | favourite hearts, badges, active highlights |
-| Text | `--foreground` | `oklch(0.23 0.018 55)` (warm ink) | headings, body |
-| Muted text | `--muted-foreground` | `oklch(0.51 0.02 65)` | metadata |
-| Border | `--border` | `oklch(0.905 0.016 80)` | outlines, dividers |
-| Pill | `--secondary` | `oklch(0.95 0.014 80)` | metadata capsules |
+| Background | `#F8F6EC` | base | screen background |
+| Surface | `#FFFFFF` | n/a | cards, sheets, inputs |
+| Primary (olive) | `#4D5B2A` | 6.8:1 | save and main actions, active tab |
+| Accent (paprika) | `#C0492F` | 4.6:1 | favourite hearts, badges, active highlights; passes for text |
+| Ink | `#2A2418` | 14.2:1 | headings and body text |
+| Muted text | to measure | to measure | metadata and secondary labels |
+| Border | to choose | decorative | outlines, dividers |
+| Pill | to choose | n/a | metadata capsules |
 
-Why this and not the brief's navy and coral: LazyChef already has a cream background, a green primary, and a tomato accent. Swapping them for navy and coral would make the app look like a different product. The brief's *principles* (cream, outlined controls, circular imagery, pill metadata, editorial headings) carry over without changing the palette.
+Contrast rules that follow from the numbers:
+- Ink on cream or white for body text.
+- Olive works for text and buttons. White text on olive passes (7.4:1).
+- Paprika passes for text on cream (4.6:1). White text on paprika (5.0:1) also passes, but check it at the final hex.
+- Muted text, border, and pill colours aren't measured yet. Measure them when the theme is written, before they're used for any text.
 
-Contrast rules to check in the build (values are estimates, measure them when the theme is written):
-- Body text uses `--foreground` on the cream or card backgrounds. It should pass easily.
-- The sage primary works for text on the cream background. Measure before using it for small text.
-- The tomato accent is probably around 3:1 on cream. That's fine for icons, hearts, and badges, but not for small text.
-- Don't put white text on tomato. Use the dark foreground colour on tomato buttons.
-- Muted text is for metadata and secondary labels. Measure it against the card background.
+Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to a theme object in `packages/core` or the Expo theme.
 
-Decision for you: keep sage as the primary (recommended), or move to a deeper navy-leaning primary? Either way the other tokens stay.
+## Typography (chosen 2026-11-18)
 
-Radius and spacing: LazyChef's `--radius` is 0.75rem. Use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to a theme object in `packages/core` or the Expo theme, not CSS variables.
-
-## Typography
-
-- Screen titles 28 to 32px, editorial and bold. One display face for titles only. Check the licence before shipping. Google Fonts are fine.
-- Section headings 17 to 19px.
-- Body 14 to 16px. Recipe titles 12 to 14px. Metadata 11 to 12px. Tab labels 10 to 11px.
+- **Display (titles):** Libre Caslon Display. Screen titles 28 to 32px. Use it only for titles and the largest headings.
+- **UI (everything else):** Source Sans 3. Section headings 17 to 19px, body 14 to 16px, recipe titles 12 to 14px, metadata 11 to 12px, tab labels 10 to 11px.
+- Both are Google Fonts under the SIL Open Font License, so they can be used in the app. Load them with `expo-font` in the RN app.
 - **Accessibility:** 10 to 11px tab labels and metadata are small for many iOS users. Support Dynamic Type and keep the minimum at 11px where possible.
-- Primary text uses the warm foreground colour, not pure black.
+- Primary text uses the ink colour, not pure black.
 
 ## Screens
 
@@ -53,7 +48,7 @@ Radius and spacing: LazyChef's `--radius` is 0.75rem. Use the brief's scale (8, 
 |---|---|---|
 | Recipe discovery (circles, carousels, see all) | Recipes tab | Visual pattern only: circular images, horizontal carousels, favourite hearts. Replaces the card grid. Ideas / Saved / Ours tabs stay as the filter. |
 | Recipe editing (rounded images, stepper, save button) | Recipe edit sheet | Visual pattern only, applied to LazyChef's existing add and edit recipe form. |
-| Bottom navigation | Tab bar | Five tabs, pending conflict 2. Sage active state, muted inactive. |
+| Bottom navigation | Tab bar | Five tabs, pending conflict 2. Olive active state, muted inactive. |
 
 Screens outside the brief still use the same tokens and components: Pantry, List, Activity, Household, sign-in, and onboarding.
 
@@ -63,10 +58,10 @@ Names are for the Expo app, under `apps/mobile/components`.
 
 - `AppScreenHeader`, `MetadataPill`, `CircleIconButton`
 - `RecipeCircleCard`, `RecipeRectangleCard`, `RecipeCarousel`, `RecipeSectionHeader`
-- `FavoriteButton` (tomato heart, small scale pulse)
+- `FavoriteButton` (paprika heart, small scale pulse)
 - `SelectedRecipeIndicator`
 - `ServingStepper` (for recipe servings, which LazyChef already tracks)
-- `PrimaryPillButton` (primary colour, pill, text in the card colour)
+- `PrimaryPillButton` (olive, pill, white text)
 - `BottomTabBar`
 
 Before building, check the existing shared components in `src/components/ui` (shadcn). Reuse them in RN where the behaviour matches. Don't duplicate them.
@@ -93,7 +88,6 @@ The haptic and reward rules from the habit plan (PR #62) apply to the same actio
 
 ## Open questions
 
-- Primary colour: keep sage (recommended), or move to a deeper navy-leaning shade?
 - Tab count: five (recommended) or four?
-- Display font for titles: which one?
 - Screenshots: share them so spacing and type can be checked against the references.
+- Muted text, border, and pill colours: to measure and choose when the theme is written.
