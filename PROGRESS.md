@@ -897,7 +897,7 @@ W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
   message, and part of the cache key (an object entry, lowercased). Without a hint the key is byte for byte the web's,
   so web and phone share cached ideas.
 - Shared code: the pure meal-ideas parts moved to `packages/core/src/recipes/ai/{idea,meal-ideas}.ts`; the web files
-  re-export them. To keep the 2 MB ingredient catalog out of the function, `BASICS` (`recipes/basics.ts`),
+  re-export them. To keep the large generated ingredient catalog out of the function, `BASICS` (`recipes/basics.ts`),
   `pantrySearchNames` / `isAvailable` (`recipes/pantry-names.ts`), the taste hints (`recipes/taste-hints.ts`) and the
   cooked-recipe reader (`activity/cooked-recipe.ts`) are split out and re-exported from `match.ts`, `taste.ts` and
   `feed.ts` (no exported signature changed). Name matching uses `ingredients/library/normalize.ts`, which is what the
