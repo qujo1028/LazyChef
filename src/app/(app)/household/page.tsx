@@ -13,6 +13,8 @@ import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/compo
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { NotificationsCard } from "@/features/push/components/notifications-card"
+import { getMyNotificationPrefs } from "@/features/push/queries"
 import { ProCard } from "@/features/pro/components/pro-card"
 import { FoodPreferencesSheet } from "@/features/preferences/components/food-preferences-sheet"
 import { getMyPreferences } from "@/features/preferences/queries"
@@ -25,7 +27,11 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
     requireHousehold(),
     searchParams,
   ])
-  const [members, prefs] = await Promise.all([getHouseholdMembers(household.id), getMyPreferences()])
+  const [members, prefs, notificationPrefs] = await Promise.all([
+    getHouseholdMembers(household.id),
+    getMyPreferences(),
+    getMyNotificationPrefs(),
+  ])
   const isOwner = role === "owner"
   const welcome = firstParam(params.welcome) === "1"
 
@@ -88,6 +94,8 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
           </Button>
         </CardContent>
       </Card>
+
+      <NotificationsCard initial={notificationPrefs} />
 
       <Card>
         <CardHeader>

@@ -14,6 +14,7 @@ import { addItems, previewItems } from "../actions"
 import { describeAdditions } from "../merge"
 import type { SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftsToItems, type ReviewDraft } from "../review"
+import { offerPush } from "@/features/push/offer"
 import { callAction } from "@/lib/call-action"
 import { IngredientCombobox } from "./ingredient-combobox"
 import { ReviewList, SpoonacularNote } from "./review-list"
@@ -100,6 +101,7 @@ export function QuickAddSheet({
       toast.success(describeAdditions(result))
       setCleared(true)
       onOpenChange(false)
+      offerPush()
     })
   }
 
