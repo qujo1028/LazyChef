@@ -588,3 +588,30 @@ W1 pantry screen (`feature/p2-pantry-screen`):
 - Code: `src/lib/pantry-rows.ts` (rows builder and `amountTaken`, tested), and `features/pantry/components/`
   `PantryItemRow`, `PantrySectionRows`, `PantrySearch`, `GettingStarted`. No shared files changed.
 - Not checked on a device or simulator. Known gaps: "Add to shopping list" on ran-out rows waits for P3.
+
+W2 add food (`feature/p2-add-food`):
+- `AddFoodSheet` (stub props kept): quick mode with one input, autocomplete from `searchIngredients` for the name at the
+  caret (`suggestionQuery`, `replaceNameAtCaret`, bold `matchRange`, in `SuggestionList.tsx`), "N items" hint, an "Add several"
+  toggle to W3's `AddSeveralInput` that keeps the text, then W3's `ReviewList` step with Back and "Add N to pantry".
+- Flow: `previewItems` then `draftsFromResolved`; `draftsToItems` null shows field errors; `addItems` errors show inside
+  the sheet; success closes, then the toast (`describeAdditions`) is held by `createAfterClose` until the sheet has closed.
+  Text and review survive a close; a new seed or a finished add starts fresh. Input autofocuses after the slide-in.
+- Pure helpers with tests: `src/lib/add-food.ts` (`highlightParts`, `reviewTitle`, `addButtonLabel`, `stateOnOpen`).
+- Not checked on a device: keyboard avoidance, autofocus timing in the page sheet, caret placement after picking a
+  suggestion (uses a controlled `selection` released on the next selection event), pasting a multi-line list into the
+  one-line box (iOS may flatten line breaks; "Add several" handles lists). No shared-file changes.
+
+Lead merge (P2): W3, W4, W1, W2 merged into `feature/p2-pantry` in that order. Every worker kept the stub props, so the
+merges were clean apart from PROGRESS.md. W3 skipped `/code-review`, so the lead reviewed its diff (no findings); the
+lead also read W1, W2 and W4's diffs. Fix on merge: the add sheet showed an error twice in "Add several" mode and put
+the review error under a long list (now above it). Checks: web typecheck, lint, 2,316 tests; mobile typecheck, lint, iOS
+and web exports.
+
+Open for P2's exit check (needs the user and a phone in Expo Go):
+- At 375pt, light and dark: pantry list, search, staples, ran out, the add sheet (autocomplete, Add several, review,
+  date picker), the edit sheet (Used some, We ran out, save, delete).
+- Keyboard and caret behaviour in the page sheet; "-1" haptic and Undo; toasts appear after a sheet closes. The toast
+  sits over the "Add food" pill while it shows.
+- Two phones: an add, -1 or edit on one shows on the other without a refresh.
+- Known gaps for later: a failed save rolls back over a housemate's newer change; the edit form doesn't refresh when a
+  housemate edits the same item; ran-out "Add to shopping list" is P3; categorizing unusual names needs a Spoonacular Edge Function.
