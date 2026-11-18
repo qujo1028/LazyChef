@@ -7,7 +7,7 @@ import { buildPantryIndex, pantrySearchNames } from '@lazychef/core/recipes/matc
 import type { RecipeSummary } from '@lazychef/core/recipes/recipe-shapes';
 import type { RecipeQuota } from '@lazychef/core/recipes/edge-contract';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 
 import { queryKeys } from '@/lib/household';
 import { buildIdeas, hashKey, localIdeaCount, wantsSpoonacular } from '@/lib/recipe-ideas';
@@ -38,10 +38,6 @@ export function useSuggestions(search: string | null, enabled: boolean) {
   const rows = useMemo(() => [...items.values()], [items]);
   const index = useMemo(() => buildPantryIndex(rows, today), [rows, today]);
   const signature = useMemo(() => hashKey(JSON.stringify(pantryMatchKeys(rows))), [rows]);
-  const latest = useRef({ rows, today });
-  useEffect(() => {
-    latest.current = { rows, today };
-  });
 
   const pantryReady = pantryQuery.data !== undefined || items.size > 0;
   const hasNames = useMemo(() => pantrySearchNames(rows, today).length > 0, [rows, today]);
@@ -51,8 +47,11 @@ export function useSuggestions(search: string | null, enabled: boolean) {
   const ideasQuery = useQuery({
     queryKey: queryKeys.recipes(householdId ?? 'none', 'ideas', search ?? '', signature, today),
     enabled: wanted,
+    // A failed Spoonacular call is data too, but it should not stick: try again on the next visit.
+    staleTime: (q) => (q.state.data?.failure ? 0 : 30 * 1000),
     queryFn: async (): Promise<IdeasData> => {
-      const { rows: current, today: day } = latest.current;
+      const current = rows;
+      const day = today;
       let candidates: LocalCard[] = [];
       let localFailed = false;
       try {
@@ -81,7 +80,7 @@ export function useSuggestions(search: string | null, enabled: boolean) {
 
   const quotaQuery = useQuery({
     queryKey: queryKeys.recipeQuota(),
-    enabled: enabled && !offline,
+    enabled: enabled && !offline && ideasQuery.data?.quota == null,
     staleTime: 5 * 60 * 1000,
     queryFn: () => callRecipes({ action: 'quota' }),
   });

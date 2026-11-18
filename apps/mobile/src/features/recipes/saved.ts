@@ -2,7 +2,7 @@
 // app's saveRecipe / unsaveRecipe actions (src/features/recipes/actions.ts). saved_recipes
 // broadcasts on the household channel, so every phone refetches when one changes.
 import { parseRecipeRef } from '@lazychef/core/recipes/ref';
-import { onlineManager, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, onlineManager, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import { dbErrorMessage } from '@/lib/db-error';
@@ -70,14 +70,16 @@ export function useSavedRecipes(householdId: string | null) {
     // Under the saved key, so a saved_recipes change refetches both.
     queryKey: [...queryKeys.saved(id), 'cards', [...localIds].sort().join(',')],
     enabled: householdId !== null && rowList !== undefined,
+    placeholderData: keepPreviousData,
     queryFn: () => getLocalCards(localIds, householdId!),
   });
 
   const refs = useMemo(() => new Set((rowList ?? []).flatMap((row) => savedRefOf(row) ?? [])), [rowList]);
 
   const toggle: ToggleSaved = useCallback(
-    (ref, title, image, onError) => {
+    (rawRef, title, image, onError) => {
       if (!householdId) return;
+      const ref = rawRef.toLowerCase();
       const key = queryKeys.saved(householdId);
       const before = client.getQueryData<SavedRow[]>(key);
       const save = !(before ?? []).some((row) => savedRefOf(row) === ref);
@@ -85,15 +87,21 @@ export function useSavedRecipes(householdId: string | null) {
       client.setQueryData<SavedRow[]>(key, (current) =>
         withSaved(current ?? [], ref, save ? { title, image } : null, new Date().toISOString()),
       );
+      // Undo only this heart, so overlapping taps on other recipes keep their own state.
+      const previous = (before ?? []).find((row) => savedRefOf(row) === ref);
+      const undo = () =>
+        client.setQueryData<SavedRow[]>(key, (current) =>
+          withSaved(current ?? [], ref, previous ? { title: previous.title, image: previous.image_url } : null, previous?.created_at ?? ''),
+        );
       void (save ? writeSave(householdId, ref, title, image) : writeUnsave(householdId, ref))
         .then((error) => {
           if (error) {
-            client.setQueryData(key, before);
+            undo();
             onError?.(error);
           }
         })
         .catch(() => {
-          client.setQueryData(key, before);
+          undo();
           onError?.("Couldn't save that. Try again.");
         })
         .finally(() => void client.invalidateQueries({ queryKey: key }));

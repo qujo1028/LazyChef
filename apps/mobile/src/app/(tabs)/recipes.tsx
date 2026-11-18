@@ -19,7 +19,7 @@ import { useSuggestions } from '@/features/recipes/use-suggestions';
 import { queryKeys } from '@/lib/household';
 import { cardFromSaved, cardFromSuggestion, savedSummary, type RecipeCardData } from '@/lib/recipe-cards';
 import { buildSaved, ideaSections, searchQuery } from '@/lib/recipe-ideas';
-import { buildPantryIndex, type Suggestion } from '@lazychef/core/recipes/match';
+import { buildPantryIndex } from '@lazychef/core/recipes/match';
 import { localSuggestion } from '@lazychef/core/recipes/local-match';
 import { sortSaved } from '@lazychef/core/recipes/saved';
 import { useOffline } from '@/lib/use-offline';
@@ -58,6 +58,7 @@ export default function RecipesScreen() {
 
   const suggestions = useSuggestions(search, filter === 'suggested');
   const saved = useSavedRecipes(householdId);
+  const toggleSaved = saved.toggle;
   const mine = useQuery({
     queryKey: queryKeys.recipes(householdId ?? 'none', 'mine'),
     enabled: householdId !== null && filter === 'mine',
@@ -73,25 +74,14 @@ export default function RecipesScreen() {
   const savedCards = useMemo(() => savedList.map(cardFromSaved), [savedList]);
   const mineCards = useMemo<RecipeCardData[]>(
     () =>
-      (mine.data ?? []).map((card) => {
-        const s: Suggestion = localSuggestion(index, card);
-        return {
-          id: card.id,
-          source: card.source,
-          title: card.title,
-          image: card.image,
-          readyInMinutes: card.readyInMinutes,
-          match: { have: s.have.length, need: s.need },
-          aiGenerated: card.aiGenerated,
-        };
-      }),
+      (mine.data ?? []).map((card) => ({ ...cardFromSuggestion(localSuggestion(index, card)), id: card.id })),
     [mine.data, index],
   );
 
   const open = useCallback((id: string) => router.push({ pathname: '/recipe/[id]', params: { id } }), [router]);
   const onToggleSaved = useCallback(
-    (card: RecipeCardData) => saved.toggle(card.id, card.title, card.image, (message) => toast.error(message)),
-    [saved, toast],
+    (card: RecipeCardData) => toggleSaved(card.id, card.title, card.image, (message) => toast.error(message)),
+    [toggleSaved, toast],
   );
 
   const refresh = async () => {
