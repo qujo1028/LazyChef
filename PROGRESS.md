@@ -648,3 +648,15 @@ W1 list screen (`feature/p3-list-screen`):
 - Code: `src/lib/list-rows.ts` (rows builder, `listMeta`, `putAwayLabel`, tested), `features/list/components/`
   `ListLineRow` and `ListQuickAdd`. Reuses the pantry's `SectionHeading`. No shared files changed.
 - Not checked on a device or simulator. Skipped: ingredient suggestions under the quick add (optional).
+
+W3 put away (`feature/p3-put-away`):
+- `PutAwaySheet` (stub props kept): on each new `session` it takes the lines checked right then, builds drafts with
+  `draftsFromListItems`, and shows them in `ReviewList` with `mergeHints` notes from the live pantry. The full set of
+  line ids is kept apart from the drafts, so removing a card skips the pantry but still clears the line.
+- "Put away N items" calls `putAway(householdId, ids, draftsToItems(drafts))` (null shows field errors); "Clear without
+  adding" asks with `Alert.alert` first; with no cards left only "Clear N from the list" shows. On success: remove the
+  lines from `useList()`, refetch the pantry, close, then a toast held by `createAfterClose`. Errors stay in the sheet.
+  Nothing checked: "Check items off first" with Close.
+- Pure helpers with tests: `src/lib/put-away.ts`. No shared-file changes.
+- Not checked on a device or against the live backend (no simulator or account): the sheet flow, the confirm alert,
+  the toast timing, and the pantry showing the new rows on a second phone.
