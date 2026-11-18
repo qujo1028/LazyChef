@@ -18,7 +18,7 @@ The Expo rebuild of LazyChef. Scope decisions are in [product-scope.md](product-
 ```
 apps/web/        current Next.js app (moves here when workspaces are set up)
 apps/mobile/     Expo app
-packages/core/   shared pure logic: units, ingredients, matching, grouping, dates, list plans, parsing
+packages/core/   shared pure logic: units, ingredients, matching, grouping, dates, list plans, parsing, and the habit logic (cook days, week, streak, tiers, challenges, leaderboard, reward timeline from `src/features/habit/`)
 packages/db-types/  generated database types (from supabase/migrations)
 supabase/        migrations and PGlite tests (unchanged)
 ```
@@ -30,7 +30,7 @@ Moving the web app into `apps/web` is its own step and happens after the core ex
 - **Supabase stays the backend.** The app calls the same RLS-protected tables and `security definer` RPCs as the web app. It never holds the secret key.
 - **Server-only work runs in Supabase Edge Functions:** Spoonacular lookups (cached, quota-aware), AI features, barcode lookup, and the AI usage counter.
 - **The RevenueCat webhook stays on Vercel** (`/api/revenuecat/webhook`).
-- **Auth:** Supabase email and password, plus password reset, and Google sign-in with `expo-auth-session`. Deep links use the `app.lazychef` scheme. Shared parts (callback URL parsing, safe redirects) move to `packages/core`. Capacitor-specific code in `src/lib/native-auth.ts` stays in the web app. RN uses `expo-auth-session`.
+- **Auth:** Supabase email and password, plus password reset, Google sign-in with `expo-auth-session`, and Sign in with Apple with `expo-apple-authentication` (Apple requires it when Google sign-in is offered). Deep links use the `app.lazychef` scheme. Shared parts (callback URL parsing, safe redirects) move to `packages/core`. Capacitor-specific code in `src/lib/native-auth.ts` stays in the web app. RN uses `expo-auth-session`.
 - **Realtime:** subscribe to `household:<id>`. Refetch when the app comes back to the foreground, because the socket can drop in the background.
 
 ## Phases
@@ -39,17 +39,17 @@ Estimates assume one developer working with Claude Code.
 
 | Phase | Scope | Exit check |
 |---|---|---|
-| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme, four bottom tabs (Pantry, Recipes, List, Household) with Activity in the header, CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build |
-| P1 Accounts and household (~1 wk) | Welcome, login, signup, reset, onboarding, join by code, members, realtime | Two phones see each other's changes live |
+| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme (`apps/mobile/theme`), four bottom tabs (Pantry, Recipes, List, Household) with Activity in the header, offline cache (TanStack Query persisted to AsyncStorage, plus an offline banner instead of a blank screen), CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build; airplane mode shows the banner, not a blank screen |
+| P1 Accounts and household (~1 wk) | Welcome, login, signup, reset, Google sign-in, Sign in with Apple, onboarding, join by code, members, realtime | Two phones see each other's changes live; Apple and Google sign-in work on a device |
 | P2 Pantry (~1.5 wk) | Category list, quick-add sheet with autocomplete, edit sheet, "Used some," −1 with Undo, staples | Parity with the web pantry for the keep items at 375px |
 | P3 Shopping list (~1 wk) | Add, check off, put away into the pantry | A list item moves to the pantry and shows for all members |
-| P4 Recipes (~1.5 wk) | Make now / almost there, filters, detail, saved, my recipes, quota messaging, "add missing to list" | Searches respect the quota; cached results show when it's used up |
+| P4 Recipes and cooking (~2 wk) | One recipes screen with Mine / Saved / Suggested filters, make now / almost there, detail, quota messaging, "add missing to list". The core loop: "I cooked this" sheet with Undo, the reward (haptic on every cook, confetti and a stronger haptic on milestones), the weekly ring and streak, and the Pantry "This week" card | Searches respect the quota; cached results show when it's used up; on a real phone a cook plays the reward and the ring and streak update for every member |
 | P5 Barcodes and Ideas (~1 wk) | Camera scanning, the single Ideas entry point | A scan adds an item to the pantry or list |
-| P6 Activity, account, legal (~3 days) | Activity feed, account and household settings, legal pages, push registration and settings (permission asked when the user first sets a reminder, not at launch), tap deep links | Account deletion works end to end; a push opens the right screen |
+| P6 Activity, account, legal (~1 wk) | Activity (header icon) with the household leaderboard, rotating challenges and goals, an account settings screen of its own (avatar lives here), household settings, legal pages, push registration and settings (permission asked when the user first sets a reminder, not at launch), tap deep links | Account deletion works end to end; a push opens the right screen |
 | P7 Pro billing (~1 wk, after launch) | RevenueCat SDK, soft-prompt paywall, webhook check | A test purchase unlocks Pro |
 | P8 Release (~1 wk) | Security audit (two fresh sessions, see below), TestFlight, icons (light, dark, tinted), privacy manifest, export compliance, store listing | Audit findings fixed; build passes review in TestFlight |
 
-About 9 to 10 weeks of focused work before public launch.
+About 10 to 11 weeks of focused work before public launch.
 
 ## Definition of done (every feature)
 
@@ -85,9 +85,9 @@ These come from a build-along video on working with Claude Code on a React Nativ
 The video's five-part framework, applied to LazyChef. Work through it before any new screen gets built.
 
 1. **Core function** (the app without anything else): the pantry knows what's in the house, and suggests what to cook from it. Everything else supports this.
-2. **Core loop** (action, then reward within about 30 seconds): add or use food, then "I cooked this" is the action. The reward is haptic on every cook, with confetti and a stronger haptic on milestones. The weekly ring and streak update right after. The reward is in P4 and P5, and the haptic needs a real phone to check.
-3. **Accessory features** (support the loop, don't change it): the Activity log, chart, and board, the household leaderboard, goals, and challenges. These are in P5. Don't start them before the core loop works on a phone.
-4. **Surface area** (5 to 7 screens): five tabs (Pantry, Recipes, List, Activity, Household) plus recipe detail. Onboarding is one pass through.
+2. **Core loop** (action, then reward within about 30 seconds): add or use food, then "I cooked this" is the action. The reward is haptic on every cook, with confetti and a stronger haptic on milestones. The weekly ring and streak update right after. The reward ships in P4 with recipes, and the haptic needs a real phone to check.
+3. **Accessory features** (support the loop, don't change it): the Activity log, chart, and board, the household leaderboard, goals, and challenges. These are in P6. Don't start them before the core loop works on a phone.
+4. **Surface area** (5 to 7 screens): four tabs (Pantry, Recipes, List, Household), Activity from the header, recipe detail, and account settings. Onboarding is one pass through.
 5. **Retention hook** (a reason to come back): the weekly ring and the "This week" card on Pantry, a rotating challenge, and the expiring-soon push. The push opt-in happens at the first reminder, not at launch.
 
 Test: if removing a feature leaves the core loop intact, it's an accessory. If it isn't in one of these five slots, it doesn't go in v1.
@@ -99,7 +99,7 @@ Test: if removing a feature leaves the core loop intact, it's an accessory. If i
 - **Realtime on mobile** can drop in the background. Refetch on resume.
 - **Pro billing** depends on the RevenueCat app code, which currently exists only on a worktree (see PROGRESS.md).
 - **Package version drift.** Expo Go and newly installed packages can break on version mismatches (the AsyncStorage case). Use `npx expo install` and a dev build, and pin versions in the lockfile.
-- **Sign in with Apple** is needed if Google sign-in stays in the app (see the plan decisions in the last review).
+- **Sign in with Apple** is required because Google sign-in stays. It's built in P1 and needs the Apple Developer Program account first.
 
 ## Build pipeline
 
