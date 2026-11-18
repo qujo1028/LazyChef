@@ -788,6 +788,7 @@ export type Database = {
           p_recipe_title: string
         }
         Returns: {
+          batch_id: number
           item_id: string
           name: string
           quantity_after: number | null
@@ -891,6 +892,10 @@ export type Database = {
       take_rate_limit: {
         Args: { p_bucket: string }
         Returns: boolean
+      }
+      undo_cook: {
+        Args: { p_amounts: Json; p_batch_id: number; p_household_id: string }
+        Returns: undefined
       }
     }
     Enums: {
