@@ -246,6 +246,8 @@ function StartHousehold({
   async function finish(withItems: boolean) {
     setBusy(true);
     setError(null);
+    // Local flag: the `created` state still reads false inside this call.
+    let made = false;
     try {
       const { data: householdId, error: createError } = await supabase.rpc('create_household', { p_name: name.trim() });
       if (createError || !householdId) {
@@ -253,6 +255,7 @@ function StartHousehold({
         setBusy(false);
         return;
       }
+      made = true;
       setCreated(true);
       const entries = withItems ? buildFirstPantryEntries(text, staples) : [];
       if (entries.length > 0) {
@@ -263,7 +266,7 @@ function StartHousehold({
         );
       }
     } catch (e) {
-      if (!created) {
+      if (!made) {
         setError(householdErrorMessage(e as Error));
         setBusy(false);
         return;

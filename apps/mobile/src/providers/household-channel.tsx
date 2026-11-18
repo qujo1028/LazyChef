@@ -124,7 +124,14 @@ export function HouseholdChannelProvider({
           refetchHousehold();
           return;
         }
-        for (const listener of listeners) listener(action.change, action.table);
+        for (const listener of listeners) {
+          // One broken listener must not stop the others from hearing the change.
+          try {
+            listener(action.change, action.table);
+          } catch (error) {
+            if (__DEV__) console.warn('[realtime] listener failed', error);
+          }
+        }
       }).subscribe((state, error) => {
         if (ch !== channel || disposed) return;
         if (state === 'SUBSCRIBED') {
@@ -208,7 +215,7 @@ export function HouseholdChannelProvider({
   }, [status]);
 
   return (
-    <StatusContext.Provider value={status}>
+    <StatusContext.Provider value={householdId ? status : 'offline'}>
       <ListenersContext.Provider value={listeners}>{children}</ListenersContext.Provider>
     </StatusContext.Provider>
   );
