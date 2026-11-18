@@ -30,7 +30,7 @@ import {
 import { scaleCookLines, scaleOriginal } from "../scale"
 import { RatingButtons } from "./rating-buttons"
 
-type Done = { results: CookResult[]; undone: boolean }
+type Done = { results: CookResult[]; batchId: number; undone: boolean }
 
 /** "I cooked this": review what comes out of the pantry, then take it all out at once. */
 export function CookSheet({
@@ -136,11 +136,11 @@ function CookContent({
     setChoices((current) => ({ ...current, [index]: { ...current[index], ...patch } }))
   }
 
-  function undo(results: CookResult[]) {
+  function undo(results: CookResult[], batchId: number) {
     const amounts = undoAmounts(results)
-    if (amounts.length === 0) return
+    if (amounts.length === 0 || !batchId) return
     startTransition(async () => {
-      const result = await callAction(() => undoCook(amounts))
+      const result = await callAction(() => undoCook(batchId, amounts))
       if (result.error !== undefined) {
         toast.error(result.error)
         return
@@ -163,12 +163,12 @@ function CookContent({
         toast.error(result.error)
         return
       }
-      setDone({ results: result.results, undone: false })
+      setDone({ results: result.results, batchId: result.batchId, undone: false })
       // A milestone (tier-up, streak, finished challenge) replaces the small reward; never both.
       play(result.habit?.milestone ? "milestone" : "cook")
       toast.success(`Cooked ${title}`, {
         description: `Took ${plural(undoAmounts(result.results).length, "item")} out of the pantry`,
-        action: { label: "Undo", onClick: () => undo(result.results) },
+        action: { label: "Undo", onClick: () => undo(result.results, result.batchId) },
       })
     })
   }
@@ -183,7 +183,7 @@ function CookContent({
         done={done}
         pending={pending}
         reward={reward}
-        onUndo={() => undo(done.results)}
+        onUndo={() => undo(done.results, done.batchId)}
         close={close}
       />
     )
