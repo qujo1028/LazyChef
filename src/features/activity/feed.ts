@@ -149,13 +149,20 @@ export function describeUpdate(row: Pick<ActivityRow, "action" | "itemName" | "d
 const ACTION_ORDER: ActivityAction[] = ["cooked", "shopped", "added", "restocked", "used", "updated", "removed"]
 
 /** The recipe a "cooked" row came from (cook_recipe puts it in `details`). */
-export function cookedRecipe(row: Pick<ActivityRow, "action" | "details">): { id: number | null; title: string } | null {
+export function cookedRecipe(
+  row: Pick<ActivityRow, "action" | "details">,
+): { id: number | null; aiId: string | null; title: string } | null {
   if (row.action !== "cooked") return null
   const details = row.details
   if (!details || typeof details !== "object" || Array.isArray(details)) return null
   const title = typeof details.recipe_title === "string" ? details.recipe_title.trim() : ""
   if (!title) return null
-  return { id: typeof details.recipe_id === "number" ? details.recipe_id : null, title }
+  return {
+    id: typeof details.recipe_id === "number" ? details.recipe_id : null,
+    // cook_ai_recipe logs the AI recipe's uuid instead of a Spoonacular id.
+    aiId: details.recipe_kind === "ai" && typeof details.ai_recipe_id === "string" ? details.ai_recipe_id : null,
+    title,
+  }
 }
 
 function itemsLabel(count: number) {

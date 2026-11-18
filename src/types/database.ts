@@ -13,6 +13,95 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_idea_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          household_id: string
+          response: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          household_id?: string
+          response?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_idea_cache_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_recipes: {
+        Row: {
+          blurb: string
+          created_at: string
+          created_by: string | null
+          household_id: string
+          id: string
+          ingredients: Json
+          meal: string | null
+          ready_in_minutes: number | null
+          servings: number | null
+          steps: Json
+          title: string
+        }
+        Insert: {
+          blurb?: string
+          created_at?: string
+          created_by?: string | null
+          household_id: string
+          id?: string
+          ingredients: Json
+          meal?: string | null
+          ready_in_minutes?: number | null
+          servings?: number | null
+          steps: Json
+          title: string
+        }
+        Update: {
+          blurb?: string
+          created_at?: string
+          created_by?: string | null
+          household_id?: string
+          id?: string
+          ingredients?: Json
+          meal?: string | null
+          ready_in_minutes?: number | null
+          servings?: number | null
+          steps?: Json
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_recipes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_recipes_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       activity_log: {
         Row: {
           action: Database["public"]["Enums"]["activity_action"]
@@ -266,6 +355,51 @@ export type Database = {
           },
         ]
       }
+      recipe_ratings: {
+        Row: {
+          created_at: string
+          household_id: string
+          rating: number
+          recipe_key: string
+          recipe_kind: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          rating: number
+          recipe_key: string
+          recipe_kind: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          rating?: number
+          recipe_key?: string
+          recipe_kind?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ratings_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       saved_recipes: {
         Row: {
           created_at: string
@@ -458,6 +592,16 @@ export type Database = {
         Args: { p_household_id: string; p_list_item_ids: string[]; p_pantry_items: Json }
         Returns: string[]
       }
+      cook_ai_recipe: {
+        Args: { p_ai_recipe_id: string; p_deductions: Json; p_household_id: string }
+        Returns: {
+          item_id: string
+          name: string
+          quantity_after: number | null
+          quantity_before: number | null
+          unit: string
+        }[]
+      }
       cook_recipe: {
         Args: { p_deductions: Json; p_household_id: string; p_recipe_id: number; p_recipe_title: string }
         Returns: {
@@ -489,9 +633,17 @@ export type Database = {
         Args: { p_household_id: string }
         Returns: undefined
       }
+      put_ai_idea_cache: {
+        Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
+        Returns: string
+      }
       put_spoonacular_cache: {
         Args: { p_cache_key: string; p_household_id: string; p_response: Json; p_ttl_seconds?: number }
         Returns: string
+      }
+      rate_recipe: {
+        Args: { p_household_id: string; p_rating: number; p_recipe_key: string; p_recipe_kind: string }
+        Returns: number
       }
       record_spoonacular_usage: {
         Args: { p_points_left: number | null; p_points_used: number }
@@ -504,6 +656,10 @@ export type Database = {
       remove_member: {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
+      }
+      save_ai_recipe: {
+        Args: { p_household_id: string; p_recipe: Json }
+        Returns: string
       }
       take_rate_limit: {
         Args: { p_bucket: string }
