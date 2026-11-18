@@ -689,3 +689,28 @@ Open for P3's exit check (needs the user and phones in Expo Go):
 - Known gaps: a failed list edit rolls back over a housemate's newer change (same as the pantry sheet); a housemate's
   change while put away is open makes the save fail with an error instead of refreshing the cards; scan to check
   off waits for P5; the "added to the list" push waits for P6.
+
+## P4 Recipes and cooking (2026-11-18, lead: `feature/p4-recipes`)
+Based on `origin/main` (P2 and P3 merged as PRs #69 and #70). Migration lock: nobody (P4 uses the existing recipes,
+saved_recipes, match_local_recipes, cook_recipe, undo_cook and activity_log). The Spoonacular Edge Function is new
+server code but no migration; deploying it to the live project and setting its secret waits for the user's go-ahead.
+
+Step 0 (lead):
+- Packages: `react-native-svg` (via `npx expo install`, for the weekly ring).
+- `packages/core/src/recipes/edge-contract.ts`: request and response types for the `recipes` Edge Function
+  (`suggest`, `info`, `quota`), the quota shape (`pointsLeft`, `resetsAt`, `resting`) and error codes.
+- `apps/mobile/src/features/recipes/edge.ts`: `callRecipes()` (never throws; a missing function reads as
+  `not_configured`, so screens fall back to the local library).
+- `apps/mobile/src/features/habit/use-habit.ts`: `useHouseholdCooks()` (activity_log 'cooked' rows, refetched on
+  broadcasts), `cookEventsFor()`, `useHabit()` (summary in the device time zone, plus the events cookRecipe needs).
+- `lib/haptics.ts` (`haptic(kind)` on expo-haptics), `lib/time-zone.ts`, `lib/use-now.ts`; query keys for cooks,
+  recipes, saved, one recipe, and the quota.
+- Route `app/recipe/[id].tsx` in the signed-in stack (header with back). Stubs: recipes tab, recipe page,
+  `CookSheet`, `ThisWeekCard`.
+- Typed routes: `.expo/types/router.d.ts` is generated and gitignored. After adding a route, run
+  `CI=1 npx expo start --offline` in apps/mobile for a few seconds to regenerate it, or tsc rejects the new path.
+
+Workers (branch from `origin/feature/p4-recipes`): W1 `feature/p4-recipes-screen` (Sonnet), W2
+`feature/p4-recipe-detail` (Sonnet), W3 `feature/p4-cook` (Sonnet), W5 `feature/p4-edge-recipes` (Opus: server code
+holding the Spoonacular key, auth, quota and rate limits). W4 `feature/p4-habit` (Sonnet: ring and This week card)
+starts when the first slot frees up (max 4 at once).

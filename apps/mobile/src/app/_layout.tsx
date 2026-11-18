@@ -91,6 +91,13 @@ function Navigation() {
               header: () => <AppScreenHeader title="Activity" onBack={() => router.back()} />,
             }}
           />
+          <Stack.Screen
+            name="recipe/[id]"
+            options={{
+              headerShown: true,
+              header: () => <AppScreenHeader title="Recipe" onBack={() => router.back()} />,
+            }}
+          />
         </Stack.Protected>
       </Stack>
     </>
