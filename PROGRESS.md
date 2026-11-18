@@ -485,3 +485,21 @@ W2 onboarding (`feature/p1-onboarding`):
 - Not built: universal links on the website domain (needs an Apple Developer account and an apple-app-site-association file).
 - Unverified: nothing was run on a device or simulator, and nothing was written to the live project. The join and create
   flows, keyboard behaviour, Dynamic Type and the 375pt layout are untested on screen.
+
+W1 auth (`feature/p1-auth`):
+- Built: welcome (display-font name, web pitch, Apple on iOS when enabled, Google, email, create account), sign in,
+  sign up (sends `display_name` metadata, "Check your email" state when there is no session), forgot password,
+  reset password, and `auth/callback` (`?code=` PKCE exchange, `error` params, `next` through core `safeNext`,
+  exchange guarded to run once per code). Google uses `signInWithOAuth` with `skipBrowserRedirect` and
+  `WebBrowser.openAuthSessionAsync`; cancel is quiet. Apple uses the native button, a nonce from `expo-crypto`,
+  `signInWithIdToken`, and saves the first-sign-in name to user metadata and `profiles` (same rule as the web).
+- Pure and tested: `packages/core/src/auth/forms.ts` (form schemas), `apple.ts` (name, hex, new-account rule),
+  `apps/mobile/src/lib/auth/` (`errors.ts`, `callback-url.ts`, `once.ts`). Native glue: `redirect.ts`, `google.ts`, `apple.ts`.
+- `app.json`: `expo-apple-authentication` plugin and `ios.usesAppleSignIn`. `.env.example`: `EXPO_PUBLIC_APPLE_SIGN_IN`.
+- Not checked: no simulator or signed-in device here, so none of the flows ran end to end (only tsc, lint, iOS bundle, Vitest).
+- Not ported: the web stores Apple's authorization code server-side to revoke the Apple link on account deletion.
+  The app does not send it yet; handle with account deletion (needs an Edge Function).
+- You must configure: Supabase Auth, URL Configuration, redirect allow list entries `app.lazychef://**` and, for Expo
+  Go, `exp://**`; the Google provider (works in Expo Go through the in-app browser); for Apple, the Apple Developer
+  account, the Supabase Apple provider with the bundle id `app.lazychef.mobile` as a client id, then set
+  `EXPO_PUBLIC_APPLE_SIGN_IN=1` and make a dev build (Expo Go does not carry the Apple entitlement for this app).
