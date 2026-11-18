@@ -2,11 +2,13 @@ import { AdminCard, AdminSuspense, CardNotice } from "@/features/admin/component
 import { CiList } from "@/features/admin/components/ci-list"
 import { DeployList, ProductionDeploy } from "@/features/admin/components/deploy-list"
 import { EnvChecklist } from "@/features/admin/components/env-checklist"
+import { RevenueCatFeed } from "@/features/admin/components/revenuecat-feed"
 import { ServiceList } from "@/features/admin/components/service-list"
 import { requireAdmin } from "@/features/admin/guard"
 import { loadSafely } from "@/features/admin/load"
 import { latestProductionDeploy, listDeploys, mainCi } from "@/features/admin/github-deploys"
 import { checkServices, envChecklist } from "@/features/admin/health"
+import { getRevenueCatRecent } from "@/features/admin/insights"
 
 async function ProductionDeployCard() {
   const result = await loadSafely(latestProductionDeploy)
@@ -54,6 +56,19 @@ async function ServicesCard() {
   )
 }
 
+async function RevenueCatEventsCard() {
+  const result = await loadSafely(() => getRevenueCatRecent(50))
+  return (
+    <AdminCard title="RevenueCat events">
+      {result.ok ? (
+        <RevenueCatFeed events={result.data} now={new Date()} />
+      ) : (
+        <CardNotice kind={result.kind} message={result.message} />
+      )}
+    </AdminCard>
+  )
+}
+
 export default async function AdminHealthPage() {
   await requireAdmin()
 
@@ -71,7 +86,9 @@ export default async function AdminHealthPage() {
       <AdminSuspense title="Services">
         <ServicesCard />
       </AdminSuspense>
-      {/* RevenueCat events card: added by the data worker */}
+      <AdminSuspense title="RevenueCat events">
+        <RevenueCatEventsCard />
+      </AdminSuspense>
       <AdminCard title="Environment">
         <EnvChecklist items={envChecklist()} />
       </AdminCard>
