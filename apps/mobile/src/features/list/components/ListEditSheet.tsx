@@ -163,8 +163,9 @@ function ListEditContent({
       setMessage(result.error);
       return;
     }
-    apply({ type: 'remove', id: item.id });
+    // Close first, so the sheet never shows "someone removed this" for our own delete.
     close();
+    apply({ type: 'remove', id: item.id });
     const line = undoLine(item);
     send({
       message: `Removed ${name}`,
