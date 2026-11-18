@@ -6,6 +6,7 @@
     "@expo-google-fonts/libre-caslon-display": "^0.4.1",
     "@expo-google-fonts/source-sans-3": "^0.4.2",
     "@expo/ui": "~58.0.29",
+    "@expo/vector-icons": "^15.0.2",
     "@lazychef/core": "*",
     "@lazychef/db-types": "*",
     "@react-native-async-storage/async-storage": "2.2.0",
