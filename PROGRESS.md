@@ -537,3 +537,26 @@ Open for P1's exit check (needs the user and real phones):
 
 Phone check (2026-11-18): the user tried P1 on a phone in Expo Go and everything worked.
 To do later: revisit onboarding once the rest of the app is built (also in the open items at the top).
+
+## P2 Pantry (2026-11-18, lead: `feature/p2-pantry`)
+Based on `origin/main` (P1 merged as PR #68). Migration lock: nobody (P2 uses the existing `pantry_items`,
+`category_overrides`, `add_pantry_items` and `adjust_pantry_quantity`).
+
+Step 0 (lead):
+- Packages: `@react-native-community/datetimepicker` (via `npx expo install`, config plugin added) and `zod`.
+- `src/features/pantry/api.ts`: reads (paged) and writes as the signed-in user, same rules as the web actions
+  (`addItems`, `addStaples`, `updateItem`, `adjustQuantity`, `deleteItem`), each returning `{ error }` and failing fast
+  offline. `previewItems` resolves typed text locally (household fixes, library, keyword guess); no Spoonacular on
+  mobile until an Edge Function exists.
+- `src/features/pantry/pantry-provider.tsx`: `PantryProvider` in the tabs layout, `usePantry()` (`items`, `query`,
+  `apply`, `adjust`) and `usePantryItem(id)`. Fetches merge with core row-state rules; `pantry_items` broadcasts apply live.
+  Query key `queryKeys.pantry(id)` sits under `['household']`, so resume and household refetches include it.
+- Components: `Toast` (`useToast().show({ message, action })`, app-wide, renders under native modals), `Sheet` (iOS page
+  sheet with title, Close, pinned footer), `SelectField`, `Chip`; `features/pantry/components/PantryFields.tsx`
+  (`CategoryField`, `UnitField`, `ExpiryField`). `src/lib/use-today.ts`, `src/lib/db-error.ts`.
+- Stubs with fixed props: pantry screen, `AddFoodSheet`, `ReviewList`, `AddSeveralInput`, `EditItemSheet`.
+- Deferred: "Add to shopping list" on ran-out items (P3), Spoonacular categorizing (Edge Function), barcode (P5),
+  the "This week" card (P4). Delete keeps the web's confirm, no Undo.
+
+Workers (branch from `origin/feature/p2-pantry`, all Sonnet: typical feature work): W1 `feature/p2-pantry-screen`,
+W2 `feature/p2-add-food`, W3 `feature/p2-review`, W4 `feature/p2-edit`.
