@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DeleteAccountButton } from "@/features/account/components/delete-account-button"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
+import { HapticsToggle } from "@/features/habit/components/haptics-toggle"
 import { HouseholdSwitcher, LeaveHouseholdButton } from "@/features/household/components/household-actions"
 import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/components/household-forms"
 import { InviteCard } from "@/features/household/components/invite-card"
@@ -101,6 +102,15 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
           <FoodPreferencesSheet initial={prefs} />
           <SignOutButton />
           <DeleteAccountButton />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>This phone</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <HapticsToggle />
         </CardContent>
       </Card>
 

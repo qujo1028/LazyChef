@@ -164,7 +164,8 @@ function CookContent({
         return
       }
       setDone({ results: result.results, batchId: result.batchId, undone: false })
-      play("cook")
+      // A milestone (tier-up, streak, finished challenge) replaces the small reward; never both.
+      play(result.habit?.milestone ? "milestone" : "cook")
       toast.success(`Cooked ${title}`, {
         description: `Took ${plural(undoAmounts(result.results).length, "item")} out of the pantry`,
         action: { label: "Undo", onClick: () => undo(result.results, result.batchId) },
