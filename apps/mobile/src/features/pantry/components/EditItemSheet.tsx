@@ -52,9 +52,14 @@ export function EditItemSheet({ itemId, visible, onClose }: { itemId: string | n
     else if (Platform.OS !== 'ios') gate.closed();
   }, [visible, gate]);
 
+  // A late dismiss from an earlier sheet must not release toasts while this one is open.
+  const dismissed = () => {
+    if (!visible) gate.closed();
+  };
+
   if (!current) {
     return (
-      <Sheet visible={visible} onClose={onClose} title="Item">
+      <Sheet visible={visible} onClose={onClose} title="Item" onDismiss={dismissed}>
         <View />
       </Sheet>
     );
@@ -67,7 +72,7 @@ export function EditItemSheet({ itemId, visible, onClose }: { itemId: string | n
       gone={visible && item === null}
       close={onClose}
       send={gate.send}
-      onDismiss={gate.closed}
+      onDismiss={dismissed}
     />
   );
 }
@@ -143,7 +148,7 @@ function EditItemContent({
   }
 
   async function markRanOut() {
-    if (!householdId) return;
+    if (!householdId || pending || gone) return;
     const before = item;
     apply({ type: 'patch', id: item.id, fields: { quantity: 0 } });
     close();
@@ -154,7 +159,7 @@ function EditItemContent({
       return;
     }
     apply({ type: 'upsert', item: result.item });
-    send({ message: `Moved ${item.name.trim()} to Ran out` });
+    send({ message: `Moved ${name} to Ran out` });
   }
 
   function confirmDelete() {
@@ -166,7 +171,7 @@ function EditItemContent({
   }
 
   async function remove() {
-    if (!householdId) return;
+    if (!householdId || gone) return;
     setPending(true);
     setMessage(null);
     const result = await deleteItem(householdId, item.id);
@@ -177,7 +182,7 @@ function EditItemContent({
     }
     close();
     apply({ type: 'remove', id: item.id });
-    send({ message: `Deleted ${item.name.trim()}` });
+    send({ message: `Deleted ${name}` });
   }
 
   const footer = gone ? undefined : (
