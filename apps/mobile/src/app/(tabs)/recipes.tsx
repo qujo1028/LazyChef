@@ -204,7 +204,8 @@ export default function RecipesScreen() {
     if (suggestions.emptyPantry) {
       emptyView = empty('Your pantry is empty.', 'Add some food and ideas will show up here. You can still search the library above.');
     } else if (suggestions.isLoading) {
-      emptyView = loading('Finding recipes');
+      // Offline with nothing cached, the query waits for the network: say so instead of spinning.
+      emptyView = offline ? retry('', () => void suggestions.refetch()) : loading('Finding recipes');
     } else if (suggestions.isError) {
       emptyView = retry("Couldn't load recipes. Try again.", () => void suggestions.refetch());
     } else if (sections.length === 0) {
@@ -242,7 +243,8 @@ export default function RecipesScreen() {
     const query = isSavedFilter ? saved.rows : mine;
     let emptyView: ReactElement | null = null;
     if (query.data === undefined) {
-      emptyView = query.isError ? retry("Couldn't load recipes. Try again.", () => void query.refetch()) : loading('Loading recipes');
+      emptyView =
+        query.isError || offline ? retry("Couldn't load recipes. Try again.", () => void query.refetch()) : loading('Loading recipes');
     } else if (isSavedFilter && query.data.length > 0 && saved.cards.isPending) {
       emptyView = loading('Loading recipes');
     } else if (isSavedFilter) {
