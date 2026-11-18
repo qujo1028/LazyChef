@@ -91,3 +91,11 @@ The haptic and reward rules from the habit plan (PR #62) apply to the same actio
 - Tab count: five (recommended) or four?
 - Screenshots: share them so spacing and type can be checked against the references.
 - Muted text, border, and pill colours: to measure and choose when the theme is written.
+
+## Design iteration rules
+
+- One card style across the whole app. Don't mix outlined and filled cards on different pages.
+- Monochrome icons, tinted with the palette, so they match the colours.
+- Generate the full colour ramp (shades for pressed, disabled, and muted states) from the chosen palette, then apply it everywhere.
+- Check the status bar on the real phone. Icons that are white on a white background only show up on a device.
+- Screenshot every screen, list the problems, then fix them and screenshot again.

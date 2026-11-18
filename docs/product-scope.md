@@ -49,3 +49,7 @@ Work through these five before any coding, so the scope can be handed to Claude 
 
 - One pass through. Ask only what the app needs to be useful: household name, invite or create, and the first pantry items.
 - Notification permission is asked at the first reminder the user sets, not at launch.
+
+## Parked ideas (not v1)
+
+- **Daily coaching message:** a short generated nudge when the app opens, if there's been no message in the last 12 hours. It needs AI budget and is an accessory feature, so it waits until the core loop works on a phone.

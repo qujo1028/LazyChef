@@ -47,7 +47,7 @@ Estimates assume one developer working with Claude Code.
 | P5 Barcodes and Ideas (~1 wk) | Camera scanning, the single Ideas entry point | A scan adds an item to the pantry or list |
 | P6 Activity, account, legal (~3 days) | Activity feed, account and household settings, legal pages, push registration and settings (permission asked when the user first sets a reminder, not at launch), tap deep links | Account deletion works end to end; a push opens the right screen |
 | P7 Pro billing (~1 wk, after launch) | RevenueCat SDK, soft-prompt paywall, webhook check | A test purchase unlocks Pro |
-| P8 Release (~1 wk) | TestFlight, icons (light, dark, tinted), privacy manifest, export compliance, store listing | Build passes review in TestFlight |
+| P8 Release (~1 wk) | Security audit (two fresh sessions, see below), TestFlight, icons (light, dark, tinted), privacy manifest, export compliance, store listing | Audit findings fixed; build passes review in TestFlight |
 
 About 9 to 10 weeks of focused work before public launch.
 
@@ -100,3 +100,64 @@ Test: if removing a feature leaves the core loop intact, it's an accessory. If i
 - **Pro billing** depends on the RevenueCat app code, which currently exists only on a worktree (see PROGRESS.md).
 - **Package version drift.** Expo Go and newly installed packages can break on version mismatches (the AsyncStorage case). Use `npx expo install` and a dev build, and pin versions in the lockfile.
 - **Sign in with Apple** is needed if Google sign-in stays in the app (see the plan decisions in the last review).
+
+## Build pipeline
+
+Each phase goes through these stages in order. A phase isn't done until the last stage passes.
+
+1. **Scope:** the phase's features are checked against the five-part framework in [product-scope.md](product-scope.md).
+2. **Build locally** with Claude Code, one feature per branch.
+3. **Design:** iterate on styles and layout against [app-design.md](app-design.md). Screenshot every screen, list the problems, then fix them.
+4. **Test in three stages:** Expo web in Chrome, then the dev build with a phone mirror, then a real phone. Haptics, sound, notifications, thumb reach, scrolling, and the status bar are only checked on the real phone.
+5. **Backend and auth:** migrations with RLS, tested with `npm run test:db`. Then test the feature again end to end.
+6. **Security audit:** run in a fresh session, fix the ranked findings, then run it again in another fresh session (fixes can introduce new problems).
+7. **Release:** TestFlight, then App Store submission (P8).
+
+## Security audit
+
+Run at the end of each backend phase and again before release (P8).
+
+- RLS on every table. The repo convention already requires it; the audit confirms it.
+- No secrets in the app bundle. The app gets only the publishable Supabase key (`EXPO_PUBLIC_*`). AI and Spoonacular keys stay in Edge Functions.
+- Server-side validation of every input to an RPC or Edge Function. Client checks are for convenience only.
+- Rate limits on AI and Spoonacular calls, so one person can't run up the bill (the existing `take_rate_limit` and `take_ai_allowance` cover the web app; the Edge Functions must call them too).
+- Consistent auth checks on every RPC and Edge Function.
+- No hard-coded secrets in the repo or the chat.
+- Verify every new package before installing it: it exists, it's maintained, and its name isn't a near-miss of a popular package.
+- Supabase advisors (`get_advisors`) and the `npm audit` step already in CI.
+
+Supabase settings to confirm before launch:
+- Email confirmation. The course disabled it for testing. Confirm the production setting is deliberate.
+- Site URL and redirect allowlist for the app's deep links (`app.lazychef`).
+- The project is on a plan that won't pause (see PROGRESS.md).
+
+## Secrets and keys
+
+- Keys live in `.env` files and the EAS secret store, never in chat. Chat history is stored locally, so anything pasted there should be treated as stored. If a key is pasted, rotate it.
+- The mobile bundle gets only the publishable key. AI provider keys and the Spoonacular key stay server-side.
+
+## Supabase setup for the RN app
+
+- Reuse the existing project. Don't create a second one.
+- Schema changes go through migrations, using the Supabase CLI. Run `supabase login` in a separate terminal, since the interactive login can't run inside Claude's shell.
+- Cache for instant screens: persist TanStack Query state to AsyncStorage, then refresh from Supabase. Pin AsyncStorage to the Expo SDK version with `npx expo install`.
+- One call per screen where possible. The course saw about 500 ms cut from one phone screen by combining several database calls into one. Use an RPC that returns what the screen needs.
+
+## AI features
+
+- LazyChef's AI features use Groq today (see PROGRESS.md), not the Claude API. The architecture is the same: app, Edge Function, provider, database row, then the app and a push.
+- Copy rules: no em dashes; emojis only in titles; nudges one or two sentences; longer reflections only where the screen calls for them.
+- Review sample outputs before hard-coding a prompt.
+- Ask for notification permission when the user first sets a reminder, not at launch.
+
+## Testing additions
+
+- In dev builds, show an in-app toast in place of a push. Local builds can't receive real pushes.
+- Ask Claude to run a browser check with devtools on each page: screenshot it, check the console for errors and the layout for overflow, then report the problems.
+
+## Working method additions
+
+- Run `/compact` around 250k to 300k tokens. In the video, performance dropped noticeably past about 200k. A fresh session per feature branch (already the repo rule) keeps context small.
+- Commit often and push. Version history makes it easy to roll back an AI change that broke something.
+- The permission-prompt setting is a personal choice. Whatever is chosen, the repo rules still apply (no pushes to `main`, no PRs from workers).
+- Expo's tunnel can suspend an account after several uses and ask for email verification. Use the local network (same Wi-Fi) by default, and the tunnel only when needed.
