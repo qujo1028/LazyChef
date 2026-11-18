@@ -19,10 +19,13 @@ export function ScanToAddSheet({
   open,
   onOpenChange,
   onDone,
+  nested,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onDone: (lines: ScannedLine[]) => void
+  /** Opens on top of another drawer. */
+  nested?: boolean
 }) {
   const { rows, scan, retry, name, rename, remove, clear } = useBarcodeLookups()
   // For "Tidy name with AI", which lookups offer only when the AI assistant is set up.
@@ -41,6 +44,7 @@ export function ScanToAddSheet({
 
   return (
     <BarcodeScanner
+      nested={nested}
       open={open}
       onOpenChange={onOpenChange}
       title="Scan your groceries"

@@ -1,7 +1,7 @@
 "use client"
 
 import { Info, LoaderCircle, Pencil, ScanBarcode, Sparkles } from "lucide-react"
-import { useId, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 import { AiLabel, useAiConsent } from "@/components/ai/ai-consent"
@@ -56,7 +56,13 @@ export function BulkAddForm({
   const [showErrors, setShowErrors] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
-  const [scanning, setScanning] = useState(startScanning)
+  // Opens after the sheet has mounted (?scan=1, "Scan barcodes"), since the scanner is a drawer nested in it.
+  const [scanning, setScanning] = useState(false)
+  useEffect(() => {
+    if (!startScanning) return
+    const frame = requestAnimationFrame(() => setScanning(true))
+    return () => cancelAnimationFrame(frame)
+  }, [startScanning])
   // Scanned lines (as parseLine reads them) → their barcode, and each code's package size.
   const scannedLines = useRef(new Map<string, string>())
   const packages = useRef(new Map<string, ScanPackage>())
@@ -236,7 +242,7 @@ export function BulkAddForm({
         <ScanBarcode aria-hidden />
         Scan barcodes
       </Button>
-      <ScanToAddSheet open={scanning} onOpenChange={setScanning} onDone={addScanned} />
+      <ScanToAddSheet nested open={scanning} onOpenChange={setScanning} onDone={addScanned} />
       <Label htmlFor={`${id}-text`}>What did you get?</Label>
       <Textarea
         ref={textareaRef}
