@@ -1,9 +1,9 @@
-import { Clock } from "lucide-react"
+import { Clock, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 
-import { filtersHref, MEAL_FILTERS, TIME_FILTERS, type RecipeFilters } from "../filters"
+import { DEFAULT_FILTERS, filtersHref, MEAL_FILTERS, TIME_FILTERS, type RecipeFilters } from "../filters"
 
 function Chip({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
@@ -21,18 +21,25 @@ function Chip({ href, active, children }: { href: string; active: boolean; child
   )
 }
 
-/** Meal type and cook-time chips. Tapping an active chip turns it off. */
-export function RecipeFilterBar({ filters }: { filters: RecipeFilters }) {
+/**
+ * Meal type and cook-time chips. Auto (the default) picks the meal from the time of day; tapping a
+ * meal overrides it, and tapping that meal again goes back to Auto.
+ */
+export function RecipeFilterBar({ filters, autoLabel }: { filters: RecipeFilters; autoLabel: string | null }) {
   return (
     <nav aria-label="Recipe filters" className="-mx-4 grid gap-2">
       <div className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
-        <Chip href={filtersHref({ ...filters, type: null })} active={filters.type === null}>
+        <Chip href={filtersHref({ ...filters, type: DEFAULT_FILTERS.type })} active={filters.type === "auto"}>
+          <Sparkles className="size-3.5" aria-hidden />
+          {autoLabel ? `Auto: ${autoLabel}` : "Auto"}
+        </Chip>
+        <Chip href={filtersHref({ ...filters, type: "any" })} active={filters.type === "any"}>
           Any meal
         </Chip>
         {MEAL_FILTERS.map((meal) => (
           <Chip
             key={meal.value}
-            href={filtersHref({ ...filters, type: filters.type === meal.value ? null : meal.value })}
+            href={filtersHref({ ...filters, type: filters.type === meal.value ? DEFAULT_FILTERS.type : meal.value })}
             active={filters.type === meal.value}
           >
             {meal.label}

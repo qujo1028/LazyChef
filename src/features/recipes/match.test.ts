@@ -25,7 +25,7 @@ function ing(name: string, id: number | null = null): RecipeIngredient {
 }
 
 function recipe(id: number, used: RecipeIngredient[], missed: RecipeIngredient[], title = `Recipe ${id}`): RecipeSummary {
-  return { id, title, image: null, readyInMinutes: null, servings: null, used, missed }
+  return { id, title, image: null, readyInMinutes: null, servings: null, dishTypes: [], used, missed }
 }
 
 describe("pantrySearchNames", () => {

@@ -21,10 +21,18 @@ describe("recipe shapes", () => {
       image: "https://img.spoonacular.com/recipes/648742-312x231.jpg",
       readyInMinutes: null,
       servings: null,
+      dishTypes: [],
       used: [{ id: 10220054, name: "sushi rice", original: "4 cups sushi rice", amount: 4, unit: "cups", aisle: "Pasta and Rice" }],
       missed: [
         { id: 11206, name: "japanese cucumber", original: "2 Japanese cucumber, cut into long sticks", amount: 2, unit: "", aisle: "Produce" },
       ],
+    })
+  })
+
+  it("keeps a complexSearch result's dish types, lowercased", () => {
+    expect(toRecipeSummary({ id: 1, title: "Soup", dishTypes: ["Lunch", "soup", "", 5], readyInMinutes: 20 })).toMatchObject({
+      dishTypes: ["lunch", "soup"],
+      readyInMinutes: 20,
     })
   })
 

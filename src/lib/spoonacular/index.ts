@@ -20,6 +20,7 @@ export {
   getRecipeInformation,
   getRecipeInformationBulk,
   MEAL_TYPES,
+  searchPool,
   searchRecipes,
   type MealType,
   type RecipeDetail,

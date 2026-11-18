@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { ChefHat, CircleAlert, KeyRound, Plus, Sparkles } from "lucide-react"
+import { cookies } from "next/headers"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/empty-state"
@@ -9,7 +10,17 @@ import { requireHousehold } from "@/features/household/queries"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
 import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
 import { RecipeFilterBar } from "@/features/recipes/components/recipe-filters"
-import { filtersHref, hasFilters, NO_FILTERS, parseFilters } from "@/features/recipes/filters"
+import { TimezoneSync } from "@/features/recipes/components/timezone-sync"
+import {
+  autoLabel,
+  CLEAR_FILTERS,
+  filtersHref,
+  hasFilters,
+  hourInZone,
+  parseFilters,
+  resolveMeals,
+  TIMEZONE_COOKIE,
+} from "@/features/recipes/filters"
 import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeSuggestions, getSavedIds } from "@/features/recipes/queries"
 import type { Usage } from "@/features/recipes/cache"
@@ -67,10 +78,17 @@ function Footer({ savedAt, usage }: { savedAt: string; usage: Usage | null }) {
 export default async function RecipesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { household } = await requireHousehold()
   const filters = parseFilters(await searchParams)
-  const [result, savedIds] = await Promise.all([getRecipeSuggestions(household.id, filters), getSavedIds(household.id)])
+  // The viewer's time zone comes from a cookie the browser sets (the server only knows UTC).
+  const timeZone = (await cookies()).get(TIMEZONE_COOKIE)?.value
+  const hour = hourInZone(new Date(), timeZone)
+  const [result, savedIds] = await Promise.all([
+    getRecipeSuggestions(household.id, filters, hour),
+    getSavedIds(household.id),
+  ])
 
   const heading = (
     <>
+      <TimezoneSync current={hour === null ? null : (timeZone ?? null)} />
       <PageHeading title="Recipes" description="What you can cook with what you have." />
       <RecipesTabs current="/recipes" />
     </>
@@ -107,7 +125,7 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
   return (
     <>
       {heading}
-      <RecipeFilterBar filters={filters} />
+      <RecipeFilterBar filters={filters} autoLabel={autoLabel(hour)} />
       {result.status === "error" ? (
         <EmptyState icon={CircleAlert} title="Couldn't find recipes right now">
           {result.problem.message}
@@ -117,11 +135,12 @@ export default async function RecipesPage({ searchParams }: { searchParams: Prom
         </EmptyState>
       ) : result.makeNow.length + result.almostThere.length === 0 ? (
         <EmptyState icon={Sparkles} title="No matches yet">
-          {hasFilters(filters) ? (
+          {hasFilters(filters) || resolveMeals(filters.type, hour) !== null ? (
             <>
-              Nothing fits those filters with what you have.{" "}
-              <Link href={filtersHref(NO_FILTERS)} className="font-medium text-primary underline underline-offset-2">
-                Clear filters
+              Nothing fits {filters.type === "auto" && autoLabel(hour) ? `${autoLabel(hour)?.toLowerCase()} right now` : "those filters"}{" "}
+              with what you have.{" "}
+              <Link href={filtersHref(CLEAR_FILTERS)} className="font-medium text-primary underline underline-offset-2">
+                Show any meal
               </Link>
             </>
           ) : (

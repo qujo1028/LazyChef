@@ -22,6 +22,8 @@ export type RecipeSummary = {
   /** Only complexSearch fills these in. */
   readyInMinutes: number | null
   servings: number | null
+  /** Spoonacular's dish types ("main course", "lunch", "soup"); only complexSearch fills these in. */
+  dishTypes: string[]
   /** Recipe ingredients that matched what we sent. */
   used: RecipeIngredient[]
   /** Recipe ingredients that didn't. */
@@ -103,6 +105,10 @@ export function toRecipeIngredient(value: unknown): RecipeIngredient | null {
   }
 }
 
+function dishTypes(value: unknown): string[] {
+  return Array.isArray(value) ? value.map((type) => text(type).toLowerCase()).filter(Boolean) : []
+}
+
 function ingredients(value: unknown): RecipeIngredient[] {
   return Array.isArray(value) ? value.flatMap((item) => toRecipeIngredient(item) ?? []) : []
 }
@@ -119,6 +125,7 @@ export function toRecipeSummary(value: unknown): RecipeSummary | null {
     image: safeUrl(raw.image),
     readyInMinutes: positiveInt(raw.readyInMinutes),
     servings: positiveInt(raw.servings),
+    dishTypes: dishTypes(raw.dishTypes),
     used: ingredients(raw.usedIngredients),
     missed: ingredients(raw.missedIngredients),
   }

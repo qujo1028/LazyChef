@@ -6,10 +6,9 @@ import { getPantryItems } from "@/features/pantry/queries"
 import { localDateKey } from "@/features/pantry/dates"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 import {
-  findRecipesByIngredients,
   getRecipeInformation,
   isSpoonacularConfigured,
-  searchRecipes,
+  searchPool,
   SpoonacularError,
   type RecipeDetail,
   type RecipeSummary,
@@ -19,7 +18,7 @@ import { createClient } from "@/lib/supabase/server"
 import { cachedRecipeDetails, cachedSpoonacular, cacheKey, recipeInfoKey, type Usage } from "./cache"
 import type { CookLine } from "./cook"
 import { planCook } from "./cook-plan"
-import { hasFilters, type RecipeFilters } from "./filters"
+import { filterRecipes, resolveMeals, type RecipeFilters } from "./filters"
 import {
   buildPantryIndex,
   checkIngredients,
@@ -31,8 +30,8 @@ import {
 } from "./match"
 import { cookHistory, type SavedRecipe } from "./saved"
 
-/** How many recipes to ask for per search. More finds more "Make now" hits; each costs 0.01+ points. */
-const SEARCH_SIZE = 40
+/** How many recipes to ask for per search. More finds more "Make now" hits; each costs 0.05 points. */
+const SEARCH_SIZE = 30
 
 export type SpoonacularProblem = { code: SpoonacularError["code"]; message: string }
 
@@ -51,8 +50,17 @@ function problem(error: unknown, context: string): SpoonacularProblem {
   return { code: "http", message: "Couldn't load recipes right now." }
 }
 
-/** "Make now" and "Almost there" for the household's pantry, cached for an hour per household. */
-export async function getRecipeSuggestions(householdId: string, filters: RecipeFilters): Promise<SuggestionsResult> {
+/**
+ * "Make now" and "Almost there" for the household's pantry. One pantry-ranked pool is cached for
+ * an hour per household; the meal and cook time are applied to it here, so switching them costs
+ * no Spoonacular points. `hour` is the viewer's local hour (null until their clock is known), which
+ * the Auto meal needs.
+ */
+export async function getRecipeSuggestions(
+  householdId: string,
+  filters: RecipeFilters,
+  hour: number | null,
+): Promise<SuggestionsResult> {
   const items = await getPantryItems(householdId)
   const today = localDateKey()
   const names = pantrySearchNames(items, today)
@@ -61,25 +69,21 @@ export async function getRecipeSuggestions(householdId: string, filters: RecipeF
 
   // The key is the set of ingredients, not their order, so a new expiry date doesn't cost a search.
   const keys = [...new Set(names.map(normalizeIngredientName))].sort()
-  const filtered = hasFilters(filters)
-  const key = filtered
-    ? cacheKey("search", [...keys, `type=${filters.type ?? ""}`, `time=${filters.maxTime ?? ""}`])
-    : cacheKey("find", keys)
+  const key = cacheKey("pool", keys)
 
   try {
     const result = await cachedSpoonacular<RecipeSummary[]>(householdId, key, async () => {
-      const { recipes, quota } = filtered
-        ? await searchRecipes({ ingredients: names, type: filters.type, maxReadyTime: filters.maxTime, number: SEARCH_SIZE })
-        : await findRecipesByIngredients(names, SEARCH_SIZE)
+      const { recipes, quota } = await searchPool(names, SEARCH_SIZE)
       return { value: recipes, quota }
     })
     const index = buildPantryIndex(items, today)
+    const shown = filterRecipes(result.value, resolveMeals(filters.type, hour), filters.maxTime)
     return {
       status: "ok",
       savedAt: result.savedAt,
       usage: result.usage,
       searched: result.value.length,
-      ...sortSuggestions(index, result.value),
+      ...sortSuggestions(index, shown),
     }
   } catch (error) {
     return { status: "error", problem: problem(error, "recipe search"), usage: null }

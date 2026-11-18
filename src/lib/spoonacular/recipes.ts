@@ -78,6 +78,14 @@ export async function searchRecipes({ ingredients, type, maxReadyTime, number = 
   return { recipes: results.flatMap((raw) => toRecipeSummary(raw) ?? []), quota }
 }
 
+/**
+ * One pantry-ranked search with no meal or time filter. Each result carries its dishTypes and
+ * readyInMinutes, so the page filters by meal and time locally (free) instead of searching again.
+ */
+export function searchPool(ingredients: string[], number = 30): Promise<RecipeList> {
+  return searchRecipes({ ingredients, number })
+}
+
 /** GET /recipes/{id}/information (no nutrition). */
 export async function getRecipeInformation(id: number): Promise<{ recipe: RecipeDetail; quota: SpoonacularQuota }> {
   if (!Number.isInteger(id) || id <= 0) throw new SpoonacularError("http", { status: 404 })

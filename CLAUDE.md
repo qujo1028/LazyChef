@@ -20,3 +20,11 @@ Supabase, Spoonacular (Phase 2+).
 - `src/types/database.ts` mirrors the migrations. Update it with each migration (or regenerate).
 - Server actions re-check auth (`requireViewer()`); the proxy is not the only gate.
 - Spoonacular free tier: 50 points/day, parse = 1 point per ingredient, cache ≤ 1 hour. Keep keys server-only.
+
+## Parallel work
+- Only one branch at a time may change `supabase/migrations/` or `src/types/database.ts`. Other sessions stay out of those files until that branch is merged.
+- Split work by feature, not by layer. Each worker session owns one whole feature.
+- Workers commit to their own branch. They never push to `main` and never open PRs; the lead session does that.
+- Before reporting done, a worker runs `npm run typecheck && npm run lint` (plus `npm run test:db` if it touched the DB).
+- The lead session reviews each branch (`/code-review`), rebases onto `main`, reruns all checks, then opens a PR. Pushes to `main` auto-deploy to Vercel, so the user merges the PR.
+- Keep to 2–3 workers at once. Use subagents for research or diff review inside a session.
