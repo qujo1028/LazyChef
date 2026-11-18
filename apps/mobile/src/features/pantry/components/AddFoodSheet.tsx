@@ -14,13 +14,18 @@ import { TextField } from '@/components/TextField';
 import { useToast, type ToastOptions } from '@/components/Toast';
 import { createAfterClose, type AfterClose } from '@/lib/after-close';
 import { addButtonLabel, reviewTitle, stateOnOpen } from '@/lib/add-food';
+import { addScansToText, emptyScanLinks, linkDrafts, memoriesForAdd, type ScanLinks } from '@/lib/scan-links';
+import { isLooking, reviewLabel, scannedLines } from '@/lib/scan-rows';
 import { useTheme } from '@/theme';
 import { useToday } from '@/lib/use-today';
 
+import { rememberBarcodes } from '../../barcodes/lookup';
+import { useScanRows } from '../../barcodes/use-scan-rows';
 import { addItems, previewItems } from '../api';
 import { usePantry } from '../pantry-provider';
 import { AddSeveralInput } from './AddSeveralInput';
 import { ReviewList } from './ReviewList';
+import { ScanPanel } from './ScanPanel';
 import { SuggestionList } from './SuggestionList';
 
 /** Text to start the sheet with; bump `n` to apply it (e.g. "Add 'oat milk'" from a search with no match). */
@@ -53,6 +58,10 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
   const [seenSeed, setSeenSeed] = useState(seed.n);
   const [cleared, setCleared] = useState(false);
   const [several, setSeveral] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const scan = useScanRows(householdId);
+  // Scanned lines in the box -> their barcode, so a renamed item is remembered under its new name.
+  const [links] = useState<ScanLinks>(emptyScanLinks);
   const [drafts, setDrafts] = useState<ReviewDraft[] | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +85,8 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       setError(null);
       setDismissedFor(null);
       setSeveral(false);
+      setScanning(false);
+      scan.clear();
     }
   }
 
@@ -96,10 +107,10 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
 
   // Focus the box when the sheet opens or we come back to typing (after the slide-in).
   useEffect(() => {
-    if (!visible || drafts) return;
+    if (!visible || drafts || scanning) return;
     const timer = setTimeout(() => inputRef.current?.focus(), 350);
     return () => clearTimeout(timer);
-  }, [visible, drafts, several]);
+  }, [visible, drafts, several, scanning]);
 
   const count = useMemo(() => (text.trim() ? parseLines(text).length : 0), [text]);
 
@@ -134,9 +145,10 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     setError(null);
   }
 
-  async function preview() {
+  async function preview(override?: string) {
     if (pending) return;
-    if (!text.trim()) {
+    const sent = typeof override === 'string' ? override : text;
+    if (!sent.trim()) {
       setError(EMPTY_MESSAGE);
       inputRef.current?.focus();
       return;
@@ -148,16 +160,20 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
     setError(null);
     setPending(true);
     try {
-      const result = await previewItems(householdId, text);
+      const result = await previewItems(householdId, sent);
       // Closed or edited while it was working: drop the stale answer.
-      if (!latest.current.visible || latest.current.text !== text) return;
+      if (!latest.current.visible || latest.current.text !== sent) return;
       if (result.error !== undefined) {
         setError(result.error);
         return;
       }
       batch.current += 1;
       setShowErrors(false);
-      const next = draftsFromResolved(result.items, batch.current);
+      const next = linkDrafts(
+        draftsFromResolved(result.items, batch.current),
+        result.items.map((item) => item.raw),
+        links,
+      );
       if (next.length === 0) setError(EMPTY_MESSAGE);
       else setDrafts(next);
     } finally {
@@ -172,6 +188,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       setShowErrors(true);
       return;
     }
+    const memories = memoriesForAdd(drafts, links);
     if (!householdId) {
       setError("We couldn't find your household. Try again in a moment.");
       return;
@@ -186,12 +203,28 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
         return;
       }
       setCleared(true);
+      if (memories.length > 0) void rememberBarcodes(householdId, memories);
+      links.byRaw.clear();
+      links.packages.clear();
+      scan.clear();
       gate.send({ message: describeAdditions(result) });
       onClose();
     } finally {
       setPending(false);
     }
   }
+
+  function doneScanning() {
+    const lines = scannedLines(scan.rows);
+    if (lines.length === 0 || isLooking(scan.rows)) return;
+    const next = addScansToText(text, lines, links);
+    setText(next);
+    setScanning(false);
+    scan.clear();
+    void preview(next);
+  }
+
+  const found = scannedLines(scan.rows).length;
 
   const footer = drafts ? (
     <>
@@ -202,9 +235,23 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
         <PrimaryPillButton title={addButtonLabel(drafts.length)} onPress={add} loading={pending} />
       </View>
     </>
+  ) : scanning ? (
+    <>
+      <View>
+        <PrimaryPillButton title="Back" variant="outline" onPress={() => setScanning(false)} disabled={pending} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <PrimaryPillButton
+          title={reviewLabel(found)}
+          onPress={doneScanning}
+          disabled={found === 0 || isLooking(scan.rows)}
+          loading={pending}
+        />
+      </View>
+    </>
   ) : (
     <View style={{ flex: 1 }}>
-      <PrimaryPillButton title="Check it" onPress={preview} loading={pending} />
+      <PrimaryPillButton title="Check it" onPress={() => void preview()} loading={pending} />
     </View>
   );
 
@@ -213,11 +260,13 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
       visible={visible}
       onClose={onClose}
       onDismiss={dismissed}
-      title={drafts ? reviewTitle(drafts.length) : 'Add food'}
+      title={drafts ? reviewTitle(drafts.length) : scanning ? 'Scan your groceries' : 'Add food'}
       subtitle={
         drafts
           ? 'Fix a name, amount or category if it looks off.'
-          : 'Type what you have, like "2 lbs chicken breast". Separate items with commas.'
+          : scanning
+            ? "Point at each barcode. You'll check everything before it's added."
+            : 'Type what you have, like "2 lbs chicken breast". Separate items with commas.'
       }
       footer={footer}
     >
@@ -235,6 +284,15 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
             disabled={pending}
           />
         </>
+      ) : scanning ? (
+        <ScanPanel
+          rows={scan.rows}
+          active={visible && !pending}
+          onCode={scan.scan}
+          onRetry={scan.retry}
+          onName={scan.name}
+          onRemove={scan.remove}
+        />
       ) : (
         <>
           {several ? (
@@ -255,7 +313,7 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
                 selection={forcedCaret === null ? undefined : { start: forcedCaret, end: forcedCaret }}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                onSubmitEditing={preview}
+                onSubmitEditing={() => void preview()}
                 returnKeyType="go"
                 autoFocus
                 autoCapitalize="none"
@@ -280,6 +338,15 @@ export function AddFoodSheet({ visible, onClose, seed }: { visible: boolean; onC
               onPress={() => {
                 setFocused(false);
                 setSeveral((value) => !value);
+              }}
+              disabled={pending}
+            />
+            <PrimaryPillButton
+              title="Scan barcodes"
+              variant="text"
+              onPress={() => {
+                setFocused(false);
+                setScanning(true);
               }}
               disabled={pending}
             />
