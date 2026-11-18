@@ -308,6 +308,25 @@ for (const [alias, target] of Object.entries(ALIASES)) {
   if (entry && !TABLE.has(normalizeIngredientName(alias))) TABLE.set(normalizeIngredientName(alias), entry)
 }
 
+/** Lines like "beef stock" or "taco seasoning" contain a protein word but aren't the protein. */
+const NOT_MAIN_WORDS = new Set(["broth", "stock", "bouillon", "seasoning", "sauce", "juice", "powder", "flavor", "extract", "paste", "oil", "fat", "drippings"])
+
+const GENERIC_WORDS = new Set([...NOT_MAIN_WORDS, "vinegar", "baking", "white", "brown", "all", "purpose", "heavy", "plain"])
+const EGG_DISHES = ["omelette", "omelet", "frittata", "scrambled", "quiche", "deviled", "poached"]
+
+/**
+ * True when the recipe is named for this ingredient ("egg" in "Egg Fried Rice", "butter" in
+ * "Butter Chicken", any egg dish word for egg). Conservative on purpose: refusing is the safe answer.
+ */
+export function namedInTitle(key: string, title: string): boolean {
+  const text = title.toLowerCase()
+  const words = key.split(" ").filter((word) => !GENERIC_WORDS.has(word))
+  const word = words[words.length - 1]
+  if (word && new RegExp(`\\b${word}(?:e?s)?\\b`).test(text)) return true
+  if (key === "egg") return EGG_DISHES.some((dish) => text.includes(dish))
+  return false
+}
+
 export type SubstitutionLookup =
   | { kind: "options"; key: string; entry: SubEntry }
   | { kind: "main" }
@@ -325,6 +344,7 @@ export function lookupSubstitutions(name: string): SubstitutionLookup {
     if (viaCatalog) return { kind: "options", key: normalizeIngredientName(entry.name), entry: viaCatalog }
   }
   const words = key.split(" ")
+  if (words.some((word) => NOT_MAIN_WORDS.has(word))) return { kind: "none" }
   if (words.some((word) => MAIN_WORDS.has(word)) || entry?.category === "meat" || entry?.category === "seafood") {
     return { kind: "main" }
   }

@@ -5,7 +5,7 @@ import "server-only"
 import { z } from "zod"
 
 import { askAiJson } from "@/lib/llm/ai"
-import { lookupSubstitutions, ROLES, type Allergen, type Role, type SubOption } from "@/lib/ingredients/substitutions"
+import { lookupSubstitutions, namedInTitle, ROLES, type Allergen, type Role, type SubOption } from "@/lib/ingredients/substitutions"
 
 import { findInPantry, type PantryIndex } from "./match"
 
@@ -50,6 +50,7 @@ export async function suggestSwaps(input: {
   if (found.kind === "main") return { status: "none", reason: NO_MAIN }
   if (found.kind === "none") return { status: "none", reason: NO_ENTRY }
   const { entry } = found
+  if (namedInTitle(found.key, input.recipeTitle)) return { status: "none", reason: NO_MAIN }
 
   // Candidates come only from the table. Pantry first, store-bought after.
   const candidates = entry.options

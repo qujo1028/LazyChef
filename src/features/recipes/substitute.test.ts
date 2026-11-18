@@ -25,6 +25,12 @@ describe("lookupSubstitutions", () => {
     expect(lookupSubstitutions("flour").kind).toBe("options")
     expect(lookupSubstitutions("peanut butter").kind).not.toBe("options")
   })
+  it("does not treat broth, stock or seasoning as the main ingredient", () => {
+    expect(lookupSubstitutions("chicken broth").kind).toBe("options")
+    expect(lookupSubstitutions("beef stock").kind).toBe("none")
+    expect(lookupSubstitutions("chicken bouillon").kind).toBe("none")
+    expect(lookupSubstitutions("chicken seasoning").kind).toBe("none")
+  })
   it("treats main proteins as no-swap", () => {
     expect(lookupSubstitutions("ribeye steak").kind).toBe("main")
     expect(lookupSubstitutions("chicken breast").kind).toBe("main")
@@ -36,6 +42,19 @@ describe("suggestSwaps", () => {
     const result = await run("ribeye steak", "Garlic Butter Steak")
     expect(result.status).toBe("none")
     expect(askAiJson).not.toHaveBeenCalled()
+  })
+
+  it("refuses an ingredient the recipe is named for, without asking the AI", async () => {
+    expect((await run("eggs", "Cheese Omelette")).status).toBe("none")
+    expect((await run("egg", "Egg Fried Rice")).status).toBe("none")
+    expect((await run("butter", "Butter Chicken")).status).toBe("none")
+    expect(askAiJson).not.toHaveBeenCalled()
+  })
+
+  it("still asks the AI for an ingredient the title doesn't name", async () => {
+    askAiJson.mockResolvedValue({ ok: true, data: { role: "binder", picks: [{ id: "banana" }] } })
+    expect((await run("egg", "Banana Muffins")).status).toBe("ok")
+    expect(askAiJson).toHaveBeenCalledTimes(1)
   })
 
   it("refuses an ingredient with no vetted entry without asking the AI", async () => {
