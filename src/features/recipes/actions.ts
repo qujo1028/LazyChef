@@ -7,6 +7,8 @@ import type { ActionResult } from "@/features/pantry/types"
 import { requireHousehold, requireViewer } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
 import { addListItems } from "@/features/list/actions"
+import { getViewerCookEvents, getViewerTimeZone } from "@/features/habit/queries"
+import { habitResult, summarize, type HabitResult } from "@/features/habit/summary"
 import { categoryFromAisle } from "@/lib/ingredients/aisles"
 import { findIngredient, guessCategory } from "@/lib/ingredients/catalog"
 import { SpoonacularError } from "@/lib/spoonacular"
@@ -99,13 +101,16 @@ export async function cookRecipe(
   ref: string,
   title: string,
   deductions: Deduction[],
-): Promise<ActionResult<{ results: CookResult[] }>> {
+): Promise<ActionResult<{ results: CookResult[]; habit: HabitResult | null }>> {
   const parsed = cookInput.safeParse({ ref, title, deductions })
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the amounts." }
 
-  const { household } = await requireHousehold()
+  const { viewer, household } = await requireHousehold()
   const supabase = await createClient()
   const { ref: recipe } = parsed.data
+  // The habit before this cook, to tell what it earned. Never allowed to fail the cook.
+  const timeZone = await getViewerTimeZone()
+  const before = await getViewerCookEvents(household.id, viewer.id).catch(() => null)
   const { data, error } = await supabase.rpc("cook_recipe", {
     p_household_id: household.id,
     p_recipe_id: recipe.kind === "spoonacular" ? recipe.id : null,
@@ -118,12 +123,24 @@ export async function cookRecipe(
   revalidatePath("/pantry")
   revalidatePath("/activity")
   revalidatePath(`/recipes/${ref}`)
+
+  let habit: HabitResult | null = null
+  if (before) {
+    try {
+      const after = await getViewerCookEvents(household.id, viewer.id)
+      const now = Date.now()
+      habit = habitResult(summarize(before, now, timeZone), summarize(after, now, timeZone))
+    } catch (error) {
+      console.error("Reading the habit after a cook failed:", error instanceof Error ? error.message : error)
+    }
+  }
   return {
     results: (data ?? []).map((row) => ({
       ...row,
       quantity_before: row.quantity_before === null ? null : Number(row.quantity_before),
       quantity_after: row.quantity_after === null ? null : Number(row.quantity_after),
     })),
+    habit,
   }
 }
 

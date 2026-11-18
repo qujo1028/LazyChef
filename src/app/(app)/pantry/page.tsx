@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import { getWeekCardData } from "@/features/habit/queries"
 import { requireHousehold } from "@/features/household/queries"
 import { PantryView } from "@/features/pantry/components/pantry-view"
 import { getPantrySnapshot } from "@/features/pantry/queries"
@@ -18,6 +19,7 @@ export default async function PantryPage({ searchParams }: PageProps<"/pantry">)
       ? { text: (firstParam(params.text) ?? "").slice(0, 5000), scan: firstParam(params.scan) === "1" }
       : null
   const pantry = await getPantrySnapshot(household.id)
+  const weekCard = await getWeekCardData(household.id, viewer.id, pantry.items)
 
   return (
     <PantryView
@@ -30,6 +32,7 @@ export default async function PantryPage({ searchParams }: PageProps<"/pantry">)
       serverToday={pantry.today}
       aiAvailable={isAiAvailable()}
       initialBulk={initialBulk}
+      weekCard={weekCard}
     />
   )
 }

@@ -5,12 +5,14 @@ import { useDeferredValue, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { PageHeading } from "@/components/page-heading"
+import { WeekCard } from "@/features/habit/components/week-card"
+import type { WeekCardData } from "@/features/habit/queries"
 import { addPantryItemToList } from "@/features/list/components/add-to-list"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useStripParams } from "@/lib/use-strip-params"
 
-import { pantrySummary, remainingMessage } from "../display"
+import { displayName, pantrySummary, remainingMessage } from "../display"
 import { groupPantry } from "../group"
 import type { PantryItem, PantryMember } from "../types"
 import { EditItemSheet } from "./edit-item-sheet"
@@ -30,6 +32,7 @@ export function PantryView({
   serverToday,
   aiAvailable,
   initialBulk,
+  weekCard,
 }: {
   householdId: string
   viewerId: string
@@ -41,6 +44,8 @@ export function PantryView({
   aiAvailable: boolean
   /** Open the bulk add sheet on arrival (?add=bulk, from the old /pantry/add address). */
   initialBulk: { text: string; scan: boolean } | null
+  /** The "This week" card's server-read data (the viewer's cooks, time zone, cached recipe ideas). */
+  weekCard: WeekCardData
 }) {
   const today = useToday(serverToday)
   const { items, apply, adjust } = usePantry({ householdId, serverItems, fetchedAt })
@@ -87,6 +92,11 @@ export function PantryView({
     [items],
   )
 
+  const expiring = useMemo(
+    () => ({ count: all.expiring.length, first: all.expiring[0] ? displayName(all.expiring[0].name) : null }),
+    [all.expiring],
+  )
+
   const empty = all.total === 0
   const onlyStaples = !empty && all.staples.length === all.total
   const searching = deferredQuery.trim() !== ""
@@ -129,6 +139,8 @@ export function PantryView({
           Bulk add
         </Button>
       </div>
+
+      <WeekCard data={weekCard} viewerId={viewerId} expiring={expiring} />
 
       {!empty ? (
         <div className="relative">
