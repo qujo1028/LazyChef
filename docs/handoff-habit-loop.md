@@ -333,6 +333,8 @@ goal end to end (sign up fresh, pick 4, see ring target 4), typecheck/lint/test/
 W1 (push) AND W6 (habit DB) ARE MERGED INTO origin/main; if not, stop and tell the lead.
 
 GOAL: bring people back with timely, kind nudges, each with an on/off switch.
+VERCEL PLAN IS HOBBY (user confirmed 2026-11-18): crons run at most once a day. Do not add an hourly cron. Reuse the
+expiring cron's daily-window approach (or fold the habit nudges into that same daily run) and say which timezones miss out.
 READ FIRST: src/lib/push/ (sender, deliver.ts, dedupe via notification_log), src/app/api/push/expiring/route.ts (cron auth, local
 time window logic), the notification_prefs migration and the Household notifications card from W1, src/features/habit/ (week.ts,
 streak.ts, challenges.ts, leaderboard.ts), vercel.json.
