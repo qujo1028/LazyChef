@@ -414,3 +414,10 @@ W1 core extraction (`feature/p0-core`):
   `src/lib/row-state.ts`, `src/features/pro/plans.ts`), README.md:315 and docs/handoff-*.md, docs/mobile-apps.md
   still name moved paths. `packages/core/src/db.ts` copies the `Tables`/`Enums` helpers; once
   `@lazychef/db-types` exports them, core should import them from there.
+
+Lead merge (P0): all four workers merged into `feature/p0-scaffold`. Follow-ups done by the lead: mobile loads
+`react-native-url-polyfill/auto` first (needed by supabase-js and the core auth helpers), Vitest also runs
+`apps/mobile/src/lib/**/*.test.ts`, stale paths in CLAUDE.md and README fixed. Checks: web typecheck, lint, 2,219 tests,
+`next build`, ingredients check; mobile typecheck, lint, iOS bundle. On a real iPhone via Expo Go (2026-11-18): tabs,
+header, fonts and theme look right (user checked). Still open: old file paths in `docs/handoff-*.md` and
+`docs/mobile-apps.md` (historical docs, left as is); `db.ts` in core repeats the `Tables`/`Enums` helpers.

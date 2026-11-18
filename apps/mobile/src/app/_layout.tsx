@@ -1,3 +1,6 @@
+// Must load first: a standard URL for supabase-js and the @lazychef/core auth helpers.
+import 'react-native-url-polyfill/auto';
+
 import { LibreCaslonDisplay_400Regular } from '@expo-google-fonts/libre-caslon-display';
 import {
   SourceSans3_400Regular,
