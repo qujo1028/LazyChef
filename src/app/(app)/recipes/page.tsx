@@ -16,7 +16,10 @@ import type { Usage } from "@/features/recipes/cache-core"
 import { CookAgain } from "@/features/recipes/components/cook-again"
 import { RatingPrompt } from "@/features/recipes/components/rating-prompt"
 import { RecipeCard } from "@/features/recipes/components/recipe-card"
-import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
+import { OursTab } from "@/features/recipes/components/ours-tab"
+import { RecipeSheet } from "@/features/recipes/components/recipe-sheet"
+import { parseRecipeView, RecipesTabs } from "@/features/recipes/components/recipes-tabs"
+import { SavedTab } from "@/features/recipes/components/saved-tab"
 import { ActiveFilters, RecipeFilterButton } from "@/features/recipes/components/recipe-filters"
 import { RecipeSearch } from "@/features/recipes/components/recipe-search"
 import { MealStrip } from "@/features/recipes/components/meal-strip"
@@ -42,6 +45,7 @@ import type { Suggestion } from "@/features/recipes/match"
 import { getRecipeIdeas, getSavedIds, type SpoonacularPart } from "@/features/recipes/queries"
 import { getCookAgain, getMyUnratedCooks } from "@/features/recipes/ratings"
 import { isAiAvailable } from "@/lib/llm/ai"
+import { firstParam } from "@/lib/search-params"
 import { DAILY_POINTS } from "@/lib/spoonacular/cost"
 
 export const metadata: Metadata = { title: "Recipes" }
@@ -218,9 +222,9 @@ function Credits({ recipes, part }: { recipes: Suggestion[]; part: SpoonacularPa
   )
 }
 
-export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
+/** Recipes, "Ideas" view: what you can cook now, search, filters, AI ideas. */
+async function IdeasTab({ params }: { params: Awaited<PageProps<"/recipes">["searchParams"]> }) {
   const [{ household }, prefs] = await Promise.all([requireHousehold(), getMyPreferences()])
-  const params = await searchParams
   const filters = parseFilters(params, { worldDefault: prefs.worldRecipes })
   const more = parseMore(params)
   const recipePrefs = { diet: !filters.all && hasRestrictions(prefs) ? prefs : null, cuisines: prefs.cuisines }
@@ -241,7 +245,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
     <>
       <TimezoneSync current={zone ? decodeURIComponent(zone) : null} />
       <PageHeading title="Recipes" description="What you can cook with what you have." />
-      <RecipesTabs current="/recipes" />
+      <RecipesTabs current="ideas" />
       <RatingPrompt cooks={unratedCooks} />
     </>
   )
@@ -254,7 +258,7 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
         <EmptyState icon={ChefHat} title="Add some food first">
           <p>Recipe ideas come from what&apos;s in your pantry. Add a few things and check back, or search for a recipe above.</p>
           <Button asChild size="lg" className="mt-4 h-12 w-full text-base">
-            <Link href="/pantry/add">
+            <Link href="/pantry?add=bulk">
               <Plus aria-hidden /> Add food
             </Link>
           </Button>
@@ -298,12 +302,19 @@ export default async function RecipesPage({ searchParams }: PageProps<"/recipes"
       {result.mode === "ideas" && isAiAvailable() && shown.length < THIN_MEAL_BELOW ? <MealIdeas meal={ideaMealFor(meals)} /> : null}
       {result.mode === "ideas" && isAiAvailable() ? <AiIdeaCard /> : null}
       {shown.length > 0 ? <SpoonacularNote part={result.spoonacular} filters={filters} /> : null}
-      <Button asChild variant="ghost" size="lg" className="h-12 w-full text-base">
-        <Link href="/recipes/new">
-          <Plus aria-hidden /> Add your own recipe
-        </Link>
-      </Button>
+      <RecipeSheet householdId={household.id} variant="ghost" className="h-12 w-full text-base">
+        <Plus aria-hidden /> Add your own recipe
+      </RecipeSheet>
       <Credits recipes={shown} part={result.spoonacular} />
     </>
   )
+}
+
+/** One screen, three views: Ideas | Saved | Ours (?view=). Each loads only its own data. */
+export default async function RecipesPage({ searchParams }: PageProps<"/recipes">) {
+  const params = await searchParams
+  const view = parseRecipeView(params.view)
+  if (view === "saved") return <SavedTab sortParam={params.sort} />
+  if (view === "ours") return <OursTab openNew={firstParam(params.new) === "1"} />
+  return <IdeasTab params={params} />
 }

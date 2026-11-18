@@ -24,8 +24,28 @@ with iOS and Android apps (Capacitor) and Pro subscriptions through RevenueCat.
 - **Saved recipes**: a heart on any recipe saves it for the whole household. The Saved tab shows which ones you
   can make right now, what each still needs, and how often you've cooked it.
 - **Activity**: who added, used, cooked and bought what. Everything above updates live for housemates.
-- **Stats**: meals cooked per week, your cooking streak, most cooked recipes, shopping trips and what you buy
+- **Stats** (Activity, "Log | Stats"): meals cooked per week, your cooking streak, most cooked recipes, shopping trips and what you buy
   most, and what each housemate has been up to.
+
+### Screens
+
+Five tab screens plus recipe detail. Everything else is a sheet or a tab inside one of them.
+
+| Screen | Address | Lives inside it |
+| --- | --- | --- |
+| Pantry | `/pantry` | Add food and the "Just went shopping" bulk add (with barcode scanning) as sheets |
+| Recipes | `/recipes` | Ideas, Saved (`?view=saved`) and Ours (`?view=ours`) as tabs; add or edit your own recipe as a sheet |
+| List | `/list` | |
+| Activity | `/activity` | Log and Stats (`?view=stats`) |
+| Household | `/household` | Members, invites, your food preferences, and the LazyChef Pro card and paywall |
+| Recipe detail | `/recipes/[id]` | Cook sheet, ratings, the edit sheet for your own recipes |
+
+First-run and account pages (`/welcome`, `/onboarding`, `/login`, `/join/[code]`, legal) are separate.
+
+Old addresses still work. `next.config.ts` permanently redirects them (query strings kept), from the
+map in `src/lib/legacy-routes.ts`: `/pantry/add` to `/pantry?add=bulk`, `/recipes/saved` and `/recipes/ours`
+to `/recipes?view=saved|ours`, `/recipes/new` to `/recipes?view=ours&new=1`, `/recipes/[id]/edit` to
+`/recipes/[id]?edit=1`, `/activity/stats` to `/activity?view=stats`, and `/pro` to `/household?pro=1`.
 
 ## Setup
 
@@ -286,7 +306,7 @@ Data notes:
 ## How it fits together
 
 - `src/app/`: routes only. `(auth)` holds the sign-in pages; `(app)` holds the tab-bar pages for signed-in
-  members of a household.
+  members of a household (see Screens above).
 - `src/features/<domain>/`: server actions, queries and components per feature.
 - `src/lib/supabase/`: clients for the browser, server, and the session-refreshing proxy.
 - `supabase/migrations/`: the schema. Every table a household shares is guarded by `private.is_member()`.

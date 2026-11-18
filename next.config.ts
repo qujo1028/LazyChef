@@ -2,6 +2,8 @@ import path from "node:path"
 
 import type { NextConfig } from "next"
 
+import { legacyRedirects } from "./src/lib/legacy-routes"
+
 const isDev = process.env.NODE_ENV === "development"
 
 function origin(url: string | undefined) {
@@ -46,6 +48,10 @@ const nextConfig: NextConfig = {
   // A package-lock.json in a parent folder would otherwise be mistaken for the root.
   turbopack: { root: path.join(__dirname) },
   poweredByHeader: false,
+  // Screens folded into the five tabs (see src/lib/legacy-routes.ts). Checked before the filesystem and the proxy.
+  async redirects() {
+    return legacyRedirects()
+  },
   async headers() {
     return [
       {

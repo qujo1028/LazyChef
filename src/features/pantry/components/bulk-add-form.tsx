@@ -1,7 +1,6 @@
 "use client"
 
 import { Info, LoaderCircle, Pencil, ScanBarcode, Sparkles } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -26,22 +25,24 @@ import { useToday } from "./use-clock"
 
 const PLACEHOLDER = ["2 lbs chicken breast", "1 dozen eggs", "milk", "3 cans black beans", "a bunch of cilantro"].join("\n")
 
-/** /pantry/add: paste, type or scan a whole haul, check it, add it in one go. */
+/** Paste, type or scan a whole haul, check it, add it in one go (in the Pantry's bulk add sheet). */
 export function BulkAddForm({
   defaultText,
   serverToday,
   startScanning = false,
   aiAvailable = false,
+  onDone,
 }: {
   defaultText: string
   serverToday: string
   /** Offer "Use AI to split this" (only when the AI assistant is set up). */
   aiAvailable?: boolean
-  /** Open the barcode scanner right away (?scan=1, from the quick add sheet). */
+  /** Open the barcode scanner right away (from "Scan barcodes" in the quick add sheet, or ?scan=1). */
   startScanning?: boolean
+  /** After the items are added (the sheet closes). */
+  onDone?: () => void
 }) {
   const id = useId()
-  const router = useRouter()
   const today = useToday(serverToday)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const batch = useRef(0)
@@ -161,9 +162,7 @@ export function BulkAddForm({
         return
       }
       toast.success(describeAdditions(result))
-      // Its own transition (updates after an await aren't part of the first one), so the
-      // button stays disabled until /pantry shows instead of re-enabling mid-navigation.
-      startTransition(() => router.replace("/pantry"))
+      onDone?.()
     })
   }
 

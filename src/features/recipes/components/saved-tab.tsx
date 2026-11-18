@@ -1,4 +1,3 @@
-import type { Metadata } from "next"
 import { Heart } from "lucide-react"
 import Link from "next/link"
 
@@ -6,24 +5,20 @@ import { EmptyState } from "@/components/empty-state"
 import { PageHeading } from "@/components/page-heading"
 import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
-import { CookAgain } from "@/features/recipes/components/cook-again"
-import { RecipesTabs } from "@/features/recipes/components/recipes-tabs"
-import { RecipeGrid } from "@/features/recipes/components/recipe-tile"
-import { SavedRecipeCard } from "@/features/recipes/components/saved-recipe-card"
 import { getSavedRecipes } from "@/features/recipes/queries"
 import { getCookAgain } from "@/features/recipes/ratings"
 import { canMakeNow, parseSavedSort, SAVED_SORTS, sortSaved } from "@/features/recipes/saved"
 import { cn } from "@/lib/utils"
 
-export const metadata: Metadata = { title: "Saved recipes" }
+import { CookAgain } from "./cook-again"
+import { RecipeGrid } from "./recipe-tile"
+import { RecipesTabs } from "./recipes-tabs"
+import { SavedRecipeCard } from "./saved-recipe-card"
 
-export default async function SavedRecipesPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
+/** Recipes, "Saved" view (?view=saved&sort=). */
+export async function SavedTab({ sortParam }: { sortParam: string | string[] | undefined }) {
   const { household } = await requireHousehold()
-  const sort = parseSavedSort((await searchParams).sort)
+  const sort = parseSavedSort(sortParam)
   const [{ recipes, unmatched, fetchedAt: serverNow }, cookAgain] = await Promise.all([
     getSavedRecipes(household.id),
     getCookAgain(household.id),
@@ -41,7 +36,7 @@ export default async function SavedRecipesPage({
             : `${recipes.length} saved${ready > 0 ? ` · ${ready} you can make now` : ""}`
         }
       />
-      <RecipesTabs current="/recipes/saved" />
+      <RecipesTabs current="saved" />
       <CookAgain cards={cookAgain} />
 
       {recipes.length === 0 ? (
@@ -57,7 +52,7 @@ export default async function SavedRecipesPage({
             {SAVED_SORTS.map((option) => (
               <Link
                 key={option.value}
-                href={option.value === "ready" ? "/recipes/saved" : `/recipes/saved?sort=${option.value}`}
+                href={option.value === "ready" ? "/recipes?view=saved" : `/recipes?view=saved&sort=${option.value}`}
                 scroll={false}
                 aria-current={sort === option.value ? "true" : undefined}
                 className={cn(
