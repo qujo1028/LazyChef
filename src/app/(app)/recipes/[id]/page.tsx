@@ -14,7 +14,9 @@ import { SaveButton } from "@/features/recipes/components/save-button"
 import { SourceTag } from "@/features/recipes/components/source-tag"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
+import { RatingButtons } from "@/features/recipes/components/rating-buttons"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
+import { getMyRating, hasCooked } from "@/features/recipes/ratings"
 import { parseRecipeRef } from "@/features/recipes/ref"
 import { isAiAvailable } from "@/lib/llm/ai"
 
@@ -81,6 +83,9 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
   }))
   const have = lines.filter((line) => line.status !== "need").length
   const saved = savedIds.has(recipe.ref)
+  const myRating = await getMyRating(household.id, recipe.ref)
+  // Only people who cooked it can vote (the database enforces it too).
+  const canRate = myRating !== null || (await hasCooked(household.id, recipe.ref))
   const image = recipe.source === "spoonacular" ? recipe.image : null
   const editable = recipe.source === "user" && recipe.householdId === household.id
 
@@ -114,6 +119,12 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
           ) : null}
           {recipe.cuisine ? <span>{recipe.cuisine}</span> : null}
         </div>
+        {canRate ? (
+          <div className="flex items-center gap-3 text-sm">
+            <span className="font-medium">Your vote</span>
+            <RatingButtons recipeId={recipe.ref} title={recipe.title} initial={myRating} />
+          </div>
+        ) : null}
         {editable ? (
           <Button asChild variant="outline" size="lg" className="mt-1 h-11 w-full">
             <Link href={`/recipes/${recipe.ref}/edit`}>
