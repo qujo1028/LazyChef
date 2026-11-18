@@ -21,6 +21,7 @@ import {
   type Suggestions,
 } from "./match"
 import type { RecipeSource } from "./ref"
+import { EMPTY_TASTE, hasTaste, tasteScore, type TasteProfile } from "./taste"
 
 /** Below this many local ideas, Spoonacular is asked for more (unless points are out). */
 export const LOCAL_ENOUGH = 10
@@ -134,10 +135,12 @@ export function localSuggestion(index: PantryIndex, recipe: LocalRecipeCard): Su
   return recipe.aiGenerated ? { ...suggestion, aiGenerated: true } : suggestion
 }
 
-/** Fewest missing first, then the ones using more of the pantry, then expiring food, then A to Z. */
-export function compareSuggestions(a: Suggestion, b: Suggestion): number {
+/** Fewest missing first, then (if given) the household's taste, then the ones using more of the pantry, then expiring food, then A to Z. */
+export function compareSuggestions(a: Suggestion, b: Suggestion, taste?: ReadonlyMap<string, number>): number {
   return (
     a.need.length - b.need.length ||
+    // The household's taste only breaks ties within the same missing count.
+    (taste ? (taste.get(b.id) ?? 0) - (taste.get(a.id) ?? 0) : 0) ||
     b.have.length - a.have.length ||
     b.usesExpiring.length - a.usesExpiring.length ||
     a.title.localeCompare(b.title)
@@ -148,11 +151,22 @@ export function compareSuggestions(a: Suggestion, b: Suggestion): number {
  * Local recipes into "Make now" (nothing missing) and "Almost there" (1 to MAX_MISSING).
  * Recipes that use nothing from the pantry are dropped.
  */
-export function rankLocal(index: PantryIndex, recipes: readonly LocalRecipeCard[]): Suggestions {
+export function rankLocal(
+  index: PantryIndex,
+  recipes: readonly LocalRecipeCard[],
+  taste: TasteProfile = EMPTY_TASTE,
+): Suggestions {
+  const scores = new Map<string, number>()
+  if (hasTaste(taste)) {
+    for (const recipe of recipes) {
+      const score = tasteScore(taste, { id: recipe.id, cuisine: recipe.cuisine, ingredients: recipe.ingredients.filter((l) => !l.optional).map((l) => l.name) })
+      if (score !== 0) scores.set(recipe.id, score)
+    }
+  }
   const all = recipes
     .map((recipe) => localSuggestion(index, recipe))
     .filter((s) => s.have.length > 0 && s.need.length <= MAX_MISSING)
-    .sort(compareSuggestions)
+    .sort((a, b) => compareSuggestions(a, b, scores))
   return { makeNow: all.filter((s) => s.need.length === 0), almostThere: all.filter((s) => s.need.length > 0) }
 }
 

@@ -4,6 +4,9 @@ import type { ChatMessage } from "@/lib/llm/client"
 
 vi.mock("server-only", () => ({}))
 
+const getHouseholdTaste = vi.fn(async () => ({ profile: { net: new Map(), liked: [], disliked: [] }, hints: { liked: ["Shakshuka"], disliked: ["Liver"] } }))
+vi.mock("../taste-queries", () => ({ getHouseholdTaste: () => getHouseholdTaste() }))
+
 const requireViewer = vi.fn(async () => ({ id: "user-1", email: null }))
 const requireHousehold = vi.fn(async () => ({ household: { id: "house-1" } }))
 vi.mock("@/features/household/queries", () => ({
