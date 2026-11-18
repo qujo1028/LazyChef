@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, History } from "lucide-react"
 import Link from "next/link"
 
 import { BrandMark } from "@/components/brand"
@@ -24,6 +24,13 @@ export function AppHeader({
         >
           <span className="truncate">{householdName}</span>
           <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        </Link>
+        <Link
+          href="/activity"
+          aria-label="Activity"
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
+        >
+          <History className="size-6" strokeWidth={1.75} aria-hidden />
         </Link>
         <Link href="/household" aria-label="Your account" className="-mr-1.5 inline-flex size-11 shrink-0 items-center justify-center rounded-full">
           <UserAvatar name={displayName} src={avatarUrl} className="size-8" />
