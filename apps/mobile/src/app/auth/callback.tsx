@@ -1,4 +1,5 @@
 import { safeNext } from '@lazychef/core/auth/safe-next';
+import type { EmailOtpType } from '@supabase/supabase-js';
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
@@ -9,6 +10,8 @@ import { friendlyAuthError, friendlyCallbackError, GENERIC_AUTH_ERROR } from '@/
 import { exchangeCodeOnce } from '@/lib/auth/redirect';
 import { supabase } from '@/lib/supabase';
 import { useTheme } from '@/theme';
+
+const EMAIL_OTP_TYPES = new Set<string>(['signup', 'invite', 'magiclink', 'recovery', 'email_change', 'email']);
 
 /** Finishes an email link or OAuth return: exchanges the code, then goes on to `next` (or `/`). */
 export default function AuthCallbackScreen() {
@@ -38,6 +41,19 @@ export default function AuthCallbackScreen() {
           return;
         }
         router.replace(next);
+        return;
+      }
+      // Email templates that send ?token_hash=&type= (see README), as on the web callback.
+      if (params.tokenHash && params.type && EMAIL_OTP_TYPES.has(params.type)) {
+        const { error } = await supabase.auth.verifyOtp({
+          type: params.type as EmailOtpType,
+          token_hash: params.tokenHash,
+        });
+        if (error) {
+          setFailure(friendlyAuthError(error));
+          return;
+        }
+        router.replace(params.type === 'recovery' ? '/reset-password' : next);
         return;
       }
       // No code: maybe a session already exists (for example the link was handled once).

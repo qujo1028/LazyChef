@@ -26,7 +26,13 @@ describe('callbackParamsFromSearch', () => {
       error: null,
       errorDescription: null,
       next: '/pantry',
+      tokenHash: null,
+      type: null,
     });
+  });
+  it('reads email template links', () => {
+    const params = callbackParamsFromSearch({ token_hash: 'pkce_123', type: 'recovery' });
+    expect([params.tokenHash, params.type, params.code]).toEqual(['pkce_123', 'recovery', null]);
   });
   it('treats empty values as missing', () => {
     expect(callbackParamsFromSearch({ code: '' }).code).toBeNull();

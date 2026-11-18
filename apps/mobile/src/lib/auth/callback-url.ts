@@ -12,6 +12,9 @@ export type CallbackParams = {
   error: string | null;
   errorDescription: string | null;
   next: string | null;
+  /** Email template links (`?token_hash=&type=`), verified with verifyOtp. */
+  tokenHash: string | null;
+  type: string | null;
 };
 
 function first(value: string | string[] | undefined | null): string | null {
@@ -26,6 +29,8 @@ export function callbackParamsFromSearch(search: Record<string, string | string[
     error: first(search.error_code) ?? first(search.error),
     errorDescription: first(search.error_description),
     next: first(search.next),
+    tokenHash: first(search.token_hash),
+    type: first(search.type),
   };
 }
 
