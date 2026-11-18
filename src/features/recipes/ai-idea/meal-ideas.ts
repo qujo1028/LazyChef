@@ -181,7 +181,7 @@ export type MealIdeasState<Idea = AiRecipe> =
   | { status: "offer" }
   | { status: "loading" }
   | { status: "ready"; ideas: Idea[] }
-  | { status: "note"; message: string }
+  | { status: "note"; message: string; limit?: boolean }
 
 /**
  * Where the area starts. With consent already given on this device it fetches straight away;

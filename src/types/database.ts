@@ -99,6 +99,35 @@ export type Database = {
           },
         ]
       }
+      ai_usage: {
+        Row: {
+          household_id: string
+          id: number
+          used_at: string
+          user_id: string | null
+        }
+        Insert: {
+          household_id: string
+          id?: never
+          used_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          household_id?: string
+          id?: never
+          used_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       apple_refresh_tokens: {
         Row: {
           created_at: string
@@ -976,6 +1005,10 @@ export type Database = {
       set_my_preferences: {
         Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
         Returns: undefined
+      }
+      take_ai_allowance: {
+        Args: { p_household_id: string }
+        Returns: { allowed: boolean; pro: boolean; used: number; lim: number; resets_at: string | null }[]
       }
       take_rate_limit: {
         Args: { p_bucket: string }

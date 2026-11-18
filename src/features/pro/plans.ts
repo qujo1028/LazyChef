@@ -33,7 +33,7 @@ export function yearlySavings(yearly: number, monthly: number): number | null {
 export const DEFAULT_SAVINGS = yearlySavings(24.99, 4.99)
 
 /** Why the paywall opened. Each Pro feature gets its own headline. */
-export type ProFeature = "searches" | "almost-there" | "alerts" | "auto-list" | "members" | "diets"
+export type ProFeature = "searches" | "almost-there" | "alerts" | "auto-list" | "members" | "diets" | "ai"
 
 export const FEATURE_HEADLINES: Record<ProFeature, string> = {
   searches: "You've used today's 5 free searches",
@@ -42,6 +42,7 @@ export const FEATURE_HEADLINES: Record<ProFeature, string> = {
   "auto-list": "Let the shopping list fill itself",
   members: "Share your pantry with the whole house",
   diets: "Filter recipes for how you eat",
+  ai: "You've used this week's 10 free AI recipes",
 }
 
 /** What Pro includes, in paywall order. */
@@ -52,4 +53,5 @@ export const PRO_BENEFITS: { title: string; detail: string }[] = [
   { title: "Automatic shopping list", detail: "What runs out goes straight on the list" },
   { title: "Unlimited housemates", detail: "Free plan: 2 people per pantry" },
   { title: "Diet filters", detail: "Vegetarian, vegan, gluten-free and more" },
+  { title: "Unlimited AI recipe help", detail: "Free plan: 10 a week" },
 ]

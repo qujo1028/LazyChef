@@ -19,6 +19,9 @@ vi.mock("./meal-cache", () => ({
   putCachedMealIdeas: (...args: unknown[]) => putCached(...(args as [])),
 }))
 
+const takeAiAllowance = vi.fn(async (): Promise<unknown> => null)
+vi.mock("@/features/pro/ai-allowance", () => ({ takeAiAllowance: () => takeAiAllowance() }))
+
 const askAiJson = vi.fn<(...args: unknown[]) => Promise<unknown>>()
 vi.mock("@/lib/llm/ai", () => ({ askAiJson: (...args: unknown[]) => askAiJson(...args) }))
 
@@ -37,6 +40,21 @@ const idea = (title: string) => ({
 })
 
 afterEach(() => vi.clearAllMocks())
+
+describe("getMealIdeas free allowance", () => {
+  it("stops before the AI when the free week is used up", async () => {
+    takeAiAllowance.mockResolvedValueOnce({ error: "Used up", proLimit: true, resetsAt: null })
+    const result = await getMealIdeas("lunch")
+    expect(result).toMatchObject({ error: "Used up", proLimit: true })
+    expect(askAiJson).not.toHaveBeenCalled()
+  })
+
+  it("doesn't take a use when the cache answers", async () => {
+    getCached.mockResolvedValueOnce([idea("Cached")])
+    await getMealIdeas("lunch")
+    expect(takeAiAllowance).not.toHaveBeenCalled()
+  })
+})
 
 describe("getMealIdeas", () => {
   it("makes one AI request for three ideas and caches them", async () => {

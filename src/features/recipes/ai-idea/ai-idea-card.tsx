@@ -7,6 +7,8 @@ import { toast } from "sonner"
 import { useAiConsent } from "@/components/ai/ai-consent"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { isAiLimited } from "@/features/pro/ai-allowance-core"
+import { AiLimitNotice } from "@/features/pro/components/ai-limit-notice"
 import { callAction } from "@/lib/call-action"
 
 import { getAiRecipeIdea, type AiIdea } from "./actions"
@@ -23,6 +25,7 @@ export function AiIdeaCard() {
   const [idea, setIdea] = useState<AiIdea | null>(null)
   const [open, setOpen] = useState(false)
   const [asking, startAsking] = useTransition()
+  const [limit, setLimit] = useState<string | null>(null)
   const { ensureConsent, dialog } = useAiConsent(
     "the names of the items in your pantry, your diet and allergies if you've set them, and any hint you type",
   )
@@ -32,9 +35,13 @@ export function AiIdeaCard() {
     startAsking(async () => {
       const result = await callAction(() => getAiRecipeIdea(hint, avoidTitle))
       if (result.error !== undefined) {
-        toast.error(result.error)
+        if (isAiLimited(result)) {
+          setLimit(result.error)
+          setOpen(false)
+        } else toast.error(result.error)
         return
       }
+      setLimit(null)
       setIdea({ recipe: result.recipe, missing: result.missing })
       setOpen(true)
     })
@@ -70,6 +77,7 @@ export function AiIdeaCard() {
           {asking ? "Thinking…" : "Ask AI for an idea"}
         </Button>
       </form>
+      {limit ? <AiLimitNotice message={limit} className="grid gap-2 rounded-xl bg-muted/50 p-3 text-sm" /> : null}
       {dialog}
       <AiRecipeSheet
         idea={idea}
