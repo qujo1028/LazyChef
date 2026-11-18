@@ -798,3 +798,24 @@ W5 recipes Edge Function (`feature/p4-edge-recipes`, Opus, 2026-11-18):
   them (contract change); (2) a partial `info` answer doesn't say why the rest are missing (only `quota.resting`);
   (3) one account can still drain the shared 50 daily points in about an hour (same as the web); a household or
   global bucket needs a migration.
+
+Lead merge (P4): W3, W2, W1, W4, W5 merged into `feature/p4-recipes` in that order. The lead read each diff; W5 was
+reviewed for auth (JWT via `getUser`, membership read as the caller), the service role limited to the Spoonacular
+cache and usage tables, rate limits failing closed, and `supabase/functions/.env` being gitignored.
+Fix on merge: Recipes showed a spinner forever offline with nothing cached; it now says you're offline with Try again.
+Checks: web typecheck, lint, 2,434 tests, audit, ingredients check; mobile typecheck, lint, iOS and web exports;
+`deno check` on the function.
+
+Open before P4's exit check:
+- Deploy the `recipes` Edge Function (needs the user's go-ahead): `supabase login` and `supabase link` in the user's
+  terminal, `SPOONACULAR_API_KEY` as a function secret, `supabase functions deploy recipes`, then the README curl test.
+  Until then Suggested shows library recipes and says Spoonacular ideas aren't set up.
+- Diet and allergies are not applied on mobile yet (library ranking or Spoonacular calls). The web filters both. This
+  matters for allergies, so it's the first P4 follow-up: filter library results with core `localFits`, and add
+  diet/intolerances to the edge contract for Spoonacular.
+- One account can still spend the household's shared daily points (same as the web); a per-household limit needs a migration.
+- On a real phone: the cook reward (haptic on every cook, confetti on milestones), Undo, the ring and streak updating
+  right after a cook on both phones, the dev reward and This week controls, 375pt in light and dark.
+- Known gaps: cooks must take at least one item out (same as the web and the database); undoing a cook doesn't
+  remove list items it added; Mine has no create or edit form yet; taste ranking and cook history on saved cards
+  aren't ported.
