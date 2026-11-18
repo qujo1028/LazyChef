@@ -31,9 +31,9 @@ Contrast rules that follow from the numbers:
 - Ink on cream or white for body text.
 - Olive works for text and buttons. White text on olive passes (7.4:1).
 - Paprika passes for text on cream (4.6:1). White text on paprika (5.0:1) also passes, but check it at the final hex.
-- Muted text, border, and pill colours aren't measured yet. Measure them when the theme is written, before they're used for any text.
+- Muted text (5.0:1) passes for text on cream and white. The divider is decorative only. Use the control outline (3.4:1) for inputs and outlined buttons. Ink on pill is 12.6:1. Re-measure if any hex changes.
 
-Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to a theme object in `packages/core` or the Expo theme.
+Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to the theme object in `apps/mobile/theme`. The theme lives with the app, not in `packages/core`, because the web app keeps its own OKLCH tokens.
 
 ## Typography (chosen 2026-11-18)
 
@@ -47,11 +47,11 @@ Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), ma
 
 | Brief screen | Maps to | Notes |
 |---|---|---|
-| Recipe discovery (circles, carousels, see all) | Recipes tab | Visual pattern only: circular images, horizontal carousels, favourite hearts. Replaces the card grid. Ideas / Saved / Ours tabs stay as the filter. |
+| Recipe discovery (circles, carousels, see all) | Recipes tab | Visual pattern only: circular images, horizontal carousels, favourite hearts. Replaces the card grid. One screen with Mine / Saved / Suggested filters (see product-scope.md). |
 | Recipe editing (rounded images, stepper, save button) | Recipe edit sheet | Visual pattern only, applied to LazyChef's existing add and edit recipe form. |
 | Bottom navigation | Tab bar | Four tabs (Pantry, Recipes, List, Household). Activity is a header icon, top right. Olive active state, muted inactive. |
 
-Screens outside the brief still use the same tokens and components: Pantry, List, Activity, Household, sign-in, and onboarding.
+Screens outside the brief still use the same tokens and components: Pantry, List, Activity, Household, account settings, sign-in, and onboarding.
 
 ## Components
 
