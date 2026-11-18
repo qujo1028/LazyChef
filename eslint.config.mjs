@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The Expo app lints itself (npm run lint -w @lazychef/mobile).
+    "apps/**",
     // Native app projects (Capacitor copies its own JS into them).
     "ios/**",
     "android/**",

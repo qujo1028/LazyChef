@@ -33,7 +33,7 @@ Contrast rules that follow from the numbers:
 - Paprika passes for text on cream (4.6:1). White text on paprika (5.0:1) also passes, but check it at the final hex.
 - Muted text (5.0:1) passes for text on cream and white. The divider is decorative only. Use the control outline (3.4:1) for inputs and outlined buttons. Ink on pill is 12.6:1. Re-measure if any hex changes.
 
-Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to the theme object in `apps/mobile/theme`. The theme lives with the app, not in `packages/core`, because the web app keeps its own OKLCH tokens.
+Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), mapped to the theme object in `apps/mobile/src/theme`. The theme lives with the app, not in `packages/core`, because the web app keeps its own OKLCH tokens.
 
 ## Typography (chosen 2026-11-18)
 
@@ -55,7 +55,7 @@ Screens outside the brief still use the same tokens and components: Pantry, List
 
 ## Components
 
-Names are for the Expo app, under `apps/mobile/components`.
+Names are for the Expo app, under `apps/mobile/src/components`.
 
 - `AppScreenHeader`, `MetadataPill`, `CircleIconButton`
 - `RecipeCircleCard`, `RecipeRectangleCard`, `RecipeCarousel`, `RecipeSectionHeader`

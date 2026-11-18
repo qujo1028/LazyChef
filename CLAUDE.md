@@ -28,7 +28,7 @@ env vars, and the Pro/admin/TheMealDB runbooks.
   `npm run ingredients -- --check` (the generated ingredient library must be up to date).
 - `npm run db:types` regenerates `src/types/database.ts` from the live schema.
 - Mobile (Expo, once `apps/mobile` exists; see `docs/react-native-app.md`): `npx expo start` for the dev server,
-  `npm run typecheck -w apps/mobile`, `npm run lint -w apps/mobile`, `eas build -p ios --profile preview` for TestFlight.
+  `npm run typecheck -w @lazychef/mobile`, `npm run lint -w @lazychef/mobile` (run `npx expo start` from `apps/mobile`, scan the QR code with Expo Go), `eas build -p ios --profile preview` for TestFlight.
   Until then, the iOS shell runs with `npm run ios` (`docs/mobile-apps.md`).
 
 ## Architecture

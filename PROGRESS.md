@@ -355,3 +355,18 @@ Not done / to do:
   differ. Renamed the file to `20261118074317_undo_cook.sql`. The file's SQL is unchanged.
 - `20261118060000_admin_dashboard.sql` was already live (hash matches the file).
 - `npm run test:db`: 216 passing.
+
+## P0 Foundations (2026-11-18, lead: `feature/p0-scaffold`)
+Step 0 scaffold (lead):
+- npm workspaces (`apps/*`, `packages/*`). The web app stays at the repo root until the planned move to `apps/web`.
+- `apps/mobile`: Expo SDK 58, Expo Router (`src/app`), bundle ID `app.lazychef.mobile`, scheme `app.lazychef`. All P0
+  packages are installed, so workers don't change `package-lock.json`.
+- React pinned to 19.3.0 for both apps so the workspace has one copy.
+- NativeWind dropped: v4 needs Tailwind 3 and broke next to the web app's Tailwind 4. Styling is `StyleSheet` plus a theme object.
+- Phone testing is Expo Go via QR code until P7 (no Apple Developer account yet).
+- Root `tsconfig.json` and `eslint.config.mjs` skip `apps/`; Vitest also runs `packages/*/src/**/*.test.ts`.
+- Checks: web typecheck, lint, 2,207 tests and `next build` pass; mobile typecheck, lint, and iOS and web bundles pass.
+
+Workers (branch from `feature/p0-scaffold`): W1 `feature/p0-core` (packages/core extraction), W2 `feature/p0-shell`
+(theme, tabs, components), W3 `feature/p0-data` (Supabase, Query, offline), W4 `feature/p0-config` (db-types, CI, EAS).
+Migration lock: nobody (P0 has no schema changes).

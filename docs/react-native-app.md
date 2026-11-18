@@ -8,10 +8,11 @@ The Expo rebuild of LazyChef. Scope decisions are in [product-scope.md](product-
 |---|---|---|
 | Framework | Expo (managed), Expo Router, TypeScript | Fastest route to TestFlight through EAS Build and Submit. Camera, secure store, deep links, and notifications are all supported. |
 | Repo | One repo, npm workspaces | Shared logic in one place, so web and mobile can't drift apart. |
+| SDK and IDs | Expo SDK 58, React 19.3.0 (pinned to match React Native, shared with the web app), iOS bundle ID `app.lazychef.mobile` (a separate App Store app from the Capacitor shell), URL scheme `app.lazychef` | One React copy in the workspace avoids "invalid hook call" crashes. |
 | Server state | TanStack Query, plus Supabase realtime on `household:<id>` | Keeps the live-update behavior. |
-| Styling | A separate RN theme file (`apps/mobile/theme`) built from the palette hex values in [app-design.md](app-design.md). NativeWind for class-based styling. `globals.css` stays the web app's OKLCH theme. | The palette changed to olive and paprika, so the RN theme no longer mirrors the web tokens. |
+| Styling | A typed theme object (`apps/mobile/src/theme`) built from the palette hex values in [app-design.md](app-design.md), used with React Native `StyleSheet`. `globals.css` stays the web app's OKLCH theme. | NativeWind 4 needs Tailwind 3 and broke in the workspace next to the web app's Tailwind 4 (2026-11-18), so P0 uses plain styles. |
 | Android | Out of v1 | Expo setup won't block it later. |
-| Dev builds | Expo development build (`expo-dev-client`), not Expo Go | RevenueCat and other native modules won't run in Expo Go. A dev build also avoids version surprises in Expo Go (see risks). |
+| Phone testing | Expo Go (scan the QR code from `npx expo start`, same Wi-Fi) through P6. An Expo development build (`expo-dev-client`) from P7, when RevenueCat arrives. | No Apple Developer account is needed until P7. Everything in P0 to P6 runs in Expo Go. Stay on the SDK that the App Store's Expo Go supports. |
 
 ## Layout
 
@@ -39,7 +40,7 @@ Estimates assume one developer working with Claude Code.
 
 | Phase | Scope | Exit check |
 |---|---|---|
-| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme (`apps/mobile/theme`), four bottom tabs (Pantry, Recipes, List, Household) with Activity in the header, offline cache (TanStack Query persisted to AsyncStorage, plus an offline banner instead of a blank screen), CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build; airplane mode shows the banner, not a blank screen |
+| P0 Foundations (~1 wk) | Workspaces, `packages/core` extraction with tests passing, Expo shell, Supabase client, theme (`apps/mobile/src/theme`), four bottom tabs (Pantry, Recipes, List, Household) with Activity in the header, offline cache (TanStack Query persisted to AsyncStorage, plus an offline banner instead of a blank screen), CI, dev build | Empty app runs on an iOS simulator and on a phone via the dev build; airplane mode shows the banner, not a blank screen |
 | P1 Accounts and household (~1 wk) | Welcome, login, signup, reset, Google sign-in, Sign in with Apple, onboarding, join by code, members, realtime | Two phones see each other's changes live; Apple and Google sign-in work on a device |
 | P2 Pantry (~1.5 wk) | Category list, quick-add sheet with autocomplete, edit sheet, "Used some," −1 with Undo, staples | Parity with the web pantry for the keep items at 375px |
 | P3 Shopping list (~1 wk) | Add, check off, put away into the pantry | A list item moves to the pantry and shows for all members |
@@ -98,7 +99,7 @@ Test: if removing a feature leaves the core loop intact, it's an accessory. If i
 - **Spoonacular quota** is shared by the household. The quota design in P4 comes first.
 - **Realtime on mobile** can drop in the background. Refetch on resume.
 - **Pro billing** depends on the RevenueCat app code, which currently exists only on a worktree (see PROGRESS.md).
-- **Package version drift.** Expo Go and newly installed packages can break on version mismatches (the AsyncStorage case). Use `npx expo install` and a dev build, and pin versions in the lockfile.
+- **Package version drift.** Expo Go and newly installed packages can break on version mismatches (the AsyncStorage case). Use `npx expo install`, and pin versions in the lockfile.
 - **Sign in with Apple** is required because Google sign-in stays. It's built in P1 and needs the Apple Developer Program account first.
 
 ## Build pipeline
