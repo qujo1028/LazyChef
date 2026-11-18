@@ -101,7 +101,11 @@ function IdeasBody({ send }: { send: (toast: ToastOptions) => void }) {
     staleTime: 30_000,
     queryFn: async (): Promise<AiAllowance | null> => {
       const result = await callAi({ action: 'allowance', householdId: householdId! });
-      if (result.error !== undefined) return result.allowance ?? null;
+      // Throw so react-query retries, instead of caching "no count" for a transient failure.
+      if (result.error !== undefined) {
+        if (result.allowance) return result.allowance;
+        throw new Error(result.code);
+      }
       return result.allowance;
     },
   });
@@ -122,10 +126,14 @@ function IdeasBody({ send }: { send: (toast: ToastOptions) => void }) {
     if (!alive.current) return;
     if (result.allowance) queryClient.setQueryData(allowanceKey, result.allowance);
     if (result.error !== undefined) return showProblem(result);
+    if (!Array.isArray(result.ideas) || result.ideas.length === 0) {
+      return showProblem({ error: '', code: 'upstream' });
+    }
     setPhase({ kind: 'ready', ideas: result.ideas.slice(0, 3), meal });
   }, [householdId, hint, meal, queryClient, allowanceKey, showProblem]);
 
   function getIdeas() {
+    if (consent === null || householdId === null || phase.kind === 'consent' || phase.kind === 'loading') return;
     if (consent !== true) {
       setPhase({ kind: 'consent' });
       return;
@@ -265,7 +273,7 @@ function ProblemCard({ problem, onRetry }: { problem: IdeasProblem; onRetry?: ()
       <Text accessibilityRole="header" style={[type.heading, { color: colors.ink }]}>
         {problem.title}
       </Text>
-      <FormMessage tone={problem.kind === 'limit' || problem.kind === 'empty_pantry' ? 'success' : 'error'} text={problem.message} />
+      <FormMessage tone="error" text={problem.message} />
       {problem.retry && onRetry ? (
         <View style={{ marginTop: spacing.xs }}>
           <PrimaryPillButton title="Try again" variant="outline" onPress={onRetry} />
@@ -324,7 +332,7 @@ function DevControls({
     <View style={{ gap: spacing.sm }}>
       <Text style={[type.meta, { color: colors.muted }]}>Dev: preview a state</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
-        <Chip label="Loading" onPress={() => setPhase({ kind: 'loading' })} />
+        <Chip label="Loading" onPress={() => { setPhase({ kind: 'loading' }); setTimeout(() => setPhase({ kind: 'idle' }), 3000); }} />
         <Chip label="3 ideas" onPress={() => { setAllowance(fx.DEV_ALLOWANCE); setPhase({ kind: 'ready', ideas: fx.DEV_IDEAS, meal }); }} />
         <Chip label="Consent" onPress={() => setPhase({ kind: 'consent' })} />
         <Chip label="Limit" onPress={() => { setAllowance(fx.DEV_LIMIT_FAILURE.allowance!); showProblem(fx.DEV_LIMIT_FAILURE); }} />

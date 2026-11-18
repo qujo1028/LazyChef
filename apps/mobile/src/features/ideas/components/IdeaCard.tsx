@@ -32,7 +32,12 @@ export function IdeaCard({ idea, onSave, onAddMissing }: Props) {
     if (busy.current) return;
     busy.current = true;
     (kind === 'save' ? setSaving : setAdding)(true);
-    const result = await (kind === 'save' ? onSave(idea) : onAddMissing(idea));
+    let result: IdeaActionResult;
+    try {
+      result = await (kind === 'save' ? onSave(idea) : onAddMissing(idea));
+    } catch {
+      result = { ok: false, message: "That didn't go through. Try again." };
+    }
     busy.current = false;
     (kind === 'save' ? setSaving : setAdding)(false);
     setNote({ tone: result.ok ? 'success' : 'error', text: result.message });
