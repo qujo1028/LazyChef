@@ -856,3 +856,14 @@ Workers (branch from `origin/feature/p5-barcodes-ideas`):
 - W2 `feature/p5-ideas` (Sonnet: the Ideas sheet, consent, count line, save and add-missing).
 - W3 `feature/p5-scanner` (Sonnet: the camera scanner and scanning inside the Add food sheet).
 - W4 `feature/p5-barcode-lookup` (Sonnet: Open Food Facts from the phone and the household barcode memory, with tests).
+
+W2 (Ideas sheet, `feature/p5-ideas`): `IdeasSheet` is built. Meal chips (default by time of day via core `autoSlot`),
+an optional hint, "Get ideas for dinner", per-device consent in AsyncStorage keyed to the `MEAL_IDEAS_SENDS` wording
+(the allowance call waits for consent too), the "7 of 10 free ideas left this week" line from `callAi` (updated from
+each ideas response), up to 3 idea cards (have/need, steps, Save to Mine via `save_ai_recipe` then bookmark, Add missing
+to list), and a screen for loading, not set up, offline, rate limited, empty pantry, upstream error with Try again, and
+limit reached (core `limitMessage`; no purchase button until P7). Toasts wait for the sheet to close (`after-close`).
+Dev only: "Dev: preview a state" chips in the sheet. New core files: `packages/core/src/ai/idea-save.ts` (+ test), which
+holds ports of `ownInputFromIdea`, `ingredientRows` and `MEAL_IDEAS_SENDS`; the web copies are untouched. Pure copy and
+state mapping: `apps/mobile/src/lib/ideas-copy.ts` (+ test). Not checked: a simulator or phone, a signed-in account,
+and the real function (not deployed, so everything past "not set up" ran only through the dev previews).
