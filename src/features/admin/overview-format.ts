@@ -46,6 +46,27 @@ export function counterSeries(
   return fillDays(rows, days, (r) => r.n, null)
 }
 
+/**
+ * Daily counters only get a row on a day something happened. So once tracking has started
+ * (the first day with a row for any of `metrics` inside `days`), a missing day means 0.
+ * Days before that stay null (gaps). Returns the start day (null when nothing is tracked)
+ * and one series per metric, in the order given.
+ */
+export function counterSeriesFromStart(
+  counters: { day: string; metric: string; n: number }[],
+  metrics: string[],
+  days: string[],
+): { start: string | null; series: Record<string, (number | null)[]> } {
+  const inRange = counters.filter((c) => metrics.includes(c.metric) && days.includes(c.day))
+  const start = inRange.map((c) => c.day).sort()[0] ?? null
+  const series: Record<string, (number | null)[]> = {}
+  for (const metric of metrics) {
+    const rows = inRange.filter((c) => c.metric === metric)
+    series[metric] = fillDays(rows, days, (r) => r.n, 0).map((v, i) => (start === null || days[i] < start ? null : v))
+  }
+  return { start, series }
+}
+
 /** The first day that has a non-null value, or null. `values` lines up with `days`. */
 export function firstValueDay(days: string[], values: (number | null)[]): string | null {
   const i = values.findIndex((v) => v !== null)

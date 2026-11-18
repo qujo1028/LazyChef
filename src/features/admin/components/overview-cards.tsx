@@ -21,7 +21,7 @@ import {
 import {
   activityMetric,
   addDays,
-  counterSeries,
+  counterSeriesFromStart,
   fillDays,
   findMetric,
   firstValueDay,
@@ -262,6 +262,9 @@ export async function TrendsCard({ className }: { className?: string }) {
     loadSafely(() => getDailySnapshots(addDays(end, -89), end)),
     loadSafely(() => getDailyCounters(addDays(end, -29), end)),
   ])
+  const ai = counters.ok
+    ? counterSeriesFromStart(counters.data, ["ai_allowance_free", "ai_allowance_pro", "ai_allowance_denied", "ai_calls"], counterDays)
+    : null
   return (
     <AdminCard title="Trends" description={`Saved daily snapshots and event counters. ${asOf()}`} className={className}>
       <div className="grid gap-6 lg:grid-cols-2">
@@ -284,22 +287,22 @@ export async function TrendsCard({ className }: { className?: string }) {
           </div>
         )}
         <div className="lg:col-span-2">
-          {counters.ok ? (
+          {ai ? (
             <TrendChart
               title="AI recipe calls per day, last 30 days"
               days={counterDays}
               series={[
-                { name: "Free", values: counterSeries(counters.data, "ai_allowance_free", counterDays), color: 0 },
-                { name: "Pro", values: counterSeries(counters.data, "ai_allowance_pro", counterDays), color: 2 },
-                { name: "Turned away", values: counterSeries(counters.data, "ai_allowance_denied", counterDays), color: 4 },
-                { name: "Total calls", values: counterSeries(counters.data, "ai_calls", counterDays), color: 6, dashed: true },
+                { name: "Free", values: ai.series.ai_allowance_free, color: 0 },
+                { name: "Pro", values: ai.series.ai_allowance_pro, color: 2 },
+                { name: "Turned away", values: ai.series.ai_allowance_denied, color: 4 },
+                { name: "Total calls", values: ai.series.ai_calls, color: 6, dashed: true },
               ]}
               format={formatCount}
-              note="Days with no recorded events show as gaps."
+              note={ai.start ? `Tracking since ${shortDay(ai.start)}. Days with no events count as 0.` : "Tracking hasn't started yet."}
             />
-          ) : (
+          ) : !counters.ok ? (
             <CardNotice kind={counters.kind} message={counters.message} />
-          )}
+          ) : null}
         </div>
       </div>
     </AdminCard>

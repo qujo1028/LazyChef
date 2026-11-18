@@ -4,6 +4,7 @@ import {
   addDays,
   cohortPercents,
   counterSeries,
+  counterSeriesFromStart,
   dayRange,
   fillDays,
   findMetric,
@@ -50,6 +51,24 @@ describe("series", () => {
       { day: "2026-11-02", metric: "other", n: 9 },
     ]
     expect(counterSeries(c, "ai_calls", days)).toEqual([2, null, 5])
+  })
+  it("fills zeros from the first counter day, leaving earlier days as gaps", () => {
+    const c = [
+      { day: "2026-11-02", metric: "ai_calls", n: 2 },
+      { day: "2026-11-03", metric: "ai_allowance_free", n: 1 },
+      { day: "2026-11-03", metric: "unrelated", n: 9 },
+      { day: "2026-10-01", metric: "ai_calls", n: 7 },
+    ]
+    const out = counterSeriesFromStart(c, ["ai_calls", "ai_allowance_free", "ai_allowance_denied"], days)
+    expect(out.start).toBe("2026-11-02")
+    expect(out.series.ai_calls).toEqual([null, 2, 0])
+    expect(out.series.ai_allowance_free).toEqual([null, 0, 1])
+    expect(out.series.ai_allowance_denied).toEqual([null, 0, 0])
+  })
+  it("is all gaps when nothing is tracked", () => {
+    const out = counterSeriesFromStart([], ["ai_calls"], days)
+    expect(out.start).toBeNull()
+    expect(out.series.ai_calls).toEqual([null, null, null])
   })
   it("finds the first day with a value", () => {
     expect(firstValueDay(days, [null, 3, 4])).toBe("2026-11-02")
