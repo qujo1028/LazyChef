@@ -19,6 +19,7 @@ import { MAX_AI_TEXT } from "../ai/split-text"
 import { describeAdditions } from "../merge"
 import type { ResolveResult, SpoonacularStatus } from "../resolve-core"
 import { draftsFromResolved, draftToItem, draftsToItems, type ReviewDraft } from "../review"
+import { offerPush } from "@/features/push/offer"
 import { callAction } from "@/lib/call-action"
 import { ReviewList, SpoonacularNote } from "./review-list"
 import { useToday } from "./use-clock"
@@ -168,6 +169,7 @@ export function BulkAddForm({
         return
       }
       toast.success(describeAdditions(result))
+      offerPush()
       onDone?.()
     })
   }

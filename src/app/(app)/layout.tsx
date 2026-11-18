@@ -3,6 +3,7 @@ import { BottomNav } from "@/components/app-shell/bottom-nav"
 import { HousemateCookBanner } from "@/features/habit/components/housemate-cook-banner"
 import { HouseholdChannelProvider } from "@/features/household/components/household-channel"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { PushBridge } from "@/features/push/components/push-bridge"
 import { FirstRunSync } from "@/features/preferences/components/first-run-sync"
 import { ProProvider } from "@/features/pro/components/pro-provider"
 import { getProStatus } from "@/features/pro/queries"
@@ -29,6 +30,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             viewerId={viewer.id}
             members={members.map((m) => ({ userId: m.userId, displayName: m.displayName }))}
           />
+          <PushBridge />
         </div>
       </ProProvider>
     </HouseholdChannelProvider>

@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { after } from "next/server"
 import { z } from "zod"
 
 import { requireHousehold } from "@/features/household/queries"
@@ -11,6 +12,7 @@ import type { AddItemsSummary, NewPantryItem } from "@/features/pantry/types"
 import { findIngredient, guessCategory, normalizeIngredientName } from "@/lib/ingredients/catalog"
 import { parseLines } from "@/lib/ingredients/parse-line"
 import type { Category } from "@/lib/ingredients/types"
+import { notifyListAdded } from "@/lib/push/notify"
 import { createClient } from "@/lib/supabase/server"
 import { convertQuantity } from "@/lib/units"
 import type { Database, Json } from "@/types/database"
@@ -64,7 +66,7 @@ async function categoriesFor(supabase: Supabase, householdId: string, names: str
 }
 
 /** Plans the lines against what's already on the list and adds them in one call. */
-async function addLines(householdId: string, inputs: LineInput[]): Promise<ActionResult<AddToListSummary>> {
+async function addLines(householdId: string, actorId: string, inputs: LineInput[]): Promise<ActionResult<AddToListSummary>> {
   const supabase = await createClient()
   const [known, open] = await Promise.all([
     categoriesFor(
@@ -108,6 +110,10 @@ async function addLines(householdId: string, inputs: LineInput[]): Promise<Actio
     ids = (data ?? []).filter((_, i) => !("merge_into" in plan.entries[i]))
   }
 
+  // Tell housemates after the response, so adding never waits on a push. Only new lines count.
+  const firstNew = plan.entries.find((entry): entry is Extract<typeof entry, { name: string }> => "name" in entry)
+  if (firstNew) after(() => notifyListAdded(householdId, actorId, firstNew.name))
+
   revalidatePath("/list")
   return { added: plan.added, toppedUp: plan.toppedUp, alreadyOnList: plan.alreadyOnList, ids }
 }
@@ -122,13 +128,13 @@ export async function addListText(text: string): Promise<ActionResult<AddToListS
     .safeParse(text)
   if (!parsed.success) return { error: firstIssue(parsed.error) }
 
-  const { household } = await requireHousehold()
+  const { household, viewer } = await requireHousehold()
   const lines = parseLines(parsed.data)
     .slice(0, MAX_LINES)
     .filter((line) => line.name)
     .map((line) => ({ name: line.name.slice(0, 80), quantity: line.quantity, unit: line.unit }))
   if (lines.length === 0) return { error: "Type something to add, like “2 lbs chicken breast”." }
-  return addLines(household.id, lines)
+  return addLines(household.id, viewer.id, lines)
 }
 
 /** Structured lines: from the pantry ("Add to list"), a recipe, or Undo after a delete. */
@@ -136,8 +142,8 @@ export async function addListItems(lines: LineInput[]): Promise<ActionResult<Add
   const parsed = z.array(lineSchema).min(1, "Nothing to add.").max(MAX_LINES).safeParse(lines)
   if (!parsed.success) return { error: firstIssue(parsed.error) }
 
-  const { household } = await requireHousehold()
-  return addLines(household.id, parsed.data)
+  const { household, viewer } = await requireHousehold()
+  return addLines(household.id, viewer.id, parsed.data)
 }
 
 /** Checks a line off (or back on). The database stamps who and when. */
