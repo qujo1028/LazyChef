@@ -16,7 +16,7 @@ import { planCook } from '@lazychef/core/recipes/cook-plan';
 import type { RecipeIngredient } from '@lazychef/core/recipes/recipe-shapes';
 import { parseRecipeRef } from '@lazychef/core/recipes/ref';
 import { formatUnit } from '@lazychef/core/units';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 
 import { FormMessage } from '@/components/FormMessage';
@@ -112,8 +112,20 @@ function CookContent({
   const today = useToday();
 
   // Planned once per open, so the amounts don't shift under the cook's thumbs.
-  const [lines] = useState<CookLine[]>(() => planCook(recipe.ingredients, [...pantry.items.values()], today));
+  const [lines, setLines] = useState<CookLine[]>(() => planCook(recipe.ingredients, [...pantry.items.values()], today));
   const [choices, setChoices] = useState(() => initialChoices(lines));
+  // If the pantry was still loading when the sheet opened, plan again once it arrives (before any edit).
+  const [replanned, setReplanned] = useState(pantry.query.isSuccess);
+  const [touched, setTouched] = useState(false);
+  if (!replanned && pantry.query.isSuccess) {
+    setReplanned(true);
+    if (!touched) {
+      const next = planCook(recipe.ingredients, [...pantry.items.values()], today);
+      setLines(next);
+      setChoices(initialChoices(next));
+    }
+  }
+  const busy = useRef(false);
   const [showErrors, setShowErrors] = useState(false);
   const [done, setDone] = useState<Done | null>(null);
   const [pending, setPending] = useState(false);
@@ -125,6 +137,7 @@ function CookContent({
   const { deductions, errors } = useMemo(() => toDeductions(lines, choices), [lines, choices]);
 
   function set(index: number, patch: Partial<CookChoice>) {
+    setTouched(true);
     setChoices((current) => ({ ...current, [index]: { ...current[index], ...patch } }));
   }
 
@@ -143,15 +156,17 @@ function CookContent({
   }
 
   async function confirm() {
-    if (pending || !householdId) return;
+    if (busy.current || !householdId) return;
     if (Object.keys(errors).length > 0) {
       setShowErrors(true);
       return;
     }
     if (deductions.length === 0) return;
+    busy.current = true;
     setPending(true);
     setFormError(null);
     const result = await cookRecipe(householdId, recipe.ref, recipe.title, deductions);
+    busy.current = false;
     setPending(false);
     if (result.error !== undefined) {
       setFormError(result.error);
@@ -186,9 +201,11 @@ function CookContent({
   }
 
   async function undoHere() {
-    if (!done || pending) return;
+    if (!done || busy.current) return;
+    busy.current = true;
     setPending(true);
     const error = await runUndo(done.results, done.batchId);
+    busy.current = false;
     setPending(false);
     if (error) {
       setFormError(error);

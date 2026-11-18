@@ -38,7 +38,10 @@ function Ring({ still }: { still: boolean }) {
   const scale = useSharedValue(still ? 1 : 0.5);
   const opacity = useSharedValue(still ? 0.5 : 0.9);
   useEffect(() => {
-    if (still) return;
+    if (still) {
+      opacity.value = withDelay(1000, withTiming(0, { duration: 300 }));
+      return;
+    }
     scale.value = withTiming(1.8, { duration: 600, easing: Easing.out(Easing.cubic) });
     opacity.value = withTiming(0, { duration: 600 });
   }, [still, scale, opacity]);
@@ -51,7 +54,10 @@ function Flame({ still }: { still: boolean }) {
   const scale = useSharedValue(still ? 1 : 0);
   const opacity = useSharedValue(1);
   useEffect(() => {
-    if (still) return;
+    if (still) {
+      opacity.value = withDelay(1000, withTiming(0, { duration: 300 }));
+      return;
+    }
     scale.value = withSequence(withSpring(1.3, { damping: 7 }), withSpring(1));
     opacity.value = withDelay(900, withTiming(0, { duration: 400 }));
   }, [still, scale, opacity]);

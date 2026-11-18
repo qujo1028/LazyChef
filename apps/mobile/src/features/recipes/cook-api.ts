@@ -41,6 +41,7 @@ export async function cookRecipe(
     });
     if (error) return { error: dbErrorMessage('cook_recipe', error) };
     const rows = data ?? [];
+    if (rows.length === 0 || !Number(rows[0].batch_id)) return { error: 'Nothing was taken out. Check the amounts and try again.' };
     return {
       results: rows.map((row) => ({
         item_id: row.item_id,
@@ -49,7 +50,7 @@ export async function cookRecipe(
         quantity_before: row.quantity_before === null ? null : Number(row.quantity_before),
         quantity_after: row.quantity_after === null ? null : Number(row.quantity_after),
       })),
-      batchId: Number(rows[0]?.batch_id ?? 0),
+      batchId: Number(rows[0].batch_id),
     };
   } catch (error) {
     return { error: dbErrorMessage('cook_recipe', error instanceof Error ? { message: error.message } : null) };
