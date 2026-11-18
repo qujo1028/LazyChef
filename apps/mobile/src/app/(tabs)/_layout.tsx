@@ -13,24 +13,30 @@ export default function TabsLayout() {
   // The root gate only shows this group with a household, so this is a brief edge case.
   const name = household?.name ?? 'LazyChef';
 
-  const tabs = (
-    <Tabs
-      tabBar={(props) => <BottomTabBar {...props} />}
-      screenOptions={{
-        header: () => (
-          <AppScreenHeader
-            title={name}
-            right={<CircleIconButton icon="pulse-outline" label="Activity" onPress={() => router.push('/activity')} />}
-          />
-        ),
-      }}
-    >
-      <Tabs.Screen name="pantry" options={{ title: 'Pantry' }} />
-      <Tabs.Screen name="recipes" options={{ title: 'Recipes' }} />
-      <Tabs.Screen name="list" options={{ title: 'List' }} />
-      <Tabs.Screen name="household" options={{ title: 'Household' }} />
-    </Tabs>
+  return (
+    <HouseholdChannelProvider householdId={household?.id ?? null}>
+      <Tabs
+        tabBar={(props) => <BottomTabBar {...props} />}
+        screenOptions={{
+          header: () => (
+            <AppScreenHeader
+              title={name}
+              right={
+                <CircleIconButton
+                  icon='pulse-outline'
+                  label='Activity'
+                  onPress={() => router.push('/activity')}
+                />
+              }
+            />
+          ),
+        }}
+      >
+        <Tabs.Screen name='pantry' options={{ title: 'Pantry' }} />
+        <Tabs.Screen name='recipes' options={{ title: 'Recipes' }} />
+        <Tabs.Screen name='list' options={{ title: 'List' }} />
+        <Tabs.Screen name='household' options={{ title: 'Household' }} />
+      </Tabs>
+    </HouseholdChannelProvider>
   );
-
-  return household ? <HouseholdChannelProvider householdId={household.id}>{tabs}</HouseholdChannelProvider> : tabs;
 }

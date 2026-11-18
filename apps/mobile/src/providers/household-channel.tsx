@@ -44,12 +44,20 @@ function runChannelOp(op: () => Promise<void>) {
  * resume or reconnect, followed by a refetch because broadcasts were missed meanwhile.
  * Failures (error, timeout, unexpected close) resubscribe with capped backoff.
  */
-export function HouseholdChannelProvider({ householdId, children }: { householdId: string; children: ReactNode }) {
+export function HouseholdChannelProvider({
+  householdId,
+  children,
+}: {
+  /** Null renders the children without a channel, so the tree doesn't remount when a household appears. */
+  householdId: string | null;
+  children: ReactNode;
+}) {
   const queryClient = useQueryClient();
   const [listeners] = useState(() => new Set<Listener>());
   const [status, setStatus] = useState<ChannelStatus>('connecting');
 
   useEffect(() => {
+    if (!householdId) return;
     let disposed = false;
     let signedIn = true;
     let foreground = AppState.currentState !== 'background';
