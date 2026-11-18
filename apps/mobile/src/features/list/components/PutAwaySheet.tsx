@@ -45,7 +45,8 @@ export function PutAwaySheet({ visible, onClose, session }: { visible: boolean; 
   const [pending, setPending] = useState(false);
 
   // Each new session starts from the lines that are checked right now.
-  if (visible && seenSession !== session) {
+  // Wait for the list to load, or an early open would see no checked lines.
+  if (visible && seenSession !== session && !list.query.isPending) {
     const checked = [...list.items.values()].filter((item) => item.checked_at !== null);
     setSeenSession(session);
     setIds(checked.map((item) => item.id));
@@ -142,7 +143,10 @@ export function PutAwaySheet({ visible, onClose, session }: { visible: boolean; 
   return (
     <Sheet
       visible={visible}
-      onClose={onClose}
+      // Don't let a swipe close it while the request is running; the result would land on a hidden sheet.
+      onClose={() => {
+        if (!pending) onClose();
+      }}
       onDismiss={dismissed}
       title={putAwayTitle(ids.length)}
       subtitle={empty ? undefined : 'Check the amounts and add expiry dates. These go to your pantry.'}
