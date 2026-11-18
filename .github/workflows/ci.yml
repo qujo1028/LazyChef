@@ -18,6 +18,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Expo app (apps/mobile): typecheck, lint, and an iOS bundle export with no secrets.
+      - run: npm run typecheck -w @lazychef/mobile
+      - run: npm run lint -w @lazychef/mobile
+      - run: npx expo export -p ios --output-dir /tmp/expo-ios
+        working-directory: apps/mobile
       # Fails on known high or critical vulnerabilities in what ships (not dev tools).
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run typecheck

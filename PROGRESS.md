@@ -370,3 +370,11 @@ Step 0 scaffold (lead):
 Workers (branch from `feature/p0-scaffold`): W1 `feature/p0-core` (packages/core extraction), W2 `feature/p0-shell`
 (theme, tabs, components), W3 `feature/p0-data` (Supabase, Query, offline), W4 `feature/p0-config` (db-types, CI, EAS).
 Migration lock: nobody (P0 has no schema changes).
+
+W4 config (`feature/p0-config`):
+- CI runs `typecheck`, `lint` and an iOS `expo export` for `apps/mobile` after `npm ci`. No secrets needed.
+- `apps/mobile/eas.json`: `appVersionSource: remote`; profiles `development` (dev client, internal), `preview` (internal),
+  `production` (autoIncrement). No EAS project ID yet, so nothing has been run against EAS.
+- `app.json`: `ios.config.usesNonExemptEncryption: false`, Android adaptive icon background `#F8F6EC`, splash dark
+  background `#1C1A14` via the `dark` key of the expo-splash-screen plugin.
+- `packages/db-types` re-exports the generated `Database` type and typechecks from the mobile app.
