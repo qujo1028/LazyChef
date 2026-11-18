@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch"
 import { addListItems } from "@/features/list/actions"
 import { callAction } from "@/lib/call-action"
 import { displayName } from "@/features/pantry/display"
+import { RewardBurst } from "@/features/habit/components/reward-burst"
+import { useReward, type RewardState } from "@/features/habit/use-reward"
 import { formatUnit } from "@/lib/units"
 import { cn } from "@/lib/utils"
 
@@ -28,7 +30,7 @@ import {
 import { scaleCookLines, scaleOriginal } from "../scale"
 import { RatingButtons } from "./rating-buttons"
 
-type Done = { results: CookResult[]; undone: boolean }
+type Done = { results: CookResult[]; batchId: number; undone: boolean }
 
 /** "I cooked this": review what comes out of the pantry, then take it all out at once. */
 export function CookSheet({
@@ -120,6 +122,7 @@ function CookContent({
   const [showErrors, setShowErrors] = useState(false)
   const [done, setDone] = useState<Done | null>(null)
   const [pending, startTransition] = useTransition()
+  const { play, state: reward } = useReward()
 
   const tracked = lines.filter((line): line is Extract<CookLine, { kind: "deduct" | "check" }> =>
     line.kind === "deduct" || line.kind === "check",
@@ -133,11 +136,11 @@ function CookContent({
     setChoices((current) => ({ ...current, [index]: { ...current[index], ...patch } }))
   }
 
-  function undo(results: CookResult[]) {
+  function undo(results: CookResult[], batchId: number) {
     const amounts = undoAmounts(results)
-    if (amounts.length === 0) return
+    if (amounts.length === 0 || !batchId) return
     startTransition(async () => {
-      const result = await callAction(() => undoCook(amounts))
+      const result = await callAction(() => undoCook(batchId, amounts))
       if (result.error !== undefined) {
         toast.error(result.error)
         return
@@ -160,10 +163,12 @@ function CookContent({
         toast.error(result.error)
         return
       }
-      setDone({ results: result.results, undone: false })
+      setDone({ results: result.results, batchId: result.batchId, undone: false })
+      // A milestone (tier-up, streak, finished challenge) replaces the small reward; never both.
+      play(result.habit?.milestone ? "milestone" : "cook")
       toast.success(`Cooked ${title}`, {
         description: `Took ${plural(undoAmounts(result.results).length, "item")} out of the pantry`,
-        action: { label: "Undo", onClick: () => undo(result.results) },
+        action: { label: "Undo", onClick: () => undo(result.results, result.batchId) },
       })
     })
   }
@@ -177,7 +182,8 @@ function CookContent({
         saved={saved}
         done={done}
         pending={pending}
-        onUndo={() => undo(done.results)}
+        reward={reward}
+        onUndo={() => undo(done.results, done.batchId)}
         close={close}
       />
     )
@@ -310,6 +316,7 @@ function CookDone({
   saved,
   done,
   pending,
+  reward,
   onUndo,
   close,
 }: {
@@ -319,6 +326,7 @@ function CookDone({
   saved: boolean
   done: Done
   pending: boolean
+  reward: RewardState
   onUndo: () => void
   close: () => void
 }) {
@@ -369,6 +377,7 @@ function CookDone({
         </DrawerDescription>
       </DrawerHeader>
       <div className="grid gap-3 px-4 pb-2">
+        {!done.undone ? <RewardBurst state={reward} label="Cooked" /> : null}
         {!done.undone ? (
           <div className="flex min-h-14 items-center gap-3 rounded-xl border bg-card py-1.5 pr-2 pl-3.5">
             <p className="min-w-0 flex-1 text-sm font-semibold">How was it?</p>

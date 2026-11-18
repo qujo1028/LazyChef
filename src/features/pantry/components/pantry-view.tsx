@@ -1,21 +1,24 @@
 "use client"
 
 import { Plus, Search, ShoppingBasket, X } from "lucide-react"
-import Link from "next/link"
 import { useDeferredValue, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { PageHeading } from "@/components/page-heading"
+import { WeekCard } from "@/features/habit/components/week-card"
+import type { WeekCardData } from "@/features/habit/queries"
 import { addPantryItemToList } from "@/features/list/components/add-to-list"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useStripParams } from "@/lib/use-strip-params"
 
-import { pantrySummary, remainingMessage } from "../display"
+import { displayName, pantrySummary, remainingMessage } from "../display"
 import { groupPantry } from "../group"
 import type { PantryItem, PantryMember } from "../types"
 import { EditItemSheet } from "./edit-item-sheet"
 import { GettingStarted } from "./getting-started"
 import { PantrySectionList } from "./pantry-sections"
+import { BulkAddSheet, type BulkAddSeed } from "./bulk-add-sheet"
 import { QuickAddSheet, type QuickAddSeed } from "./quick-add-sheet"
 import { useToday } from "./use-clock"
 import { usePantry } from "./use-pantry"
@@ -27,6 +30,9 @@ export function PantryView({
   members,
   fetchedAt,
   serverToday,
+  aiAvailable,
+  initialBulk,
+  weekCard,
 }: {
   householdId: string
   viewerId: string
@@ -34,6 +40,12 @@ export function PantryView({
   members: PantryMember[]
   fetchedAt: number
   serverToday: string
+  /** Offer "Use AI to split this" in the bulk add sheet. */
+  aiAvailable: boolean
+  /** Open the bulk add sheet on arrival (?add=bulk, from the old /pantry/add address). */
+  initialBulk: { text: string; scan: boolean } | null
+  /** The "This week" card's server-read data (the viewer's cooks, time zone, cached recipe ideas). */
+  weekCard: WeekCardData
 }) {
   const today = useToday(serverToday)
   const { items, apply, adjust } = usePantry({ householdId, serverItems, fetchedAt })
@@ -44,6 +56,11 @@ export function PantryView({
     open: false,
     seed: { text: "", n: 0 },
   })
+  const [bulk, setBulk] = useState<{ open: boolean; seed: BulkAddSeed }>(() => ({
+    open: initialBulk !== null,
+    seed: { text: initialBulk?.text ?? "", scan: initialBulk?.scan ?? false, n: 0 },
+  }))
+  useStripParams(["add", "text", "scan"])
   const [editing, setEditing] = useState<{ id: string; open: boolean } | null>(null)
   // Focused in the same tap that opens the sheet, so phones raise the keyboard (iOS only
   // does that for focus() inside a user gesture); the sheet then moves focus to its input.
@@ -75,6 +92,11 @@ export function PantryView({
     [items],
   )
 
+  const expiring = useMemo(
+    () => ({ count: all.expiring.length, first: all.expiring[0] ? displayName(all.expiring[0].name) : null }),
+    [all.expiring],
+  )
+
   const empty = all.total === 0
   const onlyStaples = !empty && all.staples.length === all.total
   const searching = deferredQuery.trim() !== ""
@@ -85,6 +107,14 @@ export function PantryView({
     setQuickAdd((current) => ({
       open: true,
       seed: text === undefined ? current.seed : { text, n: current.seed.n + 1 },
+    }))
+  }
+
+  function openBulkAdd(options: { text?: string; scan?: boolean } = {}) {
+    rememberOpener()
+    setBulk((current) => ({
+      open: true,
+      seed: { text: options.text ?? "", scan: options.scan ?? false, n: current.seed.n + 1 },
     }))
   }
 
@@ -104,13 +134,13 @@ export function PantryView({
     <>
       <div className="flex items-start justify-between gap-3">
         <PageHeading title="Pantry" description={pantrySummary(all.total - all.ranOut.length, all.expiring.length)} />
-        <Button asChild variant="outline" className="h-11 shrink-0">
-          <Link href="/pantry/add">
-            <ShoppingBasket aria-hidden />
-            Bulk add
-          </Link>
+        <Button variant="outline" className="h-11 shrink-0" onClick={() => openBulkAdd()}>
+          <ShoppingBasket aria-hidden />
+          Bulk add
         </Button>
       </div>
+
+      <WeekCard data={weekCard} viewerId={viewerId} expiring={expiring} />
 
       {!empty ? (
         <div className="relative">
@@ -167,7 +197,7 @@ export function PantryView({
       )}
 
       {(empty || onlyStaples) && !searching ? (
-        <GettingStarted onlyStaples={onlyStaples} existingNames={existingNames} onAddFood={() => openQuickAdd()} />
+        <GettingStarted onlyStaples={onlyStaples} existingNames={existingNames} onAddFood={() => openQuickAdd()} onBulkAdd={() => openBulkAdd()} />
       ) : null}
 
       {/* Room to scroll the last row above the Add food button. */}
@@ -197,6 +227,15 @@ export function PantryView({
         onOpenChange={(open) => setQuickAdd((current) => ({ ...current, open }))}
         seed={quickAdd.seed}
         today={today}
+        onCloseAutoFocus={restoreFocus}
+        onBulkAdd={openBulkAdd}
+      />
+      <BulkAddSheet
+        open={bulk.open}
+        onOpenChange={(open) => setBulk((current) => ({ ...current, open }))}
+        seed={bulk.seed}
+        today={today}
+        aiAvailable={aiAvailable}
         onCloseAutoFocus={restoreFocus}
       />
       <EditItemSheet

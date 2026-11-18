@@ -215,3 +215,34 @@
     }
   }
 }
+
+/* Cook reward: the flame pops in; banners and the flame stand still under reduced motion. */
+@keyframes reward-flame-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.25) rotate(6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.reward-flame {
+  animation: reward-flame-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reward-flame {
+    animation: none;
+    opacity: 1;
+  }
+  [data-sonner-toast] {
+    transition: none !important;
+    animation: none !important;
+  }
+}

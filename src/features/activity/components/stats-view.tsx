@@ -8,6 +8,8 @@ import { toast } from "sonner"
 import { EmptyState } from "@/components/empty-state"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
+import { CookHeatmap } from "@/features/habit/components/cook-heatmap"
+import { buildHeatmap } from "@/features/habit/heatmap"
 import { addListItems } from "@/features/list/actions"
 import { displayName } from "@/features/pantry/display"
 import { callAction } from "@/lib/call-action"
@@ -128,14 +130,18 @@ export function StatsView({
   members,
   viewerId,
   serverNow,
+  truncated = false,
 }: {
   rows: StatsRow[]
   members: ActivityMember[]
   viewerId: string
   serverNow: number
+  /** Older history was left out (row cap), so the all-time numbers are "at least". */
+  truncated?: boolean
 }) {
   const { now, timeZone } = useViewerTime(serverNow)
   const stats = useMemo(() => computeStats(rows, now, timeZone), [rows, now, timeZone])
+  const heatmap = useMemo(() => buildHeatmap(rows, now, timeZone), [rows, now, timeZone])
   const memberMap = useMemo(() => new Map(members.map((m) => [m.userId, m])), [members])
 
   if (stats.since === null) {
@@ -175,14 +181,18 @@ export function StatsView({
         <Tile
           icon={BarChart3}
           tone="text-sky-600 dark:text-sky-400"
-          value={`${cooks.total}`}
-          label={cooks.total === 1 ? "meal cooked in all" : "meals cooked in all"}
-          note={`${plural(trips.total, "trip")} in all`}
+          value={`${cooks.total}${truncated ? "+" : ""}`}
+          label={cooks.total === 1 && !truncated ? "meal cooked in all" : "meals cooked in all"}
+          note={truncated ? "Counting recent history" : `${plural(trips.total, "trip")} in all`}
         />
       </div>
 
       <Section title="Meals per week">
         <WeekChart weeks={stats.weeks} />
+      </Section>
+
+      <Section title="Cook calendar">
+        <CookHeatmap heatmap={heatmap} />
       </Section>
 
       <Section title="Most cooked">

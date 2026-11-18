@@ -3,9 +3,11 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { after } from "next/server"
 import { z } from "zod"
 
 import { normalizeInviteCode, PENDING_INVITE_COOKIE } from "@/lib/invite"
+import { notifyJoined } from "@/lib/push/notify"
 import { createClient } from "@/lib/supabase/server"
 import { requireViewer } from "./queries"
 
@@ -34,7 +36,7 @@ export async function joinHousehold(_prev: ActionState, formData: FormData): Pro
   const code = normalizeInviteCode(String(formData.get("code") ?? ""))
   if (code.length !== 8) return { error: "Invite codes have 8 letters and numbers, like K7QX-M2PA." }
 
-  await requireViewer()
+  const viewer = await requireViewer()
   const supabase = await createClient()
   const { data, error } = await supabase.rpc("join_household", { p_code: code })
   if (error) return { error: error.message }
@@ -42,6 +44,8 @@ export async function joinHousehold(_prev: ActionState, formData: FormData): Pro
   if (!data) return { error: "That invite code doesn't match any household." }
 
   ;(await cookies()).delete(PENDING_INVITE_COOKIE)
+  // `data` is the household id. Tell the people already in it, after the response.
+  after(() => notifyJoined(data, viewer.id))
   redirect("/pantry")
 }
 

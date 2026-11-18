@@ -7,6 +7,10 @@ import type { ActionResult } from "@/features/pantry/types"
 import { requireHousehold, requireViewer } from "@/features/household/queries"
 import { dbError } from "@/features/pantry/server-helpers"
 import { addListItems } from "@/features/list/actions"
+import { syntheticCookEvent } from "@/features/habit/cook-events"
+import { getViewerCookEvents, getViewerTimeZone } from "@/features/habit/queries"
+import { FALLBACK_TIME_ZONE } from "@/features/habit/timezone"
+import { habitResult, summarize, type HabitResult } from "@/features/habit/summary"
 import { categoryFromAisle } from "@/lib/ingredients/aisles"
 import { findIngredient, guessCategory } from "@/lib/ingredients/catalog"
 import { SpoonacularError } from "@/lib/spoonacular"
@@ -99,13 +103,19 @@ export async function cookRecipe(
   ref: string,
   title: string,
   deductions: Deduction[],
-): Promise<ActionResult<{ results: CookResult[] }>> {
+): Promise<ActionResult<{ results: CookResult[]; batchId: number; habit: HabitResult | null }>> {
   const parsed = cookInput.safeParse({ ref, title, deductions })
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the amounts." }
 
-  const { household } = await requireHousehold()
+  const { viewer, household } = await requireHousehold()
   const supabase = await createClient()
   const { ref: recipe } = parsed.data
+  // The habit before this cook, to tell what it earned. Never allowed to fail the cook.
+  // One parallel read; "after" is derived below instead of re-reading the history.
+  const [zone, before] = await Promise.all([
+    getViewerTimeZone(),
+    getViewerCookEvents(household.id, viewer.id).catch(() => null),
+  ])
   const { data, error } = await supabase.rpc("cook_recipe", {
     p_household_id: household.id,
     p_recipe_id: recipe.kind === "spoonacular" ? recipe.id : null,
@@ -118,43 +128,51 @@ export async function cookRecipe(
   revalidatePath("/pantry")
   revalidatePath("/activity")
   revalidatePath(`/recipes/${ref}`)
+  const rows = data ?? []
+
+  let habit: HabitResult | null = null
+  if (before) {
+    const timeZone = zone ?? FALLBACK_TIME_ZONE
+    const now = Date.now()
+    habit = habitResult(
+      summarize(before, now, timeZone),
+      summarize([...before, syntheticCookEvent(recipe, now)], now, timeZone),
+    )
+  }
   return {
-    results: (data ?? []).map((row) => ({
-      ...row,
+    results: rows.map((row) => ({
+      item_id: row.item_id,
+      name: row.name,
+      unit: row.unit,
       quantity_before: row.quantity_before === null ? null : Number(row.quantity_before),
       quantity_after: row.quantity_after === null ? null : Number(row.quantity_after),
     })),
+    batchId: Number(rows[0]?.batch_id ?? 0),
+    habit,
   }
 }
 
-/** Undo for "I cooked this": puts back what was actually taken, in one transaction. */
-export async function undoCook(amounts: Deduction[]): Promise<ActionResult> {
-  const parsed = deductionsSchema.safeParse(amounts)
+/**
+ * Undo for "I cooked this": puts back what was actually taken and removes the cook
+ * from the activity log (so it no longer counts in history or stats), in one
+ * transaction (undo_cook).
+ */
+export async function undoCook(batchId: number, amounts: Deduction[]): Promise<ActionResult> {
+  const parsed = z.object({ batchId: z.number().int().positive(), amounts: deductionsSchema }).safeParse({ batchId, amounts })
   if (!parsed.success) return { error: "Nothing to put back." }
 
   const { household } = await requireHousehold()
   const supabase = await createClient()
-  // Keep each item's expiry: add_pantry_items gives a ran-out item the date it's sent.
-  const { data: items, error: loadError } = await supabase
-    .from("pantry_items")
-    .select("id, expires_on")
-    .eq("household_id", household.id)
-    .in(
-      "id",
-      parsed.data.map((d) => d.item_id),
-    )
-  if (loadError) return { error: dbError("Loading the pantry", loadError) }
-  const expiry = new Map(items.map((item) => [item.id, item.expires_on]))
-  const entries = parsed.data
-    .filter((d) => expiry.has(d.item_id))
-    .map((d) => ({ merge_into: d.item_id, quantity: d.amount, expires_on: expiry.get(d.item_id) ?? null }))
-  if (entries.length === 0) return { error: "Those items were removed from the pantry." }
-
-  const { error } = await supabase.rpc("add_pantry_items", { p_household_id: household.id, p_items: entries })
-  if (error) return { error: dbError("undoCook", error) }
+  const { error } = await supabase.rpc("undo_cook", {
+    p_household_id: household.id,
+    p_batch_id: parsed.data.batchId,
+    p_amounts: parsed.data.amounts as unknown as Json,
+  })
+  if (error) return { error: dbError("undo_cook", error) }
 
   revalidatePath("/pantry")
   revalidatePath("/activity")
+  revalidatePath("/recipes", "layout")
   return {}
 }
 
@@ -239,7 +257,6 @@ export async function rateRecipe(ref: string, rating: number): Promise<ActionRes
   if (error) return { error: error.code === "42501" ? NOT_COOKED_MESSAGE : dbError("rate_recipe", error) }
 
   revalidatePath("/recipes")
-  revalidatePath("/recipes/saved")
   revalidatePath(`/recipes/${parsed.data.ref}`)
   return { rating: parsed.data.rating }
 }

@@ -4,9 +4,10 @@ import { CameraOff, Flashlight, FlashlightOff, Keyboard, LoaderCircle } from "lu
 import { useEffect, useId, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
+import { Drawer, DrawerNested, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { normalizeBarcode } from "@/lib/barcode/codes"
+import { haptic } from "@/lib/native/haptics"
 import { cn } from "@/lib/utils"
 
 const FORMATS = ["ean_13", "ean_8", "upc_a", "upc_e"]
@@ -126,7 +127,7 @@ function CameraView({ onCode }: { onCode: (code: string) => void }) {
                   continue
                 }
                 recent.set(code, now)
-                navigator.vibrate?.(60)
+                haptic("tap")
                 setFlash((n) => n + 1)
                 onCodeRef.current(code)
               }
@@ -271,6 +272,7 @@ export function BarcodeScanner({
   onCode,
   children,
   footer,
+  nested = false,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -279,9 +281,12 @@ export function BarcodeScanner({
   onCode: (code: string) => void
   children?: React.ReactNode
   footer: React.ReactNode
+  /** Opens on top of another drawer (the bulk add sheet) instead of on its own. */
+  nested?: boolean
 }) {
+  const Root = nested ? DrawerNested : Drawer
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Root open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="mx-auto h-[92dvh] w-full max-w-lg data-[vaul-drawer-direction=bottom]:max-h-[92dvh]">
         <DrawerHeader className="text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
           <DrawerTitle className="text-lg">{title}</DrawerTitle>
@@ -307,6 +312,6 @@ export function BarcodeScanner({
         </div>
         <DrawerFooter className="border-t pb-[calc(1rem+env(safe-area-inset-bottom))]">{footer}</DrawerFooter>
       </DrawerContent>
-    </Drawer>
+    </Root>
   )
 }

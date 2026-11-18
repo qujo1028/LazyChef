@@ -8,11 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DeleteAccountButton } from "@/features/account/components/delete-account-button"
 import { SignOutButton } from "@/features/auth/components/sign-out-button"
+import { HapticsToggle } from "@/features/habit/components/haptics-toggle"
 import { HouseholdSwitcher, LeaveHouseholdButton } from "@/features/household/components/household-actions"
 import { DisplayNameForm, RenameHouseholdForm } from "@/features/household/components/household-forms"
 import { InviteCard } from "@/features/household/components/invite-card"
 import { MemberList } from "@/features/household/components/member-list"
 import { getHouseholdMembers, requireHousehold } from "@/features/household/queries"
+import { NotificationsCard } from "@/features/push/components/notifications-card"
+import { getMyNotificationPrefs } from "@/features/push/queries"
+import { OpenPaywallOnArrival } from "@/features/pro/components/open-paywall-on-arrival"
 import { ProCard } from "@/features/pro/components/pro-card"
 import { FoodPreferencesSheet } from "@/features/preferences/components/food-preferences-sheet"
 import { getMyPreferences } from "@/features/preferences/queries"
@@ -25,7 +29,11 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
     requireHousehold(),
     searchParams,
   ])
-  const [members, prefs] = await Promise.all([getHouseholdMembers(household.id), getMyPreferences()])
+  const [members, prefs, notificationPrefs] = await Promise.all([
+    getHouseholdMembers(household.id),
+    getMyPreferences(),
+    getMyNotificationPrefs(),
+  ])
   const isOwner = role === "owner"
   const welcome = firstParam(params.welcome) === "1"
 
@@ -44,6 +52,7 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
       ) : null}
 
       <ProCard />
+      {firstParam(params.pro) === "1" ? <OpenPaywallOnArrival /> : null}
 
       <InviteCard householdId={household.id} householdName={household.name} inviteCode={household.inviteCode} isOwner={isOwner} />
 
@@ -89,6 +98,8 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
         </CardContent>
       </Card>
 
+      <NotificationsCard initial={notificationPrefs} />
+
       <Card>
         <CardHeader>
           <CardTitle>You</CardTitle>
@@ -99,6 +110,15 @@ export default async function HouseholdPage({ searchParams }: PageProps<"/househ
           <FoodPreferencesSheet initial={prefs} />
           <SignOutButton />
           <DeleteAccountButton />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>This phone</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <HapticsToggle />
         </CardContent>
       </Card>
 

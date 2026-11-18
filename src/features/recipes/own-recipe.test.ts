@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  draftFromRecipe,
   fieldErrors,
   fitWithin,
   isHouseholdPhoto,
@@ -113,5 +114,26 @@ describe("photos", () => {
     expect(fitWithin(3000, 4000, 1600)).toEqual({ width: 1200, height: 1600 })
     expect(fitWithin(800, 600, 1600)).toEqual({ width: 800, height: 600 })
     expect(fitWithin(0, 600, 1600)).toEqual({ width: 0, height: 0 })
+  })
+})
+
+describe("draftFromRecipe", () => {
+  const base = { title: "Pancakes", readyInMinutes: 20, servings: null, mealTypes: ["breakfast"], steps: [], photoPath: null }
+
+  it("turns numbers into the form's text fields and keeps one empty step", () => {
+    const draft = draftFromRecipe({ ...base, lines: [{ original: "2 eggs", optional: false }] })
+    expect(draft).toMatchObject({ readyInMinutes: "20", servings: "", steps: [""], ingredients: "2 eggs" })
+  })
+
+  it("marks optional lines once, without doubling an existing note", () => {
+    const draft = draftFromRecipe({
+      ...base,
+      lines: [
+        { original: "1 tbsp sugar", optional: true },
+        { original: "parsley (optional)", optional: true },
+        { original: "salt", optional: false },
+      ],
+    })
+    expect(draft.ingredients).toBe("1 tbsp sugar (optional)\nparsley (optional)\nsalt")
   })
 })

@@ -4,7 +4,6 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { EmptyState } from "@/components/empty-state"
-import { Button } from "@/components/ui/button"
 import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@/lib/ingredients/catalog"
 import type { ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
@@ -15,10 +14,14 @@ import { SourceTag } from "@/features/recipes/components/source-tag"
 import { SpoonacularCredit } from "@/features/recipes/components/spoonacular-credit"
 import { TheMealDbCredit } from "@/features/recipes/components/themealdb-credit"
 import { RatingButtons } from "@/features/recipes/components/rating-buttons"
+import { RecipeSheet } from "@/features/recipes/components/recipe-sheet"
 import { getRecipeDetail, getSavedIds } from "@/features/recipes/queries"
+import { getLocalRecipe } from "@/features/recipes/local"
+import { draftFromRecipe } from "@/features/recipes/own-recipe"
 import { getMyRating, hasCooked } from "@/features/recipes/ratings"
 import { parseRecipeRef } from "@/features/recipes/ref"
 import { isAiAvailable } from "@/lib/llm/ai"
+import { firstParam } from "@/lib/search-params"
 
 export const metadata: Metadata = { title: "Recipe" }
 
@@ -33,7 +36,7 @@ function BackLink() {
   )
 }
 
-export default async function RecipePage({ params }: PageProps<"/recipes/[id]">) {
+export default async function RecipePage({ params, searchParams }: PageProps<"/recipes/[id]">) {
   const ref = parseRecipeRef((await params).id)
   if (ref === null) notFound()
 
@@ -88,6 +91,8 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
   const canRate = myRating !== null || (await hasCooked(household.id, recipe.ref))
   const image = recipe.source === "spoonacular" ? recipe.image : null
   const editable = recipe.source === "user" && recipe.householdId === household.id
+  // The edit sheet starts from the saved recipe's own lines (/recipes/<id>/edit redirects here as ?edit=1).
+  const own = editable && ref.kind === "local" ? await getLocalRecipe(ref.id, household.id) : null
 
   return (
     <article className="grid grid-cols-1 gap-5">
@@ -125,12 +130,17 @@ export default async function RecipePage({ params }: PageProps<"/recipes/[id]">)
             <RatingButtons recipeId={recipe.ref} title={recipe.title} initial={myRating} />
           </div>
         ) : null}
-        {editable ? (
-          <Button asChild variant="outline" size="lg" className="mt-1 h-11 w-full">
-            <Link href={`/recipes/${recipe.ref}/edit`}>
-              <Pencil aria-hidden /> Edit recipe
-            </Link>
-          </Button>
+        {own ? (
+          <RecipeSheet
+            householdId={household.id}
+            recipeId={own.id}
+            initial={draftFromRecipe(own)}
+            initialPhotoUrl={own.photoPath ? own.image : null}
+            defaultOpen={firstParam((await searchParams).edit) === "1"}
+            className="mt-1 h-11 w-full"
+          >
+            <Pencil aria-hidden /> Edit recipe
+          </RecipeSheet>
         ) : null}
       </header>
 

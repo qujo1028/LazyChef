@@ -96,7 +96,7 @@ Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the c
 ### 1.5 🔴 Permission prompts (Info.plist)
 - [x] `NSCameraUsageDescription`: "LazyChef uses the camera to scan barcodes on groceries."
 - [x] `NSPhotoLibraryUsageDescription`: for recipe photos (`src/features/recipes/components/photo-field.tsx`).
-- [ ] Push permission asked at a sensible moment (not on first launch), with a short explanation first.
+- [x] Push permission asked at a sensible moment (not on first launch), with a short explanation first. (After the first pantry add, or from the Notifications card in Household. Needs a device to check.)
 
 ### 1.6 🔴 Privacy manifest and App Privacy labels
 - [ ] `PrivacyInfo.xcprivacy` in the iOS project, declaring any "required reason" APIs your code and plugins
@@ -133,9 +133,10 @@ Google blocks OAuth inside embedded web views (`disallowed_useragent`), so the c
 - [ ] 🟢 Feel: launch screen + splash, status bar colors in light and dark, no rubber-band bounce on fixed
       screens, no long-press text selection on buttons, swipe-back where it makes sense, pull-to-refresh on
       Pantry and List, keyboard not covering inputs in the sheets.
-- [ ] 🟢 Push notifications (APNs key in the Apple portal, a `device_tokens` table with RLS, a sender on the
-      server or a Supabase Edge Function): expiring soon, list changes by housemates, "someone joined your
-      household". Each one with an on/off switch.
+- [ ] 🟢 Push notifications. Code is built (device tokens table with RLS, APNs and FCM senders, expiring, list and
+      joined pushes, an on/off switch each). Still to do: APNs key, Firebase project, Push Notifications
+      capability in Xcode, `npm run cap:sync` and a new build, then a test on a real phone. See "Push setup" in
+      `docs/mobile-apps.md`.
 - [ ] 🟢 App update path: since the UI is served from Vercel, web fixes go live without App Review. Native
       changes (plugins, permissions) still need a new build.
 

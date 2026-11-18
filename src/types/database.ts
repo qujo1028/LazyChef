@@ -178,6 +178,39 @@ export type Database = {
           },
         ]
       }
+      device_tokens: {
+        Row: {
+          app_version: string | null
+          created_at: string
+          id: string
+          last_seen_at: string
+          platform: string
+          timezone: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          app_version?: string | null
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform: string
+          timezone?: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          app_version?: string | null
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform?: string
+          timezone?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       household_barcodes: {
         Row: {
           code: string
@@ -290,6 +323,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_log: {
+        Row: {
+          dedupe_key: string
+          id: number
+          kind: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          dedupe_key: string
+          id?: never
+          kind: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          dedupe_key?: string
+          id?: never
+          kind?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notification_prefs: {
+        Row: {
+          expiring: boolean
+          joined: boolean
+          list: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          expiring?: boolean
+          joined?: boolean
+          list?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          expiring?: boolean
+          joined?: boolean
+          list?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       pantry_items: {
         Row: {
@@ -1078,6 +1159,7 @@ export type Database = {
           p_recipe_title: string
         }
         Returns: {
+          batch_id: number
           item_id: string
           name: string
           quantity_after: number | null
@@ -1174,6 +1256,10 @@ export type Database = {
         Args: { p_household_id: string }
         Returns: string
       }
+      register_device_token: {
+        Args: { p_app_version: string | null; p_platform: string; p_timezone: string; p_token: string }
+        Returns: undefined
+      }
       remove_member: {
         Args: { p_household_id: string; p_user_id: string }
         Returns: undefined
@@ -1186,6 +1272,10 @@ export type Database = {
         Args: { p_household_id: string; p_ingredients: Json; p_recipe: Json; p_recipe_id: string | null }
         Returns: string
       }
+      set_my_notification_prefs: {
+        Args: { p_expiring: boolean | null; p_joined: boolean | null; p_list: boolean | null }
+        Returns: undefined
+      }
       set_my_preferences: {
         Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
         Returns: undefined
@@ -1197,6 +1287,10 @@ export type Database = {
       take_rate_limit: {
         Args: { p_bucket: string }
         Returns: boolean
+      }
+      undo_cook: {
+        Args: { p_amounts: Json; p_batch_id: number; p_household_id: string }
+        Returns: undefined
       }
     }
     Enums: {

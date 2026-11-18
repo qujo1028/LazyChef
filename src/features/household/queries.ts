@@ -71,7 +71,7 @@ export const requireHousehold = cache(async () => {
   return { ...context, household: active.household, role: active.role }
 })
 
-export async function getHouseholdMembers(householdId: string) {
+export const getHouseholdMembers = cache(async (householdId: string) => {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from("household_members")
@@ -86,7 +86,7 @@ export async function getHouseholdMembers(householdId: string) {
     displayName: m.profile?.display_name ?? "Housemate",
     avatarUrl: m.profile?.avatar_url ?? null,
   }))
-}
+})
 
 /** The household behind an invite code, null for a wrong code, or "limited" after too many wrong ones. */
 export async function getInvitePreview(code: string) {

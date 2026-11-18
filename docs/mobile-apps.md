@@ -94,6 +94,48 @@ don't add it before you've joined (the build would fail to sign).
    (`ios/App/App/LazyChefAuthPlugin.swift`); without the entitlement Apple rejects the request with an
    error.
 
+## Push setup
+
+The app can send three pushes: food expiring soon, a housemate adding to the list, and someone joining the
+household. Each has a switch in Household. The code is done; real delivery needs the steps below. Until they
+are done the server skips pushes quietly (it never crashes).
+
+**One-time, in order**
+
+1. **Supabase**: apply `supabase/migrations/20261118120000_push_notifications.sql`.
+2. **Apple (iPhone)**
+   - Developer portal, Keys, new key with "Apple Push Notifications service (APNs)". Download the `.p8` once
+     (Apple only shows it once). Note the Key ID and your Team ID.
+   - In Vercel set `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_PRIVATE_KEY` (the `.p8` contents; `\n` for line breaks is
+     fine), `APNS_BUNDLE_ID=app.lazychef` and `APNS_ENVIRONMENT=production`. Use `sandbox` only for builds run
+     straight from Xcode.
+   - Xcode: target App, Signing & Capabilities, add **Push Notifications** (and Background Modes, Remote
+     notifications is optional). This updates `App.entitlements`.
+   - In `ios/App/App/AppDelegate.swift` add the two forwarding methods the plugin needs
+     (`didRegisterForRemoteNotificationsWithDeviceToken` and `didFailToRegisterForRemoteNotificationsWithError`,
+     see the plugin's README).
+3. **Android**
+   - Firebase console: create a project, add an Android app with package `app.lazychef`, download
+     `google-services.json` into `android/app/` (it is not secret, but keep it out of the repo if you prefer).
+   - Project settings, Service accounts, Generate new private key. Put the whole JSON on one line in the Vercel
+     env var `FCM_SERVICE_ACCOUNT_JSON`. Never commit it.
+4. **Vercel**: `CRON_SECRET` is already used by the admin cron and also protects `/api/push/expiring`.
+5. `npm run cap:sync`, then make a new iOS and Android build. Native changes need a new App Store build; the
+   web side (settings card, server code) goes live on its own.
+
+**How the expiring push is scheduled**
+
+`vercel.json` runs `/api/push/expiring` once a day at 17:00 UTC (the Hobby plan allows one run a day). A person
+gets it if their local time at that moment is between 08:00 and 22:59, which covers the Americas, Europe and
+Africa, but not Australia or East Asia. They get at most one per local day. On the Pro plan, run the route
+hourly (`"schedule": "0 * * * *"`, path `/api/push/expiring?mode=hourly`): each person then gets it between 17:00
+and 18:59 their time, wherever they live.
+
+**Testing without keys**: `npm run test` covers delivery with a fake sender. For a real device, build from
+Xcode with `APNS_ENVIRONMENT=sandbox` on a preview deployment, turn notifications on in Household, then call
+`curl -H "Authorization: Bearer $CRON_SECRET" https://<deployment>/api/push/expiring` with something in the
+pantry expiring tomorrow.
+
 ## When the domain changes
 
 Update the URL in three places: `capacitor.config.ts`, `native/www/offline.html`, `native/www/index.html`.

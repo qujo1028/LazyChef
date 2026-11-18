@@ -1,10 +1,14 @@
 import { SectionTabs } from "@/components/section-tabs"
 
-const TABS = [
-  { href: "/activity", label: "Feed" },
-  { href: "/activity/stats", label: "Stats" },
-] as const
+import type { ActivityView } from "../view"
 
-export function ActivityTabs({ current }: { current: (typeof TABS)[number]["href"] }) {
-  return <SectionTabs label="Activity" tabs={TABS} current={current} />
+const TABS = [
+  { view: "log", href: "/activity", label: "Log" },
+  { view: "chart", href: "/activity?view=chart", label: "Chart" },
+  { view: "board", href: "/activity?view=board", label: "Board" },
+] as const satisfies readonly { view: ActivityView; href: string; label: string }[]
+
+export function ActivityTabs({ current }: { current: ActivityView }) {
+  const href = TABS.find((tab) => tab.view === current)?.href ?? "/activity"
+  return <SectionTabs label="Activity" tabs={TABS} current={href} />
 }

@@ -132,6 +132,31 @@ export type OwnRecipeDraft = {
   photoPath: string | null
 }
 
+const OPTIONAL_WORDS = /\(\s*optional\s*\)|\boptional\b|\bto serve\b|\bfor garnish\b|\bto garnish\b/i
+
+/** A saved own recipe, as the edit form's starting values. */
+export function draftFromRecipe(recipe: {
+  title: string
+  readyInMinutes: number | null
+  servings: number | null
+  mealTypes: string[]
+  lines: readonly { original: string; optional: boolean }[]
+  steps: string[]
+  photoPath: string | null
+}): OwnRecipeDraft {
+  return {
+    title: recipe.title,
+    readyInMinutes: recipe.readyInMinutes ? String(recipe.readyInMinutes) : "",
+    servings: recipe.servings ? String(recipe.servings) : "",
+    mealTypes: recipe.mealTypes,
+    ingredients: recipe.lines
+      .map((line) => (line.optional && !OPTIONAL_WORDS.test(line.original) ? `${line.original} (optional)` : line.original))
+      .join("\n"),
+    steps: recipe.steps.length > 0 ? recipe.steps : [""],
+    photoPath: recipe.photoPath,
+  }
+}
+
 /** Field → first problem, for showing next to each field. */
 export function fieldErrors(error: z.ZodError): Partial<Record<keyof OwnRecipeDraft, string>> {
   const errors: Partial<Record<keyof OwnRecipeDraft, string>> = {}
