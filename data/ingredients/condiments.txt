@@ -63,6 +63,7 @@ korean bbq sauce ~4 : bulgogi sauce, korean bbq marinade, galbi sauce | bottle, 
 sambal oelek ~4 : sambal, chili paste, chile paste | jar, oz, tsp
 doubanjiang ~5 : chili bean paste, broad bean paste, toban djan | jar, oz
 black bean sauce ~5 : black bean garlic sauce, fermented black beans, douchi | jar, oz
+sweet bean sauce ~5 : tianmianjiang, sweet flour sauce | jar, oz
 miso ~3 : miso paste | oz, package, tbsp
 white miso ~4 : shiro miso, yellow miso, sweet miso | oz, package, tbsp
 red miso ~5 : aka miso | oz, package, tbsp

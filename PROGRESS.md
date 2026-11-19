@@ -825,6 +825,51 @@ Open before P4's exit check:
   remove list items it added; Mine has no create or edit form yet; taste ranking and cook history on saved cards
   aren't ported.
 
+## Library expansion: 150 American + 150 Chinese recipes (2026-11-18, lead: `feature/library-expansion`)
+Based on `origin/feature/p4-recipes` (PR #71 still open; the mobile recipe page lives there). **Migration lock:
+`feature/library-expansion`** (`20261119024109_library_expansion.sql` and `src/types/database.ts`), cleared when it merges.
+
+Why: the shared library had 33 "United States" and 27 "Chinese" recipes, and TheMealDB has no more. Narrow pantries got
+fewer than 10 local ideas and fell back to Spoonacular's 50 daily points.
+
+Built (the first session stopped after the code; the P5 lead session finished the data on 2026-11-18):
+- Migration: `recipe_source` value `lazychef` (no household, slug as `source_id`), photo credit columns on `recipes`
+  (`image_author`, `image_license`, `image_license_url`, `image_source_url`, `image_ai_generated`), public bucket
+  `library-photos` (no policies, so only the secret key writes). PGlite test `supabase/tests/library-expansion.test.mjs`.
+- Recipes: dish lists from two Sonnet agents (American, Chinese) deduped against all 790 library titles, written by 30
+  Haiku agents, checked by `checkLibraryRecipe` (`packages/core/src/recipes/import/lazychef.ts`, which parses lines with
+  the TheMealDB importer's `toIngredient`), then reviewed by Sonnet agents.
+- Photos: Wikimedia Commons (CC0, public domain, CC BY, CC BY-SA, at least 1200 px), picked by Haiku and checked by
+  Sonnet; AI images only for the rest, after the user picks a provider.
+- Credits: `SOURCE_LABELS.lazychef` ("LazyChef kitchen"), `photoCredit()` (`packages/core/src/recipes/photo-credit.ts`)
+  shown under the photo on the web and mobile recipe pages.
+- Import: `npm run recipes:lazychef -- --dry-run | --write` (`scripts/import-lazychef-library.mjs`), reading the reviewed
+  `data/lazychef/recipes.json`.
+
+Finished (P5 lead session, 2026-11-18, worktree `.claude/worktrees/library`, pushed to `feature/library-expansion`):
+- The first session's uncommitted work was committed as found (`8885fc4`) so it was on GitHub.
+- Dishes: `data/lazychef/dishes.json`, 150 American and 150 Chinese, none matching a library title by `titleKey`.
+- Recipes: written by 10 Sonnet agents (30 each) against `checkLibraryRecipe`, merged into `data/lazychef/recipes.json`.
+  Dry run: 300 recipes, 3,280 ingredient lines, 3,212 matched, no notes. Spot-checked by the lead. "Hunan Steamed Fish
+  Head" became "Hunan Steamed Fish with Chopped Chilies" (it uses fillets).
+- Ingredient library: specialty items no longer fall back to generic ones (century eggs were "eggs", winter melon
+  "melon", wood ear mushrooms "mushrooms", tofu skin "tofu", Chinese noodles "pasta"); added those plus lotus and bamboo
+  leaves.
+- Photos: `scripts/find-library-photos.mjs` lists Commons candidates (CC0, public domain, CC BY, CC BY-SA, at least
+  1200 px) into `data/lazychef/photo-candidates.json`; 5 Sonnet agents looked at the thumbnails and picked one per dish
+  or none. 254 photos, 46 dishes without. The lead dropped picks showing a different dish or a brand, and tidied 4 author
+  names. No AI images (needs the user to pick a provider, if wanted).
+- Checks: web typecheck, lint, 2,445 tests, `npm run test:db` (221 pass), ingredients check; mobile typecheck and lint.
+
+Still to do (each needs the user's OK):
+- Done 2026-11-18 (user approved): the migration is live as `20261119024109` (applied through the Supabase connector; the file was renamed to match). Security advisor: nothing new.
+- Done 2026-11-18 (user approved): `npm run recipes:lazychef -- --write` imported the 300 recipes (1,090 in the library
+  now) and uploaded all 254 photos to `library-photos` (public URL checked). Two fixes to get there:
+  `scripts/lib/ts-paths.mjs` no longer rewrites requires inside node_modules (it broke sharp), and the importer
+  retries uploads and imports a recipe without its photo if the image can't be read, instead of stopping.
+- Then check a few recipe pages and their photo credits on the web and on a phone, and clear the migration lock when
+  the branch merges.
+
 ## P5 Barcodes and Ideas (2026-11-18, lead: `feature/p5-barcodes-ideas`)
 Based on `origin/feature/p4-recipes`, because P4 (PR #71) isn't merged yet and P5 builds on its recipes screen, Edge
 Function pattern and list helpers. Rebase onto `origin/main` once #71 merges. Migration lock: held by

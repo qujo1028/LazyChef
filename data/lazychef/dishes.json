@@ -1,0 +1,1502 @@
+[
+ {
+  "slug": "us-baked-mac-and-cheese",
+  "title": "Baked Mac and Cheese",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-buttermilk-pancakes",
+  "title": "Buttermilk Pancakes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-classic-meatloaf",
+  "title": "Classic Meatloaf",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-pot-pie",
+  "title": "Chicken Pot Pie",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-buffalo-chicken-wings",
+  "title": "Buffalo Chicken Wings",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-southern-fried-chicken",
+  "title": "Southern Fried Chicken",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-biscuits-and-sausage-gravy",
+  "title": "Biscuits and Sausage Gravy",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-buttermilk-biscuits",
+  "title": "Buttermilk Biscuits",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-skillet-cornbread",
+  "title": "Skillet Cornbread",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-texas-beef-chili",
+  "title": "Texas Beef Chili",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-white-chicken-chili",
+  "title": "White Chicken Chili",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-noodle-soup",
+  "title": "Chicken Noodle Soup",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-broccoli-cheddar-soup",
+  "title": "Broccoli Cheddar Soup",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-loaded-baked-potato-soup",
+  "title": "Loaded Baked Potato Soup",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pot-roast-with-carrots-and-potatoes",
+  "title": "Pot Roast with Carrots and Potatoes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-beef-stew",
+  "title": "Beef Stew",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sloppy-joes",
+  "title": "Sloppy Joes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-classic-cheeseburger",
+  "title": "Classic Cheeseburger",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-philly-cheesesteak",
+  "title": "Philly Cheesesteak",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-reuben-sandwich",
+  "title": "Reuben Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-blt-sandwich",
+  "title": "BLT Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-grilled-cheese-sandwich",
+  "title": "Grilled Cheese Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-tuna-melt",
+  "title": "Tuna Melt",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-salad-sandwich",
+  "title": "Chicken Salad Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-egg-salad-sandwich",
+  "title": "Egg Salad Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-club-sandwich",
+  "title": "Club Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pulled-pork-sandwich",
+  "title": "Pulled Pork Sandwich",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-baby-back-ribs",
+  "title": "Baby Back Ribs",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-barbecue-chicken-drumsticks",
+  "title": "Barbecue Chicken Drumsticks",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-shrimp-and-grits",
+  "title": "Shrimp and Grits",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-jambalaya",
+  "title": "Jambalaya",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-and-sausage-gumbo",
+  "title": "Chicken and Sausage Gumbo",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-red-beans-and-rice",
+  "title": "Red Beans and Rice",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-hoppin-john",
+  "title": "Hoppin' John",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-collard-greens-with-bacon",
+  "title": "Collard Greens with Bacon",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-southern-green-beans",
+  "title": "Southern Green Beans",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-creamed-spinach",
+  "title": "Creamed Spinach",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-creamed-corn",
+  "title": "Creamed Corn",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-corn-chowder",
+  "title": "Corn Chowder",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-coleslaw",
+  "title": "Coleslaw",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-deviled-eggs",
+  "title": "Deviled Eggs",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-macaroni-salad",
+  "title": "Macaroni Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-three-bean-salad",
+  "title": "Three Bean Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cobb-salad",
+  "title": "Cobb Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-caesar-salad",
+  "title": "Chicken Caesar Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-waldorf-salad",
+  "title": "Waldorf Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-wedge-salad",
+  "title": "Wedge Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-taco-salad",
+  "title": "Taco Salad",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-buffalo-chicken-dip",
+  "title": "Buffalo Chicken Dip",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-spinach-artichoke-dip",
+  "title": "Spinach Artichoke Dip",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-seven-layer-dip",
+  "title": "Seven Layer Dip",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-baked-ziti",
+  "title": "Baked Ziti",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-parmesan",
+  "title": "Chicken Parmesan",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-spaghetti-and-meatballs",
+  "title": "Spaghetti and Meatballs",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-tuna-noodle-casserole",
+  "title": "Tuna Noodle Casserole",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-green-bean-casserole",
+  "title": "Green Bean Casserole",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sweet-potato-casserole",
+  "title": "Sweet Potato Casserole",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-king-ranch-chicken-casserole",
+  "title": "King Ranch Chicken Casserole",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-shepherds-pie-with-ground-beef",
+  "title": "Shepherd's Pie with Ground Beef",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-and-dumplings",
+  "title": "Chicken and Dumplings",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-fried-steak",
+  "title": "Chicken Fried Steak",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-salisbury-steak",
+  "title": "Salisbury Steak",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-smothered-pork-chops",
+  "title": "Smothered Pork Chops",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pan-seared-steak-with-garlic-butter",
+  "title": "Pan-Seared Steak with Garlic Butter",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-roast-chicken-with-lemon-and-herbs",
+  "title": "Roast Chicken with Lemon and Herbs",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-roast-turkey-breast",
+  "title": "Roast Turkey Breast",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-herb-stuffing",
+  "title": "Herb Stuffing",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cranberry-sauce",
+  "title": "Cranberry Sauce",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-mashed-potatoes",
+  "title": "Mashed Potatoes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-scalloped-potatoes",
+  "title": "Scalloped Potatoes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-twice-baked-potatoes",
+  "title": "Twice-Baked Potatoes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-hash-browns",
+  "title": "Hash Browns",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-home-fries",
+  "title": "Home Fries",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sweet-potato-fries",
+  "title": "Sweet Potato Fries",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-onion-rings",
+  "title": "Onion Rings",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-baked-beans",
+  "title": "Baked Beans",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-corn-on-the-cob-with-herb-butter",
+  "title": "Corn on the Cob with Herb Butter",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-roasted-brussels-sprouts-with-bacon",
+  "title": "Roasted Brussels Sprouts with Bacon",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-glazed-carrots",
+  "title": "Glazed Carrots",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-succotash",
+  "title": "Succotash",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-fried-green-tomatoes",
+  "title": "Fried Green Tomatoes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-hush-puppies",
+  "title": "Hush Puppies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-crab-cakes",
+  "title": "Crab Cakes",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-lobster-roll",
+  "title": "Lobster Roll",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-new-england-fish-and-chips",
+  "title": "New England Fish and Chips",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-blackened-salmon",
+  "title": "Blackened Salmon",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-shrimp-scampi",
+  "title": "Shrimp Scampi",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-fish-tacos-with-lime-crema",
+  "title": "Fish Tacos with Lime Crema",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-beef-tacos",
+  "title": "Beef Tacos",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-quesadillas",
+  "title": "Chicken Quesadillas",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-beef-burritos",
+  "title": "Beef Burritos",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-nachos",
+  "title": "Nachos",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-enchiladas-with-red-sauce",
+  "title": "Chicken Enchiladas with Red Sauce",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cheese-enchiladas",
+  "title": "Cheese Enchiladas",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-breakfast-burritos",
+  "title": "Breakfast Burritos",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-huevos-rancheros",
+  "title": "Huevos Rancheros",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-western-omelet",
+  "title": "Western Omelet",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-scrambled-eggs-and-toast",
+  "title": "Scrambled Eggs and Toast",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-eggs-benedict",
+  "title": "Eggs Benedict",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-quiche-lorraine",
+  "title": "Quiche Lorraine",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-french-toast",
+  "title": "French Toast",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-belgian-waffles",
+  "title": "Belgian Waffles",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-blueberry-muffins",
+  "title": "Blueberry Muffins",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-banana-bread",
+  "title": "Banana Bread",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-zucchini-bread",
+  "title": "Zucchini Bread",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cinnamon-rolls",
+  "title": "Cinnamon Rolls",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-overnight-oats",
+  "title": "Overnight Oats",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-granola",
+  "title": "Granola",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-breakfast-casserole",
+  "title": "Breakfast Casserole",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sausage-egg-and-cheese-biscuits",
+  "title": "Sausage Egg and Cheese Biscuits",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-tenders",
+  "title": "Chicken Tenders",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-hot-dogs-with-onions",
+  "title": "Hot Dogs with Onions",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-corn-dogs",
+  "title": "Corn Dogs",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pigs-in-a-blanket",
+  "title": "Pigs in a Blanket",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-stuffed-bell-peppers-with-rice-and-be",
+  "title": "Stuffed Bell Peppers with Rice and Beef",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-stuffed-shells",
+  "title": "Stuffed Shells",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chicken-alfredo-bake",
+  "title": "Chicken Alfredo Bake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cajun-chicken-pasta",
+  "title": "Cajun Chicken Pasta",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pasta-primavera",
+  "title": "Pasta Primavera",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-garlic-bread",
+  "title": "Garlic Bread",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-dinner-rolls",
+  "title": "Dinner Rolls",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chocolate-chip-cookies",
+  "title": "Chocolate Chip Cookies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-oatmeal-raisin-cookies",
+  "title": "Oatmeal Raisin Cookies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-snickerdoodles",
+  "title": "Snickerdoodles",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sugar-cookies",
+  "title": "Sugar Cookies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-fudgy-brownies",
+  "title": "Fudgy Brownies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-blondies",
+  "title": "Blondies",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-rice-krispie-treats",
+  "title": "Rice Krispie Treats",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-peach-cobbler",
+  "title": "Peach Cobbler",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-apple-crisp",
+  "title": "Apple Crisp",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-blueberry-pie",
+  "title": "Blueberry Pie",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-cherry-pie",
+  "title": "Cherry Pie",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sweet-potato-pie",
+  "title": "Sweet Potato Pie",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-banana-pudding",
+  "title": "Banana Pudding",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chocolate-cake",
+  "title": "Chocolate Cake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-yellow-cake-with-chocolate-frosting",
+  "title": "Yellow Cake with Chocolate Frosting",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-red-velvet-cake",
+  "title": "Red Velvet Cake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-pineapple-upside-down-cake",
+  "title": "Pineapple Upside-Down Cake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-strawberry-shortcake",
+  "title": "Strawberry Shortcake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-lemon-bars",
+  "title": "Lemon Bars",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chocolate-pudding",
+  "title": "Chocolate Pudding",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-rice-pudding",
+  "title": "Rice Pudding",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-bread-pudding-with-vanilla-sauce",
+  "title": "Bread Pudding with Vanilla Sauce",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-lemonade",
+  "title": "Lemonade",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-sweet-tea",
+  "title": "Sweet Tea",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-chocolate-milkshake",
+  "title": "Chocolate Milkshake",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-hot-chocolate",
+  "title": "Hot Chocolate",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-caramel-popcorn",
+  "title": "Caramel Popcorn",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-ranch-dressing",
+  "title": "Ranch Dressing",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "us-barbecue-sauce",
+  "title": "Barbecue Sauce",
+  "cuisine": "United States"
+ },
+ {
+  "slug": "cn-mapo-eggplant",
+  "title": "Mapo Eggplant",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-dan-dan-noodles",
+  "title": "Dan Dan Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-scallion-pancakes",
+  "title": "Scallion Pancakes",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-and-chive-dumplings",
+  "title": "Pork and Chive Dumplings",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pan-fried-pork-buns",
+  "title": "Pan-Fried Pork Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-pork-buns",
+  "title": "Steamed Pork Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-xiaolongbao-soup-dumplings",
+  "title": "Xiaolongbao Soup Dumplings",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-har-gow",
+  "title": "Shrimp Har Gow",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-siu-mai",
+  "title": "Pork Siu Mai",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-char-siu-barbecue-pork",
+  "title": "Char Siu Barbecue Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cantonese-roast-pork-belly",
+  "title": "Cantonese Roast Pork Belly",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-soy-sauce-chicken",
+  "title": "Soy Sauce Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-white-cut-chicken-with-ginger-scallio",
+  "title": "White Cut Chicken with Ginger Scallion Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-three-cup-chicken",
+  "title": "Three Cup Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cashew-chicken",
+  "title": "Cashew Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-lemon-chicken",
+  "title": "Lemon Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sesame-chicken",
+  "title": "Sesame Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-honey-walnut-shrimp",
+  "title": "Honey Walnut Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-salt-and-pepper-shrimp",
+  "title": "Salt and Pepper Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-salt-and-pepper-tofu",
+  "title": "Salt and Pepper Tofu",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-garlic-shrimp-stir-fry",
+  "title": "Garlic Shrimp Stir-Fry",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-with-lobster-sauce",
+  "title": "Shrimp with Lobster Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-fish-with-ginger-and-scallion",
+  "title": "Steamed Fish with Ginger and Scallions",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sweet-and-sour-fish",
+  "title": "Sweet and Sour Fish",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-red-braised-pork-belly",
+  "title": "Red Braised Pork Belly",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-twice-cooked-pork",
+  "title": "Twice-Cooked Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-fish-fragrant-pork",
+  "title": "Fish-Fragrant Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-fish-fragrant-eggplant",
+  "title": "Fish-Fragrant Eggplant",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-dry-fried-green-beans",
+  "title": "Dry-Fried Green Beans",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-garlic-bok-choy",
+  "title": "Garlic Bok Choy",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-gai-lan-with-oyster-sauce",
+  "title": "Stir-Fried Gai Lan with Oyster Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-water-spinach-with-garlic",
+  "title": "Stir-Fried Water Spinach with Garlic",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hot-and-sour-shredded-potatoes",
+  "title": "Hot and Sour Shredded Potatoes",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-cabbage-with-vinegar",
+  "title": "Stir-Fried Cabbage with Vinegar",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-smashed-cucumber-salad",
+  "title": "Smashed Cucumber Salad",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-wood-ear-mushroom-salad",
+  "title": "Wood Ear Mushroom Salad",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-tiger-salad",
+  "title": "Tiger Salad",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cold-sesame-noodles",
+  "title": "Cold Sesame Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chongqing-hot-and-sour-noodles",
+  "title": "Chongqing Hot and Sour Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-zhajiangmian",
+  "title": "Zhajiangmian",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-biang-biang-noodles",
+  "title": "Biang Biang Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-scallion-oil-noodles",
+  "title": "Scallion Oil Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chicken-chow-mein",
+  "title": "Chicken Chow Mein",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-beef-chow-fun",
+  "title": "Beef Chow Fun",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-lo-mein",
+  "title": "Shrimp Lo Mein",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-yangzhou-fried-rice",
+  "title": "Yangzhou Fried Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-egg-fried-rice",
+  "title": "Egg Fried Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pineapple-fried-rice",
+  "title": "Pineapple Fried Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-lap-cheong-fried-rice",
+  "title": "Lap Cheong Fried Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-claypot-chicken-rice",
+  "title": "Claypot Chicken Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-century-egg-and-pork-congee",
+  "title": "Century Egg and Pork Congee",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-fish-congee",
+  "title": "Fish Congee",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-wonton-noodle-soup",
+  "title": "Wonton Noodle Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-beef-noodle-soup",
+  "title": "Beef Noodle Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-lanzhou-hand-pulled-beef-noodle-soup",
+  "title": "Lanzhou Hand-Pulled Beef Noodle Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-tomato-egg-noodle-soup",
+  "title": "Tomato Egg Noodle Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-rib-and-corn-soup",
+  "title": "Pork Rib and Corn Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-winter-melon-soup",
+  "title": "Winter Melon Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-west-lake-beef-soup",
+  "title": "West Lake Beef Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-seaweed-and-egg-drop-soup",
+  "title": "Seaweed and Egg Drop Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-corn-egg-drop-soup",
+  "title": "Corn Egg Drop Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hot-pot-at-home",
+  "title": "Hot Pot at Home",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-steamed-egg-custard",
+  "title": "Chinese Steamed Egg Custard",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-tea-eggs",
+  "title": "Tea Eggs",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-and-egg-stir-fry",
+  "title": "Shrimp and Egg Stir-Fry",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-chive-and-egg-stir-fry",
+  "title": "Chinese Chive and Egg Stir-Fry",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-mongolian-beef",
+  "title": "Mongolian Beef",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pepper-steak",
+  "title": "Pepper Steak",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-beef-with-black-bean-sauce",
+  "title": "Beef with Black Bean Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cumin-lamb",
+  "title": "Cumin Lamb",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-black-pepper-beef",
+  "title": "Black Pepper Beef",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-orange-beef",
+  "title": "Orange Beef",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sichuan-boiled-beef",
+  "title": "Sichuan Boiled Beef",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sichuan-boiled-fish",
+  "title": "Sichuan Boiled Fish",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-spicy-fragrant-pot",
+  "title": "Spicy Fragrant Pot",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-laziji-chongqing-chili-chicken",
+  "title": "Laziji Chongqing Chili Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-saliva-chicken",
+  "title": "Saliva Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sichuan-wontons-in-chili-oil",
+  "title": "Sichuan Wontons in Chili Oil",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chili-oil",
+  "title": "Chili Oil",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-gong-bao-shrimp",
+  "title": "Gong Bao Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-moo-shu-pork",
+  "title": "Moo Shu Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hoisin-chicken-lettuce-wraps",
+  "title": "Hoisin Chicken Lettuce Wraps",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-chicken-salad",
+  "title": "Chinese Chicken Salad",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chicken-with-mushrooms-stir-fry",
+  "title": "Chicken with Mushrooms Stir-Fry",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chicken-and-broccoli",
+  "title": "Chicken and Broccoli",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chicken-with-snow-peas",
+  "title": "Chicken with Snow Peas",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hunan-chicken",
+  "title": "Hunan Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hunan-steamed-fish-chopped-chilies",
+  "title": "Hunan Steamed Fish with Chopped Chilies",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hunan-pork-with-peppers",
+  "title": "Hunan Pork with Peppers",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-dongpo-pork",
+  "title": "Dongpo Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-lions-head-meatballs",
+  "title": "Lion's Head Meatballs",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pearl-meatballs",
+  "title": "Pearl Meatballs",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-spare-ribs-with-black-bean",
+  "title": "Steamed Spare Ribs with Black Bean",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sweet-and-sour-spare-ribs",
+  "title": "Sweet and Sour Spare Ribs",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-barbecue-spare-ribs",
+  "title": "Chinese Barbecue Spare Ribs",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-braised-chicken-wings-in-coke",
+  "title": "Braised Chicken Wings in Coke",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-soy-braised-chicken-wings",
+  "title": "Soy Braised Chicken Wings",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-braised-beef-shank",
+  "title": "Chinese Braised Beef Shank",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-tomato-beef-brisket-stew",
+  "title": "Tomato Beef Brisket Stew",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-braised-tofu-with-pork",
+  "title": "Braised Tofu with Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-home-style-tofu",
+  "title": "Home-Style Tofu",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-mapo-tofu-with-mushrooms",
+  "title": "Mapo Tofu with Mushrooms",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-tofu-skin-with-celery",
+  "title": "Stir-Fried Tofu Skin with Celery",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-buddhas-delight",
+  "title": "Buddha's Delight",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-mushrooms-with-garlic",
+  "title": "Stir-Fried Mushrooms with Garlic",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-garlic-eggplant",
+  "title": "Garlic Eggplant",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-snow-pea-shoots",
+  "title": "Stir-Fried Snow Pea Shoots",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-lotus-root",
+  "title": "Stir-Fried Lotus Root",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-bean-sprouts",
+  "title": "Stir-Fried Bean Sprouts",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-braised-napa-cabbage-with-glass-noodl",
+  "title": "Braised Napa Cabbage with Glass Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-ants-climbing-a-tree",
+  "title": "Ants Climbing a Tree",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-glass-noodle-salad",
+  "title": "Glass Noodle Salad",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-spring-rolls",
+  "title": "Spring Rolls",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-potstickers-with-chicken-and-cabbage",
+  "title": "Potstickers with Chicken and Cabbage",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-toast",
+  "title": "Shrimp Toast",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-crab-rangoon",
+  "title": "Crab Rangoon",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-sausage-rice-in-a-rice-cooker",
+  "title": "Chinese Sausage Rice in a Rice Cooker",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sticky-rice-in-lotus-leaf",
+  "title": "Sticky Rice in Lotus Leaf",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-zongzi",
+  "title": "Zongzi",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-turnip-cake",
+  "title": "Chinese Turnip Cake",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-egg-tarts",
+  "title": "Egg Tarts",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-mango-pudding",
+  "title": "Mango Pudding",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sesame-balls",
+  "title": "Sesame Balls",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-tangyuan",
+  "title": "Tangyuan",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-red-bean-soup",
+  "title": "Red Bean Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-almond-jelly",
+  "title": "Almond Jelly",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-milk-pudding",
+  "title": "Steamed Milk Pudding",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-almond-cookies",
+  "title": "Chinese Almond Cookies",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pineapple-buns",
+  "title": "Pineapple Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-mantou-steamed-buns",
+  "title": "Mantou Steamed Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-scallion-flower-rolls",
+  "title": "Scallion Flower Rolls",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-sesame-flatbread",
+  "title": "Chinese Sesame Flatbread",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-jianbing",
+  "title": "Jianbing",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-spinach-with-garlic",
+  "title": "Chinese Spinach with Garlic",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-taiwanese-braised-pork-rice",
+  "title": "Taiwanese Braised Pork Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-taiwanese-popcorn-chicken",
+  "title": "Taiwanese Popcorn Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-taiwanese-beef-noodle-soup",
+  "title": "Taiwanese Beef Noodle Soup",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-oyster-omelette",
+  "title": "Oyster Omelette",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-hainanese-chicken-rice",
+  "title": "Hainanese Chicken Rice",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cantonese-steamed-chicken-with-mushro",
+  "title": "Cantonese Steamed Chicken with Mushrooms",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-clams-in-black-bean-sauce",
+  "title": "Clams in Black Bean Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-ginger-scallion-lobster",
+  "title": "Ginger Scallion Lobster",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-kung-pao-tofu",
+  "title": "Kung Pao Tofu",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sichuan-mala-dry-pot-cauliflower",
+  "title": "Sichuan Mala Dry Pot Cauliflower",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-stir-fried-celery-with-pork",
+  "title": "Stir-Fried Celery with Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-with-garlic-sauce",
+  "title": "Pork with Garlic Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shredded-pork-with-green-peppers",
+  "title": "Shredded Pork with Green Peppers",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sweet-and-sour-shrimp",
+  "title": "Sweet and Sour Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-chinese-pickled-vegetables",
+  "title": "Chinese Pickled Vegetables",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-ginger-scallion-sauce",
+  "title": "Ginger Scallion Sauce",
+  "cuisine": "Chinese"
+ }
+]

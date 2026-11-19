@@ -81,6 +81,7 @@ cup noodles ~4 : cup of noodles, cup noodle, noodle cups | count, package
 rice noodles ~3 : pad thai noodles, rice stick noodles, pho noodles, rice sticks
 rice vermicelli ~4 : vermicelli rice noodles, bun noodles
 udon noodles ~3 : udon
+chinese wheat noodles ~4 : wheat noodles, fresh wheat noodles, chinese noodles, fresh chinese noodles, la mian, lamian, knife cut noodles | package, oz, lb
 soba noodles ~3 : soba, buckwheat noodles
 lo mein noodles ~3 : chinese egg noodles, lo mein
 chow mein noodles ~4 : crispy chow mein noodles, fried noodles

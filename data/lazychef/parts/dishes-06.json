@@ -1,0 +1,152 @@
+[
+ {
+  "slug": "cn-mapo-eggplant",
+  "title": "Mapo Eggplant",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-dan-dan-noodles",
+  "title": "Dan Dan Noodles",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-scallion-pancakes",
+  "title": "Scallion Pancakes",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-and-chive-dumplings",
+  "title": "Pork and Chive Dumplings",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pan-fried-pork-buns",
+  "title": "Pan-Fried Pork Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-pork-buns",
+  "title": "Steamed Pork Buns",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-xiaolongbao-soup-dumplings",
+  "title": "Xiaolongbao Soup Dumplings",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-har-gow",
+  "title": "Shrimp Har Gow",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-pork-siu-mai",
+  "title": "Pork Siu Mai",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-char-siu-barbecue-pork",
+  "title": "Char Siu Barbecue Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cantonese-roast-pork-belly",
+  "title": "Cantonese Roast Pork Belly",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-soy-sauce-chicken",
+  "title": "Soy Sauce Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-white-cut-chicken-with-ginger-scallio",
+  "title": "White Cut Chicken with Ginger Scallion Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-three-cup-chicken",
+  "title": "Three Cup Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-cashew-chicken",
+  "title": "Cashew Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-lemon-chicken",
+  "title": "Lemon Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sesame-chicken",
+  "title": "Sesame Chicken",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-honey-walnut-shrimp",
+  "title": "Honey Walnut Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-salt-and-pepper-shrimp",
+  "title": "Salt and Pepper Shrimp",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-salt-and-pepper-tofu",
+  "title": "Salt and Pepper Tofu",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-garlic-shrimp-stir-fry",
+  "title": "Garlic Shrimp Stir-Fry",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-shrimp-with-lobster-sauce",
+  "title": "Shrimp with Lobster Sauce",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-steamed-fish-with-ginger-and-scallion",
+  "title": "Steamed Fish with Ginger and Scallions",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-sweet-and-sour-fish",
+  "title": "Sweet and Sour Fish",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-red-braised-pork-belly",
+  "title": "Red Braised Pork Belly",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-twice-cooked-pork",
+  "title": "Twice-Cooked Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-fish-fragrant-pork",
+  "title": "Fish-Fragrant Pork",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-fish-fragrant-eggplant",
+  "title": "Fish-Fragrant Eggplant",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-dry-fried-green-beans",
+  "title": "Dry-Fried Green Beans",
+  "cuisine": "Chinese"
+ },
+ {
+  "slug": "cn-garlic-bok-choy",
+  "title": "Garlic Bok Choy",
+  "cuisine": "Chinese"
+ }
+]

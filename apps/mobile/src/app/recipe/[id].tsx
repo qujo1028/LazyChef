@@ -1,6 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useQuery } from '@tanstack/react-query';
 import { describeListAdditions } from '@lazychef/core/list/plan';
+import type { PhotoCredit } from '@lazychef/core/recipes/photo-credit';
 import { parseRecipeRef, SOURCE_LABELS } from '@lazychef/core/recipes/ref';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -130,6 +131,7 @@ export default function RecipeScreen() {
             style={{ width: '100%', aspectRatio: 4 / 3, borderRadius: 20, backgroundColor: colors.pill }}
           />
         ) : null}
+        {recipe.image && recipe.photoCredit ? <PhotoCreditLine credit={recipe.photoCredit} /> : null}
 
         <View style={{ gap: spacing.sm }}>
           <View style={[styles.titleRow, { gap: spacing.md }]}>
@@ -227,6 +229,25 @@ export default function RecipeScreen() {
         recipe={{ ref: recipe.ref, title: recipe.title, ingredients: recipe.ingredients, servings: recipe.servings }}
       />
     </View>
+  );
+}
+
+/** "Photo: Jane Doe, CC BY-SA 4.0" under a library photo (the license requires it), or "AI-generated image". */
+function PhotoCreditLine({ credit }: { credit: PhotoCredit }) {
+  const { colors, spacing, type, minTouch } = useTheme();
+  const href = credit.kind === 'licensed' ? (credit.href ?? credit.licenseHref) : null;
+  if (!href) {
+    return <Text style={[type.bodySmall, { color: colors.muted, marginTop: -spacing.lg }]}>{credit.text}</Text>;
+  }
+  return (
+    <Text
+      accessibilityRole="link"
+      accessibilityLabel={`${credit.text}. Opens the photo's page in the browser.`}
+      onPress={() => void WebBrowser.openBrowserAsync(href)}
+      style={[type.bodySmall, { color: colors.muted, marginTop: -spacing.lg, minHeight: minTouch, textDecorationLine: 'underline' }]}
+    >
+      {credit.text}
+    </Text>
   );
 }
 

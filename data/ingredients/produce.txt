@@ -153,6 +153,9 @@ cassava ~4 : yuca, yucca root, manioc | lb, count
 taro root ~5 : taro | lb, count
 malanga ~5 | lb, count
 lotus root ~5 | lb, count
+lotus leaves ~5 : dried lotus leaves | count, package
+bamboo leaves ~5 : dried bamboo leaves, zongzi leaves | count, package
+tofu skin ~5 : yuba, bean curd sheets, bean curd skin, dried tofu skin | package, oz
 burdock root ~5 : gobo | count, lb
 
 # ── Vegetables ───────────────────────────────────────────────────────────────────────────────
@@ -235,6 +238,7 @@ okra ~3 | lb, oz
 artichokes ~3 : globe artichokes | count
 fennel ~3 : fennel bulb, fennel bulbs | count, lb
 bitter melon ~5 : bitter gourd, karela | count, lb
+winter melon ~5 : wax gourd, ash gourd, dong gua | lb, count
 nopales ~5 : cactus paddles, nopalitos | lb, oz
 fiddleheads ~5 : fiddlehead ferns | oz, lb
 squash blossoms ~5 : zucchini flowers | count, oz
@@ -286,6 +290,7 @@ cremini mushrooms ~2 : baby bella mushrooms, baby bellas, crimini mushrooms, bab
 portobello mushrooms ~3 : portobello mushroom caps, portobellos, portabella mushrooms
 shiitake mushrooms ~3 : shiitakes
 oyster mushrooms ~4
+wood ear mushrooms ~4 : wood ears, black fungus, dried wood ear mushrooms, cloud ear fungus | oz, package
 enoki mushrooms ~4 : enoki
 king oyster mushrooms ~4 : king trumpet mushrooms
 maitake mushrooms ~5 : hen of the woods
