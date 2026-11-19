@@ -1160,3 +1160,29 @@ Workers (branch from `feature/home-tab` at the step 0 commit):
 - `docs/app-design.md` tab row says five tabs.
 - Not checked: no simulator, Playwright or signed-in account here. The raised button, the 375px fit with five labels,
   and the Android tap on the part above the bar need a look in Expo Go.
+
+### W1 `feature/home-screen`
+Built the Home screen in the Expo app. Pure helpers in `packages/core/src/home/` (`greeting`, `trending`, `expiring`,
+22 Vitest tests). Screen in `apps/mobile/src/app/(tabs)/home.tsx` with parts in `apps/mobile/src/features/home/`:
+welcome (greeting, household name, expiring line that opens Pantry), the "This week" card (moved off Pantry), a compact
+household board ("See all" opens Activity; the challenge shows once, on the This week card, invite prompt when alone), and a sideways row of
+trending recipes (`get_trending_recipes`, topped up with day-seeded library picks). New query keys `trending` and
+`libraryPool` (under `['home', ...]`, no realtime). Pull to refresh refetches all of it.
+- Expiring rule: next 7 days including today, already-expired items count, ran-out (quantity 0) and staples do not.
+- Not checked: no simulator or signed-in account here, so nothing was seen on a device (375pt layout, dark mode,
+  the trending row against live data, the migration is not applied live yet).
+- Lead fixes on merge: the board no longer repeats the card's challenge; the pool reads the whole core library
+  (`extended = false`, ordered by id) instead of an arbitrary 300 rows; theme fonts instead of a hardcoded name.
+  The card's expiring nudge ("Find a recipe") stays alongside the welcome line ("open Pantry"): different actions.
+
+### Lead merge notes
+- Trending fix from review: the caller's own households never count toward the 2-household minimum (otherwise a
+  recipe at 2 told the caller what exactly one other household cooked). Test added (8 total).
+- Accepted risk: two throwaway households can make a library recipe trend. It only promotes a recipe already in the
+  public library, so it isn't worth gating.
+- Both workers' `/code-review` runs reviewed the wrong target (origin/main, then another session's files), so the lead
+  read both diffs by hand.
+- Another session has an uncommitted `20261119060000_library_curation.sql` (branch `feature/library-curation`, main
+  checkout) while this branch holds the migration lock. Its timestamp is earlier than this branch's. Whichever merges
+  second needs a later timestamp than everything live; trending and the pool should also skip `recipes.hidden` once
+  that column exists.

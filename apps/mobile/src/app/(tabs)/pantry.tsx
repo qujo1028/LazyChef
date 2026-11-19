@@ -11,7 +11,6 @@ import { useToast } from '@/components/Toast';
 import { useAddPantryItemToList } from '@/features/list/add-to-list';
 import { AddFoodSheet, type AddFoodSeed } from '@/features/pantry/components/AddFoodSheet';
 import { EditItemSheet } from '@/features/pantry/components/EditItemSheet';
-import { ThisWeekCard } from '@/features/habit/components/ThisWeekCard';
 import { GettingStarted } from '@/features/pantry/components/GettingStarted';
 import { PantryItemRow } from '@/features/pantry/components/PantryItemRow';
 import { PantrySearch } from '@/features/pantry/components/PantrySearch';
@@ -198,9 +197,6 @@ export default function PantryScreen() {
         contentInsetAdjustmentBehavior="never"
         contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingBottom: 112 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
-        ListHeaderComponent={
-          searching ? undefined : <ThisWeekCard />
-        }
         ListEmptyComponent={
           searching && shown.total === 0 ? (
             <View

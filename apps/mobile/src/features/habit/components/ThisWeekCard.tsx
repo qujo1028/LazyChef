@@ -29,7 +29,7 @@ import { WeekDots, WeekRing } from './WeekRing';
 
 const DISMISS_KEY = 'lazychef.week-nudges';
 
-/** Pantry's "This week" card: the weekly ring (cook days vs goal), streak, tier, challenge and one nudge. */
+/** Home's "This week" card: the weekly ring (cook days vs goal), streak, tier, challenge and one nudge. */
 export function ThisWeekCard() {
   const { colors, spacing, type, radius } = useTheme();
   const router = useRouter();
@@ -79,7 +79,7 @@ export function ThisWeekCard() {
     return { count: list.length, first: list[0]?.name ?? null };
   }, [items, today]);
 
-  // Quiet while loading or when the read failed: Pantry shows nothing rather than an error here.
+  // Quiet while loading or when the read failed: Home shows nothing rather than an error here.
   if (!summary || !events) return null;
 
   const neverCooked = events.length === 0 && (query.data?.length ?? 0) === 0;
