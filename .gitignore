@@ -46,3 +46,6 @@ next-env.d.ts
 
 # TheMealDB import previews (npm run recipes:import -- --dry-run)
 /data/themealdb/
+
+# Supabase CLI link state
+supabase/.temp/

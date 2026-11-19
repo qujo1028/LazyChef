@@ -30,6 +30,15 @@ export const queryKeys = {
   invitePreview: (code: string) => ['household', 'invite-preview', code] as const,
   pantry: (householdId: string) => ['household', 'pantry', householdId] as const,
   list: (householdId: string) => ['household', 'list', householdId] as const,
+  /** Every cook in the household (activity_log 'cooked' rows), for the habit ring, streak and leaderboard. */
+  cooks: (householdId: string) => ['household', 'cooks', householdId] as const,
+  /** Recipe ideas for the pantry; the rest of the key is the recipes screen's filters. */
+  recipes: (householdId: string, ...rest: readonly unknown[]) => ['household', 'recipes', householdId, ...rest] as const,
+  saved: (householdId: string) => ['household', 'saved', householdId] as const,
+  /** One recipe's page (a Spoonacular id or a local uuid). */
+  recipe: (householdId: string, ref: string) => ['household', 'recipe', householdId, ref] as const,
+  /** Spoonacular's daily quota (searches left, reset time). */
+  recipeQuota: () => ['household', 'recipe-quota'] as const,
 };
 
 async function fetchHouseholdContext(userId: string, email: string | null): Promise<HouseholdContext> {

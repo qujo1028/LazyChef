@@ -689,3 +689,138 @@ Open for P3's exit check (needs the user and phones in Expo Go):
 - Known gaps: a failed list edit rolls back over a housemate's newer change (same as the pantry sheet); a housemate's
   change while put away is open makes the save fail with an error instead of refreshing the cards; scan to check
   off waits for P5; the "added to the list" push waits for P6.
+
+## P4 Recipes and cooking (2026-11-18, lead: `feature/p4-recipes`)
+Based on `origin/main` (P2 and P3 merged as PRs #69 and #70). Migration lock: nobody (P4 uses the existing recipes,
+saved_recipes, match_local_recipes, cook_recipe, undo_cook and activity_log). The Spoonacular Edge Function is new
+server code but no migration; deploying it to the live project and setting its secret waits for the user's go-ahead.
+
+Step 0 (lead):
+- Packages: `react-native-svg` (via `npx expo install`, for the weekly ring).
+- `packages/core/src/recipes/edge-contract.ts`: request and response types for the `recipes` Edge Function
+  (`suggest`, `info`, `quota`), the quota shape (`pointsLeft`, `resetsAt`, `resting`) and error codes.
+- `apps/mobile/src/features/recipes/edge.ts`: `callRecipes()` (never throws; a missing function reads as
+  `not_configured`, so screens fall back to the local library).
+- `apps/mobile/src/features/habit/use-habit.ts`: `useHouseholdCooks()` (activity_log 'cooked' rows, refetched on
+  broadcasts), `cookEventsFor()`, `useHabit()` (summary in the device time zone, plus the events cookRecipe needs).
+- `lib/haptics.ts` (`haptic(kind)` on expo-haptics), `lib/time-zone.ts`, `lib/use-now.ts`; query keys for cooks,
+  recipes, saved, one recipe, and the quota.
+- Route `app/recipe/[id].tsx` in the signed-in stack (header with back). Stubs: recipes tab, recipe page,
+  `CookSheet`, `ThisWeekCard`.
+- Typed routes: `.expo/types/router.d.ts` is generated and gitignored. After adding a route, run
+  `CI=1 npx expo start --offline` in apps/mobile for a few seconds to regenerate it, or tsc rejects the new path.
+
+Workers (branch from `origin/feature/p4-recipes`): W1 `feature/p4-recipes-screen` (Sonnet), W2
+`feature/p4-recipe-detail` (Sonnet), W3 `feature/p4-cook` (Sonnet), W5 `feature/p4-edge-recipes` (Opus: server code
+holding the Spoonacular key, auth, quota and rate limits). W4 `feature/p4-habit` (Sonnet: ring and This week card)
+starts when the first slot frees up (max 4 at once).
+
+W3 cook and reward (`feature/p4-cook`, Sonnet):
+- `CookSheet` (same props and `CookRecipe`): plans against the live pantry with `planCook` once per open, deduct lines with an
+  editable amount and a Skip switch, "check this" lines (start skipped), staples, basics and missing items just listed.
+  Confirm "Take N items out" calls `cook_recipe` through `features/recipes/cook-api.ts` (`cookRecipe`, `undoCook`: fail fast
+  offline, `{ error }` results). The habit before and after is computed on the phone with `useHabit` events, then the cooks
+  query is invalidated and the pantry refetched.
+- Reward: `features/habit/use-reward.tsx` and `components/RewardBurst.tsx` (reanimated ring pulse, flame pop, confetti).
+  `lib/reward-plan.ts` wraps the core timeline: under reduce motion it keeps ONE haptic (success, or milestone) and static
+  visuals, no confetti motion (the core timeline alone has no haptics under reduce motion; this follows the brief).
+- Done view: "Nice! You cooked X", what came out, the habit line ("3 of 3 this week", "4 day streak"), a milestone line,
+  "Add to list" for anything that ran out, and Undo (`undo_cook`). A "Cooked X" toast with Undo is held with
+  `createAfterClose` until the sheet closes; undoing inside the sheet replaces it.
+- Dev only (`__DEV__`): "Dev: play milestone reward" and "Dev: play cook reward" in the sheet.
+- Pure helpers with tests: `lib/cook-done.ts`, `lib/reward-plan.ts`. No shared-file changes.
+- Not checked on a device (no simulator or account): haptics, confetti, the sheet flow, the held toast, the live RPCs.
+
+W2 recipe detail (`feature/p4-recipe-detail`, Sonnet):
+- `app/recipe/[id].tsx`: loads by ref (`queryKeys.recipe`, 10 minute stale time since Spoonacular lookups cost points).
+  Local recipes read from `recipes` + `recipe_ingredients` as the user (household photos signed from `recipe-photos`);
+  Spoonacular ones through `callRecipes({ action: 'info' })`. Not found, not set up, resting, rate limited and offline each
+  show a message with "Try again"; a cached copy shows with a one-line offline note.
+- Page: image (expo-image), title, source and time pills, "Cooked N times · last Sep 12" (from `useHouseholdCooks`),
+  save heart, checklist against the live pantry (have, basic, need, "On the shopping list"), "Add missing to list"
+  (`addListItems`, toast from `describeListAdditions`), numbered steps, source link and TheMealDB or Spoonacular credit
+  (expo-web-browser), sticky "I cooked this" opening `CookSheet`. Header title set with `Stack.Screen options`.
+- Files: `lib/recipe-view.ts` (+ tests), `features/recipes/recipe-api.ts`, `components/IngredientChecklist.tsx`,
+  `components/RecipeSaveButton.tsx` (own heart; the lead can dedupe with W1's). No shared-file changes.
+- Not checked: simulator, signed-in account, the Edge Function (not deployed), household photo signing, the heart on a
+  real saved list. Not ported: serving scaler, rating thumbs, edit own recipe, AI swaps (not in this task).
+W1 recipes screen (`feature/p4-recipes-screen`):
+- `(tabs)/recipes.tsx`: Suggested / Saved / Mine chips on one screen. Suggested has "Make now" and "Almost there (1 to 3
+  missing)" sections with "Missing: x, y", a title search (debounced; library first, Spoonacular only when fewer than
+  10 local ideas), a quota line ("Spoonacular: N searches left today, resets at 5 pm", or a plain "resting", "not set
+  up", "offline" note that still shows library results) and the Spoonacular credit when its recipes show. Saved lists
+  `saved_recipes` ("Can make now" / "Have 5 of 7" for library recipes, no match for Spoonacular ones), sorted ready
+  first. Mine lists the household's recipes, newest first. Heart (`FavoriteButton`) saves and unsaves with an instant
+  update and rollback; `saved_recipes` broadcasts refetch it. Pull to refresh on every filter.
+- Code: `features/recipes/{local,saved,use-suggestions}.ts`, components `RecipeCard`, `FavoriteButton`,
+  `SpoonacularCredit`; pure helpers with tests in `src/lib/recipe-{quota,cards,ideas}.ts`. No shared files changed.
+- Not checked (no simulator, account, or deployed Edge Function): the screen on a device, the Spoonacular top-up and
+  quota line against the real function, realtime on a second phone. Skipped: diet and cuisine preferences, thumbs
+  taste ranking, cook history on saved cards, matching saved Spoonacular recipes (needs the `info` call), creating
+  recipes (Mine only lists them).
+
+W4 habit ring and This week card (`feature/p4-habit`, Sonnet):
+- `WeekRing.tsx` (react-native-svg ring, olive on a pill track, reanimated fill unless reduce motion, label "2 of 3 cook
+  days this week") and `WeekDots` (Mon to Sun). `ThisWeekCard.tsx` uses `useHabit()`: ring, streak, tier with next-tier
+  hint, active challenge, "Welcome back" on comeback, and at most one nudge (expiring food from the live pantry; dismissed
+  per day in AsyncStorage). The card hides while loading or on error. Goal is `DEFAULT_GOAL` until goals exist.
+- Skipped: the "almost there" and "first cook" nudges (they need recipe data the Pantry does not have).
+- Mounted in `app/(tabs)/pantry.tsx` as the FlatList `ListHeaderComponent` (hidden while searching).
+- Dev only (`__DEV__`): "Dev preview" row on the card with cook days, streak, comeback and challenge done presets. It
+  overrides the summary shown, never written anywhere.
+- Pure helpers with tests: `lib/week-card.ts`. No shared-file changes.
+- Not checked on a device: ring animation, layout at 375px, dark mode, reduce motion, dismissal persistence.
+
+W5 recipes Edge Function (`feature/p4-edge-recipes`, Opus, 2026-11-18):
+- `supabase/functions/recipes/`: `suggest`, `info`, `quota` per `edge-contract.ts` (contract unchanged). Caller's JWT
+  checked with `auth.getUser()`, household membership read as the caller (RLS), `take_rate_limit` as the caller
+  (`recipe_search` per search that misses the cache, `recipe_open` per uncached recipe in `info`), failing closed if
+  any check errors. Service role only for `spoonacular_cache` / `spoonacular_usage` (same keys as the web, so the web
+  and the phone share the hourly cache). Quota headers recorded (estimate as fallback); 3-point reserve for searches,
+  1 for details; 402 rests until midnight UTC. Status codes: 400, 401, 403 (not a member), 405, 429, 502, 503,
+  and 200 for `resting`. No migration needed.
+- Pure parts (`handler.ts`, `validate.ts`, `cache.ts`, `spoonacular.ts`) have Vitest tests; Deno-only files are
+  `index.ts` and `db.ts` (`deno check index.ts` passes with deno 2.9). Root `tsconfig.json` now excludes
+  `supabase/functions`; `npm run typecheck` checks the pure modules and tests through `supabase/functions/tsconfig.json`.
+  Vitest includes `supabase/functions/**/*.test.ts`.
+- Shared modules (recipe-shapes, edge-contract, ingredient normalize, Spoonacular cost) are generated copies in
+  `supabase/functions/_shared/core/` (`node scripts/sync-edge-shared.mjs`; a test fails when a copy is stale),
+  because the Supabase bundler resolves files under `supabase/functions` and Deno needs `.ts` import paths.
+- Deploy (lead, after the user's go-ahead; not done): in your own terminal `supabase login`, then
+  `supabase link --project-ref <ref>`, put `SPOONACULAR_API_KEY=...` in the gitignored `supabase/functions/.env` and run
+  `supabase secrets set --env-file supabase/functions/.env`, then `supabase functions deploy recipes` (JWT verification
+  stays on). Smoke test with the curl in `supabase/functions/recipes/README.md`. CI has no Deno, so `deno check` is
+  manual for now.
+- Self-review fixes: names are sent to Spoonacular as their normalized keys (no cache poisoning across households),
+  `take_rate_limit` only counts an explicit true, the body is read after auth with a streaming 16 KB cap, `info`
+  fetches as many uncached recipes as today's points cover. Open for the lead: (1) the diet and intolerance filters the
+  web applies to Spoonacular ideas aren't in the Edge contract, so mobile ideas ignore allergies unless the app filters
+  them (contract change); (2) a partial `info` answer doesn't say why the rest are missing (only `quota.resting`);
+  (3) one account can still drain the shared 50 daily points in about an hour (same as the web); a household or
+  global bucket needs a migration.
+
+Lead merge (P4): W3, W2, W1, W4, W5 merged into `feature/p4-recipes` in that order. The lead read each diff; W5 was
+reviewed for auth (JWT via `getUser`, membership read as the caller), the service role limited to the Spoonacular
+cache and usage tables, rate limits failing closed, and `supabase/functions/.env` being gitignored.
+Fix on merge: Recipes showed a spinner forever offline with nothing cached; it now says you're offline with Try again.
+Checks: web typecheck, lint, 2,434 tests, audit, ingredients check; mobile typecheck, lint, iOS and web exports;
+`deno check` on the function.
+
+Edge Function deployed (2026-11-18, user approved): `recipes` v1 is live on the LazyChef project with JWT
+verification on, deployed through the Supabase connector; the deployed files were diffed against the repo (all 11
+identical). `SPOONACULAR_API_KEY` is set as a function secret (the Vercel copy is marked sensitive and can't be pulled,
+so the user supplied the key; it was pasted in chat, so rotate it in the Spoonacular console and update Supabase,
+Vercel and `.env.local`). Smoke test: no auth 401, a non-user token 401 with the function's own JSON, CORS preflight
+204. Not yet tested with a signed-in session (do it from the app on a phone). Redeploy after changes with
+`npx supabase functions deploy recipes --project-ref gldppemwlecnbarxamcb` (the CLI is logged in on this Mac now).
+
+Open before P4's exit check:
+- Diet and allergies are not applied on mobile yet (library ranking or Spoonacular calls). The web filters both. This
+  matters for allergies, so it's the first P4 follow-up: filter library results with core `localFits`, and add
+  diet/intolerances to the edge contract for Spoonacular.
+- One account can still spend the household's shared daily points (same as the web); a per-household limit needs a migration.
+- On a real phone: the cook reward (haptic on every cook, confetti on milestones), Undo, the ring and streak updating
+  right after a cook on both phones, the dev reward and This week controls, 375pt in light and dark.
+- Known gaps: cooks must take at least one item out (same as the web and the database); undoing a cook doesn't
+  remove list items it added; Mine has no create or edit form yet; taste ranking and cook history on saved cards
+  aren't ported.
