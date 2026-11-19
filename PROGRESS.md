@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/p6-activity-account` until PR #74 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/home-tab` (`20261119080000_trending_recipes.sql`, not applied live yet) until its PR merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -1120,3 +1120,30 @@ Open for P6's exit check (needs the user):
   (web takes bug fixes only); the web join action and the app could each push once for the same join right at a
   5-minute boundary.
 
+## Home tab (2026-11-18, lead: `feature/home-tab`)
+Based on `origin/main` (P6 merged as #74). Expo app only; the web app keeps its four tabs. Migration lock: held by
+this branch (`20261119080000_trending_recipes.sql`). Workers don't touch `supabase/migrations/` or
+`src/types/database.ts`.
+
+Decisions (user, 2026-11-18; recorded in `docs/product-scope.md` and `docs/react-native-app.md`):
+- Five tabs with Home as a raised round button in the center (Pantry, Recipes, Home, List, Household). The app opens
+  on Home. The "This week" card moves from Pantry to Home.
+- Trending recipes are part of the retention hook: library recipes only, ranked by how many different households
+  cooked them in the last 7 days, at least 2 households, nothing about who cooked. Random library picks (seeded by
+  day) top the row up to 10 while few recipes qualify.
+- Five tabs puts the Expo app at the top of the 5 to 7 screen range.
+
+Step 0 (lead):
+- Migration `20261119080000_trending_recipes.sql`: `get_trending_recipes(p_limit default 10)` (security definer,
+  `search_path = ''`, signed-in only, anon revoked; reads `details->>'local_recipe_id'` on `cooked` rows, joins only
+  `recipes.household_id is null`) and a partial index on recent cooks. 7 PGlite tests (`trending-recipes.test.mjs`):
+  anon blocked, 2-household minimum, counts households not cooks, no actor columns, household recipes excluded,
+  7-day window, malformed ids and the limit. Types updated.
+- Docs: scope, plan phase row and design check updated. `apps/mobile/src/app/(tabs)/home.tsx` stub so both workers
+  branch from a registered route.
+- Not applied to the live project yet: apply through the Supabase connector after review, rename the file to the
+  version it gets, and run the security advisor.
+
+Workers (branch from `feature/home-tab` at the step 0 commit):
+- W1 `feature/home-screen` (Sonnet: the Home screen, `packages/core/src/home/*` helpers and tests, card off Pantry).
+- W2 `feature/home-tabbar` (Sonnet: raised Home tab button, tab order, default route and redirects).
