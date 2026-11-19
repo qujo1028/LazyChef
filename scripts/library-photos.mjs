@@ -183,9 +183,13 @@ async function download(from) {
 
 /** 1600 px on the long side (never upscaled), metadata stripped, JPEG under MAX_BYTES if it can be. */
 async function prepare(original) {
+  const meta = await sharp(original, { failOn: "none" }).rotate().metadata()
+  const [w, h] = (meta.orientation ?? 1) >= 5 ? [meta.height, meta.width] : [meta.width, meta.height]
+  // Wide photos get a longer long side, so the short side still reaches MIN_SHORT_SIDE.
+  const long = Math.max(LONG_SIDE, Math.ceil((MIN_SHORT_SIDE * Math.max(w, h)) / Math.min(w, h)))
   const base = sharp(original, { failOn: "none" })
     .rotate()
-    .resize({ width: LONG_SIDE, height: LONG_SIDE, fit: "inside", withoutEnlargement: true })
+    .resize({ width: long, height: long, fit: "inside", withoutEnlargement: true })
   for (const quality of [80, 72, 64, 56]) {
     const { data, info } = await base.clone().jpeg({ quality, mozjpeg: true }).toBuffer({ resolveWithObject: true })
     if (Math.min(info.width, info.height) < MIN_SHORT_SIDE) throw new Error(`only ${info.width}x${info.height}`)

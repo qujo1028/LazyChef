@@ -1,0 +1,422 @@
+[
+  {
+    "id": "4a3e62c0-c03c-421f-bdbf-38694ab51c1d",
+    "title": "Big Mac",
+    "pick": null,
+    "reason": "current studio shot is better"
+  },
+  {
+    "id": "65127402-bc9a-42f3-b4b4-17f797be3c7c",
+    "title": "Bigos (Hunters Stew)",
+    "pick": null,
+    "reason": "current is better, candidates amateur"
+  },
+  {
+    "id": "4f899e29-0abc-4438-9c60-d996fa4faa7a",
+    "title": "Bistek",
+    "pick": null,
+    "reason": "candidates are other dishes"
+  },
+  {
+    "id": "0f17dd9a-fb27-4bca-a42e-07136d1a9649",
+    "title": "Bitterballen (Dutch meatballs)",
+    "pick": null,
+    "reason": "current is just as good"
+  },
+  {
+    "id": "eae289cf-2c45-41da-ad46-2b44716e66eb",
+    "title": "Black bean & meat stew - feijoada",
+    "pick": "commons-87928865",
+    "reason": "real feijoada plate with rice, kale, orange and farofa, current is plain beans and rice"
+  },
+  {
+    "id": "f3191087-a2c3-4e2e-b291-1292c1ea8ce0",
+    "title": "Black Bean soup",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "cb7c0088-8e60-445f-905e-585877d9cbae",
+    "title": "Black Beans Hotpot",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "926cc593-3caa-47e9-8621-0a14d8bcf11d",
+    "title": "Black Pepper Beef",
+    "pick": null,
+    "reason": "candidates are amateur or other dishes"
+  },
+  {
+    "id": "6c89891e-ee57-4b25-8988-ede65743559a",
+    "title": "Blackberry Fool",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "3fbbffdd-d2c2-4d61-96b7-22a1043e5f10",
+    "title": "Blackened Salmon",
+    "pick": "commons-143701625",
+    "reason": "blackened salmon on a clean white plate with salad, current is a plain plated salmon"
+  },
+  {
+    "id": "3be2c5e5-6496-4a7e-8266-a9c2604131d9",
+    "title": "Blini Pancakes",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "80f19565-c7be-4182-b9b4-1fff19872bfe",
+    "title": "Blondies",
+    "pick": null,
+    "reason": "current is as good"
+  },
+  {
+    "id": "cc254ea6-b22a-467a-8d94-94b4f7108e58",
+    "title": "Blueberry & lemon friands",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "279e5cf0-d9cf-4d46-abb3-7b64887e204f",
+    "title": "Blueberry Pie",
+    "pick": "commons-94976139",
+    "reason": "whole lattice blueberry pie, current is a half-eaten slice"
+  },
+  {
+    "id": "bb6e5d09-e115-4a36-a193-b488f315d2a0",
+    "title": "Bolita di Keshi",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "7c68e042-25a4-4773-8594-9f0d6d7f0711",
+    "title": "Boulangère Potatoes",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "6a821417-350c-4ed8-8bea-d5d1ebdad149",
+    "title": "Boxty Breakfast",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "650f5088-4351-4019-b6dc-ae8b263ab1cd",
+    "title": "Braised Beef Chilli",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "634c62a5-0338-464a-a17f-9f095703334b",
+    "title": "Braised Chicken Wings in Coke",
+    "pick": null,
+    "reason": "candidates amateur, current is fine"
+  },
+  {
+    "id": "684c59e4-422d-4584-bddf-eb4ed24339a7",
+    "title": "Braised Napa Cabbage with Glass Noodles",
+    "pick": null,
+    "reason": "candidate is amateur"
+  },
+  {
+    "id": "1262ef1d-0329-4eb8-8277-b297e5e2b1d4",
+    "title": "Braised Tofu with Pork",
+    "pick": null,
+    "reason": "none show the dish"
+  },
+  {
+    "id": "6ab9033d-9c3d-432b-ae65-4c14f55a0273",
+    "title": "Brazilian carrot cake",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "f115413b-82f6-47d3-8254-192f269a72da",
+    "title": "Brazilian cheese bread (pão de queijo)",
+    "pick": null,
+    "reason": "current studio shot is better"
+  },
+  {
+    "id": "4cb311c1-3602-4a7d-9e16-f840bc3f2f09",
+    "title": "Brazilian chocolate truffles - brigadeiro",
+    "pick": "commons-57825065",
+    "reason": "brigadeiro in gold cups, current shows pistachio truffles"
+  },
+  {
+    "id": "b5dfd322-d5f4-460f-a733-c24b85c93d0c",
+    "title": "Bread and Butter Pudding",
+    "pick": "commons-99986108",
+    "reason": "plated bread and butter pudding with custard jug, current is baking dishes on stove"
+  },
+  {
+    "id": "b7efb007-1097-4422-8b06-a3f607680c08",
+    "title": "Bread omelette",
+    "pick": null,
+    "reason": "all amateur, current is cleaner"
+  },
+  {
+    "id": "92536b5c-7982-4f18-9e0d-bbffaf3d9b36",
+    "title": "Bread Pudding with Vanilla Sauce",
+    "pick": "commons-90142531",
+    "reason": "square of bread pudding with sauce on white bowl, current is dull plate shot"
+  },
+  {
+    "id": "85018e68-3ab1-4edf-9f74-ddd47dc5a76d",
+    "title": "Breaded Steak Recipe (Lomo de Res Apanado)",
+    "pick": null,
+    "reason": "current plated shot is better"
+  },
+  {
+    "id": "c439604c-1de1-4d80-96b4-7094940e08d2",
+    "title": "Breakfast Burritos",
+    "pick": null,
+    "reason": "none clearly better than current"
+  },
+  {
+    "id": "09742ecf-52a6-4c0a-ad82-c4b95270e419",
+    "title": "Breakfast Casserole",
+    "pick": null,
+    "reason": "none show the finished dish well"
+  },
+  {
+    "id": "43a8fe27-023c-4a7b-b844-baa7f473922a",
+    "title": "Breakfast Potatoes",
+    "pick": null,
+    "reason": "none show breakfast potatoes"
+  },
+  {
+    "id": "9eaf32e9-d5ec-47d0-bc64-d23309570a4b",
+    "title": "Broccoli & Stilton soup",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "115845f2-691e-4b10-b4d1-e6e0196b8601",
+    "title": "Broccoli Cheddar Soup",
+    "pick": null,
+    "reason": "none better than current"
+  },
+  {
+    "id": "bb1b7c52-ccaf-4867-ba1a-ac662210e341",
+    "title": "Brown Stew Chicken",
+    "pick": null,
+    "reason": "all amateur or wrong dish"
+  },
+  {
+    "id": "e1ad89d6-5c0e-4fbd-a523-db656b80b195",
+    "title": "Brun Lapskaus (Norwegian Beef Vegetable Stew)",
+    "pick": null,
+    "reason": "none show the dish"
+  },
+  {
+    "id": "1e399666-d638-4831-b5da-a7df7b483b79",
+    "title": "Buddha's Delight",
+    "pick": null,
+    "reason": "none show Buddha's Delight"
+  },
+  {
+    "id": "fe60b742-47c4-476b-812c-35840972afe6",
+    "title": "Budino Di Ricotta",
+    "pick": null,
+    "reason": "none show the dish"
+  },
+  {
+    "id": "b2995674-eaa5-476b-bd19-615bc0623175",
+    "title": "Buffalo Chicken Dip",
+    "pick": null,
+    "reason": "none show buffalo chicken dip"
+  },
+  {
+    "id": "38cbc955-f962-4e19-a9cb-1f9a19a88722",
+    "title": "Buffalo Chicken Wings",
+    "pick": null,
+    "reason": "current is cleaner"
+  },
+  {
+    "id": "45878c4d-7ed1-460e-9049-e122a6bd2295",
+    "title": "Bulgarian Green Salad",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "1fb98182-0d32-4cf7-8562-1b2679836cba",
+    "title": "Bulgarian Honey Cookies",
+    "pick": null,
+    "reason": "none show the cookies well"
+  },
+  {
+    "id": "1861b38b-8f12-4a83-84a3-ea62589fb818",
+    "title": "Buttermilk Pancakes",
+    "pick": null,
+    "reason": "all amateur, current is better"
+  },
+  {
+    "id": "2cb004e1-9dbf-4b76-94cc-f61e51018358",
+    "title": "Cabbage Soup (Shchi)",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "5b198d63-9b23-4c51-bfce-13805a363750",
+    "title": "Cabbage with Ground Beef",
+    "pick": null,
+    "reason": "candidates are other dishes"
+  },
+  {
+    "id": "c3e50a74-265f-4c31-bc53-2485d06a255a",
+    "title": "Cacik",
+    "pick": null,
+    "reason": "current is just as good"
+  },
+  {
+    "id": "042dc64a-ebe7-4c78-8156-d103d9d93bff",
+    "title": "CAFE LA LLAVE ESPRESSO ICE CREAM",
+    "pick": "commons-35716850",
+    "reason": "scoops of coffee ice cream in glass bowl, current is a dalgona coffee drink"
+  },
+  {
+    "id": "03529e68-7596-40d0-952c-baec1f8f18e3",
+    "title": "Cajun spiced fish tacos",
+    "pick": null,
+    "reason": "candidates are amateur or other tacos"
+  },
+  {
+    "id": "b3e7a98d-fef4-4164-9022-cac08a763457",
+    "title": "Camaro Grelhado Com Molho Cru (Grilled Prawns with Green Onion Sauce)",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "22f31d67-978d-4066-81a1-c57b041ff5a7",
+    "title": "Canadian Butter Tarts",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "ee708fc5-9490-4057-89eb-a6a31994298f",
+    "title": "Cantonese Roast Pork Belly",
+    "pick": null,
+    "reason": "candidates are not Cantonese or are amateur"
+  },
+  {
+    "id": "a0b4fe47-a714-4b08-bd8d-289aea544d0d",
+    "title": "Cantonese Steamed Chicken with Mushrooms",
+    "pick": null,
+    "reason": "amateur and no mushrooms"
+  },
+  {
+    "id": "bd37b1f6-9335-4a20-abe1-e6430403d802",
+    "title": "Caramel Popcorn",
+    "pick": null,
+    "reason": "current is as good, candidates show text"
+  },
+  {
+    "id": "75f2eb6a-2722-4a1c-904a-a47fe362d4ed",
+    "title": "Carbonada Criolla",
+    "pick": null,
+    "reason": "candidates are Belgian carbonade"
+  },
+  {
+    "id": "db60f68e-06aa-4b51-96ae-8a7df90fd053",
+    "title": "Carrot and Bean Fritters",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "1896417c-0e71-4235-a3da-b4730dab3e9e",
+    "title": "Carrot Cake",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "ff014560-3efe-426e-ae54-dc541618155f",
+    "title": "Cashew Chicken",
+    "pick": "commons-19432269",
+    "reason": "cashew chicken with rice on a plate, tidier than the cropped current"
+  },
+  {
+    "id": "f759ec1f-560b-475e-987f-89a5b966acd7",
+    "title": "Cayman Style Potato Salad",
+    "pick": "commons-144344216",
+    "reason": "tidy potato salad in bowl, current shows a mayonnaise brand jar"
+  },
+  {
+    "id": "037aac82-f463-4788-9187-8b8f93a9701e",
+    "title": "Cayman-Style Lobster",
+    "pick": null,
+    "reason": "candidates are live lobsters"
+  },
+  {
+    "id": "b20d4c9a-c85b-459d-ae86-cce1b7d71de7",
+    "title": "Cevapi Sausages",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "c9dffc79-d081-4887-8ca8-d455ae35a67d",
+    "title": "Chakchouka",
+    "pick": null,
+    "reason": "candidates are pan shots"
+  },
+  {
+    "id": "b976b69f-ab61-4993-8d01-6b3dac261e6d",
+    "title": "Challah",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "e5438f44-674e-4053-923b-37e67c5debc0",
+    "title": "Char Siu Barbecue Pork",
+    "pick": null,
+    "reason": "best candidate shows a plate logo"
+  },
+  {
+    "id": "4f74b3e3-24a4-4c6f-ba88-76c62f8fea44",
+    "title": "Cheese Enchiladas",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "33def1c6-3984-4ad8-9c3e-48fd711b7f7a",
+    "title": "Cheese Sticks",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "89e70aae-e223-4eeb-9225-3dd23e7c61e8",
+    "title": "Chelsea Buns",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "190a3147-b589-47b8-bcfc-99f32da2f654",
+    "title": "Cherry Pie",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "4d60b4c3-e4f2-447d-adc0-4fb505754624",
+    "title": "Chick-Fil-A Sandwich",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "ce3fccd6-a8e3-4dcc-847a-b0ee55da8d0f",
+    "title": "Chicken & chorizo rice pot",
+    "pick": null,
+    "reason": "current is better"
+  },
+  {
+    "id": "3efdc911-54f2-497c-8dc0-ef7c2fc500b7",
+    "title": "Chicken & mushroom Hotpot",
+    "pick": null,
+    "reason": "candidates show claypot rice, a different dish"
+  },
+  {
+    "id": "00509c60-be3e-41cb-8ff5-563b3ccef8d1",
+    "title": "Chicken Alfredo Bake",
+    "pick": null,
+    "reason": "candidates are close-ups or off topic"
+  }
+]

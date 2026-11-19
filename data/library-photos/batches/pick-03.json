@@ -1,0 +1,2459 @@
+[
+ {
+  "id": "0701dcea-8eb1-4e97-8ff8-061179ab7c1d",
+  "title": "Chicken Alfredo Primavera",
+  "source": "themealdb",
+  "cuisine": "Italian",
+  "current": "data/library-photos/cache/current/0701dcea-8eb1-4e97-8ff8-061179ab7c1d.jpg",
+  "candidates": [
+   {
+    "key": "commons-203363601",
+    "image": "data/library-photos/cache/candidates/0701dcea-8eb1-4e97-8ff8-061179ab7c1d/commons-203363601.jpg",
+    "width": 1848,
+    "height": 2772,
+    "description": "This filling cafe-style meal pairs a juicy, spice-rubbed chicken breast finished with melted cheddar cheese and fresh herbs alongside tender penne pasta. The pasta is tossed in a mildly spiced, creamy sauce with roasted broccoli florets and garnished with fresh dill (suva bhaji) and coriander for a "
+   }
+  ]
+ },
+ {
+  "id": "7ad4e2d8-d3ef-46d4-bc85-77884e837437",
+  "title": "Chicken and Broccoli",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": null,
+  "candidates": [
+   {
+    "key": "commons-188564810",
+    "image": "data/library-photos/cache/candidates/7ad4e2d8-d3ef-46d4-bc85-77884e837437/commons-188564810.jpg",
+    "width": 2140,
+    "height": 2140,
+    "description": "Asparagus, broccoli, chicken - Massachusetts, USA."
+   },
+   {
+    "key": "commons-119936086",
+    "image": "data/library-photos/cache/candidates/7ad4e2d8-d3ef-46d4-bc85-77884e837437/commons-119936086.jpg",
+    "width": 2268,
+    "height": 2268,
+    "description": "Chicken and broccoli in Alfredo sauce - Massachusetts, USA."
+   },
+   {
+    "key": "commons-23109690",
+    "image": "data/library-photos/cache/candidates/7ad4e2d8-d3ef-46d4-bc85-77884e837437/commons-23109690.jpg",
+    "width": 2048,
+    "height": 1360,
+    "description": "Chicken and broccoli pizza"
+   },
+   {
+    "key": "commons-179613137",
+    "image": "data/library-photos/cache/candidates/7ad4e2d8-d3ef-46d4-bc85-77884e837437/commons-179613137.jpg",
+    "width": 2227,
+    "height": 2227,
+    "description": "Chicken breast, roast broccoli, and celery - Massachusetts, USA."
+   }
+  ]
+ },
+ {
+  "id": "c7ddd3ea-8690-44d0-b284-019af5e143da",
+  "title": "Chicken and Dumplings",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/c7ddd3ea-8690-44d0-b284-019af5e143da.jpg",
+  "candidates": [
+   {
+    "key": "commons-10247334",
+    "image": "data/library-photos/cache/candidates/c7ddd3ea-8690-44d0-b284-019af5e143da/commons-10247334.jpg",
+    "width": 2881,
+    "height": 2304,
+    "description": "A bowl of chicken and dumplings with vegetables served at Nicoll's Cafe, 255 Main Street, Pine City, Minnesota"
+   },
+   {
+    "key": "commons-23131442",
+    "image": "data/library-photos/cache/candidates/c7ddd3ea-8690-44d0-b284-019af5e143da/commons-23131442.jpg",
+    "width": 4928,
+    "height": 3264,
+    "description": "Mmm... chicken dumplings"
+   },
+   {
+    "key": "commons-3786117",
+    "image": "data/library-photos/cache/candidates/c7ddd3ea-8690-44d0-b284-019af5e143da/commons-3786117.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "A 9 year old eats chicken and dumplings ."
+   },
+   {
+    "key": "commons-25014946",
+    "image": "data/library-photos/cache/candidates/c7ddd3ea-8690-44d0-b284-019af5e143da/commons-25014946.jpg",
+    "width": 4288,
+    "height": 3216,
+    "description": "Traditional chicken and dumplings with vegetables."
+   }
+  ]
+ },
+ {
+  "id": "adb9454a-ef87-43ab-ba39-d2a40c7e43f2",
+  "title": "Chicken and Sausage Gumbo",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/adb9454a-ef87-43ab-ba39-d2a40c7e43f2.jpg",
+  "candidates": [
+   {
+    "key": "commons-90144101",
+    "image": "data/library-photos/cache/candidates/adb9454a-ef87-43ab-ba39-d2a40c7e43f2/commons-90144101.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "Chicken and Sausage Gumbo"
+   },
+   {
+    "key": "commons-90143943",
+    "image": "data/library-photos/cache/candidates/adb9454a-ef87-43ab-ba39-d2a40c7e43f2/commons-90143943.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "Chicken and Sausage Gumbo in Germany"
+   },
+   {
+    "key": "commons-101799865",
+    "image": "data/library-photos/cache/candidates/adb9454a-ef87-43ab-ba39-d2a40c7e43f2/commons-101799865.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Fiorella Cafe New Orleans"
+   },
+   {
+    "key": "commons-51288018",
+    "image": "data/library-photos/cache/candidates/adb9454a-ef87-43ab-ba39-d2a40c7e43f2/commons-51288018.jpg",
+    "width": 1733,
+    "height": 1733,
+    "description": "Delicious New Orleans Gumbo"
+   }
+  ]
+ },
+ {
+  "id": "4348f5bf-ce72-4aa4-aa6c-efa31777e73a",
+  "title": "Chicken Basquaise",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/4348f5bf-ce72-4aa4-aa6c-efa31777e73a.jpg",
+  "candidates": [
+   {
+    "key": "commons-60008323",
+    "image": "data/library-photos/cache/candidates/4348f5bf-ce72-4aa4-aa6c-efa31777e73a/commons-60008323.jpg",
+    "width": 4592,
+    "height": 3280,
+    "description": "Parboiled rice with chicken, peppers, squash, peas and tomato. Recipe from a cookbook for women with Gestational diabetes (original recipe has brown rice and beef, instead of parboiled rice and chicken). Cookbook written by Ana Žontar Kristanc, ISBN 978-961-93983-2-6"
+   },
+   {
+    "key": "commons-92141022",
+    "image": "data/library-photos/cache/candidates/4348f5bf-ce72-4aa4-aa6c-efa31777e73a/commons-92141022.jpg",
+    "width": 3884,
+    "height": 4171,
+    "description": "Plate of curry chicken with bell peppers and rice"
+   },
+   {
+    "key": "commons-92141023",
+    "image": "data/library-photos/cache/candidates/4348f5bf-ce72-4aa4-aa6c-efa31777e73a/commons-92141023.jpg",
+    "width": 5184,
+    "height": 3888,
+    "description": "Plate of curry chicken with bell peppers and rice"
+   },
+   {
+    "key": "commons-127022486",
+    "image": "data/library-photos/cache/candidates/4348f5bf-ce72-4aa4-aa6c-efa31777e73a/commons-127022486.jpg",
+    "width": 4538,
+    "height": 1706,
+    "description": "Ms Hollie cooked curry chicken with bell peppers and rice. Yum!"
+   }
+  ]
+ },
+ {
+  "id": "e781e06c-9395-4e2e-a428-79c7394942da",
+  "title": "Chicken Caesar Salad",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/e781e06c-9395-4e2e-a428-79c7394942da.jpg",
+  "candidates": [
+   {
+    "key": "commons-40972336",
+    "image": "data/library-photos/cache/candidates/e781e06c-9395-4e2e-a428-79c7394942da/commons-40972336.jpg",
+    "width": 4870,
+    "height": 4820,
+    "description": "A plate of fettuccine Alfredo with a side of Caesar salad ."
+   },
+   {
+    "key": "commons-189509861",
+    "image": "data/library-photos/cache/candidates/e781e06c-9395-4e2e-a428-79c7394942da/commons-189509861.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: \"Chicken Breast, Shaved Parmesan, Croutons, Bacon & House Mayo.\""
+   },
+   {
+    "key": "commons-136965934",
+    "image": "data/library-photos/cache/candidates/e781e06c-9395-4e2e-a428-79c7394942da/commons-136965934.jpg",
+    "width": 2233,
+    "height": 2233,
+    "description": "Caesar salad with chicken, homemade - Massachusetts, USA."
+   },
+   {
+    "key": "commons-155032829",
+    "image": "data/library-photos/cache/candidates/e781e06c-9395-4e2e-a428-79c7394942da/commons-155032829.jpg",
+    "width": 2063,
+    "height": 2063,
+    "description": "Chicken Caesar salad - Auckland, New Zealand."
+   }
+  ]
+ },
+ {
+  "id": "bdd5e75d-f835-4c0f-9762-c58d79432d41",
+  "title": "Chicken Chow Mein",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/bdd5e75d-f835-4c0f-9762-c58d79432d41.jpg",
+  "candidates": [
+   {
+    "key": "commons-126251768",
+    "image": "data/library-photos/cache/candidates/bdd5e75d-f835-4c0f-9762-c58d79432d41/commons-126251768.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Chicken Chow mein."
+   },
+   {
+    "key": "commons-20011472",
+    "image": "data/library-photos/cache/candidates/bdd5e75d-f835-4c0f-9762-c58d79432d41/commons-20011472.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Chicken Chow Mein"
+   },
+   {
+    "key": "commons-126119875",
+    "image": "data/library-photos/cache/candidates/bdd5e75d-f835-4c0f-9762-c58d79432d41/commons-126119875.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Chicken Chow mein with tomato ketchup."
+   },
+   {
+    "key": "commons-182400670",
+    "image": "data/library-photos/cache/candidates/bdd5e75d-f835-4c0f-9762-c58d79432d41/commons-182400670.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a homemade Chinese-style meal with baked orange chicken made from a frozen, ready-made product, served alongside chow mein spaghetti noodles with vegetables and steamed broccoli. The dish is plated in a white bowl on a dark table. This image documents a"
+   }
+  ]
+ },
+ {
+  "id": "ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d",
+  "title": "Chicken Congee",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d.jpg",
+  "candidates": [
+   {
+    "key": "commons-567814",
+    "image": "data/library-photos/cache/candidates/ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d/commons-567814.jpg",
+    "width": 1000,
+    "height": 1000,
+    "description": "中華 粥 en:Chinese Rice congee 上にのっているのはザーサイと 肉松 （ローソン。豚肉のデンブ 肉松 ）"
+   },
+   {
+    "key": "commons-83134768",
+    "image": "data/library-photos/cache/candidates/ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d/commons-83134768.jpg",
+    "width": 2048,
+    "height": 1371,
+    "description": "Congee must rate somewhere in the top 10 Asian comfort foods, and the congee at Wonton House Swanston is a rather good specimen. We were hesitant with the brined jellyfish, but we needn't have been. It adds a textural crunch to the earth century egg and silky chunks of chicken. The star of this dish"
+   },
+   {
+    "key": "commons-182921004",
+    "image": "data/library-photos/cache/candidates/ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d/commons-182921004.jpg",
+    "width": 3468,
+    "height": 4406,
+    "description": "An Indonesian instant congee served with meat floss"
+   },
+   {
+    "key": "commons-126042055",
+    "image": "data/library-photos/cache/candidates/ebb0e3a6-def4-4037-a0ec-bfea8fc6aa9d/commons-126042055.jpg",
+    "width": 8050,
+    "height": 4904,
+    "description": "A BOWL OF FOXTAIL MILLET CONGEE"
+   }
+  ]
+ },
+ {
+  "id": "a48ad3a9-8e80-4cae-9a89-df8e9416bebd",
+  "title": "Chicken Couscous",
+  "source": "themealdb",
+  "cuisine": "Moroccan",
+  "current": "data/library-photos/cache/current/a48ad3a9-8e80-4cae-9a89-df8e9416bebd.jpg",
+  "candidates": [
+   {
+    "key": "commons-6217614",
+    "image": "data/library-photos/cache/candidates/a48ad3a9-8e80-4cae-9a89-df8e9416bebd/commons-6217614.jpg",
+    "width": 2793,
+    "height": 3964,
+    "description": "Chicken Orange Couscous: either that or it was so-so couscous and I was really hungry (which was true) but having so-so couscous by the Ourika River in the mountains of northern africa really seems to make the couscous taste really good."
+   },
+   {
+    "key": "commons-114816526",
+    "image": "data/library-photos/cache/candidates/a48ad3a9-8e80-4cae-9a89-df8e9416bebd/commons-114816526.jpg",
+    "width": 3200,
+    "height": 2400,
+    "description": "Couscous with chicken at a restaurant in Tangier"
+   },
+   {
+    "key": "commons-30322978",
+    "image": "data/library-photos/cache/candidates/a48ad3a9-8e80-4cae-9a89-df8e9416bebd/commons-30322978.jpg",
+    "width": 4896,
+    "height": 3672,
+    "description": "الكسكس، Couscous, Kuskus"
+   },
+   {
+    "key": "commons-182170793",
+    "image": "data/library-photos/cache/candidates/a48ad3a9-8e80-4cae-9a89-df8e9416bebd/commons-182170793.jpg",
+    "width": 2448,
+    "height": 3264,
+    "description": "High-quality photograph by Liat Portal showing traditional Algerian couscous topped with a vegetable soup made of pumpkin, sweet potatoes, carrots, and green zucchini, served alongside chicken. The dish was prepared in Kiryat Ata, Israel, by Liat Portal’s grandmother, Aziza Odette Sellam. This image"
+   }
+  ]
+ },
+ {
+  "id": "61b6727b-e8d8-46b9-bfff-ba436adeacd0",
+  "title": "Chicken Enchilada Casserole",
+  "source": "themealdb",
+  "cuisine": "Mexican",
+  "current": "data/library-photos/cache/current/61b6727b-e8d8-46b9-bfff-ba436adeacd0.jpg",
+  "candidates": [
+   {
+    "key": "commons-109445512",
+    "image": "data/library-photos/cache/candidates/61b6727b-e8d8-46b9-bfff-ba436adeacd0/commons-109445512.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "getting really hungry by this point."
+   }
+  ]
+ },
+ {
+  "id": "54886f43-bddb-4e88-be1d-18acbd086430",
+  "title": "Chicken Enchiladas with Red Sauce",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/54886f43-bddb-4e88-be1d-18acbd086430.jpg",
+  "candidates": [
+   {
+    "key": "commons-35337298",
+    "image": "data/library-photos/cache/candidates/54886f43-bddb-4e88-be1d-18acbd086430/commons-35337298.jpg",
+    "width": 1630,
+    "height": 1222,
+    "description": "Fotografía de enchiladas rellenas de pollo con arroz cubiertas en salsa verde y roja, dentro del Festival turístico y gastronómico de la Enchilada, que se llevó a cabo en el Jardín Cuitláhuac, en la delegación Iztapalapa."
+   },
+   {
+    "key": "commons-127807815",
+    "image": "data/library-photos/cache/candidates/54886f43-bddb-4e88-be1d-18acbd086430/commons-127807815.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken enchiladas at La Casa Restaurant"
+   },
+   {
+    "key": "commons-132023934",
+    "image": "data/library-photos/cache/candidates/54886f43-bddb-4e88-be1d-18acbd086430/commons-132023934.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken enchiladas at Frida's Mexican Grill"
+   },
+   {
+    "key": "commons-75420994",
+    "image": "data/library-photos/cache/candidates/54886f43-bddb-4e88-be1d-18acbd086430/commons-75420994.jpg",
+    "width": 4752,
+    "height": 3168,
+    "description": "RCCL Radiance Of The Seas Cascade Dining Room PS : Taste Horrible :("
+   }
+  ]
+ },
+ {
+  "id": "4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d",
+  "title": "Chicken Fajita Mac and Cheese",
+  "source": "themealdb",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d.jpg",
+  "candidates": [
+   {
+    "key": "commons-151971887",
+    "image": "data/library-photos/cache/candidates/4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d/commons-151971887.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "mac and cheese"
+   },
+   {
+    "key": "commons-46869907",
+    "image": "data/library-photos/cache/candidates/4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d/commons-46869907.jpg",
+    "width": 2448,
+    "height": 2448,
+    "description": "Mac n Cheese from BRC Gastropub"
+   },
+   {
+    "key": "commons-83393231",
+    "image": "data/library-photos/cache/candidates/4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d/commons-83393231.jpg",
+    "width": 2592,
+    "height": 1722,
+    "description": "From Only U Cafe at UBC"
+   },
+   {
+    "key": "commons-137350258",
+    "image": "data/library-photos/cache/candidates/4ecc2f8a-48e3-4f1d-bfca-136b55e28a9d/commons-137350258.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Description on menu: \"Creamy macaroni, pancetta, Mozzella, hemp parm.\""
+   }
+  ]
+ },
+ {
+  "id": "102f8db1-ab82-491d-b799-859eafa8115d",
+  "title": "Chicken Fried Rice",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/102f8db1-ab82-491d-b799-859eafa8115d.jpg",
+  "candidates": [
+   {
+    "key": "commons-100486167",
+    "image": "data/library-photos/cache/candidates/102f8db1-ab82-491d-b799-859eafa8115d/commons-100486167.jpg",
+    "width": 1549,
+    "height": 1936,
+    "description": "Fried rice with chicken and egg"
+   },
+   {
+    "key": "commons-83172312",
+    "image": "data/library-photos/cache/candidates/102f8db1-ab82-491d-b799-859eafa8115d/commons-83172312.jpg",
+    "width": 2992,
+    "height": 2992,
+    "description": "Fried rice with chicken"
+   },
+   {
+    "key": "commons-87201168",
+    "image": "data/library-photos/cache/candidates/102f8db1-ab82-491d-b799-859eafa8115d/commons-87201168.jpg",
+    "width": 2900,
+    "height": 3953,
+    "description": "This photo has been taken in the country: Indonesia"
+   },
+   {
+    "key": "commons-141645800",
+    "image": "data/library-photos/cache/candidates/102f8db1-ab82-491d-b799-859eafa8115d/commons-141645800.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken fried rice - Stir Fry by CK"
+   }
+  ]
+ },
+ {
+  "id": "c2d363ff-3e12-4536-a195-40c2fd1ffbd3",
+  "title": "Chicken Fried Steak",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/c2d363ff-3e12-4536-a195-40c2fd1ffbd3.jpg",
+  "candidates": [
+   {
+    "key": "commons-77508070",
+    "image": "data/library-photos/cache/candidates/c2d363ff-3e12-4536-a195-40c2fd1ffbd3/commons-77508070.jpg",
+    "width": 3642,
+    "height": 2732,
+    "description": "Chicken fried steak smothered in cream gravy, with sides of mashed potatoes, fried okra and a dinner roll."
+   },
+   {
+    "key": "commons-14857780",
+    "image": "data/library-photos/cache/candidates/c2d363ff-3e12-4536-a195-40c2fd1ffbd3/commons-14857780.jpg",
+    "width": 4320,
+    "height": 3240,
+    "description": "I took photo in Lamesa, TX, with Canon camera."
+   },
+   {
+    "key": "commons-61416808",
+    "image": "data/library-photos/cache/candidates/c2d363ff-3e12-4536-a195-40c2fd1ffbd3/commons-61416808.jpg",
+    "width": 4320,
+    "height": 3240,
+    "description": "Chicken fried steak"
+   },
+   {
+    "key": "commons-177364724",
+    "image": "data/library-photos/cache/candidates/c2d363ff-3e12-4536-a195-40c2fd1ffbd3/commons-177364724.jpg",
+    "width": 3772,
+    "height": 2829,
+    "description": "Only available on Wednesdays"
+   }
+  ]
+ },
+ {
+  "id": "318e47fb-1fdf-4e5d-b219-e4d50d7bd692",
+  "title": "Chicken Ham and Leek Pie",
+  "source": "themealdb",
+  "cuisine": "British",
+  "current": "data/library-photos/cache/current/318e47fb-1fdf-4e5d-b219-e4d50d7bd692.jpg",
+  "candidates": [
+   {
+    "key": "commons-165396759",
+    "image": "data/library-photos/cache/candidates/318e47fb-1fdf-4e5d-b219-e4d50d7bd692/commons-165396759.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "chicken & leek pie with mushroom"
+   },
+   {
+    "key": "commons-201727503",
+    "image": "data/library-photos/cache/candidates/318e47fb-1fdf-4e5d-b219-e4d50d7bd692/commons-201727503.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Chicken & Leek Pie (left) and Spinach & Ricotta Roll (right)"
+   },
+   {
+    "key": "commons-22201918",
+    "image": "data/library-photos/cache/candidates/318e47fb-1fdf-4e5d-b219-e4d50d7bd692/commons-22201918.jpg",
+    "width": 1200,
+    "height": 1600,
+    "description": "zh:上環 信德中心 澳門茶餐廳 , Macau Restaurant, Shun Tak Centre, Hong Kong"
+   },
+   {
+    "key": "commons-6450594",
+    "image": "data/library-photos/cache/candidates/318e47fb-1fdf-4e5d-b219-e4d50d7bd692/commons-6450594.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Homemade curry chicken pot pies."
+   }
+  ]
+ },
+ {
+  "id": "9bb659eb-731d-41f7-a027-16f0079630a6",
+  "title": "Chicken Handi",
+  "source": "themealdb",
+  "cuisine": "India",
+  "current": "data/library-photos/cache/current/9bb659eb-731d-41f7-a027-16f0079630a6.jpg",
+  "candidates": [
+   {
+    "key": "commons-17427480",
+    "image": "data/library-photos/cache/candidates/9bb659eb-731d-41f7-a027-16f0079630a6/commons-17427480.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Chicken Handi"
+   },
+   {
+    "key": "commons-17427429",
+    "image": "data/library-photos/cache/candidates/9bb659eb-731d-41f7-a027-16f0079630a6/commons-17427429.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Murgh Handi"
+   },
+   {
+    "key": "commons-17427398",
+    "image": "data/library-photos/cache/candidates/9bb659eb-731d-41f7-a027-16f0079630a6/commons-17427398.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Chicken Handi"
+   },
+   {
+    "key": "commons-93060635",
+    "image": "data/library-photos/cache/candidates/9bb659eb-731d-41f7-a027-16f0079630a6/commons-93060635.jpg",
+    "width": 3264,
+    "height": 1836,
+    "description": "A pot of Punjabi -style chicken curry from India"
+   }
+  ]
+ },
+ {
+  "id": "62a6afb9-a8b4-4840-adb4-f229c8cb9049",
+  "title": "Chicken in Orange Sauce Recipe (Pollo a la Naranja)",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "current": "data/library-photos/cache/current/62a6afb9-a8b4-4840-adb4-f229c8cb9049.jpg",
+  "candidates": [
+   {
+    "key": "commons-11138608",
+    "image": "data/library-photos/cache/candidates/62a6afb9-a8b4-4840-adb4-f229c8cb9049/commons-11138608.jpg",
+    "width": 2033,
+    "height": 3060,
+    "description": "Orange chicken . Photographed in Oakland, California, USA."
+   },
+   {
+    "key": "commons-78711033",
+    "image": "data/library-photos/cache/candidates/62a6afb9-a8b4-4840-adb4-f229c8cb9049/commons-78711033.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "Yummy"
+   },
+   {
+    "key": "commons-41315606",
+    "image": "data/library-photos/cache/candidates/62a6afb9-a8b4-4840-adb4-f229c8cb9049/commons-41315606.jpg",
+    "width": 2048,
+    "height": 1432,
+    "description": "whats4dinnersolutions.wordpress.com/2011/10/15/orange-chi..."
+   },
+   {
+    "key": "commons-41315621",
+    "image": "data/library-photos/cache/candidates/62a6afb9-a8b4-4840-adb4-f229c8cb9049/commons-41315621.jpg",
+    "width": 1600,
+    "height": 1063,
+    "description": "whats4dinnersolutions.wordpress.com/2010/08/17/making-chi..."
+   }
+  ]
+ },
+ {
+  "id": "49d43648-094d-4b5d-8b0d-cab81e01b926",
+  "title": "Chicken Karaage",
+  "source": "themealdb",
+  "cuisine": "Japanese",
+  "current": "data/library-photos/cache/current/49d43648-094d-4b5d-8b0d-cab81e01b926.jpg",
+  "candidates": [
+   {
+    "key": "commons-141523884",
+    "image": "data/library-photos/cache/candidates/49d43648-094d-4b5d-8b0d-cab81e01b926/commons-141523884.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Description on menu: \"Japanese Fried Chicken with Sunoso Creamy Kimchi Sauce, served with White or Brown Rice & Seasonal Vegetables, topped with Sesame Seeds.\""
+   },
+   {
+    "key": "commons-102337115",
+    "image": "data/library-photos/cache/candidates/49d43648-094d-4b5d-8b0d-cab81e01b926/commons-102337115.jpg",
+    "width": 4288,
+    "height": 2848,
+    "description": "からやまのからやま定食（梅） \\759-（税込み） Nikon D5000"
+   },
+   {
+    "key": "commons-109487490",
+    "image": "data/library-photos/cache/candidates/49d43648-094d-4b5d-8b0d-cab81e01b926/commons-109487490.jpg",
+    "width": 4736,
+    "height": 3552,
+    "description": "Chicken Karaage with Rice"
+   },
+   {
+    "key": "commons-95180671",
+    "image": "data/library-photos/cache/candidates/49d43648-094d-4b5d-8b0d-cab81e01b926/commons-95180671.jpg",
+    "width": 4736,
+    "height": 3552,
+    "description": "Chicken Karaage in Basket"
+   }
+  ]
+ },
+ {
+  "id": "0f4ecceb-abd1-4bf6-9dea-06e59eda0a84",
+  "title": "Chicken Lollipop",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "current": "data/library-photos/cache/current/0f4ecceb-abd1-4bf6-9dea-06e59eda0a84.jpg",
+  "candidates": [
+   {
+    "key": "commons-164088373",
+    "image": "data/library-photos/cache/candidates/0f4ecceb-abd1-4bf6-9dea-06e59eda0a84/commons-164088373.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "This is an image with the theme \" Farm to Plate \" from:"
+   },
+   {
+    "key": "commons-163334506",
+    "image": "data/library-photos/cache/candidates/0f4ecceb-abd1-4bf6-9dea-06e59eda0a84/commons-163334506.jpg",
+    "width": 3000,
+    "height": 2000,
+    "description": "This is an image with the theme \" Farm to Plate \" from:"
+   },
+   {
+    "key": "commons-15816476",
+    "image": "data/library-photos/cache/candidates/0f4ecceb-abd1-4bf6-9dea-06e59eda0a84/commons-15816476.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Chicken lollipop is an hors d'œuvre that is made from the middle (and sometimes inner) segments of chicken wings. The middle segment has one of the two bones removed, and the flesh on the segments is pushed to one end of the bone. These are then coated in a spicy red batter and deep fried. It is als"
+   },
+   {
+    "key": "commons-40990989",
+    "image": "data/library-photos/cache/candidates/0f4ecceb-abd1-4bf6-9dea-06e59eda0a84/commons-40990989.jpg",
+    "width": 4320,
+    "height": 3240,
+    "description": "LOLLIPOP"
+   }
+  ]
+ },
+ {
+  "id": "fadf6669-3073-48fe-9852-a4def8b6e02b",
+  "title": "Chicken Mandi",
+  "source": "themealdb",
+  "cuisine": "India",
+  "current": "data/library-photos/cache/current/fadf6669-3073-48fe-9852-a4def8b6e02b.jpg",
+  "candidates": [
+   {
+    "key": "commons-159793415",
+    "image": "data/library-photos/cache/candidates/fadf6669-3073-48fe-9852-a4def8b6e02b/commons-159793415.jpg",
+    "width": 4240,
+    "height": 2600,
+    "description": "Chicken Mandi"
+   },
+   {
+    "key": "commons-159793413",
+    "image": "data/library-photos/cache/candidates/fadf6669-3073-48fe-9852-a4def8b6e02b/commons-159793413.jpg",
+    "width": 3341,
+    "height": 2600,
+    "description": "Chicken Mandi At Arabian Mandi Hyderabad"
+   },
+   {
+    "key": "commons-174091281",
+    "image": "data/library-photos/cache/candidates/fadf6669-3073-48fe-9852-a4def8b6e02b/commons-174091281.jpg",
+    "width": 16320,
+    "height": 12240,
+    "description": "Chicken Mandi"
+   },
+   {
+    "key": "commons-104955024",
+    "image": "data/library-photos/cache/candidates/fadf6669-3073-48fe-9852-a4def8b6e02b/commons-104955024.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken mandi, from Kerala, India"
+   }
+  ]
+ },
+ {
+  "id": "1fd95693-7847-4ea1-8f60-0ec3269752d6",
+  "title": "Chicken Marengo",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/1fd95693-7847-4ea1-8f60-0ec3269752d6.jpg",
+  "candidates": [
+   {
+    "key": "commons-13585134",
+    "image": "data/library-photos/cache/candidates/1fd95693-7847-4ea1-8f60-0ec3269752d6/commons-13585134.jpg",
+    "width": 3000,
+    "height": 4000,
+    "description": "chicken marengo"
+   },
+   {
+    "key": "commons-19497518",
+    "image": "data/library-photos/cache/candidates/1fd95693-7847-4ea1-8f60-0ec3269752d6/commons-19497518.jpg",
+    "width": 2786,
+    "height": 2957,
+    "description": "chicken marengo"
+   },
+   {
+    "key": "commons-152275370",
+    "image": "data/library-photos/cache/candidates/1fd95693-7847-4ea1-8f60-0ec3269752d6/commons-152275370.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Chicken a la marengo, cooked in March of 2024 by user Dronozjad."
+   },
+   {
+    "key": "commons-86129784",
+    "image": "data/library-photos/cache/candidates/1fd95693-7847-4ea1-8f60-0ec3269752d6/commons-86129784.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Poulet Marengo"
+   }
+  ]
+ },
+ {
+  "id": "ca592367-017e-4834-b064-83ca9849da05",
+  "title": "Chicken Noodle Soup",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/ca592367-017e-4834-b064-83ca9849da05.jpg",
+  "candidates": [
+   {
+    "key": "commons-139481448",
+    "image": "data/library-photos/cache/candidates/ca592367-017e-4834-b064-83ca9849da05/commons-139481448.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken with Noodles Soup - Noodles Soup"
+   },
+   {
+    "key": "commons-25318098",
+    "image": "data/library-photos/cache/candidates/ca592367-017e-4834-b064-83ca9849da05/commons-25318098.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken Noodle Soup made in the classic French / American preparation with a stewing hen."
+   },
+   {
+    "key": "commons-180036291",
+    "image": "data/library-photos/cache/candidates/ca592367-017e-4834-b064-83ca9849da05/commons-180036291.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a bowl of homemade chicken soup prepared by Liat Portal, with rice noodles, carrots, celery, and herbs, served in a white bowl on a dark table. This image documents a cooked chicken soup dish made by Liat Portal as part of the Foodie Disorder global foo"
+   },
+   {
+    "key": "commons-112032217",
+    "image": "data/library-photos/cache/candidates/ca592367-017e-4834-b064-83ca9849da05/commons-112032217.jpg",
+    "width": 3024,
+    "height": 3024,
+    "description": "Chicken noodle soup - Massachusetts, USA."
+   }
+  ]
+ },
+ {
+  "id": "b7699933-7ea4-46a2-94c3-29973d675fef",
+  "title": "Chicken Parmentier",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/b7699933-7ea4-46a2-94c3-29973d675fef.jpg",
+  "candidates": [
+   {
+    "key": "commons-95692413",
+    "image": "data/library-photos/cache/candidates/b7699933-7ea4-46a2-94c3-29973d675fef/commons-95692413.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "I got causushi for lunch. Causushi is not a word, it's a mix of two words: causa and sushi. Causa is a popular Peruvian entrée made of mashed potatoes, lemon and chili, it can have different fillings (or toppings, as in this case), it can be tuna, octopus, shrimp, chicken or veggies. This sampler pl"
+   }
+  ]
+ },
+ {
+  "id": "45ed89f7-3156-473c-a250-c3f75f00770c",
+  "title": "Chicken Parmesan",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/45ed89f7-3156-473c-a250-c3f75f00770c.jpg",
+  "candidates": [
+   {
+    "key": "commons-125271806",
+    "image": "data/library-photos/cache/candidates/45ed89f7-3156-473c-a250-c3f75f00770c/commons-125271806.jpg",
+    "width": 2048,
+    "height": 2035,
+    "description": "A dish with tomato sauce, some flattened chicken breast pieces, cut mozarella, and a breading station (flour, egg, breading) - preparation for chicken parmesan"
+   },
+   {
+    "key": "commons-77601734",
+    "image": "data/library-photos/cache/candidates/45ed89f7-3156-473c-a250-c3f75f00770c/commons-77601734.jpg",
+    "width": 1537,
+    "height": 2049,
+    "description": "A dish of chickien parmigiana served with linguine in marinara sauce from a diner in northern New Jersey."
+   },
+   {
+    "key": "commons-30184098",
+    "image": "data/library-photos/cache/candidates/45ed89f7-3156-473c-a250-c3f75f00770c/commons-30184098.jpg",
+    "width": 2592,
+    "height": 1936,
+    "description": "A Burger King Italian chicken sandwich, a type of chicken Parmesan sandwich."
+   },
+   {
+    "key": "commons-155036366",
+    "image": "data/library-photos/cache/candidates/45ed89f7-3156-473c-a250-c3f75f00770c/commons-155036366.jpg",
+    "width": 5712,
+    "height": 4284,
+    "description": "Chicken parmesan at Mamma Tanino's, Sonoma, California"
+   }
+  ]
+ },
+ {
+  "id": "68d37ac3-5a52-481c-84d9-1a3382f33aa9",
+  "title": "Chicken Quesadillas",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/68d37ac3-5a52-481c-84d9-1a3382f33aa9.jpg",
+  "candidates": [
+   {
+    "key": "commons-132325763",
+    "image": "data/library-photos/cache/candidates/68d37ac3-5a52-481c-84d9-1a3382f33aa9/commons-132325763.jpg",
+    "width": 2267,
+    "height": 2267,
+    "description": "Chicken quesadilla - Massachusetts, USA."
+   },
+   {
+    "key": "commons-136305461",
+    "image": "data/library-photos/cache/candidates/68d37ac3-5a52-481c-84d9-1a3382f33aa9/commons-136305461.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken quesadilla at La Casa Restaurant, Sonoma, California"
+   },
+   {
+    "key": "commons-164458351",
+    "image": "data/library-photos/cache/candidates/68d37ac3-5a52-481c-84d9-1a3382f33aa9/commons-164458351.jpg",
+    "width": 3008,
+    "height": 2000,
+    "description": "Looked wonderful. Must go back."
+   },
+   {
+    "key": "commons-80211872",
+    "image": "data/library-photos/cache/candidates/68d37ac3-5a52-481c-84d9-1a3382f33aa9/commons-80211872.jpg",
+    "width": 3456,
+    "height": 2304,
+    "description": "at the busy lunch rush the chef doesn't have much time for presentation, but it tasted real good"
+   }
+  ]
+ },
+ {
+  "id": "fdaf889f-1cf0-4939-a9d9-3cdb441b7654",
+  "title": "Chicken Quinoa Greek Salad",
+  "source": "themealdb",
+  "cuisine": "Greek",
+  "current": "data/library-photos/cache/current/fdaf889f-1cf0-4939-a9d9-3cdb441b7654.jpg",
+  "candidates": [
+   {
+    "key": "commons-179904302",
+    "image": "data/library-photos/cache/candidates/fdaf889f-1cf0-4939-a9d9-3cdb441b7654/commons-179904302.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a plate of cooked quinoa with golden breaded schnitzel pieces, accompanied by a bowl of finely chopped Israeli salad made from cucumber, tomato, onion, and bell pepper. This image documents a home-cooked Israeli-style meal as part of the Foodie Disorder"
+   },
+   {
+    "key": "commons-83010802",
+    "image": "data/library-photos/cache/candidates/fdaf889f-1cf0-4939-a9d9-3cdb441b7654/commons-83010802.jpg",
+    "width": 1080,
+    "height": 1080,
+    "description": "Japanese food"
+   },
+   {
+    "key": "commons-101633682",
+    "image": "data/library-photos/cache/candidates/fdaf889f-1cf0-4939-a9d9-3cdb441b7654/commons-101633682.jpg",
+    "width": 3072,
+    "height": 2304,
+    "description": "Terrine of chicken salad with quinoa and nori"
+   }
+  ]
+ },
+ {
+  "id": "ee27da18-5af4-4d3c-bf2a-de40b2d34ef8",
+  "title": "Chicken Salad Sandwich",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/ee27da18-5af4-4d3c-bf2a-de40b2d34ef8.jpg",
+  "candidates": [
+   {
+    "key": "commons-181753389",
+    "image": "data/library-photos/cache/candidates/ee27da18-5af4-4d3c-bf2a-de40b2d34ef8/commons-181753389.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a homemade chicken salad sandwich layered with lettuce, sliced boiled egg, and caramelized onion on bread, served alongside a fresh chopped vegetable salad. This image documents a home-prepared meal combining protein, vegetables, and bread as part of th"
+   },
+   {
+    "key": "commons-181448381",
+    "image": "data/library-photos/cache/candidates/ee27da18-5af4-4d3c-bf2a-de40b2d34ef8/commons-181448381.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a homemade chicken salad sandwich on bread with lettuce and pickles, served alongside a bowl of Israeli chopped salad made with tomatoes, cucumbers, herbs, and vegetables, made by Liat Portal. This image documents a simple home-prepared lunch as part of"
+   },
+   {
+    "key": "commons-110026133",
+    "image": "data/library-photos/cache/candidates/ee27da18-5af4-4d3c-bf2a-de40b2d34ef8/commons-110026133.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "chicken salad with tomato on toasted sourdough"
+   },
+   {
+    "key": "commons-18958365",
+    "image": "data/library-photos/cache/candidates/ee27da18-5af4-4d3c-bf2a-de40b2d34ef8/commons-18958365.jpg",
+    "width": 3211,
+    "height": 2568,
+    "description": "Chicken salad sandwich"
+   }
+  ]
+ },
+ {
+  "id": "09e4b19c-2d6f-4148-acf2-505260040c5c",
+  "title": "Chicken Salad With Mushrooms and Bacon",
+  "source": "themealdb",
+  "cuisine": "Denmark",
+  "current": "data/library-photos/cache/current/09e4b19c-2d6f-4148-acf2-505260040c5c.jpg",
+  "candidates": [
+   {
+    "key": "commons-193215071",
+    "image": "data/library-photos/cache/candidates/09e4b19c-2d6f-4148-acf2-505260040c5c/commons-193215071.jpg",
+    "width": 2857,
+    "height": 2266,
+    "description": "Grilled chicken club sandwich with bacon, lettuce, tomato, and onion, and a side salad - Ojai, California, USA."
+   },
+   {
+    "key": "commons-189509861",
+    "image": "data/library-photos/cache/candidates/09e4b19c-2d6f-4148-acf2-505260040c5c/commons-189509861.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: \"Chicken Breast, Shaved Parmesan, Croutons, Bacon & House Mayo.\""
+   },
+   {
+    "key": "commons-182791307",
+    "image": "data/library-photos/cache/candidates/09e4b19c-2d6f-4148-acf2-505260040c5c/commons-182791307.jpg",
+    "width": 3973,
+    "height": 2980,
+    "description": "Camembert, Chicken & Bacon Flat Grill \"... with creamy hollandaise, spinach & red onion\", The Coffee Club Carousel WA"
+   },
+   {
+    "key": "commons-182791306",
+    "image": "data/library-photos/cache/candidates/09e4b19c-2d6f-4148-acf2-505260040c5c/commons-182791306.jpg",
+    "width": 3060,
+    "height": 4080,
+    "description": "Camembert, Chicken & Bacon Flat Grill \"... with creamy hollandaise, spinach & red onion\", The Coffee Club Carousel WA"
+   }
+  ]
+ },
+ {
+  "id": "d9c61b72-3d8b-4292-a6b6-70e455c764e7",
+  "title": "Chicken Shawarma with homemade garlic herb yoghurt sauce",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "current": "data/library-photos/cache/current/d9c61b72-3d8b-4292-a6b6-70e455c764e7.jpg",
+  "candidates": [
+   {
+    "key": "commons-182543068",
+    "image": "data/library-photos/cache/candidates/d9c61b72-3d8b-4292-a6b6-70e455c764e7/commons-182543068.jpg",
+    "width": 4096,
+    "height": 3072,
+    "description": "Special Chicken Shawarma Plate"
+   },
+   {
+    "key": "commons-116529740",
+    "image": "data/library-photos/cache/candidates/d9c61b72-3d8b-4292-a6b6-70e455c764e7/commons-116529740.jpg",
+    "width": 1080,
+    "height": 1350,
+    "description": "Chicken Shawarma"
+   },
+   {
+    "key": "commons-152528202",
+    "image": "data/library-photos/cache/candidates/d9c61b72-3d8b-4292-a6b6-70e455c764e7/commons-152528202.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Description on menu: \"Our chicken shawarma is daily prepared served w/ garlic fresh herbs yogurt, red cabbage, onion and leaves (chilli sauce opt)\""
+   },
+   {
+    "key": "commons-159539249",
+    "image": "data/library-photos/cache/candidates/d9c61b72-3d8b-4292-a6b6-70e455c764e7/commons-159539249.jpg",
+    "width": 4080,
+    "height": 3072,
+    "description": "Description on menu: \"Our handmade unique chicken shawarma is daily prepared, served on lavash bread w/ bulgur pilaf, salads, garlic yogurt and chilli sauce, accompanied by coriander and paprika spicy melted butter\""
+   }
+  ]
+ },
+ {
+  "id": "e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760",
+  "title": "Chicken Tenders",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760.jpg",
+  "candidates": [
+   {
+    "key": "commons-133113640",
+    "image": "data/library-photos/cache/candidates/e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760/commons-133113640.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Chicken tenders and french fries at Sonoma Raceway"
+   },
+   {
+    "key": "commons-102854187",
+    "image": "data/library-photos/cache/candidates/e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760/commons-102854187.jpg",
+    "width": 1531,
+    "height": 1265,
+    "description": "Sriracha Chicken Tenders"
+   },
+   {
+    "key": "commons-41302998",
+    "image": "data/library-photos/cache/candidates/e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760/commons-41302998.jpg",
+    "width": 4621,
+    "height": 3061,
+    "description": "Mmm... chicken tenders"
+   },
+   {
+    "key": "commons-89187878",
+    "image": "data/library-photos/cache/candidates/e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760/commons-89187878.jpg",
+    "width": 2592,
+    "height": 1936,
+    "description": "Popeye's \"Chicken Waffle\" Tenders Waffle batter different fried Waffle Chicken with Honey Maple Syrup Sauce. 6/2014 Pics by Mike Mozart of TheToyChannel and JeepersMedia on YouTube. #ChickenWaffle #PopeyesChicken #ChickenWaffleTenders #PopeyesRestaurant"
+   }
+  ]
+ },
+ {
+  "id": "76dd1e7f-7c48-4b1b-aeb1-16e87b388246",
+  "title": "Chicken wings with cumin, lemon & garlic",
+  "source": "themealdb",
+  "cuisine": "Turkish",
+  "current": "data/library-photos/cache/current/76dd1e7f-7c48-4b1b-aeb1-16e87b388246.jpg",
+  "candidates": [
+   {
+    "key": "commons-119163120",
+    "image": "data/library-photos/cache/candidates/76dd1e7f-7c48-4b1b-aeb1-16e87b388246/commons-119163120.jpg",
+    "width": 5184,
+    "height": 3888,
+    "description": "Lemon and Honey Grilled Chicken Wings from The Spaghetti House"
+   }
+  ]
+ },
+ {
+  "id": "5b46e3c6-e9c3-4ed1-9d75-c5a45499c7ca",
+  "title": "Chicken with Mushrooms Stir-Fry",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": null,
+  "candidates": [
+   {
+    "key": "commons-152824922",
+    "image": "data/library-photos/cache/candidates/5b46e3c6-e9c3-4ed1-9d75-c5a45499c7ca/commons-152824922.jpg",
+    "width": 1200,
+    "height": 1800,
+    "description": "Looking for a hearty and delicious meal? These Chicken Ricotta Meatballs with Risoni are perfect for a cozy dinner. Packed with rich flavors from parmesan, lemon, and basil, this dish is both satisfying and easy to make. Follow the steps below to create a meal that will impress your family or guests"
+   },
+   {
+    "key": "commons-41315707",
+    "image": "data/library-photos/cache/candidates/5b46e3c6-e9c3-4ed1-9d75-c5a45499c7ca/commons-41315707.jpg",
+    "width": 1600,
+    "height": 1063,
+    "description": "with bell peppers, green onions, and Shiitake mushrooms in a sauce of chicken stock and Chinese cooking wine"
+   },
+   {
+    "key": "commons-138892158",
+    "image": "data/library-photos/cache/candidates/5b46e3c6-e9c3-4ed1-9d75-c5a45499c7ca/commons-138892158.jpg",
+    "width": 3000,
+    "height": 4000,
+    "description": "HK KTD 觀塘 Kwun Tong zh:鱷魚恤中心 Crocodile Center 稻香茶居 Tao Heung Tea House Restaurant paper document bill in October 2023 炒薯仔牛柳粒 Stir fried beef and potato cubes 清蒸龍躉魚 Steamed Sabah Giant Grouper 炒龍躉魚肉 汽鍋姬松茸菇瘦肉雞湯 Chicken Soup with Agaricus Blazei Mushrooms and pork 燒腩仔 Siu Yuk 煎墨魚餅 Pan fried cuttle fish"
+   },
+   {
+    "key": "commons-138896466",
+    "image": "data/library-photos/cache/candidates/5b46e3c6-e9c3-4ed1-9d75-c5a45499c7ca/commons-138896466.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "HK KTD 觀塘 Kwun Tong zh:鱷魚恤中心 Crocodile Center 稻香茶居 Tao Heung Tea House Restaurant in October 2023 炒薯仔牛柳粒 Stir fried beef and potato cubes 清蒸龍躉魚 Steamed Sabah Giant Grouper 炒龍躉魚肉 汽鍋姬松茸菇瘦肉雞湯 Chicken Soup with Agaricus Blazei Mushrooms and pork 燒腩仔 Siu Yuk 煎墨魚餅 Pan fried cuttle fish cake"
+   }
+  ]
+ },
+ {
+  "id": "1315981f-3ffd-49e7-b42b-198e917a2f0e",
+  "title": "Chicken with saffron, raisins & pine nuts",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/1315981f-3ffd-49e7-b42b-198e917a2f0e.jpg",
+  "candidates": [
+   {
+    "key": "commons-21020767",
+    "image": "data/library-photos/cache/candidates/1315981f-3ffd-49e7-b42b-198e917a2f0e/commons-21020767.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Chicken Tikka Masala"
+   },
+   {
+    "key": "commons-90436416",
+    "image": "data/library-photos/cache/candidates/1315981f-3ffd-49e7-b42b-198e917a2f0e/commons-90436416.jpg",
+    "width": 2286,
+    "height": 2286,
+    "description": "Zereshk polow, Barberry Rice, Iran"
+   },
+   {
+    "key": "commons-63078653",
+    "image": "data/library-photos/cache/candidates/1315981f-3ffd-49e7-b42b-198e917a2f0e/commons-63078653.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "アンナミラーズ ウィング高輪店‎ (map)"
+   },
+   {
+    "key": "commons-83152108",
+    "image": "data/library-photos/cache/candidates/1315981f-3ffd-49e7-b42b-198e917a2f0e/commons-83152108.jpg",
+    "width": 2048,
+    "height": 1370,
+    "description": "Cafe Mint is a nice cosy Middle-Eastern place in the less-trendy end of Crown St, Surry Hills, near Cleveland Street. Further north is the trendier section with the likes of Bills and Billy Kwong. I rather like this more bohemian end, where every other shop is seemingly Indian or Middle-Eastern. In "
+   }
+  ]
+ },
+ {
+  "id": "71ce98f8-e2d0-47d2-8126-03df3e3c4add",
+  "title": "Chickpea Fajitas",
+  "source": "themealdb",
+  "cuisine": "Mexican",
+  "current": "data/library-photos/cache/current/71ce98f8-e2d0-47d2-8126-03df3e3c4add.jpg",
+  "candidates": [
+   {
+    "key": "commons-99296824",
+    "image": "data/library-photos/cache/candidates/71ce98f8-e2d0-47d2-8126-03df3e3c4add/commons-99296824.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "Fajitas consisting of tortillas topped with shredded beef, jalapeño peppers and shredded cheese, prior to being rolled up, served as lunch at Antell Martintalo in Vantaankoski, Vantaa, Finland."
+   },
+   {
+    "key": "commons-149570500",
+    "image": "data/library-photos/cache/candidates/71ce98f8-e2d0-47d2-8126-03df3e3c4add/commons-149570500.jpg",
+    "width": 1875,
+    "height": 1250,
+    "description": "Today's lunch. Fajitas with onions, orange bell peppers, garlic, tomatoes, bacon, and Cajun seasoned shrimp, topped with a little Tabasco Chipotle sauce, green onions, and sour cream. An easy meal on a rainy winter's day, along with a good beer."
+   },
+   {
+    "key": "commons-4276836",
+    "image": "data/library-photos/cache/candidates/71ce98f8-e2d0-47d2-8126-03df3e3c4add/commons-4276836.jpg",
+    "width": 3072,
+    "height": 2304,
+    "description": "Fajita with sauteed onion, red pepper, yellow pepper, green pepper, guacamole and sour cream."
+   },
+   {
+    "key": "commons-107856553",
+    "image": "data/library-photos/cache/candidates/71ce98f8-e2d0-47d2-8126-03df3e3c4add/commons-107856553.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "Chicken fajitas at La Casa Restaurant in Sonoma, California Chicken with grilled onions and bell peppers."
+   }
+  ]
+ },
+ {
+  "id": "80dfd43f-c816-4cbc-9f64-a8a2f2f623e1",
+  "title": "Chickpea, chorizo & spinach stew",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/80dfd43f-c816-4cbc-9f64-a8a2f2f623e1.jpg",
+  "candidates": [
+   {
+    "key": "commons-5275528",
+    "image": "data/library-photos/cache/candidates/80dfd43f-c816-4cbc-9f64-a8a2f2f623e1/commons-5275528.jpg",
+    "width": 2592,
+    "height": 1944,
+    "description": "Chorizo stew with salad"
+   },
+   {
+    "key": "commons-42779343",
+    "image": "data/library-photos/cache/candidates/80dfd43f-c816-4cbc-9f64-a8a2f2f623e1/commons-42779343.jpg",
+    "width": 4128,
+    "height": 2322,
+    "description": "Tapa: a reproduction of a miniature stew from Ávila: chickpeas, noodles, sausage meat, egg and parsley bread filling, bacon, sausage and bread"
+   }
+  ]
+ },
+ {
+  "id": "c1bb93b1-44a0-42b7-b1ec-8fe62c671782",
+  "title": "Chilean Empanada",
+  "source": "themealdb",
+  "cuisine": "Chile",
+  "current": "data/library-photos/cache/current/c1bb93b1-44a0-42b7-b1ec-8fe62c671782.jpg",
+  "candidates": [
+   {
+    "key": "commons-15767459",
+    "image": "data/library-photos/cache/candidates/c1bb93b1-44a0-42b7-b1ec-8fe62c671782/commons-15767459.jpg",
+    "width": 3772,
+    "height": 2261,
+    "description": "Los Naranjos restaurant in Pomaire, Chile."
+   },
+   {
+    "key": "commons-137931919",
+    "image": "data/library-photos/cache/candidates/c1bb93b1-44a0-42b7-b1ec-8fe62c671782/commons-137931919.jpg",
+    "width": 5309,
+    "height": 3539,
+    "description": "Empanada típica de Pomaire, Chile."
+   },
+   {
+    "key": "commons-44170592",
+    "image": "data/library-photos/cache/candidates/c1bb93b1-44a0-42b7-b1ec-8fe62c671782/commons-44170592.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "Empanada de pino frita"
+   },
+   {
+    "key": "commons-43992238",
+    "image": "data/library-photos/cache/candidates/c1bb93b1-44a0-42b7-b1ec-8fe62c671782/commons-43992238.jpg",
+    "width": 2448,
+    "height": 2448,
+    "description": "Typical giant empanada in Pomaire, Chile. Weight: 1 kilo"
+   }
+  ]
+ },
+ {
+  "id": "2d79af8e-5e82-4a97-91ec-4943adaf740c",
+  "title": "Chilli ginger lamb chops",
+  "source": "themealdb",
+  "cuisine": "Turkish",
+  "current": "data/library-photos/cache/current/2d79af8e-5e82-4a97-91ec-4943adaf740c.jpg",
+  "candidates": [
+   {
+    "key": "commons-181496326",
+    "image": "data/library-photos/cache/candidates/2d79af8e-5e82-4a97-91ec-4943adaf740c/commons-181496326.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing lamb chops cooking in a skillet with garlic cloves, fresh rosemary sprigs, and sliced jalapeño peppers. This image documents a homemade lamb dish in preparation as part of the Foodie Disorder global food culture archive."
+   },
+   {
+    "key": "commons-180950562",
+    "image": "data/library-photos/cache/candidates/2d79af8e-5e82-4a97-91ec-4943adaf740c/commons-180950562.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing a home-cooked meal prepared by Liat Portal featuring lamb chops served with sautéed asparagus and green pepper on a white plate placed on a dark wooden surface. This image documents everyday home cooking and ingredient-focused preparation as part of the"
+   },
+   {
+    "key": "commons-181496325",
+    "image": "data/library-photos/cache/candidates/2d79af8e-5e82-4a97-91ec-4943adaf740c/commons-181496325.jpg",
+    "width": 3024,
+    "height": 4032,
+    "description": "High-quality photograph by Liat Portal showing homemade lamb chops prepared and plated with basmati rice, grilled potatoes, sweet potatoes, caramelized onion slices, and roasted garlic on a white plate, made by Liat Portal. This image documents a home-cooked lunch as part of the Foodie Disorder glob"
+   },
+   {
+    "key": "commons-160037750",
+    "image": "data/library-photos/cache/candidates/2d79af8e-5e82-4a97-91ec-4943adaf740c/commons-160037750.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "Lamb chops pilaf"
+   }
+  ]
+ },
+ {
+  "id": "c084c3af-ea49-4188-b409-79168c67a394",
+  "title": "Chilli prawn linguine",
+  "source": "themealdb",
+  "cuisine": "Italian",
+  "current": "data/library-photos/cache/current/c084c3af-ea49-4188-b409-79168c67a394.jpg",
+  "candidates": [
+   {
+    "key": "commons-125741265",
+    "image": "data/library-photos/cache/candidates/c084c3af-ea49-4188-b409-79168c67a394/commons-125741265.jpg",
+    "width": 3652,
+    "height": 2475,
+    "description": "Linguine with Shrimp on a round plate with a fork"
+   },
+   {
+    "key": "commons-75421010",
+    "image": "data/library-photos/cache/candidates/c084c3af-ea49-4188-b409-79168c67a394/commons-75421010.jpg",
+    "width": 3973,
+    "height": 3178,
+    "description": "Bubba Gump Restaurant"
+   },
+   {
+    "key": "commons-41315558",
+    "image": "data/library-photos/cache/candidates/c084c3af-ea49-4188-b409-79168c67a394/commons-41315558.jpg",
+    "width": 1600,
+    "height": 1063,
+    "description": "whats4dinnersolutions.wordpress.com/2010/09/17/sesame-shr..."
+   },
+   {
+    "key": "commons-129041869",
+    "image": "data/library-photos/cache/candidates/c084c3af-ea49-4188-b409-79168c67a394/commons-129041869.jpg",
+    "width": 3434,
+    "height": 3061,
+    "description": "Linguine marinara, Boardwalk Bistro on Hastings, 2023"
+   }
+  ]
+ },
+ {
+  "id": "35a9e905-664d-4ea3-bb68-cc122d83295e",
+  "title": "Chinese Almond Cookies",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/35a9e905-664d-4ea3-bb68-cc122d83295e.jpg",
+  "candidates": [
+   {
+    "key": "commons-40759319",
+    "image": "data/library-photos/cache/candidates/35a9e905-664d-4ea3-bb68-cc122d83295e/commons-40759319.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "Bengaluru Bakery Biscuit"
+   },
+   {
+    "key": "commons-61665608",
+    "image": "data/library-photos/cache/candidates/35a9e905-664d-4ea3-bb68-cc122d83295e/commons-61665608.jpg",
+    "width": 3648,
+    "height": 5472,
+    "description": "Olenka Kotyk 2015-07-10"
+   },
+   {
+    "key": "commons-156007644",
+    "image": "data/library-photos/cache/candidates/35a9e905-664d-4ea3-bb68-cc122d83295e/commons-156007644.jpg",
+    "width": 2862,
+    "height": 4074,
+    "description": "Almond cookies in shop window"
+   },
+   {
+    "key": "commons-102853462",
+    "image": "data/library-photos/cache/candidates/35a9e905-664d-4ea3-bb68-cc122d83295e/commons-102853462.jpg",
+    "width": 4752,
+    "height": 3168,
+    "description": "Almond cookies"
+   }
+  ]
+ },
+ {
+  "id": "f314ad5b-ea8d-4d41-830f-0a535b12daa5",
+  "title": "Chinese Barbecue Spare Ribs",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": null,
+  "candidates": [
+   {
+    "key": "commons-91007000",
+    "image": "data/library-photos/cache/candidates/f314ad5b-ea8d-4d41-830f-0a535b12daa5/commons-91007000.jpg",
+    "width": 4736,
+    "height": 3552,
+    "description": "Sea Urchin & Seafood Rice in Stone Pot"
+   },
+   {
+    "key": "commons-31754564",
+    "image": "data/library-photos/cache/candidates/f314ad5b-ea8d-4d41-830f-0a535b12daa5/commons-31754564.jpg",
+    "width": 3920,
+    "height": 2204,
+    "description": "Seafood fried rice in Singapore."
+   },
+   {
+    "key": "commons-93199109",
+    "image": "data/library-photos/cache/candidates/f314ad5b-ea8d-4d41-830f-0a535b12daa5/commons-93199109.jpg",
+    "width": 5184,
+    "height": 3888,
+    "description": "A seafood rice soup in Chinese restaurant at yuen long"
+   },
+   {
+    "key": "commons-174772903",
+    "image": "data/library-photos/cache/candidates/f314ad5b-ea8d-4d41-830f-0a535b12daa5/commons-174772903.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: \"Our signature fried rice packed with prawns, squid, and scallops, all coated in a rich and savoury crab roe sauce. Properly tasty.\""
+   }
+  ]
+ },
+ {
+  "id": "e893f722-a38b-4ede-97f5-1abf555cff7f",
+  "title": "Chinese Braised Beef Shank",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": null,
+  "candidates": [
+   {
+    "key": "commons-142519495",
+    "image": "data/library-photos/cache/candidates/e893f722-a38b-4ede-97f5-1abf555cff7f/commons-142519495.jpg",
+    "width": 3223,
+    "height": 2878,
+    "description": "Beef Noodle Soup (braised beef shank, mustard greens, baby bok choy) July 2023."
+   },
+   {
+    "key": "commons-142440743",
+    "image": "data/library-photos/cache/candidates/e893f722-a38b-4ede-97f5-1abf555cff7f/commons-142440743.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Boat Noodles with sliced beef round steak, beef ball, braised shank and tendon"
+   }
+  ]
+ },
+ {
+  "id": "695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1",
+  "title": "Chinese Chicken Salad",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1.jpg",
+  "candidates": [
+   {
+    "key": "commons-3631003",
+    "image": "data/library-photos/cache/candidates/695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1/commons-3631003.jpg",
+    "width": 3008,
+    "height": 2000,
+    "description": "Chinese chicken salad."
+   },
+   {
+    "key": "commons-134497246",
+    "image": "data/library-photos/cache/candidates/695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1/commons-134497246.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "salad with chicken and avocado"
+   },
+   {
+    "key": "commons-140430313",
+    "image": "data/library-photos/cache/candidates/695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1/commons-140430313.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "​雞扒沙律。︁"
+   },
+   {
+    "key": "commons-119074710",
+    "image": "data/library-photos/cache/candidates/695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1/commons-119074710.jpg",
+    "width": 4032,
+    "height": 2688,
+    "description": "Salad 15.80 (actually 10.8 after an accidental discount), and the chicken leg 23... hmm, 33.80 for a \"picnic\" at the Canal Business District!"
+   }
+  ]
+ },
+ {
+  "id": "1662b7b9-80af-463d-8d69-0bbc1912f0b5",
+  "title": "Chinese Chive and Egg Stir-Fry",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": null,
+  "candidates": [
+   {
+    "key": "commons-95611944",
+    "image": "data/library-photos/cache/candidates/1662b7b9-80af-463d-8d69-0bbc1912f0b5/commons-95611944.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Dinner with Xavier, the Swiss chef traveller at 包老六饭店 Baolaoliu Restaurant. Dinner for 3 of us including rice was about CNY50 / AUD6 / USD5. The food in this area had stronger flavours, with chilli and garlic being the dominant flavours. In the century egg salad, there was even mint and vinegar, rem"
+   },
+   {
+    "key": "commons-197210443",
+    "image": "data/library-photos/cache/candidates/1662b7b9-80af-463d-8d69-0bbc1912f0b5/commons-197210443.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Dinner with Xavier, the Swiss chef traveller at 包老六饭店 Baolaoliu Restaurant. Dinner for 3 of us including rice was about CNY50 / AUD6 / USD5. The food in this area had stronger flavours, with chilli and garlic being the dominant flavours. In the century egg salad, there was even mint and vinegar, rem"
+   },
+   {
+    "key": "commons-93302919",
+    "image": "data/library-photos/cache/candidates/1662b7b9-80af-463d-8d69-0bbc1912f0b5/commons-93302919.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "This Northern Chinese version of sweet and sour pork was crisper, with only a drizzle of sauce. The name 锅巴肉 Guoba Pork, named after the crusty burnt rice at the bottom of the pot seems a misnomer, but I guess I can see the parallels between the crunchy light batter and the burnt rice. --- Dinner wi"
+   },
+   {
+    "key": "commons-127500238",
+    "image": "data/library-photos/cache/candidates/1662b7b9-80af-463d-8d69-0bbc1912f0b5/commons-127500238.jpg",
+    "width": 3000,
+    "height": 4000,
+    "description": "HK TKL zh:調景嶺 Tiu Keng Leng zh:彩明苑商場 Choi Ming Shopping Centre shop in January 2023 Peking pork chop Deep fried pork chop with salt and pepper / Fried Pork Chop with Spicy Salt 椒鹽豬扒 Minced pork and eggplant pot with tangy sauce / Spicy eggplant with salted fish 魚香茄子 Steamed egg with conpoy and mince"
+   }
+  ]
+ },
+ {
+  "id": "93869d72-c766-48fe-b9a0-221b178c172a",
+  "title": "Chinese Orange Chicken",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/93869d72-c766-48fe-b9a0-221b178c172a.jpg",
+  "candidates": [
+   {
+    "key": "commons-11138608",
+    "image": "data/library-photos/cache/candidates/93869d72-c766-48fe-b9a0-221b178c172a/commons-11138608.jpg",
+    "width": 2033,
+    "height": 3060,
+    "description": "Orange chicken . Photographed in Oakland, California, USA."
+   },
+   {
+    "key": "commons-78711033",
+    "image": "data/library-photos/cache/candidates/93869d72-c766-48fe-b9a0-221b178c172a/commons-78711033.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "Yummy"
+   },
+   {
+    "key": "commons-41315606",
+    "image": "data/library-photos/cache/candidates/93869d72-c766-48fe-b9a0-221b178c172a/commons-41315606.jpg",
+    "width": 2048,
+    "height": 1432,
+    "description": "whats4dinnersolutions.wordpress.com/2011/10/15/orange-chi..."
+   },
+   {
+    "key": "commons-41315621",
+    "image": "data/library-photos/cache/candidates/93869d72-c766-48fe-b9a0-221b178c172a/commons-41315621.jpg",
+    "width": 1600,
+    "height": 1063,
+    "description": "whats4dinnersolutions.wordpress.com/2010/08/17/making-chi..."
+   }
+  ]
+ },
+ {
+  "id": "bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a",
+  "title": "Chinese Sausage Rice in a Rice Cooker",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a.jpg",
+  "candidates": [
+   {
+    "key": "commons-72359754",
+    "image": "data/library-photos/cache/candidates/bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a/commons-72359754.jpg",
+    "width": 2121,
+    "height": 1192,
+    "description": "Taiwanese nuomichang (glutinous rice sausage)"
+   },
+   {
+    "key": "commons-83152029",
+    "image": "data/library-photos/cache/candidates/bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a/commons-83152029.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Mum's Oily Rice - Glutinous Rice Rice with mushroom, Chinese Sausage"
+   },
+   {
+    "key": "commons-48864229",
+    "image": "data/library-photos/cache/candidates/bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a/commons-48864229.jpg",
+    "width": 4928,
+    "height": 3264,
+    "description": "​臺灣家庭料理的臘味蒸飯與味噌湯。"
+   },
+   {
+    "key": "commons-83134683",
+    "image": "data/library-photos/cache/candidates/bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a/commons-83134683.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "腊味煲仔饭 Chinese Sausage and Cured Pork Hotpot Rice - First Taste AUD8.50 The rice grains were nice and firm, all with a light coating of the drippings from the cured meats. The best part was the crispy burnt rice at the bottom and sides! --- Cantonese/HK style restaurant with good double-boiled soups,"
+   }
+  ]
+ },
+ {
+  "id": "835eba8c-f32a-4808-b675-f8135f6f4597",
+  "title": "Chinese Sesame Flatbread",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/835eba8c-f32a-4808-b675-f8135f6f4597.jpg",
+  "candidates": [
+   {
+    "key": "commons-195856486",
+    "image": "data/library-photos/cache/candidates/835eba8c-f32a-4808-b675-f8135f6f4597/commons-195856486.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: - NEW FOREST OYSTER MUSHROOMS - SOY/GINGER GLAZE - GOCHUJANG MAYO - SESAME PICKLED CARROT & CUCUMBER - SWEET PICKLED RED ONION SESAME, CHILLI, LEMON, CORIANDER, MAGGI Cut in half for sharing."
+   },
+   {
+    "key": "commons-93193046",
+    "image": "data/library-photos/cache/candidates/835eba8c-f32a-4808-b675-f8135f6f4597/commons-93193046.jpg",
+    "width": 3739,
+    "height": 2803,
+    "description": "Sesame Flatbread (Shaobing)"
+   },
+   {
+    "key": "commons-107196548",
+    "image": "data/library-photos/cache/candidates/835eba8c-f32a-4808-b675-f8135f6f4597/commons-107196548.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "Jingzhou-style guokui flatbread with red bean paste. Made by A Gan Guo Kui, Singapore."
+   },
+   {
+    "key": "commons-197356350",
+    "image": "data/library-photos/cache/candidates/835eba8c-f32a-4808-b675-f8135f6f4597/commons-197356350.jpg",
+    "width": 8256,
+    "height": 5504,
+    "description": "This image shows a baker working beside a large oven while freshly prepared Uzbek flatbreads are displayed in the foreground. The golden breads are decorated with sesame and other seeds. It documents cultural heritage in Tashkent, Uzbekistan."
+   }
+  ]
+ },
+ {
+  "id": "169bea6f-90ca-4645-a46f-772ae78959ef",
+  "title": "Chinese Spinach with Garlic",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/169bea6f-90ca-4645-a46f-772ae78959ef.jpg",
+  "candidates": [
+   {
+    "key": "commons-77858938",
+    "image": "data/library-photos/cache/candidates/169bea6f-90ca-4645-a46f-772ae78959ef/commons-77858938.jpg",
+    "width": 2038,
+    "height": 1378,
+    "description": "A dish of Stir-Fry Spinach with Tofu 菠菜炒豆腐, also referred as 金鑲白玉板，紅嘴綠鸚哥[1], roughly translated in English as Golden White Jade and Green Parrot. In China, it is rumored that both Qianlong Emperor and Empress Dowager Cixi liked the simple-yet-delicious stir-fried dish. Picture taken in Clovis Califo"
+   },
+   {
+    "key": "commons-63731182",
+    "image": "data/library-photos/cache/candidates/169bea6f-90ca-4645-a46f-772ae78959ef/commons-63731182.jpg",
+    "width": 2560,
+    "height": 1440,
+    "description": "A dish of Stir-Fry Spinach with Tofu 菠菜炒豆腐, also referred as 金鑲白玉板，紅嘴綠鸚哥 [ 1 ] , roughly translated in English as Golden White Jade and Green Parrot. In China, it is rumored that both Qianlong Emperor and Empress Dowager Cixi liked the simple-yet-delicious stir-fried dish. Picture taken in Clovis Ca"
+   },
+   {
+    "key": "commons-8051504",
+    "image": "data/library-photos/cache/candidates/169bea6f-90ca-4645-a46f-772ae78959ef/commons-8051504.jpg",
+    "width": 1920,
+    "height": 1285,
+    "description": "(Phat) phak boong fai daeng (Thai: ผัดผักบุ้งไฟแดง): Literally it means \"(fried) red fire morning-glory\". The basic recipe is morning-glory (Ipomoea aquatica) stir-fried with garlic, chillies, Thai yellow bean sauce (taochiao), oyster sauce and fish sauce. For the correct taste, one needs to get the"
+   },
+   {
+    "key": "commons-130892750",
+    "image": "data/library-photos/cache/candidates/169bea6f-90ca-4645-a46f-772ae78959ef/commons-130892750.jpg",
+    "width": 2819,
+    "height": 2009,
+    "description": "An air-fried version Sichuan pepper chicken. The original uploader is a Chaoshanese descent."
+   }
+  ]
+ },
+ {
+  "id": "dbeed194-546d-42c8-a986-b529e2c87351",
+  "title": "Chinese Tomato Egg Stir Fry",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/dbeed194-546d-42c8-a986-b529e2c87351.jpg",
+  "candidates": [
+   {
+    "key": "commons-80179120",
+    "image": "data/library-photos/cache/candidates/dbeed194-546d-42c8-a986-b529e2c87351/commons-80179120.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "Hunan cuisine, stir-fried tomato with eggs."
+   },
+   {
+    "key": "commons-161362547",
+    "image": "data/library-photos/cache/candidates/dbeed194-546d-42c8-a986-b529e2c87351/commons-161362547.jpg",
+    "width": 4096,
+    "height": 3072,
+    "description": "Tomato scrambled eggs noodles"
+   },
+   {
+    "key": "commons-18015234",
+    "image": "data/library-photos/cache/candidates/dbeed194-546d-42c8-a986-b529e2c87351/commons-18015234.jpg",
+    "width": 1200,
+    "height": 1600,
+    "description": "Chinese style stir-fried tomato and scrambled eggs"
+   },
+   {
+    "key": "commons-18103600",
+    "image": "data/library-photos/cache/candidates/dbeed194-546d-42c8-a986-b529e2c87351/commons-18103600.jpg",
+    "width": 1197,
+    "height": 1389,
+    "description": "Chinese style stir-fried tomato and scrambled egg"
+   }
+  ]
+ },
+ {
+  "id": "90adb9ad-41e0-466c-99d4-a0731de833fd",
+  "title": "Chinon Apple Tarts",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/90adb9ad-41e0-466c-99d4-a0731de833fd.jpg",
+  "candidates": [
+   {
+    "key": "commons-88494704",
+    "image": "data/library-photos/cache/candidates/90adb9ad-41e0-466c-99d4-a0731de833fd/commons-88494704.jpg",
+    "width": 4333,
+    "height": 2888,
+    "description": "Simple and easy apple pie served with vanilla ice cream, on a gingham tablecloth in Lysekil, Sweden. Image focus stacked from five photos using Photoshop. Recipe : Ingredients : 150 g butter, 1 dl sugar, 3 dl all-purpose flour, 1 dl rolled oats, 3 large apples Directions : Mix sugar, flour and oats "
+   },
+   {
+    "key": "commons-100565381",
+    "image": "data/library-photos/cache/candidates/90adb9ad-41e0-466c-99d4-a0731de833fd/commons-100565381.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "apple pie"
+   },
+   {
+    "key": "commons-49894376",
+    "image": "data/library-photos/cache/candidates/90adb9ad-41e0-466c-99d4-a0731de833fd/commons-49894376.jpg",
+    "width": 2500,
+    "height": 2500,
+    "description": "Apple tart pie and custard Sunday Lunch pudding in The Crown public house garden at Newgate Street Village (name of road), at Newgate Street , in the civil parish of Hatfield , and the Borough of Welwyn Hatfield , Hertfordshire , England. Camera : Camera : Canon EOS 6D with Canon EF 24-105mm F4L IS "
+   },
+   {
+    "key": "commons-102240604",
+    "image": "data/library-photos/cache/candidates/90adb9ad-41e0-466c-99d4-a0731de833fd/commons-102240604.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "apple pie"
+   }
+  ]
+ },
+ {
+  "id": "c63d9d94-4542-4d3a-8252-94a85a4a02ce",
+  "title": "Chivito uruguayo",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "current": "data/library-photos/cache/current/c63d9d94-4542-4d3a-8252-94a85a4a02ce.jpg",
+  "candidates": [
+   {
+    "key": "commons-8183070",
+    "image": "data/library-photos/cache/candidates/c63d9d94-4542-4d3a-8252-94a85a4a02ce/commons-8183070.jpg",
+    "width": 3648,
+    "height": 2736,
+    "description": "Chivito sandwich"
+   },
+   {
+    "key": "commons-111656664",
+    "image": "data/library-photos/cache/candidates/c63d9d94-4542-4d3a-8252-94a85a4a02ce/commons-111656664.jpg",
+    "width": 3072,
+    "height": 2304,
+    "description": "Homemade Uruguayan chivito"
+   },
+   {
+    "key": "commons-111656869",
+    "image": "data/library-photos/cache/candidates/c63d9d94-4542-4d3a-8252-94a85a4a02ce/commons-111656869.jpg",
+    "width": 2304,
+    "height": 3072,
+    "description": "chivito"
+   },
+   {
+    "key": "commons-55343853",
+    "image": "data/library-photos/cache/candidates/c63d9d94-4542-4d3a-8252-94a85a4a02ce/commons-55343853.jpg",
+    "width": 3664,
+    "height": 2760,
+    "description": "El chivito es un plato típico uruguayo. Es un sándwich de carne vacuna (generalmente de lomo a la plancha), a la que se agregan jamón cocido, panceta (tocino), queso muzzarella (mozzarella), lechuga, tomate, rodajas de huevo duro y morrón (pimiento) y mayonesa. Es común que se lo acompañe con una po"
+   }
+  ]
+ },
+ {
+  "id": "b1b8f80a-4a6e-4636-87af-10406511081a",
+  "title": "Choc Chip Pecan Pie",
+  "source": "themealdb",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/b1b8f80a-4a6e-4636-87af-10406511081a.jpg",
+  "candidates": [
+   {
+    "key": "commons-91979516",
+    "image": "data/library-photos/cache/candidates/b1b8f80a-4a6e-4636-87af-10406511081a/commons-91979516.jpg",
+    "width": 3032,
+    "height": 1074,
+    "description": "Selection of ice cream flavors available at an ice cream shop in Fruitland Park, Florida."
+   },
+   {
+    "key": "commons-95013067",
+    "image": "data/library-photos/cache/candidates/b1b8f80a-4a6e-4636-87af-10406511081a/commons-95013067.jpg",
+    "width": 3877,
+    "height": 2736,
+    "description": "Pecan Pie slice"
+   },
+   {
+    "key": "commons-15764019",
+    "image": "data/library-photos/cache/candidates/b1b8f80a-4a6e-4636-87af-10406511081a/commons-15764019.jpg",
+    "width": 2174,
+    "height": 1317,
+    "description": "A slice of pecan pie . (Edited with GIMP 2.6.11 - Omitted background items)"
+   },
+   {
+    "key": "commons-858947",
+    "image": "data/library-photos/cache/candidates/b1b8f80a-4a6e-4636-87af-10406511081a/commons-858947.jpg",
+    "width": 2560,
+    "height": 1920,
+    "description": "A slice of pecan pie ."
+   }
+  ]
+ },
+ {
+  "id": "38b11d65-d3b7-4697-b2c9-85b2e813726b",
+  "title": "Chocolate Avocado Mousse",
+  "source": "themealdb",
+  "cuisine": "British",
+  "current": "data/library-photos/cache/current/38b11d65-d3b7-4697-b2c9-85b2e813726b.jpg",
+  "candidates": [
+   {
+    "key": "commons-83080774",
+    "image": "data/library-photos/cache/candidates/38b11d65-d3b7-4697-b2c9-85b2e813726b/commons-83080774.jpg",
+    "width": 5149,
+    "height": 3862,
+    "description": "Avocado chocolate mousse"
+   },
+   {
+    "key": "commons-73013915",
+    "image": "data/library-photos/cache/candidates/38b11d65-d3b7-4697-b2c9-85b2e813726b/commons-73013915.jpg",
+    "width": 2805,
+    "height": 2104,
+    "description": "Star Chefs Rising Stars Awards and Gala"
+   },
+   {
+    "key": "commons-142439997",
+    "image": "data/library-photos/cache/candidates/38b11d65-d3b7-4697-b2c9-85b2e813726b/commons-142439997.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "A bowl of white chocolate mousse and a glass of Sandels beer (can partially shown on the right) served at a cabinet at the Flamingo entertainment centre in Pakkala, Vantaa, Finland."
+   },
+   {
+    "key": "commons-103642408",
+    "image": "data/library-photos/cache/candidates/38b11d65-d3b7-4697-b2c9-85b2e813726b/commons-103642408.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "Coffee glass which is made of chocolate . Filled with coffee and chocolate ganache, coffee mousse, coffee chocolate paraline, Caramel filling, coffee foam . Trying to represent Dalgona Coffee"
+   }
+  ]
+ },
+ {
+  "id": "eeb4d61e-c16c-4ffc-80bb-34b15a450bca",
+  "title": "Chocolate Cake",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/eeb4d61e-c16c-4ffc-80bb-34b15a450bca.jpg",
+  "candidates": [
+   {
+    "key": "commons-104101424",
+    "image": "data/library-photos/cache/candidates/eeb4d61e-c16c-4ffc-80bb-34b15a450bca/commons-104101424.jpg",
+    "width": 5536,
+    "height": 3766,
+    "description": "Piece of chocolate cake, sprinkled with cocoa powder , on a white plate decorated with chocolate sauce."
+   },
+   {
+    "key": "commons-60633971",
+    "image": "data/library-photos/cache/candidates/eeb4d61e-c16c-4ffc-80bb-34b15a450bca/commons-60633971.jpg",
+    "width": 3500,
+    "height": 2333,
+    "description": "A chocolate cake and sugar-topped Victoria sponge on an outdoor table of a garden in Essex , England. Camera : Canon EOS 6D with Canon EF 24-105mm F4L IS USM lens. Software : RAW file lens-corrected, optimized and converted with DxO OpticsPro 11 Elite , and further optimized with Adobe Photoshop CS2"
+   },
+   {
+    "key": "commons-156789528",
+    "image": "data/library-photos/cache/candidates/eeb4d61e-c16c-4ffc-80bb-34b15a450bca/commons-156789528.jpg",
+    "width": 4080,
+    "height": 3072,
+    "description": "Chocolate cake in Tokyo"
+   },
+   {
+    "key": "commons-154491794",
+    "image": "data/library-photos/cache/candidates/eeb4d61e-c16c-4ffc-80bb-34b15a450bca/commons-154491794.jpg",
+    "width": 3000,
+    "height": 4000,
+    "description": "Chocolate cake from India."
+   }
+  ]
+ },
+ {
+  "id": "1484a150-c2b3-49ce-a5d5-ce944fb5535f",
+  "title": "Chocolate Caramel Crispy",
+  "source": "themealdb",
+  "cuisine": "British",
+  "current": "data/library-photos/cache/current/1484a150-c2b3-49ce-a5d5-ce944fb5535f.jpg",
+  "candidates": [
+   {
+    "key": "commons-10362730",
+    "image": "data/library-photos/cache/candidates/1484a150-c2b3-49ce-a5d5-ce944fb5535f/commons-10362730.jpg",
+    "width": 2560,
+    "height": 1920,
+    "description": "caramelized rice crispies (?) shortbread cookie very good"
+   },
+   {
+    "key": "commons-11961311",
+    "image": "data/library-photos/cache/candidates/1484a150-c2b3-49ce-a5d5-ce944fb5535f/commons-11961311.jpg",
+    "width": 3100,
+    "height": 1000,
+    "description": "A Nestle Toffee Crisp candy bar split in half."
+   },
+   {
+    "key": "commons-146129027",
+    "image": "data/library-photos/cache/candidates/1484a150-c2b3-49ce-a5d5-ce944fb5535f/commons-146129027.jpg",
+    "width": 1600,
+    "height": 1200,
+    "description": "Chewy Caramel, Milk Chocolate, Crispy Crunchies"
+   },
+   {
+    "key": "commons-197008443",
+    "image": "data/library-photos/cache/candidates/1484a150-c2b3-49ce-a5d5-ce944fb5535f/commons-197008443.jpg",
+    "width": 1470,
+    "height": 1385,
+    "description": "2015 Los Churreros B2B Business-to-Business (deep frying ready-to-cook frozen signature crispy golden churros - extruding dough typically straight dusted with white sugar - flavored dips dark chocolate salted caramel)"
+   }
+  ]
+ },
+ {
+  "id": "d6958097-6223-4784-b8bb-06222789f85e",
+  "title": "Chocolate Chip Cookies",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/d6958097-6223-4784-b8bb-06222789f85e.jpg",
+  "candidates": [
+   {
+    "key": "commons-17266903",
+    "image": "data/library-photos/cache/candidates/d6958097-6223-4784-b8bb-06222789f85e/commons-17266903.jpg",
+    "width": 2400,
+    "height": 1650,
+    "description": "A chocolate chip cookie. This is from a Duane Reade brand of cookies."
+   },
+   {
+    "key": "commons-11866363",
+    "image": "data/library-photos/cache/candidates/d6958097-6223-4784-b8bb-06222789f85e/commons-11866363.jpg",
+    "width": 2096,
+    "height": 2100,
+    "description": "Peanut butter cookie with a chocolate chip smiley face"
+   },
+   {
+    "key": "commons-99796496",
+    "image": "data/library-photos/cache/candidates/d6958097-6223-4784-b8bb-06222789f85e/commons-99796496.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "Chocolate chip cookies scattered on brown cutting board, small pile of hand-cut chocolate chips in corner with part of a large kitchen knife angled away"
+   },
+   {
+    "key": "commons-150283142",
+    "image": "data/library-photos/cache/candidates/d6958097-6223-4784-b8bb-06222789f85e/commons-150283142.jpg",
+    "width": 5184,
+    "height": 3888,
+    "description": "Chocolate chip cookies fresh from the oven, on stove-top of home kitchen in New Orleans, July 2024"
+   }
+  ]
+ },
+ {
+  "id": "39af1af9-0e92-419f-af02-8b4b71847146",
+  "title": "Chocolate churros with chocolate & salted caramel sauce",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/39af1af9-0e92-419f-af02-8b4b71847146.jpg",
+  "candidates": [
+   {
+    "key": "commons-17760569",
+    "image": "data/library-photos/cache/candidates/39af1af9-0e92-419f-af02-8b4b71847146/commons-17760569.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Chocolate a la taza con churros de lazo, en Madrid."
+   },
+   {
+    "key": "commons-116078689",
+    "image": "data/library-photos/cache/candidates/39af1af9-0e92-419f-af02-8b4b71847146/commons-116078689.jpg",
+    "width": 4032,
+    "height": 2268,
+    "description": "Chocolate con churros."
+   },
+   {
+    "key": "commons-2518576",
+    "image": "data/library-photos/cache/candidates/39af1af9-0e92-419f-af02-8b4b71847146/commons-2518576.jpg",
+    "width": 3072,
+    "height": 2304,
+    "description": "Churros with chocolate in en:El Hatillo Municipality ."
+   },
+   {
+    "key": "commons-57254479",
+    "image": "data/library-photos/cache/candidates/39af1af9-0e92-419f-af02-8b4b71847146/commons-57254479.jpg",
+    "width": 5472,
+    "height": 3648,
+    "description": "Churros con chocolate, en México."
+   }
+  ]
+ },
+ {
+  "id": "34c7acd2-7188-4b62-bcad-24220d495a2b",
+  "title": "Chocolate Coconut Squares",
+  "source": "themealdb",
+  "cuisine": "Australian",
+  "current": "data/library-photos/cache/current/34c7acd2-7188-4b62-bcad-24220d495a2b.jpg",
+  "candidates": [
+   {
+    "key": "commons-153792181",
+    "image": "data/library-photos/cache/candidates/34c7acd2-7188-4b62-bcad-24220d495a2b/commons-153792181.jpg",
+    "width": 2889,
+    "height": 2507,
+    "description": "Fudgy Saganà Chocolate brownie baked with creamed coconut butter photos in October 8, 2024."
+   },
+   {
+    "key": "commons-153792197",
+    "image": "data/library-photos/cache/candidates/34c7acd2-7188-4b62-bcad-24220d495a2b/commons-153792197.jpg",
+    "width": 3785,
+    "height": 2367,
+    "description": "Fudgy Saganà Chocolate brownie baked with creamed coconut butter photos in October 8, 2024."
+   },
+   {
+    "key": "commons-83080772",
+    "image": "data/library-photos/cache/candidates/34c7acd2-7188-4b62-bcad-24220d495a2b/commons-83080772.jpg",
+    "width": 5049,
+    "height": 3787,
+    "description": "Coconut flour raspberry brownies"
+   },
+   {
+    "key": "commons-65592245",
+    "image": "data/library-photos/cache/candidates/34c7acd2-7188-4b62-bcad-24220d495a2b/commons-65592245.jpg",
+    "width": 1703,
+    "height": 1196,
+    "description": "Sponge cake squares covered in chocolate and shredded coconut displayed on a green and gold floral plate accompanied by a cup of black tea in a cream and gold teacup and saucer."
+   }
+  ]
+ },
+ {
+  "id": "b961d7b6-d152-43c4-b8b1-a71a28ac4c32",
+  "title": "Chocolate Gateau",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/b961d7b6-d152-43c4-b8b1-a71a28ac4c32.jpg",
+  "candidates": [
+   {
+    "key": "commons-104101424",
+    "image": "data/library-photos/cache/candidates/b961d7b6-d152-43c4-b8b1-a71a28ac4c32/commons-104101424.jpg",
+    "width": 5536,
+    "height": 3766,
+    "description": "Piece of chocolate cake, sprinkled with cocoa powder , on a white plate decorated with chocolate sauce."
+   },
+   {
+    "key": "commons-149661114",
+    "image": "data/library-photos/cache/candidates/b961d7b6-d152-43c4-b8b1-a71a28ac4c32/commons-149661114.jpg",
+    "width": 16320,
+    "height": 12240,
+    "description": "Chocolate Cake from Udaipur, India"
+   },
+   {
+    "key": "commons-184207424",
+    "image": "data/library-photos/cache/candidates/b961d7b6-d152-43c4-b8b1-a71a28ac4c32/commons-184207424.jpg",
+    "width": 2880,
+    "height": 2304,
+    "description": "Gateau au chocolat"
+   },
+   {
+    "key": "commons-129235409",
+    "image": "data/library-photos/cache/candidates/b961d7b6-d152-43c4-b8b1-a71a28ac4c32/commons-129235409.jpg",
+    "width": 3000,
+    "height": 4000,
+    "description": "Gateâu belle-Hèléne"
+   }
+  ]
+ },
+ {
+  "id": "c7242536-7556-42d4-8f07-ebe65c2eb85a",
+  "title": "Chocolate Pudding",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/c7242536-7556-42d4-8f07-ebe65c2eb85a.jpg",
+  "candidates": [
+   {
+    "key": "commons-147381009",
+    "image": "data/library-photos/cache/candidates/c7242536-7556-42d4-8f07-ebe65c2eb85a/commons-147381009.jpg",
+    "width": 1918,
+    "height": 1937,
+    "description": "Chocolate Sweet Dish"
+   },
+   {
+    "key": "commons-56573645",
+    "image": "data/library-photos/cache/candidates/c7242536-7556-42d4-8f07-ebe65c2eb85a/commons-56573645.jpg",
+    "width": 2560,
+    "height": 1920,
+    "description": "Chocolate pudding with a butterfly-shaped white chocolate deco on it."
+   },
+   {
+    "key": "commons-10213702",
+    "image": "data/library-photos/cache/candidates/c7242536-7556-42d4-8f07-ebe65c2eb85a/commons-10213702.jpg",
+    "width": 3888,
+    "height": 2592,
+    "description": "Chocolate pudding in glasses"
+   },
+   {
+    "key": "commons-72246173",
+    "image": "data/library-photos/cache/candidates/c7242536-7556-42d4-8f07-ebe65c2eb85a/commons-72246173.jpg",
+    "width": 2978,
+    "height": 4634,
+    "description": "Jacky Makupala Maitosuklaa pudding."
+   }
+  ]
+ },
+ {
+  "id": "82d0245b-dc54-4d49-a91f-c345f91f8e02",
+  "title": "Chocolate Raspberry Brownies",
+  "source": "themealdb",
+  "cuisine": "United States",
+  "current": "data/library-photos/cache/current/82d0245b-dc54-4d49-a91f-c345f91f8e02.jpg",
+  "candidates": [
+   {
+    "key": "commons-83080772",
+    "image": "data/library-photos/cache/candidates/82d0245b-dc54-4d49-a91f-c345f91f8e02/commons-83080772.jpg",
+    "width": 5049,
+    "height": 3787,
+    "description": "Coconut flour raspberry brownies"
+   },
+   {
+    "key": "commons-32568539",
+    "image": "data/library-photos/cache/candidates/82d0245b-dc54-4d49-a91f-c345f91f8e02/commons-32568539.jpg",
+    "width": 2368,
+    "height": 3157,
+    "description": "In collaboration with Les Invitations Paper Candy we prepared a dessert table for WordCamp Montreal . To satisfy the sweet tooth of the 200 attendees we baked cupcakes, brownie pops, whoopie pies, and chocolate chip cookies. To go along with the WordCamp colour scheme we accented the table with blue"
+   },
+   {
+    "key": "commons-32568532",
+    "image": "data/library-photos/cache/candidates/82d0245b-dc54-4d49-a91f-c345f91f8e02/commons-32568532.jpg",
+    "width": 2182,
+    "height": 2909,
+    "description": "In collaboration with Les Invitations Paper Candy we prepared a dessert table for WordCamp Montreal . To satisfy the sweet tooth of the 200 attendees we baked cupcakes, brownie pops, whoopie pies, and chocolate chip cookies. To go along with the WordCamp colour scheme we accented the table with blue"
+   },
+   {
+    "key": "commons-7476902",
+    "image": "data/library-photos/cache/candidates/82d0245b-dc54-4d49-a91f-c345f91f8e02/commons-7476902.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "Assortment of Vachon Inc. snack pastries. From top to bottom, left to right : Hop & Go original, Crispy Snack Vanilla, Super Jos. Louis, Jelly Log, Brownies with peanuts, and Passion Flaky raspberry."
+   }
+  ]
+ },
+ {
+  "id": "9de5fbd7-6505-405e-b062-e0c61c7535d5",
+  "title": "Chocolate Souffle",
+  "source": "themealdb",
+  "cuisine": "France",
+  "current": "data/library-photos/cache/current/9de5fbd7-6505-405e-b062-e0c61c7535d5.jpg",
+  "candidates": [
+   {
+    "key": "commons-110804273",
+    "image": "data/library-photos/cache/candidates/9de5fbd7-6505-405e-b062-e0c61c7535d5/commons-110804273.jpg",
+    "width": 2129,
+    "height": 2839,
+    "description": "soufflé chocolat dans un moule porcelaine de 8 cm"
+   },
+   {
+    "key": "commons-194792531",
+    "image": "data/library-photos/cache/candidates/9de5fbd7-6505-405e-b062-e0c61c7535d5/commons-194792531.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: \"Delicate and fluffy baked dessert, infused with chocolate center served warm with ice-cream\""
+   },
+   {
+    "key": "commons-110803008",
+    "image": "data/library-photos/cache/candidates/9de5fbd7-6505-405e-b062-e0c61c7535d5/commons-110803008.jpg",
+    "width": 2560,
+    "height": 1920,
+    "description": "soufflé qui menace l'effondrement"
+   },
+   {
+    "key": "commons-103534363",
+    "image": "data/library-photos/cache/candidates/9de5fbd7-6505-405e-b062-e0c61c7535d5/commons-103534363.jpg",
+    "width": 2000,
+    "height": 1500,
+    "description": "New Years Eve 2009/2010"
+   }
+  ]
+ },
+ {
+  "id": "3a769002-951e-48ab-a5b0-9aac32c6001f",
+  "title": "Chongqing Hot and Sour Noodles",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "current": "data/library-photos/cache/current/3a769002-951e-48ab-a5b0-9aac32c6001f.jpg",
+  "candidates": [
+   {
+    "key": "commons-100172845",
+    "image": "data/library-photos/cache/candidates/3a769002-951e-48ab-a5b0-9aac32c6001f/commons-100172845.jpg",
+    "width": 4032,
+    "height": 3024,
+    "description": "A bowl of Chengdu-style hot and sour noodles (酸辣粉 suānlàfěn), topped with pork intestines (肥肠), peanuts and bok choy."
+   },
+   {
+    "key": "commons-94098202",
+    "image": "data/library-photos/cache/candidates/3a769002-951e-48ab-a5b0-9aac32c6001f/commons-94098202.jpg",
+    "width": 1280,
+    "height": 1280,
+    "description": "揚州商人のスーラータンメン"
+   },
+   {
+    "key": "commons-110122362",
+    "image": "data/library-photos/cache/candidates/3a769002-951e-48ab-a5b0-9aac32c6001f/commons-110122362.jpg",
+    "width": 4272,
+    "height": 2848,
+    "description": "From Noodle Theory in Rockridge, Oakland."
+   },
+   {
+    "key": "commons-70628353",
+    "image": "data/library-photos/cache/candidates/3a769002-951e-48ab-a5b0-9aac32c6001f/commons-70628353.jpg",
+    "width": 1875,
+    "height": 1224,
+    "description": "A bowl of Hot & Sour Noodles (酸辣麵). It is a part of Sichuan cuisine. It recipe is from the cookbook Chinese Cuisine: Szechwan Style by Lee Hwa Lin. Published by Chin Chin Publishing Co., Ltd. (Taipei, Taiwan, 1993)."
+   }
+  ]
+ },
+ {
+  "id": "a0faa6a6-3fd4-4a62-9d74-e156ee914b29",
+  "title": "Choripán",
+  "source": "themealdb",
+  "cuisine": "Argentina",
+  "current": "data/library-photos/cache/current/a0faa6a6-3fd4-4a62-9d74-e156ee914b29.jpg",
+  "candidates": [
+   {
+    "key": "commons-187203681",
+    "image": "data/library-photos/cache/candidates/a0faa6a6-3fd4-4a62-9d74-e156ee914b29/commons-187203681.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "Choripán (argentine sandwich with chorizo)."
+   },
+   {
+    "key": "commons-187203708",
+    "image": "data/library-photos/cache/candidates/a0faa6a6-3fd4-4a62-9d74-e156ee914b29/commons-187203708.jpg",
+    "width": 3578,
+    "height": 2976,
+    "description": "Choripán (argentine sandwich with chorizo and Savora)."
+   },
+   {
+    "key": "commons-10718481",
+    "image": "data/library-photos/cache/candidates/a0faa6a6-3fd4-4a62-9d74-e156ee914b29/commons-10718481.jpg",
+    "width": 2874,
+    "height": 2053,
+    "description": "Choripán."
+   },
+   {
+    "key": "commons-179020922",
+    "image": "data/library-photos/cache/candidates/a0faa6a6-3fd4-4a62-9d74-e156ee914b29/commons-179020922.jpg",
+    "width": 4000,
+    "height": 3000,
+    "description": "Argentine Choripán."
+   }
+  ]
+ },
+ {
+  "id": "6a548636-dc0f-4d16-a990-752ed99b0160",
+  "title": "Chorizo & chickpea soup",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/6a548636-dc0f-4d16-a990-752ed99b0160.jpg",
+  "candidates": [
+   {
+    "key": "commons-89104615",
+    "image": "data/library-photos/cache/candidates/6a548636-dc0f-4d16-a990-752ed99b0160/commons-89104615.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "Ingredientes"
+   },
+   {
+    "key": "commons-11073480",
+    "image": "data/library-photos/cache/candidates/6a548636-dc0f-4d16-a990-752ed99b0160/commons-11073480.jpg",
+    "width": 3888,
+    "height": 2592,
+    "description": "Potaje de verano (Toro)"
+   },
+   {
+    "key": "commons-17723019",
+    "image": "data/library-photos/cache/candidates/6a548636-dc0f-4d16-a990-752ed99b0160/commons-17723019.jpg",
+    "width": 2592,
+    "height": 1944,
+    "description": "Callos con garbanzos"
+   },
+   {
+    "key": "commons-9623832",
+    "image": "data/library-photos/cache/candidates/6a548636-dc0f-4d16-a990-752ed99b0160/commons-9623832.jpg",
+    "width": 3888,
+    "height": 2592,
+    "description": "Potaje de garbanzos con bacalao y grelos"
+   }
+  ]
+ },
+ {
+  "id": "4a8d68e7-dd3e-4fba-a09c-dee2ac396a2e",
+  "title": "Chorizo & soft-boiled egg salad",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/4a8d68e7-dd3e-4fba-a09c-dee2ac396a2e.jpg",
+  "candidates": [
+   {
+    "key": "commons-90731207",
+    "image": "data/library-photos/cache/candidates/4a8d68e7-dd3e-4fba-a09c-dee2ac396a2e/commons-90731207.jpg",
+    "width": 2048,
+    "height": 1566,
+    "description": "Chorizo, roasted capsicum, tomatoes, hard boiled eggs and rocket salad"
+   },
+   {
+    "key": "commons-24282506",
+    "image": "data/library-photos/cache/candidates/4a8d68e7-dd3e-4fba-a09c-dee2ac396a2e/commons-24282506.jpg",
+    "width": 3605,
+    "height": 2440,
+    "description": "This is their Pierre Loti breakfast, and it's going for that Mediterranean theme, with olives, halloumi and fresh salad vegetables. Plus an egg and chorizo. It looked good but was a bit unsatisfying. Also, very salty. At Pierre Loti , Rathbone Place."
+   },
+   {
+    "key": "commons-174675204",
+    "image": "data/library-photos/cache/candidates/4a8d68e7-dd3e-4fba-a09c-dee2ac396a2e/commons-174675204.jpg",
+    "width": 3776,
+    "height": 2520,
+    "description": "This gentrified conservation area of Peckham gets the pub refit that it's been waiting for, now returned to the original name. The place is packed and noisy on a Friday evening and the food is excellent. (View of bar and rear interior.) (Photo of menu, June 2010.) (Photos of burger, chorizo scotch e"
+   }
+  ]
+ },
+ {
+  "id": "d3f56a7b-7862-4e11-9426-58f04f00344c",
+  "title": "Chorizo & tomato salad",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/d3f56a7b-7862-4e11-9426-58f04f00344c.jpg",
+  "candidates": [
+   {
+    "key": "commons-90731207",
+    "image": "data/library-photos/cache/candidates/d3f56a7b-7862-4e11-9426-58f04f00344c/commons-90731207.jpg",
+    "width": 2048,
+    "height": 1566,
+    "description": "Chorizo, roasted capsicum, tomatoes, hard boiled eggs and rocket salad"
+   },
+   {
+    "key": "commons-32858218",
+    "image": "data/library-photos/cache/candidates/d3f56a7b-7862-4e11-9426-58f04f00344c/commons-32858218.jpg",
+    "width": 2560,
+    "height": 2020,
+    "description": "An open sandwich of toasted baguette with Gorgonzola, grilled chorizo, rocket salad, and tomatoes"
+   },
+   {
+    "key": "commons-177703604",
+    "image": "data/library-photos/cache/candidates/d3f56a7b-7862-4e11-9426-58f04f00344c/commons-177703604.jpg",
+    "width": 8160,
+    "height": 6144,
+    "description": "Description on menu: \"Spanish chorizo, sundried tomatos, cheddar cheese. Served with salad or homemade chips.\""
+   }
+  ]
+ },
+ {
+  "id": "e2fc8b78-38b7-401d-ad12-c8e0a816ed57",
+  "title": "Chorizo, potato & cheese omelette",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "current": "data/library-photos/cache/current/e2fc8b78-38b7-401d-ad12-c8e0a816ed57.jpg",
+  "candidates": [
+   {
+    "key": "commons-24953245",
+    "image": "data/library-photos/cache/candidates/e2fc8b78-38b7-401d-ad12-c8e0a816ed57/commons-24953245.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "the El Jefe omelette at Fat Nat's eggs. Seriously, the best breakfast I've had in ages. An omelette with actual chorizo, properly greasy American fries, and rye toast. Seriously tasty."
+   },
+   {
+    "key": "commons-80185651",
+    "image": "data/library-photos/cache/candidates/e2fc8b78-38b7-401d-ad12-c8e0a816ed57/commons-80185651.jpg",
+    "width": 3264,
+    "height": 2448,
+    "description": "Chorizo omelette breakfast"
+   },
+   {
+    "key": "commons-112576441",
+    "image": "data/library-photos/cache/candidates/e2fc8b78-38b7-401d-ad12-c8e0a816ed57/commons-112576441.jpg",
+    "width": 2560,
+    "height": 1920,
+    "description": "¡Mi padre es todo un artesano de este manjar!"
+   },
+   {
+    "key": "commons-4391718",
+    "image": "data/library-photos/cache/candidates/e2fc8b78-38b7-401d-ad12-c8e0a816ed57/commons-4391718.jpg",
+    "width": 2816,
+    "height": 2112,
+    "description": "Typical Asturian food from the country: bollos de pan, tortilla, chorizos, sidra"
+   }
+  ]
+ },
+ {
+  "id": "34d426cf-1b7e-46d8-a74a-73a0afdb3910",
+  "title": "Christmas cake",
+  "source": "themealdb",
+  "cuisine": "British",
+  "current": "data/library-photos/cache/current/34d426cf-1b7e-46d8-a74a-73a0afdb3910.jpg",
+  "candidates": [
+   {
+    "key": "commons-91157277",
+    "image": "data/library-photos/cache/candidates/34d426cf-1b7e-46d8-a74a-73a0afdb3910/commons-91157277.jpg",
+    "width": 2560,
+    "height": 1440,
+    "description": "Traditional fruit cake, made at Christmastime, covered with marzipan and royal icing before being decorated with traditional decorations. Traditional Christmas verse inscription. Made by my 12 year old daughter (at the time) for sharing with family and friends."
+   },
+   {
+    "key": "commons-88817595",
+    "image": "data/library-photos/cache/candidates/34d426cf-1b7e-46d8-a74a-73a0afdb3910/commons-88817595.jpg",
+    "width": 2832,
+    "height": 4256,
+    "description": "Christmas cake"
+   },
+   {
+    "key": "commons-113839503",
+    "image": "data/library-photos/cache/candidates/34d426cf-1b7e-46d8-a74a-73a0afdb3910/commons-113839503.jpg",
+    "width": 1536,
+    "height": 1685,
+    "description": "Cross-section of a Tunis Cake (using the Mary Berry recipe for the decoration on top)"
+   },
+   {
+    "key": "commons-92438002",
+    "image": "data/library-photos/cache/candidates/34d426cf-1b7e-46d8-a74a-73a0afdb3910/commons-92438002.jpg",
+    "width": 2048,
+    "height": 1536,
+    "description": "Worlds Largest Christmas Cake World Records India made by Chef Anal Kotak"
+   }
+  ]
+ },
+ {
+  "id": "cd233cb0-8cbd-4def-98ad-1040488224a6",
+  "title": "Chtitha Batata (Algerian Potato Stew)",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "current": "data/library-photos/cache/current/cd233cb0-8cbd-4def-98ad-1040488224a6.jpg",
+  "candidates": [
+   {
+    "key": "commons-36248585",
+    "image": "data/library-photos/cache/candidates/cd233cb0-8cbd-4def-98ad-1040488224a6/commons-36248585.jpg",
+    "width": 1536,
+    "height": 1536,
+    "description": "This is an image of food from"
+   },
+   {
+    "key": "commons-36151033",
+    "image": "data/library-photos/cache/candidates/cd233cb0-8cbd-4def-98ad-1040488224a6/commons-36151033.jpg",
+    "width": 2048,
+    "height": 2048,
+    "description": "This is an image of food from"
+   },
+   {
+    "key": "commons-99640021",
+    "image": "data/library-photos/cache/candidates/cd233cb0-8cbd-4def-98ad-1040488224a6/commons-99640021.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "Cuisine food of Bulacan Baliuag"
+   },
+   {
+    "key": "commons-99640022",
+    "image": "data/library-photos/cache/candidates/cd233cb0-8cbd-4def-98ad-1040488224a6/commons-99640022.jpg",
+    "width": 4608,
+    "height": 3456,
+    "description": "Cuisine food of Bulacan Baliuag"
+   }
+  ]
+ },
+ {
+  "id": "6801aadf-b062-4362-9501-cc119da99256",
+  "title": "Chuletas de Cerdo a la Criolla (Pork Chops in Creole Sauce)",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "current": "data/library-photos/cache/current/6801aadf-b062-4362-9501-cc119da99256.jpg",
+  "candidates": [
+   {
+    "key": "commons-31319090",
+    "image": "data/library-photos/cache/candidates/6801aadf-b062-4362-9501-cc119da99256/commons-31319090.jpg",
+    "width": 3920,
+    "height": 2940,
+    "description": "Baked Pork Chop Rice in Tomato Sauce with Cheese"
+   },
+   {
+    "key": "commons-78019517",
+    "image": "data/library-photos/cache/candidates/6801aadf-b062-4362-9501-cc119da99256/commons-78019517.jpg",
+    "width": 4736,
+    "height": 3552,
+    "description": "Baked Pork Chop Rice with Fried Egg"
+   },
+   {
+    "key": "commons-46573593",
+    "image": "data/library-photos/cache/candidates/6801aadf-b062-4362-9501-cc119da99256/commons-46573593.jpg",
+    "width": 5520,
+    "height": 4140,
+    "description": "Baked Pork Chop Rice with Cheese"
+   },
+   {
+    "key": "commons-91006992",
+    "image": "data/library-photos/cache/candidates/6801aadf-b062-4362-9501-cc119da99256/commons-91006992.jpg",
+    "width": 4736,
+    "height": 3552,
+    "description": "Baked Pork Chop Rice in Tomato Sauce"
+   }
+  ]
+ }
+]

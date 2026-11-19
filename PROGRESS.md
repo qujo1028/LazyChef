@@ -1204,3 +1204,46 @@ including all 5 drinks). The list with each reason is `data/library-curation/hid
 - To unhide one: `update public.recipes set hidden = false where id = '<id>'` (secret key / SQL editor).
 - Not checked in a browser (no signed-in test account here).
 
+
+## Library photo refresh (2026-11-19, `data/library-photos`)
+
+Based on `origin/main` (#78). Migration lock: nobody (no schema change). Data job plus a small importer fix.
+
+Decisions (user, 2026-11-19): scope is every visible TheMealDB photo (558), the 39 visible LazyChef recipes without a
+photo, and the 223 visible LazyChef Wikimedia photos judged against the bar (at least 1000 px on the short side; not
+amateur; clearly the dish; no watermarks, text, logos or brands). Free sources only: Wikimedia Commons now, Pexels
+(free key) if the user adds `PEXELS_API_KEY` later; no AI images. All at once, then a review page to spot-check.
+
+Built:
+- Importers keep photos: `npm run recipes:import` and `npm run recipes:lazychef` used to reset `image_url` and the
+  credit columns on every re-run. Rows that already have a photo now keep it (`splitPhotoRows` in
+  `packages/core/src/recipes/import/keep-photos.ts`, 3 tests; `scripts/lib/library-upsert.mjs`). `--replace-photos`
+  overwrites on purpose. Credits needed no change: `photoCredit()` already shows for any source on web and mobile.
+- `scripts/library-photo-audit.mjs` (read-only): `data/library-photos/audit.json`, 820 rows with sizes and Commons
+  original sizes. 556 of 558 TheMealDB photos are 700x700; 219 of 223 Wikimedia originals are big enough.
+- Wikimedia judging: 3 Sonnet agents, 29 of 223 passed (`data/library-photos/judge/`); lead failed one more.
+- `scripts/find-stock-photos.mjs`: Pexels (optional, rate-limit aware) then Commons, at least 1000 px short side,
+  resumable. Search words per dish from a Haiku agent (`data/library-photos/queries.json`). 791 dishes, 2,971
+  candidates, 23 with none.
+- Picks: 11 Sonnet agents (`data/library-photos/picks/`), 50 picks; the lead dropped 10 after looking at all 50
+  (`data/library-photos/dropped.json`: wrong dish, a photo of buildings, or not better than the current one).
+- `scripts/build-photo-replacements.mjs` writes `data/library-photos/replacements.json` (old and new values per row).
+- `scripts/library-photos.mjs`: `--dry-run`, `--write` (download, resize so the short side is at least 1000 px and
+  the long side about 1600, JPEG under 300 KB, upload to `library-photos/v2/<id>-<hash>.jpg`, update the row only if
+  it still has the old photo), `--revert <id,id|all>` (puts the old photo and credit back; old files are never deleted).
+
+Live (2026-11-19): 68 rows updated, all verified (68 v2 files, 12 MB, largest 298 KB, every row licensed; one
+revert and re-apply round trip tested).
+- TheMealDB: 17 new photos from Commons, 541 kept (no free photo beat TheMealDB's studio shot).
+- LazyChef Wikimedia: 28 kept and re-hosted at full size, 14 replaced, 181 kept as they were (no better free photo).
+  Eggs Benedict passed but its original is 1298x979, so it stays at its current size.
+- LazyChef without a photo: 9 filled, 30 still without one.
+- Review page (old vs new, credits, a revert picker): https://claude.ai/artifact/PmksFM88eaBoDAKo264ye3
+
+Revert: `node scripts/library-photos.mjs --revert <recipe id>[,<id>]` or `--revert all` (needs `SUPABASE_SECRET_KEY`).
+
+Not done / not checked:
+- Pexels was never searched (no key). With a free key in `.env.local`, re-run `node scripts/find-stock-photos.mjs`
+  (it adds Pexels results to dishes searched without it), then re-pick and re-apply; Pexels should beat Commons for
+  the 541 TheMealDB and 30 empty recipes.
+- Not seen on a phone. The 3:2 card and 4:3 hero crops were checked on contact sheets, not in the app.
