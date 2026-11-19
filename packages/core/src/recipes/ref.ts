@@ -1,8 +1,8 @@
-// Recipes come from three places. In URLs and actions each one is a single string:
-// Spoonacular's recipes by their numeric id ("715538"), ours (TheMealDB imports and
-// household recipes) by their uuid. Pure, shared by server and client.
+// Recipes come from four places. In URLs and actions each one is a single string:
+// Spoonacular's recipes by their numeric id ("715538"), ours (TheMealDB imports, LazyChef's
+// own library recipes and household recipes) by their uuid. Pure, shared by server and client.
 
-export type RecipeSource = "spoonacular" | "themealdb" | "user"
+export type RecipeSource = "spoonacular" | "themealdb" | "lazychef" | "user"
 
 export type RecipeRef = { kind: "spoonacular"; id: number } | { kind: "local"; id: string }
 
@@ -30,6 +30,7 @@ export function recipeHref(ref: string): string {
 export const SOURCE_LABELS: Record<RecipeSource, string> = {
   spoonacular: "Powered by Spoonacular",
   themealdb: "From TheMealDB",
+  lazychef: "LazyChef kitchen",
   user: "Your recipe",
 }
 

@@ -8,6 +8,7 @@ import { requireHousehold } from "@/features/household/queries"
 import { normalizeIngredientName } from "@lazychef/core/ingredients/catalog"
 import type { ChecklistLine } from "@/features/recipes/components/ingredient-checklist"
 import { RecipeIngredients } from "@/features/recipes/components/recipe-ingredients"
+import { PhotoCreditLine } from "@/features/recipes/components/photo-credit"
 import { RecipeImage } from "@/features/recipes/components/recipe-image"
 import { SaveButton } from "@/features/recipes/components/save-button"
 import { SourceTag } from "@/features/recipes/components/source-tag"
@@ -97,7 +98,14 @@ export default async function RecipePage({ params, searchParams }: PageProps<"/r
   return (
     <article className="grid grid-cols-1 gap-5">
       <BackLink />
-      <RecipeImage src={recipe.image} eager className="aspect-[4/3] w-full rounded-2xl" />
+      {recipe.photoCredit ? (
+        <figure className="grid gap-1.5">
+          <RecipeImage src={recipe.image} eager className="aspect-[4/3] w-full rounded-2xl" />
+          <PhotoCreditLine credit={recipe.photoCredit} />
+        </figure>
+      ) : (
+        <RecipeImage src={recipe.image} eager className="aspect-[4/3] w-full rounded-2xl" />
+      )}
       <header className="grid gap-2">
         <div className="flex items-start gap-2">
           <h1 className="min-w-0 flex-1 text-2xl leading-tight font-semibold tracking-tight break-words">{recipe.title}</h1>

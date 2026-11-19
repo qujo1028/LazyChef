@@ -29,7 +29,9 @@ async function fetchLocal(id: string, householdId: string): Promise<RecipeView> 
   const [recipe, lines] = await Promise.all([
     supabase
       .from('recipes')
-      .select('id, source, source_id, title, image_url, photo_path, ready_in_minutes, servings, instructions, source_url, ai_generated')
+      .select(
+        'id, source, source_id, title, image_url, photo_path, ready_in_minutes, servings, instructions, source_url, ai_generated, image_author, image_license, image_license_url, image_source_url, image_ai_generated',
+      )
       .eq('id', id)
       // Only the shared library and this household.
       .or(`household_id.is.null,household_id.eq.${householdId}`)
@@ -56,6 +58,8 @@ async function fetchLocal(id: string, householdId: string): Promise<RecipeView> 
   if (recipe.data.photo_path) {
     const { data } = await supabase.storage.from(PHOTO_BUCKET).createSignedUrl(recipe.data.photo_path, PHOTO_URL_SECONDS);
     if (data?.signedUrl) view.image = data.signedUrl;
+    // The household's own photo has no library credit.
+    view.photoCredit = null;
   }
   return view;
 }

@@ -824,3 +824,24 @@ Open before P4's exit check:
 - Known gaps: cooks must take at least one item out (same as the web and the database); undoing a cook doesn't
   remove list items it added; Mine has no create or edit form yet; taste ranking and cook history on saved cards
   aren't ported.
+
+## Library expansion: 150 American + 150 Chinese recipes (2026-11-18, lead: `feature/library-expansion`)
+Based on `origin/feature/p4-recipes` (PR #71 still open; the mobile recipe page lives there). **Migration lock:
+`feature/library-expansion`** (`20261118140000_library_expansion.sql` and `src/types/database.ts`), cleared when it merges.
+
+Why: the shared library had 33 "United States" and 27 "Chinese" recipes, and TheMealDB has no more. Narrow pantries got
+fewer than 10 local ideas and fell back to Spoonacular's 50 daily points.
+
+In progress (this entry is finished when the import is done):
+- Migration: `recipe_source` value `lazychef` (no household, slug as `source_id`), photo credit columns on `recipes`
+  (`image_author`, `image_license`, `image_license_url`, `image_source_url`, `image_ai_generated`), public bucket
+  `library-photos` (no policies, so only the secret key writes). PGlite test `supabase/tests/library-expansion.test.mjs`.
+- Recipes: dish lists from two Sonnet agents (American, Chinese) deduped against all 790 library titles, written by 30
+  Haiku agents, checked by `checkLibraryRecipe` (`packages/core/src/recipes/import/lazychef.ts`, which parses lines with
+  the TheMealDB importer's `toIngredient`), then reviewed by Sonnet agents.
+- Photos: Wikimedia Commons (CC0, public domain, CC BY, CC BY-SA, at least 1200 px), picked by Haiku and checked by
+  Sonnet; AI images only for the rest, after the user picks a provider.
+- Credits: `SOURCE_LABELS.lazychef` ("LazyChef kitchen"), `photoCredit()` (`packages/core/src/recipes/photo-credit.ts`)
+  shown under the photo on the web and mobile recipe pages.
+- Import: `npm run recipes:lazychef -- --dry-run | --write` (`scripts/import-lazychef-library.mjs`), reading the reviewed
+  `data/lazychef/recipes.json`.

@@ -579,6 +579,11 @@ export type Database = {
           extended: boolean
           household_id: string | null
           id: string
+          image_ai_generated: boolean
+          image_author: string | null
+          image_license: string | null
+          image_license_url: string | null
+          image_source_url: string | null
           image_url: string | null
           instructions: string[]
           meal_types: string[]
@@ -600,6 +605,11 @@ export type Database = {
           extended?: boolean
           household_id?: string | null
           id?: string
+          image_ai_generated?: boolean
+          image_author?: string | null
+          image_license?: string | null
+          image_license_url?: string | null
+          image_source_url?: string | null
           image_url?: string | null
           instructions?: string[]
           meal_types?: string[]
@@ -621,6 +631,11 @@ export type Database = {
           extended?: boolean
           household_id?: string | null
           id?: string
+          image_ai_generated?: boolean
+          image_author?: string | null
+          image_license?: string | null
+          image_license_url?: string | null
+          image_source_url?: string | null
           image_url?: string | null
           instructions?: string[]
           meal_types?: string[]
@@ -1296,7 +1311,7 @@ export type Database = {
     Enums: {
       activity_action: "added" | "used" | "restocked" | "updated" | "removed" | "cooked" | "shopped"
       household_role: "owner" | "member"
-      recipe_source: "themealdb" | "user"
+      recipe_source: "themealdb" | "user" | "lazychef"
       item_category:
         | "produce"
         | "bakery"

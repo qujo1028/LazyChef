@@ -6,9 +6,11 @@ import type { RecipeIngredient } from "@lazychef/core/recipes/recipe-shapes"
 import { basicKeys, LOCAL_CANDIDATES, mergeRecipeIds, pantryMatchKeys, toRecipeIngredients, type LocalIngredient, type LocalRecipeCard } from "@lazychef/core/recipes/local-match"
 import type { PantryRow } from "@lazychef/core/recipes/match"
 import { EVERYDAY_CUISINES, type MealQuery, type RecipeFilters } from "@lazychef/core/recipes/filters"
+import { photoCredit, type PhotoCredit } from "@lazychef/core/recipes/photo-credit"
 import { mealDbUrl } from "@lazychef/core/recipes/ref"
+import type { Database } from "@/types/database"
 
-// Our own recipe library (TheMealDB imports + household recipes), read as the signed-in
+// Our own recipe library (TheMealDB imports, LazyChef's own recipes + household recipes), read as the signed-in
 // user, so RLS decides what's visible. Nothing here costs Spoonacular points.
 
 type Db = Awaited<ReturnType<typeof createClient>>
@@ -41,10 +43,12 @@ export async function signedPhotoUrls(supabase: Db, paths: readonly (string | nu
   return urls
 }
 
+type LocalSource = Database["public"]["Enums"]["recipe_source"]
+
 type RecipeRow = {
   id: string
   ai_generated: boolean
-  source: "themealdb" | "user"
+  source: LocalSource
   cuisine: string | null
   title: string
   image_url: string | null
@@ -195,7 +199,7 @@ export async function findLocalCandidates(
 /** One of our recipes, for its page. */
 export type LocalRecipe = {
   id: string
-  source: "themealdb" | "user"
+  source: LocalSource
   householdId: string | null
   title: string
   summary: string | null
@@ -209,6 +213,8 @@ export type LocalRecipe = {
   sourceUrl: string | null
   /** TheMealDB's page for an imported recipe (the credit links there). */
   creditUrl: string | null
+  /** Author and license (or "AI-generated image") for a LazyChef library photo. */
+  photoCredit: PhotoCredit | null
   ingredients: RecipeIngredient[]
   /** Per ingredient line: "to serve" and the like. */
   optional: boolean[]
@@ -249,6 +255,8 @@ export async function getLocalRecipe(id: string, householdId: string): Promise<L
     photoPath: row.photo_path,
     sourceUrl: row.source_url,
     creditUrl: row.source === "themealdb" && row.source_id ? mealDbUrl(row.source_id) : null,
+    // A household photo replaces the library one, and has no credit to show.
+    photoCredit: row.photo_path ? null : photoCredit(row),
     ingredients: toRecipeIngredients(ingredients),
     optional: ingredients.map((line) => line.optional),
     lines: ingredients,

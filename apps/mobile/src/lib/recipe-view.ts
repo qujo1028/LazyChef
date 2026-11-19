@@ -8,6 +8,7 @@ import type { EdgeErrorCode } from '@lazychef/core/recipes/edge-contract';
 import { recipeListLines } from '@lazychef/core/recipes/list';
 import { toRecipeIngredients, type LocalIngredient } from '@lazychef/core/recipes/local-match';
 import { buildPantryIndex, checkIngredients, type IngredientStatus, type PantryRow } from '@lazychef/core/recipes/match';
+import { photoCredit, type PhotoCredit, type PhotoCreditFields } from '@lazychef/core/recipes/photo-credit';
 import { mealDbUrl, type RecipeSource } from '@lazychef/core/recipes/ref';
 import type { RecipeDetail, RecipeIngredient } from '@lazychef/core/recipes/recipe-shapes';
 import { cookHistory, historyLabel, type CookedRow } from '@lazychef/core/recipes/saved';
@@ -26,6 +27,8 @@ export type RecipeView = {
   sourceName: string | null;
   /** TheMealDB's page for an imported meal. */
   creditUrl: string | null;
+  /** Author and license (or "AI-generated image") for a LazyChef library photo. */
+  photoCredit: PhotoCredit | null;
   steps: string[];
   ingredients: RecipeIngredient[];
   /** Same length as `ingredients`: "to serve" lines are listed but not picked by default. */
@@ -34,9 +37,9 @@ export type RecipeView = {
 };
 
 /** The columns the page reads from `recipes`. */
-export type LocalRecipeRow = {
+export type LocalRecipeRow = PhotoCreditFields & {
   id: string;
-  source: 'themealdb' | 'user';
+  source: 'themealdb' | 'lazychef' | 'user';
   source_id: string | null;
   title: string;
   image_url: string | null;
@@ -68,6 +71,7 @@ export function localToView(row: LocalRecipeRow, lines: readonly LocalIngredient
     sourceUrl: row.source_url,
     sourceName: hostName(row.source_url),
     creditUrl: row.source === 'themealdb' && row.source_id ? mealDbUrl(row.source_id) : null,
+    photoCredit: photoCredit(row),
     steps: row.instructions,
     ingredients: toRecipeIngredients(lines),
     optional: lines.map((line) => line.optional),
@@ -87,6 +91,7 @@ export function spoonacularToView(recipe: RecipeDetail): RecipeView {
     sourceUrl: recipe.sourceUrl,
     sourceName: recipe.sourceName,
     creditUrl: null,
+    photoCredit: null,
     steps: recipe.steps,
     ingredients: recipe.ingredients,
     optional: recipe.ingredients.map(() => false),

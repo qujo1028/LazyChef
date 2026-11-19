@@ -7,12 +7,13 @@ import { SOURCE_LABELS, type RecipeSource } from "@lazychef/core/recipes/ref"
 const STYLES: Record<RecipeSource, string> = {
   user: "bg-primary/10 text-primary",
   themealdb: "bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-200",
+  lazychef: "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200",
   spoonacular: "bg-muted text-muted-foreground",
 }
 
 const AI_STYLE = "bg-violet-600/10 text-violet-800 dark:bg-violet-300/15 dark:text-violet-200"
 
-/** "Your recipe", "From TheMealDB" or "Powered by Spoonacular"; "AI idea" for a saved AI recipe. */
+/** "Your recipe", "From TheMealDB", "LazyChef kitchen" or "Powered by Spoonacular"; "AI idea" for a saved AI recipe. */
 export function SourceTag({ source, aiGenerated = false, className }: { source: RecipeSource; aiGenerated?: boolean; className?: string }) {
   const ai = aiGenerated && source === "user"
   return (

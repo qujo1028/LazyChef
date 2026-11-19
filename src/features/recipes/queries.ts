@@ -48,6 +48,7 @@ import {
   type Suggestion,
   type Suggestions,
 } from "@lazychef/core/recipes/match"
+import type { PhotoCredit } from "@lazychef/core/recipes/photo-credit"
 import type { RecipeRef, RecipeSource } from "@lazychef/core/recipes/ref"
 import { likesCuisine, localFits, preferCuisines, spoonacularFits, type RecipePrefs } from "@lazychef/core/recipes/prefs"
 import { cookHistory, type SavedRecipe } from "@lazychef/core/recipes/saved"
@@ -257,6 +258,8 @@ export type RecipeView = {
   sourceName: string | null
   /** TheMealDB's page for an imported recipe. */
   creditUrl: string | null
+  /** Author and license (or "AI-generated image") for a LazyChef library photo. */
+  photoCredit: PhotoCredit | null
   steps: string[]
   ingredients: RecipeIngredient[]
   /** Per ingredient line: "to serve" and the like (local recipes only). */
@@ -306,6 +309,7 @@ function spoonacularView(recipe: RecipeDetail): RecipeView {
     sourceUrl: recipe.sourceUrl,
     sourceName: recipe.sourceName,
     creditUrl: null,
+    photoCredit: null,
     steps: recipe.steps,
     ingredients: recipe.ingredients,
     optional: recipe.ingredients.map(() => false),
@@ -327,6 +331,7 @@ function localView(recipe: LocalRecipe): RecipeView {
     sourceUrl: recipe.sourceUrl,
     sourceName: recipe.sourceUrl ? hostName(recipe.sourceUrl) : null,
     creditUrl: recipe.creditUrl,
+    photoCredit: recipe.photoCredit,
     steps: recipe.steps,
     ingredients: recipe.ingredients,
     optional: recipe.optional,
