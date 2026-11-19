@@ -76,14 +76,21 @@ export function safeUrl(value: unknown): string | null {
 
 const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", "#39": "'" }
 
-/** "<b>Tasty</b> &amp; quick" → "Tasty & quick". */
+/**
+ * "<b>Tasty</b> &amp; quick" → "Tasty & quick". Entities are decoded first and tags removed after,
+ * so an encoded tag ("&lt;script&gt;") can't come back out as markup, and any "<" or ">" left over
+ * is dropped. The result is plain text.
+ */
 export function stripHtml(value: unknown): string {
-  return text(
-    text(value)
-      .replace(/<(br|\/p|\/li)\s*\/?>/gi, " ")
-      .replace(/<[^>]*>/g, "")
-      .replace(/&(#?\w+);/g, (match, name: string) => ENTITIES[name.toLowerCase()] ?? match),
-  )
+  const decoded = text(value).replace(/&(#?\w+);/g, (match, name: string) => ENTITIES[name.toLowerCase()] ?? match)
+  let previous: string
+  let current = decoded.replace(/<(br|\/p|\/li)\s*\/?>/gi, " ")
+  // Repeat until nothing changes, so nested or split tags ("<scr<b>ipt>") can't survive one pass.
+  do {
+    previous = current
+    current = current.replace(/<[^<>]*>/g, "")
+  } while (current !== previous)
+  return text(current.replace(/[<>]/g, ""))
 }
 
 export function toRecipeIngredient(value: unknown): RecipeIngredient | null {
