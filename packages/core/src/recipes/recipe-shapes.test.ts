@@ -75,4 +75,13 @@ describe("recipe shapes", () => {
     expect(safeUrl("data:text/html,hi")).toBeNull()
     expect(stripHtml("a<br>b")).toBe("a b")
   })
+
+  it("never lets markup back out of stripHtml", () => {
+    expect(stripHtml("<b>Tasty</b> &amp; quick")).toBe("Tasty & quick")
+    expect(stripHtml("&lt;script&gt;alert(1)&lt;/script&gt; soup")).toBe("alert(1) soup")
+    expect(stripHtml("<scr<b>ipt>x</script>")).toBe("x")
+    expect(stripHtml("5 < 6 and 7 > 3")).not.toMatch(/[<>]/)
+    expect(stripHtml("cook < 10 min")).toBe("cook 10 min")
+    expect(stripHtml("it&#39;s &nbsp;good")).toBe("it's good")
+  })
 })
