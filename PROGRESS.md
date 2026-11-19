@@ -1147,3 +1147,16 @@ Step 0 (lead):
 Workers (branch from `feature/home-tab` at the step 0 commit):
 - W1 `feature/home-screen` (Sonnet: the Home screen, `packages/core/src/home/*` helpers and tests, card off Pantry).
 - W2 `feature/home-tabbar` (Sonnet: raised Home tab button, tab order, default route and redirects).
+
+### W1 `feature/home-screen`
+Built the Home screen in the Expo app. Pure helpers in `packages/core/src/home/` (`greeting`, `trending`, `expiring`,
+22 Vitest tests). Screen in `apps/mobile/src/app/(tabs)/home.tsx` with parts in `apps/mobile/src/features/home/`:
+welcome (greeting, household name, expiring line that opens Pantry), the "This week" card (moved off Pantry), a compact
+household board with the current challenge ("See all" opens Activity, invite prompt when alone), and a sideways row of
+trending recipes (`get_trending_recipes`, topped up with day-seeded library picks). New query keys `trending` and
+`libraryPool` (under `['home', ...]`, no realtime). Pull to refresh refetches all of it.
+- Expiring rule: next 7 days including today, already-expired items count, ran-out (quantity 0) and staples do not.
+- Not checked: no simulator or signed-in account here, so nothing was seen on a device (375pt layout, dark mode,
+  the trending row against live data, the migration is not applied live yet).
+- Open: the This week card still carries its own challenge row and expiring nudge, so Home shows the challenge twice
+  (card and board) and may repeat the welcome expiring line. Left as is per the brief.

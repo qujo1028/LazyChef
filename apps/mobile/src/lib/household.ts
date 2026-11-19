@@ -49,6 +49,10 @@ export const queryKeys = {
   weeklyGoal: (userId: string) => ['household', 'weekly-goal', userId] as const,
   /** The viewer's push settings (notification_prefs; per person). */
   notificationPrefs: (userId: string) => ['household', 'notification-prefs', userId] as const,
+  /** Home: library recipes other households cooked lately. Not household data, so not under `all`. */
+  trending: () => ['home', 'trending'] as const,
+  /** Home: a slice of the shared library to top the recipe row up with. Not household data either. */
+  libraryPool: () => ['home', 'library-pool'] as const,
 };
 
 async function fetchHouseholdContext(userId: string, email: string | null): Promise<HouseholdContext> {
