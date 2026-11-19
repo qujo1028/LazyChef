@@ -869,3 +869,123 @@ Still to do (each needs the user's OK):
   retries uploads and imports a recipe without its photo if the image can't be read, instead of stopping.
 - Then check a few recipe pages and their photo credits on the web and on a phone, and clear the migration lock when
   the branch merges.
+
+## P5 Barcodes and Ideas (2026-11-18, lead: `feature/p5-barcodes-ideas`)
+Based on `origin/feature/p4-recipes`, because P4 (PR #71) isn't merged yet and P5 builds on its recipes screen, Edge
+Function pattern and list helpers. Rebase onto `origin/main` once #71 merges. Migration lock: held by
+`feature/library-expansion`, not P5. P5 needs no migration (household_barcodes, take_ai_allowance, take_rate_limit
+'ai', ai_idea_cache, put_ai_idea_cache, save_ai_recipe and the members-only `ai_usage` read already exist). If a worker
+finds it needs one, it stops and tells the lead, who asks the user.
+
+Decisions (user, 2026-11-18):
+- Ideas: a sparkle "Ideas" button in the Recipes header opens one Ideas sheet. v1 has recipe ideas only (meal, an
+  optional hint, up to 3 ideas from the pantry, save to Mine, add missing to list, the free count shown). Pantry
+  "split with AI" and scan "tidy name" wait until after v1. Recorded in `docs/product-scope.md`.
+- Barcode lookup: the phone calls Open Food Facts directly; household barcode memory is read and written as the user
+  (RLS). Recorded in `docs/react-native-app.md` (Backend).
+- Scan to check off on the List: not in P5 (pantry only). Recorded under Cut in `docs/product-scope.md`.
+
+Step 0 (lead):
+- Packages: `expo-camera` (via `npx expo install`), with its config plugin and camera permission text in `app.json`.
+- `packages/core/src/ai/edge-contract.ts`: the `ai` Edge Function contract (`ideas`, `allowance`), the allowance shape,
+  error codes. Copied to `supabase/functions/_shared/core/ai-contract.ts` by `scripts/sync-edge-shared.mjs`.
+- `apps/mobile/src/features/ideas/ai-edge.ts`: `callAi()` (never throws; a missing function reads as `not_configured`).
+- Query keys `aiAllowance(householdId)` and `barcodes(householdId)`.
+- Recipes tab header: `IdeasButton` (sparkles) next to Activity, opening the `IdeasSheet` stub.
+- Stubs with final signatures: `features/barcodes/lookup.ts` (`lookupBarcode`, `rememberBarcodes`),
+  `features/barcodes/components/BarcodeScanner.tsx` (`onCode`, `active`), `features/ideas/components/IdeasSheet.tsx`.
+
+Workers (branch from `origin/feature/p5-barcodes-ideas`):
+- W1 `feature/p5-edge-ai` (Opus: server code holding the Groq key, auth, the free allowance, rate limits, prompt
+  injection): `supabase/functions/ai/`.
+- W2 `feature/p5-ideas` (Sonnet: the Ideas sheet, consent, count line, save and add-missing).
+- W3 `feature/p5-scanner` (Sonnet: the camera scanner and scanning inside the Add food sheet).
+- W4 `feature/p5-barcode-lookup` (Sonnet: Open Food Facts from the phone and the household barcode memory, with tests).
+
+W4 (`feature/p5-barcode-lookup`, Sonnet): `features/barcodes/lookup.ts` is filled in. `lookupBarcode(householdId, input)`
+checks the household's `household_barcodes` row (as the user, RLS), then calls Open Food Facts v2 straight from the phone
+(6 s timeout, identifying User-Agent). It never throws, reads offline as friendly copy, and caches results per session
+(per household and code). `rememberBarcodes` inserts new codes and updates known ones (name, amount, unit only), ignores
+23505 and never fails the caller. Pure parts and tests: `lib/barcode-off.ts`, `barcode-cache.ts`, `barcode-memory.ts`.
+No tidy flag (AI tidy is out of v1). Not checked: a signed-in account, live RLS writes from a phone.
+W2 (Ideas sheet, `feature/p5-ideas`): `IdeasSheet` is built. Meal chips (default by time of day via core `autoSlot`),
+an optional hint, "Get ideas for dinner", per-device consent in AsyncStorage keyed to the `MEAL_IDEAS_SENDS` wording
+(the lead later made the allowance call load before consent: it sends only the household id), the "7 of 10 free ideas left this week" line from `callAi` (updated from
+each ideas response), up to 3 idea cards (have/need, steps, Save to Mine via `save_ai_recipe` then bookmark, Add missing
+to list), and a screen for loading, not set up, offline, rate limited, empty pantry, upstream error with Try again, and
+limit reached (core `limitMessage`; no purchase button until P7). Toasts wait for the sheet to close (`after-close`).
+Dev only: "Dev: preview a state" chips in the sheet. New core files: `packages/core/src/ai/idea-save.ts` (+ test), which
+holds ports of `ownInputFromIdea`, `ingredientRows` and `MEAL_IDEAS_SENDS`; the web copies are untouched. Pure copy and
+state mapping: `apps/mobile/src/lib/ideas-copy.ts` (+ test). Not checked: a simulator or phone, a signed-in account,
+and the real function (not deployed, so everything past "not set up" ran only through the dev previews).
+
+W3 (scanner, `feature/p5-scanner`): `BarcodeScanner` is a real expo-camera `CameraView` (ean13, ean8, upc_a, upc_e),
+asks for the camera on first use, has a denied state with Open Settings, a torch button and a typed-code box (the only
+control on Expo web). The Add food sheet has a "Scan barcodes" button that opens a scan view (camera, scan list with
+remove and "name it by hand" for unknown products, Open Food Facts credit); Done writes each hit's line into the box and
+goes to the usual review, so there is still one way to add food. After an add the codes are remembered with
+`rememberBarcodes`, named as added (one package's amount, `barcodeMemories`); the scan-to-draft link (`lib/scan-links.ts`)
+keeps a renamed item under its new name. Pure logic with tests: `lib/scan-dedupe.ts` (same code within 2.5 s ignored),
+`scan-rows.ts`, `scan-links.ts`. State hook: `features/barcodes/use-scan-rows.ts`. Dev only: "Dev: fake scan" (3017620422003).
+Not checked: the camera, the permission prompt, the torch and haptics (need a real phone), or a signed-in lookup.
+The `barcodes` query key isn't invalidated after remembering (W4 owns reads, if any).
+
+W1 ai Edge Function (`feature/p5-edge-ai`, Opus, 2026-11-18):
+- `supabase/functions/ai/`: `ideas` and `allowance` per `ai/edge-contract.ts` (contract unchanged). JWT checked with
+  `auth.getUser()`, then membership; everything runs as the caller (pantry, preferences, ratings and titles,
+  `ai_idea_cache` / `put_ai_idea_cache`, `take_ai_allowance`, `get_pro_status` + `ai_usage` for the read-only allowance,
+  `take_rate_limit('ai')`). No service role client at all. Order: pantry (`empty_pantry`), cache (free hit), rate limit
+  (`rate_limited`), allowance (`limit_reached`), Groq. The brief said allowance before rate limit (as the web), but then
+  an hourly refusal burns a free use, against CLAUDE.md's "after cache hits and refusals"; so the rate limit goes first. Fails closed on any check error. One use per request;
+  the model gets one retry when nothing in its answer is usable. Status codes: 200 (also `empty_pantry`), 400, 401, 403,
+  405, 429 (`limit_reached`, `rate_limited`), 502, 503. No migration needed.
+- Hint: cleaned (control, zero-width and bidi characters out, single-spaced, at most 100), sent as quoted data in the user
+  message, and part of the cache key (an object entry, lowercased). Without a hint the key is byte for byte the web's,
+  so web and phone share cached ideas.
+- Shared code: the pure meal-ideas parts moved to `packages/core/src/recipes/ai/{idea,meal-ideas}.ts`; the web files
+  re-export them. To keep the large generated ingredient catalog out of the function, `BASICS` (`recipes/basics.ts`),
+  `pantrySearchNames` / `isAvailable` (`recipes/pantry-names.ts`), the taste hints (`recipes/taste-hints.ts`) and the
+  cooked-recipe reader (`activity/cooked-recipe.ts`) are split out and re-exported from `match.ts`, `taste.ts` and
+  `feed.ts` (no exported signature changed). Name matching uses `ingredients/library/normalize.ts`, which is what the
+  catalog's `normalizeIngredientName` already calls. `scripts/sync-edge-shared.mjs` now rewrites relative imports to the
+  flat copy names and throws if a copied file imports one that isn't copied. CORS, the bearer token and the capped body
+  reader moved to `supabase/functions/_shared/http.ts`; `recipes/handler.ts` re-exports them (same behavior, so the
+  deployed `recipes` needs no redeploy).
+- `deno check` passes for `ai/index.ts` and `recipes/index.ts` (deno 2.9.8). Not deployed, no secrets set: see
+  `supabase/functions/ai/README.md` (deploy, dashboard secret, curl smoke test). Not checked: a live Groq call, a
+  signed-in session, the deployed function.
+- Self-review fixes: rate limit before allowance (above); pantry and ratings read in pages of 1000 (up to 5000);
+  taste read alongside the pantry and diet; bidi isolate, soft hyphen and Arabic letter mark characters stripped from the
+  hint; a non-text hint gets its own message; `filters.ts` no longer copied (the meal list check moved to a test).
+  Open for the lead: (1) a cache hit still fails with `upstream` if the read-only allowance can't be read, since
+  `AiSuccess` requires `allowance` (an optional allowance would need a contract change); (2) `limit_reached`'s "come
+  back Friday" weekday is worded in UTC, so the app may prefer to word it from `resetsAt`; (3) the read-only allowance
+  uses `AI_FREE_WEEKLY` (10), since only `take_ai_allowance` returns the database's limit; (4) `ai/groq.ts` is a port of
+  `src/lib/llm/client.ts`, not shared code (moving the web client into core is a follow-up); (5) the web's
+  `getMealIdeas` still takes the allowance before the rate limit.
+
+Lead merge (P5): W4, W2, W3, W1 merged into `feature/p5-barcodes-ideas` in that order; only PROGRESS.md conflicted. The
+lead read every diff; W1 was reviewed for auth (`getUser`, membership as the caller), no service role at all, rate limit
+and allowance failing closed, the key only in Groq's Authorization header, the hint as user-message data, and logs
+without pantry names or the hint. Fixes on merge: barcodes Open Food Facts doesn't know aren't cached (a housemate's
+name shows on the next scan); the Ideas count loads before consent (it sends only the household id); the empty pantry
+note names the Add food button; the scan list clears once its lines are in the box (no doubled lines after a failed
+check). Checks: web typecheck, lint, 2,515 tests, audit, ingredients check, edge sync check; mobile typecheck, lint, iOS
+and web exports; `deno check` on `ai` and `recipes`.
+
+Open for P5's exit check (needs the user and a phone in Expo Go):
+- Scan to add (the exit check): Add food, Scan barcodes, review, add; the scan haptic; a re-scan shows the saved name;
+  the camera permission prompt and the denied state; the torch; an unknown product named by hand.
+- The Ideas sheet at 375pt, light and dark; then end to end once `ai` is deployed with `GROQ_API_KEY`: consent, the
+  count line, 3 ideas, Save to Mine, Add missing to list, the limit message.
+- Known gaps: camera permission isn't re-checked after returning from Settings; the same idea can be saved twice; two
+  scans with identical line text share one barcode link (as on the web); `ownInputFromIdea` exists twice in core
+  (`ai/idea-save.ts` from W2 and `recipes/ai/meal-ideas.ts` from W1), to fold into one; the web's `getMealIdeas` still
+  takes the allowance before the rate limit (a web bug fix: swap the order); the `limit_reached` weekday is UTC;
+  `recipes` on the live project predates the shared `_shared/http.ts` move (same behavior; redeploy it next time it
+  changes).
+- Deployed 2026-11-18 (user approved): `GROQ_API_KEY` set as a function secret from `.env.local` through a temporary,
+  gitignored `supabase/functions/.env` (deleted afterwards; the key never went through chat), and `ai` v1 deployed with
+  JWT verification on (`npx supabase functions deploy ai --project-ref gldppemwlecnbarxamcb`). The 20 deployed files
+  were diffed against the repo: all identical. Smoke test: no auth 401 (gateway), a non-user token 401 with the
+  function's own JSON, CORS preflight 204. Not yet tested with a signed-in session: do it from the Ideas sheet on a phone.
