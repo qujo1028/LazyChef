@@ -39,6 +39,10 @@ export const queryKeys = {
   recipe: (householdId: string, ref: string) => ['household', 'recipe', householdId, ref] as const,
   /** Spoonacular's daily quota (searches left, reset time). */
   recipeQuota: () => ['household', 'recipe-quota'] as const,
+  /** The household's free weekly AI allowance (the Ideas sheet's count line). */
+  aiAllowance: (householdId: string) => ['household', 'ai-allowance', householdId] as const,
+  /** What the household calls each barcode it scanned before (household_barcodes). */
+  barcodes: (householdId: string) => ['household', 'barcodes', householdId] as const,
 };
 
 async function fetchHouseholdContext(userId: string, email: string | null): Promise<HouseholdContext> {

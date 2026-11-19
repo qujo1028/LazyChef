@@ -2,6 +2,7 @@
 // grouping a request's rows into one entry, and the sentence for each entry.
 import { formatQuantity } from "../units"
 import type { Enums, Json, Tables } from "../db"
+import { cookedRecipeOf } from "./cooked-recipe"
 
 export type ActivityAction = Enums<"activity_action">
 
@@ -153,18 +154,7 @@ const ACTION_ORDER: ActivityAction[] = ["cooked", "shopped", "added", "restocked
  * Spoonacular's id as a string, or our recipe's uuid (see recipes/ref.ts).
  */
 export function cookedRecipe(row: Pick<ActivityRow, "action" | "details">): { id: string | null; title: string } | null {
-  if (row.action !== "cooked") return null
-  const details = row.details
-  if (!details || typeof details !== "object" || Array.isArray(details)) return null
-  const title = typeof details.recipe_title === "string" ? details.recipe_title.trim() : ""
-  if (!title) return null
-  const id =
-    typeof details.recipe_id === "number"
-      ? String(details.recipe_id)
-      : typeof details.local_recipe_id === "string" && /^[0-9a-f-]{36}$/i.test(details.local_recipe_id)
-        ? details.local_recipe_id
-        : null
-  return { id, title }
+  return row.action === "cooked" ? cookedRecipeOf(row.details) : null
 }
 
 function itemsLabel(count: number) {
