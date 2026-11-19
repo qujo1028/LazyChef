@@ -5106,7 +5106,7 @@
     "preview": "data/library-photos/cache/candidates/8a1921a3-3fb6-4f3c-8ce7-44994a647ccc/commons-655869.jpg",
     "width": 3456,
     "height": 2304,
-    "author": "No machine-readable author provided. Miskatonic assumed (based on copyright claims).",
+    "author": "Miskatonic",
     "license": "CC BY 2.5",
     "license_url": "https://creativecommons.org/licenses/by/2.5",
     "source_url": "https://commons.wikimedia.org/wiki/File:Granola03242006.JPG"
@@ -5496,9 +5496,9 @@
     "preview": "data/library-photos/cache/candidates/26bd2ccb-9df4-4771-b302-98f02b59e2e3/commons-729105.jpg",
     "width": 2488,
     "height": 1810,
-    "author": "No machine-readable author provided. Rainer Zenz assumed (based on copyright claims).",
+    "author": "Rainer Zenz",
     "license": "CC BY-SA 3.0",
-    "license_url": null,
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
     "source_url": "https://commons.wikimedia.org/wiki/File:Lahmacun.jpg"
    }
   },

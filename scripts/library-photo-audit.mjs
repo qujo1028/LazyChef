@@ -95,6 +95,7 @@ async function audit(row) {
     image_license: row.image_license,
     image_license_url: row.image_license_url,
     image_source_url: row.image_source_url,
+    image_ai_generated: row.image_ai_generated === true,
     width: null,
     height: null,
     short_side: null,

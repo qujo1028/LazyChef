@@ -73,7 +73,7 @@ function newColumns(entry) {
     image_license: entry.new.license ?? null,
     image_license_url: entry.new.license_url ?? null,
     image_source_url: entry.new.source_url ?? null,
-    image_ai_generated: false,
+    image_ai_generated: entry.new.ai_generated === true,
   }
 }
 
@@ -90,6 +90,8 @@ function check(entry) {
   if (!entry.new?.license) problems.push("no license")
   const needsAuthor = !/^(CC0|Public domain)$/.test(entry.new?.license ?? "")
   if (needsAuthor && !entry.new?.author) problems.push("no author")
+  if (/no machine-readable/i.test(entry.new?.author ?? "")) problems.push("author is a Commons placeholder")
+  if (/^CC BY/.test(entry.new?.license ?? "") && !/^https:\/\//.test(entry.new?.license_url ?? "")) problems.push("CC BY needs an https license link")
   if (!/^https:\/\//.test(entry.new?.source_url ?? "")) problems.push("no https source page")
   if (!entry.old || !("image_url" in entry.old)) problems.push("old values missing (needed to revert)")
   return problems
@@ -191,7 +193,7 @@ async function prepare(original) {
     .rotate()
     .resize({ width: long, height: long, fit: "inside", withoutEnlargement: true })
   for (const quality of [80, 72, 64, 56]) {
-    const { data, info } = await base.clone().jpeg({ quality, mozjpeg: true }).toBuffer({ resolveWithObject: true })
+    const { data, info } = await base.clone().flatten({ background: "#ffffff" }).jpeg({ quality, mozjpeg: true }).toBuffer({ resolveWithObject: true })
     if (Math.min(info.width, info.height) < MIN_SHORT_SIDE) throw new Error(`only ${info.width}x${info.height}`)
     if (data.length <= MAX_BYTES || quality === 56) return data
   }

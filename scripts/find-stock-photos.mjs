@@ -64,8 +64,12 @@ const targets = audit.recipes.filter((r) => !passed.has(r.id) && (!only || only.
 const strip = (html) =>
   String(html ?? "")
     .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
     .replace(/&quot;/g, '"')
-    .replace(/&#0?39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
     .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim()
@@ -76,7 +80,7 @@ function allowedLicense(short) {
   if (/^(cc0|cc-zero)/i.test(s)) return "CC0"
   if (/^public domain/i.test(s) || /^pd/i.test(s)) return "Public domain"
   const m = s.match(/^cc[- ]by(-sa)?[- ]?(\d(?:\.\d)?)?/i)
-  if (!m || /nc|nd/i.test(s)) return null
+  if (!m || /(^|[- ])(nc|nd)([- ]|$)/i.test(s)) return null
   return `CC BY${m[1] ? "-SA" : ""}${m[2] ? ` ${m[2]}` : ""}`
 }
 
@@ -147,14 +151,31 @@ async function commonsSearch(query) {
   return []
 }
 
+/** Commons fills Artist with "No machine-readable author provided. Name assumed (...)." when unknown. */
+export function commonsAuthor(artist) {
+  const assumed = /^No machine-readable author provided\.\s*(.+?)\s+assumed\b/i.exec(artist)
+  if (assumed) return assumed[1]
+  return /^No machine-readable author/i.test(artist) ? "" : artist
+}
+
+/** Commons sometimes gives the license deed as http://; the credit links only to https. */
+function httpsLicense(value) {
+  const raw = String(value ?? "").trim()
+  if (/^https:\/\//i.test(raw)) return raw
+  if (/^http:\/\/creativecommons\.org\//i.test(raw)) return raw.replace(/^http:/i, "https:")
+  return null
+}
+
 function fromCommons(page, query) {
   const info = page.imageinfo?.[0]
   if (!info || !/^image\/(jpeg|png|webp)$/.test(info.mime) || Math.min(info.width, info.height) < MIN_SHORT_SIDE) return null
   const meta = info.extmetadata ?? {}
   const license = allowedLicense(meta.LicenseShortName?.value)
   if (!license) return null
-  const author = strip(meta.Artist?.value).slice(0, 200)
+  const author = commonsAuthor(strip(meta.Artist?.value)).slice(0, 200)
   if (!/^(CC0|Public domain)/.test(license) && !author) return null
+  const licenseUrl = httpsLicense(meta.LicenseUrl?.value)
+  if (/^CC BY/.test(license) && !licenseUrl) return null
   return {
     provider: "wikimedia",
     key: `commons-${page.pageid}`,
@@ -165,7 +186,7 @@ function fromCommons(page, query) {
     height: info.height,
     author: author || null,
     license,
-    license_url: meta.LicenseUrl?.value?.startsWith("https://") ? meta.LicenseUrl.value : null,
+    license_url: licenseUrl,
     source_url: info.descriptionurl,
     description: strip(meta.ImageDescription?.value).slice(0, 300),
   }

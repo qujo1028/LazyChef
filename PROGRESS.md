@@ -1246,4 +1246,5 @@ Not done / not checked:
 - Pexels was never searched (no key). With a free key in `.env.local`, re-run `node scripts/find-stock-photos.mjs`
   (it adds Pexels results to dishes searched without it), then re-pick and re-apply; Pexels should beat Commons for
   the 541 TheMealDB and 30 empty recipes.
+- Credit fixes from review (live): Granola and Turkish lahmacun showed Commons' "No machine-readable author" text, now the named author; lahmacun and Taiwanese Popcorn Chicken (from the earlier expansion) got their CC BY-SA 3.0 license link. No live row now has a CC BY credit without a link.
 - Not seen on a phone. The 3:2 card and 4:3 hero crops were checked on contact sheets, not in the app.

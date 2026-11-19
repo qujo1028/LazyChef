@@ -32,7 +32,7 @@ function old(recipe) {
     image_license: recipe.image_license,
     image_license_url: recipe.image_license_url,
     image_source_url: recipe.image_source_url,
-    image_ai_generated: false,
+    image_ai_generated: recipe.image_ai_generated === true,
   }
 }
 

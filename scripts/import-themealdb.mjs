@@ -142,6 +142,14 @@ const { createClient } = await import("@supabase/supabase-js")
 const db = createClient(url, secret, { auth: { persistSession: false, autoRefreshToken: false } })
 console.log(`Writing to ${new URL(url).host} …`)
 
+const NO_CREDIT = {
+  image_author: null,
+  image_license: null,
+  image_license_url: null,
+  image_source_url: null,
+  image_ai_generated: false,
+}
+
 const BATCH = 50
 let written = 0
 for (let i = 0; i < recipes.length; i += BATCH) {
@@ -149,7 +157,8 @@ for (let i = 0; i < recipes.length; i += BATCH) {
   // Upsert on (source, source_id): re-running updates the same rows. Rows that already have a photo
   // keep it and its credit (replaced library photos must survive a re-run), unless --replace-photos.
   const rowsToSave = batch.map((recipe) => {
-    const row = { ...recipe, household_id: null }
+    // TheMealDB photos carry no credit, so a replaced photo's credit is cleared with it.
+    const row = { ...NO_CREDIT, ...recipe, household_id: null }
     delete row.ingredients
     return row
   })
