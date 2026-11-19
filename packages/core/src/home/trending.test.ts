@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { buildHomeRecipes, trendingLine, type PoolRecipe, type TrendingRow } from "./trending"
+import { buildHomeRecipes, homeRecipesHeading, trendingLine, type PoolRecipe, type TrendingRow } from "./trending"
 
 const trend = (id: string, count = 3): TrendingRow => ({
   id,
@@ -85,5 +85,13 @@ describe("trendingLine", () => {
   })
   it("is null for picks", () => {
     expect(trendingLine({ tag: "Try something new", householdCount: null })).toBeNull()
+  })
+})
+
+describe("homeRecipesHeading", () => {
+  it("says trending only when a card is trending", () => {
+    expect(homeRecipesHeading([{ tag: "Try something new" }, { tag: "Trending" }])).toBe("Trending recipes")
+    expect(homeRecipesHeading([{ tag: "Try something new" }])).toBe("Recipes to try")
+    expect(homeRecipesHeading([])).toBe("Recipes to try")
   })
 })

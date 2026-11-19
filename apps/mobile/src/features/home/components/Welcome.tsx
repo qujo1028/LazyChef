@@ -11,8 +11,8 @@ import { useNow } from '@/lib/use-now';
 import { useToday } from '@/lib/use-today';
 import { useTheme } from '@/theme';
 
-/** Home's top: the greeting, the household name and (only when something expires within a week) a line that opens Pantry. */
-export function Welcome({ displayName, householdName }: { displayName: string | null; householdName: string | null }) {
+/** Home's top: the greeting (the header above already shows the household name) and (only when something expires within a week) a line that opens Pantry. */
+export function Welcome({ displayName }: { displayName: string | null }) {
   const { colors, spacing, type, radius } = useTheme();
   const router = useRouter();
   const { items } = usePantry();
@@ -29,7 +29,6 @@ export function Welcome({ displayName, householdName }: { displayName: string | 
         <Text accessibilityRole="header" style={[type.titleSmall, { color: colors.ink }]}>
           {hello}
         </Text>
-        {householdName ? <Text style={[type.body, { color: colors.muted }]}>{householdName}</Text> : null}
       </View>
       {expiring ? (
         <Pressable

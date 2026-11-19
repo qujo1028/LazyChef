@@ -116,3 +116,8 @@ export function trendingLine(card: Pick<HomeRecipeCard, "tag" | "householdCount"
   if (card.tag !== "Trending" || card.householdCount === null) return null
   return `Cooked by ${card.householdCount} ${card.householdCount === 1 ? "household" : "households"}`
 }
+
+/** "Trending recipes" once at least one card really is trending, otherwise "Recipes to try". */
+export function homeRecipesHeading(cards: readonly Pick<HomeRecipeCard, "tag">[]): string {
+  return cards.some((card) => card.tag === "Trending") ? "Trending recipes" : "Recipes to try"
+}
