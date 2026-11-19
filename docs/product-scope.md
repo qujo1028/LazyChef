@@ -18,6 +18,7 @@ What the app should do, based on a consumer review of the current web app (2026-
 - **Household page** handles household settings only. Account settings get their own screen.
 - **Simpler header:** household name only. The avatar moves into account settings.
 - **Free AI limit (10 uses a week):** show the count before the limit is reached.
+- **Account settings screen** (P6, decided 2026-11-18): opened from the Household tab. The avatar is the sign-in photo when there is one, otherwise initials (no photo upload in v1). It also holds the display name, a personal weekly cook goal (1 to 7 nights, default 3, stored per person), food preferences, haptics, notifications, legal links, sign out and delete account.
 
 ## Cut from v1
 

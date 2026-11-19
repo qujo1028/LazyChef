@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { DEFAULT_GOAL } from '@lazychef/core/habit/constants';
 import { dismissKey, pickNudges, type NudgeId } from '@lazychef/core/habit/nudges';
 import { groupPantry } from '@lazychef/core/pantry/group';
 import { useRouter } from 'expo-router';
@@ -10,6 +9,7 @@ import { Pressable, Text, View } from 'react-native';
 import { Card } from '@/components/Card';
 import { Chip } from '@/components/Chip';
 import { useHabit } from '@/features/habit/use-habit';
+import { useWeeklyGoal } from '@/features/habit/use-weekly-goal';
 import { usePantry } from '@/features/pantry/pantry-provider';
 import {
   applyDevPreset,
@@ -36,7 +36,7 @@ export function ThisWeekCard() {
   const { householdId, items } = usePantry();
   const { summary: real, events, query } = useHabit(householdId);
   const today = useToday();
-  const goal = DEFAULT_GOAL;
+  const { goal } = useWeeklyGoal();
 
   // Dev only: preview states without waiting days. Display only, never saved.
   const [devOpen, setDevOpen] = useState(false);

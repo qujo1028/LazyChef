@@ -26,6 +26,7 @@ import { useToast, type ToastOptions } from '@/components/Toast';
 import { RewardBurst } from '@/features/habit/components/RewardBurst';
 import { useReward } from '@/features/habit/use-reward';
 import { useHabit } from '@/features/habit/use-habit';
+import { useWeeklyGoal } from '@/features/habit/use-weekly-goal';
 import { addListItems } from '@/features/list/api';
 import { usePantry } from '@/features/pantry/pantry-provider';
 import { createAfterClose, type AfterClose } from '@/lib/after-close';
@@ -391,6 +392,7 @@ function DoneBody({
   refresh: () => Promise<void>;
 }) {
   const { colors, radius, spacing, type, minTouch } = useTheme();
+  const { goal } = useWeeklyGoal();
   const { show } = useToast();
   const out = ranOut(done.results);
   const [added, setAdded] = useState<ReadonlySet<string>>(() => new Set());
@@ -421,8 +423,8 @@ function DoneBody({
   return (
     <>
       {celebrate ? <Text style={[type.heading, { color: colors.accent }]}>{celebrate}</Text> : null}
-      {habitLines(done.habit).length > 0 ? (
-        <Text style={[type.button, { color: colors.ink }]}>{habitLines(done.habit).join(' · ')}</Text>
+      {habitLines(done.habit, goal).length > 0 ? (
+        <Text style={[type.button, { color: colors.ink }]}>{habitLines(done.habit, goal).join(' · ')}</Text>
       ) : null}
       <View style={{ gap: spacing.xs }}>
         <Text style={[type.button, { color: colors.ink }]}>{tookOutSummary(done.results)}</Text>

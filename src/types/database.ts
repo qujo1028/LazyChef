@@ -932,6 +932,7 @@ export type Database = {
           diet: string
           updated_at: string
           user_id: string
+          weekly_goal: number
           world_recipes: boolean
         }
         Insert: {
@@ -940,6 +941,7 @@ export type Database = {
           diet?: string
           updated_at?: string
           user_id: string
+          weekly_goal?: number
           world_recipes?: boolean
         }
         Update: {
@@ -948,6 +950,7 @@ export type Database = {
           diet?: string
           updated_at?: string
           user_id?: string
+          weekly_goal?: number
           world_recipes?: boolean
         }
         Relationships: [
@@ -1294,6 +1297,10 @@ export type Database = {
       set_my_preferences: {
         Args: { p_allergies: string[]; p_cuisines: string[]; p_diet: string; p_world_recipes: boolean }
         Returns: undefined
+      }
+      set_my_weekly_goal: {
+        Args: { p_goal: number }
+        Returns: number
       }
       take_ai_allowance: {
         Args: { p_household_id: string }

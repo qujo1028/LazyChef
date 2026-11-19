@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** `20261118060000_admin_dashboard.sql` is already applied to the live project (checked 2026-11-18). Still pending: `20261118120000_push_notifications.sql` (on `main`, not live). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). Pending: `20261120000100_weekly_goal.sql` on `feature/p6-activity-account`. Migration lock: held by `feature/p6-activity-account` (P6 lead). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -989,3 +989,32 @@ Open for P5's exit check (needs the user and a phone in Expo Go):
   JWT verification on (`npx supabase functions deploy ai --project-ref gldppemwlecnbarxamcb`). The 20 deployed files
   were diffed against the repo: all identical. Smoke test: no auth 401 (gateway), a non-user token 401 with the
   function's own JSON, CORS preflight 204. Not yet tested with a signed-in session: do it from the Ideas sheet on a phone.
+
+## P6 Activity, account, legal (2026-11-18, lead: `feature/p6-activity-account`)
+Based on `origin/main` (P5 and the library expansion merged as #72 and #73). Migration lock: held by this branch
+(`20261120000100_weekly_goal.sql`). Workers don't touch `supabase/migrations/` or `src/types/database.ts`; a worker
+that needs a schema change stops and tells the lead.
+
+Decisions (user, 2026-11-18; recorded in `docs/react-native-app.md` and `docs/product-scope.md`):
+- Account deletion and app-triggered pushes are Vercel routes with bearer auth, reusing the web code.
+- Push goes through Expo's push service until the P7 dev build (Expo tokens in `device_tokens`, no migration).
+  Needs `eas init` once for the EAS project ID (user, free Expo account).
+- Avatar: the sign-in photo or initials. No upload in v1.
+- A stored weekly cook goal per person (1 to 7, default 3).
+
+Step 0 (lead):
+- Migration `20261120000100_weekly_goal.sql`: `user_preferences.weekly_goal` and `set_my_weekly_goal()`; 6 PGlite
+  tests (`weekly-goal.test.mjs`); types updated.
+- `packages/core/src/push/app-contract.ts` (+ test): routes, `notifyRequestSchema` (ids only), responses, error
+  codes, `isExpoPushToken`, `pushTapRoute`.
+- Mobile: `expo-notifications` (plugin in `app.json`), `lib/web-api.ts` (`callWebApi`, `EXPO_PUBLIC_API_URL`),
+  query keys `activity`, `weeklyGoal`, `notificationPrefs`, `features/habit/use-weekly-goal.ts` (wired into the ring
+  and the cook done lines), the `account` route, and stubs: `features/push/{PushBridge.tsx,notify.ts}`,
+  `features/push/components/NotificationsCard.tsx`. `PushBridge` is mounted in the root layout.
+
+Workers (branch from `origin/feature/p6-activity-account`):
+- W1 `feature/p6-server-routes` (Opus: bearer auth, account deletion, push delivery to housemates).
+- W2 `feature/p6-activity` (Sonnet: the Activity screen: log, chart, board, challenge and goal).
+- W3 `feature/p6-account` (Sonnet: the Account screen and the Household tab cleanup).
+- W4 `feature/p6-push-app` (Sonnet: registration, permission at first toggle, tap deep links, notify calls).
+
