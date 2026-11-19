@@ -1,6 +1,6 @@
 import "server-only"
 
-import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js"
+import { createClient, isAuthRetryableFetchError, type SupabaseClient, type User } from "@supabase/supabase-js"
 
 import type { AppApiErrorCode, AppApiFailure } from "@lazychef/core/push/app-contract"
 import type { Database } from "@/types/database"
@@ -76,15 +76,33 @@ export async function authenticate(
 ): Promise<BearerAuth | Response> {
   const token = bearerToken(request.headers.get("authorization"))
   if (!token) return apiFailure("unauthorized", UNAUTHORIZED)
-  const supabase = makeClient(token)
+  let supabase: SupabaseClient<Database>
   try {
+    supabase = makeClient(token)
+  } catch {
+    return apiFailure("not_configured", "Supabase isn't set up on this server.")
+  }
+  try {
+    // getUser returns network and server failures as `error` rather than throwing.
     const { data, error } = await supabase.auth.getUser(token)
+    if (error && !isTokenRejection(error)) return apiFailure("failed", FAILED)
     if (error || !data.user) return apiFailure("unauthorized", UNAUTHORIZED)
     return { user: data.user, supabase }
   } catch {
-    // Auth unreachable: not the caller's fault, and not a reason to sign them out.
-    return apiFailure("failed", "Something went wrong. Try again in a minute.")
+    return apiFailure("failed", FAILED)
   }
+}
+
+const FAILED = "Something went wrong. Try again in a minute."
+
+/**
+ * True when Auth looked at the token and said no (bad, expired, or its user is gone). Outages,
+ * timeouts and 5xx are not rejections: answering those with 401 would sign the app out for nothing.
+ */
+export function isTokenRejection(error: unknown): boolean {
+  if (isAuthRetryableFetchError(error)) return false
+  const status = (error as { status?: unknown } | null)?.status
+  return typeof status === "number" && status >= 400 && status < 500 && status !== 429
 }
 
 /**

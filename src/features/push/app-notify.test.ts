@@ -56,7 +56,10 @@ function deps(tables: Record<string, Result>, opts: { authed?: boolean } = {}) {
   }
 }
 
-const member = (joinedAgoMs = 30 * 24 * 3600_000): Result => ({ data: { joined_at: new Date(now - joinedAgoMs).toISOString() }, error: null })
+const member = (joinedAgoMs = 30 * 24 * 3600_000, role = "member"): Result => ({
+  data: { joined_at: new Date(now - joinedAgoMs).toISOString(), role },
+  error: null,
+})
 
 beforeEach(() => {
   notifyListAdded = vi.fn(async () => true)
@@ -104,7 +107,11 @@ describe("POST /api/push/notify", () => {
       })
       const response = await handleNotify(request({ event: "list_added", householdId: HOUSEHOLD }), d)
       expect(await response.json()).toEqual({ ok: true, sent: true })
-      expect(notifyListAdded).toHaveBeenCalledWith(HOUSEHOLD, "me", "Milk", { defer })
+      const [household, who, name, options] = notifyListAdded.mock.calls[0]
+      expect([household, who, name]).toEqual([HOUSEHOLD, "me", "Milk"])
+      expect(options.defer).toBe(defer)
+      // Keyed on the line's time, so a retry for the same line lands in the same slot.
+      expect(options.now()).toBe(now - 10_000)
       const list = db.calls.find((c) => c.table === "shopping_list_items")!
       expect(list.filters).toContainEqual(["eq", "added_by", "me"])
       expect(list.filters).toContainEqual(["eq", "household_id", HOUSEHOLD])
@@ -120,7 +127,7 @@ describe("POST /api/push/notify", () => {
 
     it("reports sent false when the slot was already used", async () => {
       notifyListAdded.mockResolvedValue(false)
-      const { deps: d } = deps({ household_members: member(), shopping_list_items: { data: { name: "Milk" }, error: null } })
+      const { deps: d } = deps({ household_members: member(), shopping_list_items: { data: { name: "Milk", created_at: new Date(now).toISOString() }, error: null } })
       expect(await (await handleNotify(request({ event: "list_added", householdId: HOUSEHOLD }), d)).json()).toEqual({ ok: true, sent: false })
     })
   })
@@ -135,6 +142,12 @@ describe("POST /api/push/notify", () => {
       expect([household, who]).toEqual([HOUSEHOLD, "me"])
       expect(options.defer).toBe(defer)
       expect(options.now()).toBe(now - 60_000)
+    })
+
+    it("sends nothing for the owner's own row (creating a household isn't a join)", async () => {
+      const { deps: d } = deps({ household_members: member(60_000, "owner") })
+      expect(await (await handleNotify(request({ event: "joined", householdId: HOUSEHOLD }), d)).json()).toEqual({ ok: true, sent: false })
+      expect(notifyJoined).not.toHaveBeenCalled()
     })
 
     it("sends nothing for an old membership", async () => {

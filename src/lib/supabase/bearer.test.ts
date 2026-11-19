@@ -94,9 +94,29 @@ describe("authenticate", () => {
   })
 
   it("is 401 when Supabase rejects the token", async () => {
-    const make = client(async () => ({ data: { user: null }, error: { message: "invalid JWT" } }))
-    const result = await authenticate(withAuth("Bearer bad"), make)
-    expect(result instanceof Response && result.status).toBe(401)
+    for (const status of [401, 403, 404]) {
+      const make = client(async () => ({ data: { user: null }, error: { message: "invalid JWT", status } }))
+      const result = await authenticate(withAuth("Bearer bad"), make)
+      expect(result instanceof Response && result.status).toBe(401)
+    }
+  })
+
+  it("is 500, not 401, when Auth answers with an outage error", async () => {
+    const { AuthRetryableFetchError } = await import("@supabase/supabase-js")
+    for (const error of [new AuthRetryableFetchError("fetch failed", 0), { message: "down", status: 503 }, { message: "slow", status: 429 }]) {
+      const make = client(async () => ({ data: { user: null }, error }))
+      const result = await authenticate(withAuth("Bearer t"), make)
+      expect(result instanceof Response && result.status).toBe(500)
+    }
+  })
+
+  it("is not_configured when the Supabase settings are missing", async () => {
+    const make = vi.fn(() => {
+      throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL")
+    })
+    const result = await authenticate(withAuth("Bearer t"), make as never)
+    expect(result instanceof Response && result.status).toBe(503)
+    expect(result instanceof Response && (await result.json()).code).toBe("not_configured")
   })
 
   it("is 500, not 401, when Supabase can't be reached", async () => {

@@ -1072,8 +1072,9 @@ W2 `feature/p6-activity` (Activity screen, Expo app):
 W1 `feature/p6-server-routes` (Opus, 2026-11-18): the Vercel routes the Expo app calls.
 - `src/lib/supabase/bearer.ts`: `authenticate()` reads `Authorization: Bearer`, verifies with `auth.getUser(token)` and
   returns the user plus a client acting as them (publishable key + token, RLS applies). 401 `unauthorized` for a
-  missing or bad token, 500 `failed` if Auth can't be reached (so the app doesn't sign out). `readJsonBody()`: JSON
-  only (415), 4 KB cap checked while reading (413), bad JSON 400. Other methods get 405 in the `AppApiFailure` shape.
+  missing or bad token. `readJsonBody()`: JSON
+  only (415), 4 KB cap checked while reading (413), bad JSON 400. Auth outages (retryable fetch errors, 429, 5xx)
+  are 500 `failed`, only 4xx token rejections are 401; missing Supabase settings are 503 `not_configured`. Other methods get 405 in the `AppApiFailure` shape.
   No CORS on purpose: Expo web can't call these routes.
 - `POST /api/account/delete`: the deletion moved to `src/features/account/delete.ts` (`deleteAccountCore`), used by
   the web action (same redirects and local sign-out) and by `src/features/account/api.ts`. Returns
@@ -1081,7 +1082,8 @@ W1 `feature/p6-server-routes` (Opus, 2026-11-18): the Vercel routes the Expo app
 - `POST /api/push/notify` (`src/features/push/app-notify.ts`): membership checked as the caller (403 `forbidden`).
   `list_added` names the caller's newest `shopping_list_items` line from the last 5 minutes (`added_by` is stamped
   from `auth.uid()` by a trigger, so it can't be forged); `joined` needs `household_members.joined_at` within 10
-  minutes and uses the join time as the dedupe slot, so the web join action and the app share one push.
+  minutes and role `member` (the owner's row is from creating the household). Both events key the dedupe slot on
+  the database time (line `created_at`, `joined_at`), so app retries never push twice.
 - `notifyListAdded` / `notifyJoined` now return `Promise<boolean>` and take an optional `defer` (the route passes
   `after`): the dedupe claim happens in the request, delivery runs after the response. `sent: true` means this
   request claimed the slot and delivery was scheduled, not that a phone buzzed. Server actions unchanged.

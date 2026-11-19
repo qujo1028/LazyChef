@@ -49,7 +49,7 @@ export async function handleNotify(request: Request, deps: NotifyApiDeps = {}): 
 
   const { data: membership, error: memberError } = await supabase
     .from("household_members")
-    .select("joined_at")
+    .select("joined_at, role")
     .eq("household_id", householdId)
     .eq("user_id", user.id)
     .maybeSingle()
@@ -79,15 +79,23 @@ export async function handleNotify(request: Request, deps: NotifyApiDeps = {}): 
       return apiFailure("failed", FAILED)
     }
     if (!line) return apiOk(nothing)
-    const sent = await (deps.notifyListAdded ?? notifyListAdded)(householdId, user.id, line.name, { defer })
+    // The line's own time picks the dedupe slot, so a retry for the same line can't push twice.
+    const addedAt = Date.parse(line.created_at)
+    const sent = await (deps.notifyListAdded ?? notifyListAdded)(householdId, user.id, line.name, {
+      defer,
+      now: () => (Number.isFinite(addedAt) ? addedAt : now),
+    })
     return apiOk<NotifyResponse>({ ok: true, sent })
   }
 
-  // joined
+  // joined. The owner's row is from creating the household (or from inheriting it), not a join.
+  if (membership.role !== "member") return apiOk(nothing)
   const joinedAt = Date.parse(membership.joined_at)
   const age = now - joinedAt
   if (!Number.isFinite(age) || age > JOIN_WINDOW_MS || age < -SKEW_MS) return apiOk(nothing)
-  // The join time picks the dedupe slot, so this and the web's join action share one push.
+  // The join time picks the dedupe slot, so retries share one push. The web join action keys on its
+  // own clock, which is almost always the same five-minute slot (a join right at a boundary could
+  // push twice if both the web and the app report it; the app reports only its own joins).
   const sent = await (deps.notifyJoined ?? notifyJoined)(householdId, user.id, { defer, now: () => joinedAt })
   return apiOk<NotifyResponse>({ ok: true, sent })
 }
