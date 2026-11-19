@@ -27,11 +27,9 @@ export function DeleteAccountCard() {
     setBusy(true);
     setError(null);
     const outcome = await deleteAccount();
-    // On success the phone signs out and this screen goes away; only failures stay here.
-    if (outcome.kind === 'error') {
-      setError(outcome.message);
-      setBusy(false);
-    }
+    // On success the phone signs out and this screen goes away; failures stay here.
+    if (outcome.kind === 'error') setError(outcome.message);
+    setBusy(false);
   };
 
   const confirm = () => {

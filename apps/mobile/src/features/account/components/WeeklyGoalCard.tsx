@@ -14,7 +14,7 @@ export function WeeklyGoalCard() {
   const save = useSetWeeklyGoal();
 
   const step = (next: number) => {
-    if (next < GOAL_MIN || next > GOAL_MAX) return;
+    if (next < GOAL_MIN || next > GOAL_MAX || save.isPending) return;
     haptic('tap');
     save.mutate(next);
   };

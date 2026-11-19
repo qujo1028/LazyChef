@@ -1,5 +1,4 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,8 +15,11 @@ export default function WelcomeScreen() {
   const router = useRouter();
   const social = useSocialSignIn();
   const notice = useAccountNotice();
-  // Show the deleted message once: leaving this screen (to sign in, say) clears it.
-  useEffect(() => () => setAccountNotice(null), []);
+  // The deleted message stays until the person starts signing in.
+  const go = (fn: () => void) => () => {
+    setAccountNotice(null);
+    fn();
+  };
   const busy = social.busy !== null;
 
   return (
@@ -46,16 +48,16 @@ export default function WelcomeScreen() {
           <FormMessage tone="success" text={[notice.message, notice.appleNote].filter(Boolean).join(' ')} />
         ) : null}
         {social.error ? <FormMessage tone="error" text={social.error} /> : null}
-        <AppleSignInButton onPress={social.apple} disabled={busy} />
+        <AppleSignInButton onPress={go(social.apple)} disabled={busy} />
         <PrimaryPillButton
           title="Continue with Google"
           variant="outline"
           loading={social.busy === 'google'}
           disabled={busy}
-          onPress={social.google}
+          onPress={go(social.google)}
         />
-        <PrimaryPillButton title="Sign in with email" disabled={busy} onPress={() => router.push('/login')} />
-        <PrimaryPillButton title="Create an account" variant="text" disabled={busy} onPress={() => router.push('/signup')} />
+        <PrimaryPillButton title="Sign in with email" disabled={busy} onPress={go(() => router.push('/login'))} />
+        <PrimaryPillButton title="Create an account" variant="text" disabled={busy} onPress={go(() => router.push('/signup'))} />
       </View>
     </View>
   );

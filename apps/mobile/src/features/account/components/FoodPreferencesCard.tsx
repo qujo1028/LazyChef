@@ -34,9 +34,10 @@ export function FoodPreferencesCard() {
   const { colors, spacing, type } = useTheme();
   const saved = useFoodPreferences();
   const save = useSavePreferences();
-  const [draft, setDraft] = useState<FoodPreferences | null>(null);
+  const [draft, setDraft] = useState<Partial<FoodPreferences> | null>(null);
 
-  const current = draft ?? saved.data ?? null;
+  // Only the edited fields are kept, so a refetch while editing never writes back stale values.
+  const current: FoodPreferences | null = saved.data ? { ...saved.data, ...draft } : null;
 
   if (!current) {
     return (
@@ -55,7 +56,7 @@ export function FoodPreferencesCard() {
 
   const edit = (patch: Partial<FoodPreferences>) => {
     save.reset();
-    setDraft({ ...current, ...patch });
+    setDraft({ ...draft, ...patch });
   };
   const dirty = draft !== null;
 

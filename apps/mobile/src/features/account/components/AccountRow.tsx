@@ -31,7 +31,7 @@ export function AccountRow() {
         },
       ]}
     >
-      <Avatar name={name} url={context.data?.profile?.avatarUrl ?? null} size={48} />
+      <Avatar name={context.data?.profile?.displayName ?? ''} url={context.data?.profile?.avatarUrl ?? null} size={48} />
       <View style={styles.text}>
         <Text style={[type.bodySmall, { color: colors.muted }]}>Your account</Text>
         <Text numberOfLines={1} style={[type.titleSmall, { color: colors.ink }]}>

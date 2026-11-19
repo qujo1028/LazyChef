@@ -89,12 +89,31 @@ export async function signOutLocal(): Promise<{ error: Error | null }> {
  */
 export async function deleteAccount(): Promise<DeleteOutcome> {
   const result = await callWebApi<DeleteAccountResponse>(APP_API.deleteAccount, {});
-  const outcome = deleteOutcome(result);
-  if (outcome.kind === 'deleted') await finishDeleted(outcome);
+  let outcome = deleteOutcome(result);
+  // A timeout or dropped connection may hide a delete that finished: ask the server if the account is still there.
+  if (outcome.kind === 'error' && !result.ok && result.code === 'offline' && (await accountIsGone())) {
+    outcome = deleteOutcome({ ok: true, appleNotRevoked: false });
+  }
+  if (outcome.kind === 'deleted') {
+    const error = await finishDeleted(outcome);
+    if (error) return { kind: 'error', message: error };
+  }
   return outcome;
 }
 
-async function finishDeleted(outcome: Extract<DeleteOutcome, { kind: 'deleted' }>) {
+/** True only when the server answers that this login no longer has a user; network trouble is "unknown". */
+async function accountIsGone(): Promise<boolean> {
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (data.user) return false;
+    return error?.status === 401 || error?.status === 403 || error?.status === 404;
+  } catch {
+    return false;
+  }
+}
+
+/** Returns an error message when the local sign out fails (the notice is cleared then). */
+async function finishDeleted(outcome: Extract<DeleteOutcome, { kind: 'deleted' }>): Promise<string | null> {
   setAccountNotice({ message: outcome.message, appleNote: outcome.appleNote });
   appQueryClient.clear();
   try {
@@ -102,5 +121,12 @@ async function finishDeleted(outcome: Extract<DeleteOutcome, { kind: 'deleted' }
   } catch {
     // The sign out below clears it again.
   }
-  await supabase.auth.signOut({ scope: 'local' });
+  try {
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
+    if (error) throw error;
+    return null;
+  } catch {
+    setAccountNotice(null);
+    return 'Your account is deleted, but this phone could not sign out. Close and reopen LazyChef.';
+  }
 }

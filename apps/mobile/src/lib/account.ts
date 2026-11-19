@@ -58,7 +58,7 @@ export function deleteOutcome(result: DeleteAccountResponse | AppApiFailure): De
         message: result.error || "Deleting accounts isn't set up right now. Nothing was deleted. Try again later.",
       };
     default:
-      return { kind: 'error', message: result.error || 'Something went wrong. Nothing was deleted. Try again.' };
+      return { kind: 'error', message: result.error || 'Something went wrong. Try again.' };
   }
 }
 
