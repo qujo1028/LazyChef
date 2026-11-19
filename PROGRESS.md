@@ -1097,3 +1097,28 @@ W1 `feature/p6-server-routes` (Opus, 2026-11-18): the Vercel routes the Expo app
   live Supabase project. Vitest covers bearer parsing, body limits, auth outcomes, both handlers with fakes
   (unauthorized, forbidden, bad body, list_added with/without a recent line, joined new/old, delete
   not_configured/success/failures), the Expo sender and the sender routing.
+
+Lead merge (P6): W3, W4, W2, W1 merged into `feature/p6-activity-account` in that order; PROGRESS.md and the sign-out
+card (W3 moved it, W4 added the token unregister) conflicted. The lead read every diff; W1 was reviewed for bearer auth
+(401 only when Auth rejects the token, outages 500), the size-capped JSON body, membership checked as the caller, names
+read from the database, the secret key only in the deletion path, and no CORS. Fixes on merge: step 0's goal rollback
+when the goal never loaded, `pushTapRoute` trailing slashes, a timeout from `callWebApi` worded as "took too long", not
+"offline"; the delete flow checks whether the account is gone after a timeout or server error too, and a 401 alone no
+longer counts as deleted; one shared `components/Avatar.tsx` (W2 and W3 each had one). Checks on the merged branch:
+web typecheck, lint, 2,614 tests, `npm run test:db` (227 pass), audit, ingredients check; mobile typecheck, lint, iOS
+and web exports.
+
+Open for P6's exit check (needs the user):
+- Apply `20261120000100_weekly_goal.sql` to the live project before anyone runs this app build: the goal query reads
+  `user_preferences.weekly_goal`, so the ring falls back to 3 and saving fails until it's live.
+- `eas init` in `apps/mobile` (free Expo account) for the EAS project ID; without it the Notifications card says push
+  isn't set up. Check `SUPABASE_SECRET_KEY` is set in Vercel (Production and Preview); `EXPO_ACCESS_TOKEN` is optional.
+- On a phone in Expo Go: Activity (Log, Chart, Board, goal card) at 375pt, light and dark; Account (name, goal stepper,
+  food preferences, legal links, sign out); turn on a notification (the permission prompt), then have a housemate add
+  to the list and tap the push (the exit check: it opens the List); delete a throwaway account end to end (the other
+  exit check), including the Apple note when it applies.
+- Known gaps: Expo push receipts aren't checked (a dead token is dropped on its next send); a token that couldn't be
+  unregistered on sign out stays until someone registers on that phone; the web's ring still uses the fixed goal of 3
+  (web takes bug fixes only); the web join action and the app could each push once for the same join right at a
+  5-minute boundary.
+
