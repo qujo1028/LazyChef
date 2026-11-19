@@ -1147,3 +1147,16 @@ Step 0 (lead):
 Workers (branch from `feature/home-tab` at the step 0 commit):
 - W1 `feature/home-screen` (Sonnet: the Home screen, `packages/core/src/home/*` helpers and tests, card off Pantry).
 - W2 `feature/home-tabbar` (Sonnet: raised Home tab button, tab order, default route and redirects).
+
+### W2 `feature/home-tabbar` (Sonnet)
+- `BottomTabBar`: Home added as the middle tab, drawn as a raised 56px olive circle (on-primary icon, small shadow and
+  elevation, light haptic on press). The tab row owns the lift (the bar background sits behind it) so the button is
+  inside its parent's bounds and stays tappable on Android. Household's icon is now `people`. Press feedback is a
+  colour change only, so nothing to skip for reduced motion.
+- `(tabs)/_layout.tsx`: order Pantry, Recipes, Home, List, Household; `unstable_settings.initialRouteName = "home"`.
+- Landings: `app/index.tsx` and `app/join/[code].tsx` go to `/home`. The auth callback and onboarding already go
+  through `/`, so they follow. The expiring-food push tap stays `/pantry`. The unknown-tap fallback in
+  `packages/core/src/push/app-contract.ts` also stays `/pantry` (shared with web, which has no Home tab).
+- `docs/app-design.md` tab row says five tabs.
+- Not checked: no simulator, Playwright or signed-in account here. The raised button, the 375px fit with five labels,
+  and the Android tap on the part above the bar need a look in Expo Go.

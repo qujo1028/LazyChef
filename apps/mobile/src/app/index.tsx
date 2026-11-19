@@ -9,5 +9,5 @@ export default function Index() {
   const context = useHouseholdContext();
   if (!session) return <Redirect href="/welcome" />;
   if ((context.data?.memberships.length ?? 0) === 0) return <Redirect href="/onboarding" />;
-  return <Redirect href="/pantry" />;
+  return <Redirect href="/home" />;
 }
