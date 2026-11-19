@@ -6,12 +6,14 @@
 //
 //   npm run recipes:lazychef -- --dry-run     check every recipe, write data/lazychef/preview.json, touch nothing
 //   npm run recipes:lazychef -- --write       resize and upload photos, upsert recipes (safe to re-run)
+//   npm run recipes:lazychef -- --write --replace-photos   also overwrite photos already in the database
 //   npm run recipes:lazychef -- --write --only us-baked-mac-and-cheese,cn-sesame-chicken
 //
 // Each recipe's `photo.from` is where the photo comes from: an https URL (a Wikimedia Commons file)
 // or a local file (an AI-generated image). The photo is resized to 1200 px wide JPEG and uploaded to
 // library-photos/<slug>.jpg; the recipe stores that public URL plus the credit (author, license,
-// links) the apps show under it.
+// links) the apps show under it. A recipe already stored with a photo keeps that photo and its credit
+// (photos replaced later by scripts/library-photos.mjs must survive a re-run), unless --replace-photos.
 //
 // Env (from the shell or .env.local), only for --write:
 //   NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SECRET_KEY   the secret key bypasses RLS and storage policies,
@@ -22,6 +24,7 @@ import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 
 import "./lib/ts-paths.mjs"
+import { sourceIdsWithPhoto, upsertLibraryRows } from "./lib/library-upsert.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const { checkLibraryRecipe } = await import(path.join(ROOT, "packages/core/src/recipes/import/lazychef.ts"))
@@ -38,6 +41,7 @@ const { values: args } = parseArgs({
     from: { type: "string", default: "data/lazychef/recipes.json" },
     out: { type: "string", default: "data/lazychef/preview.json" },
     only: { type: "string" },
+    "replace-photos": { type: "boolean", default: false },
   },
 })
 
@@ -185,10 +189,18 @@ const NO_PHOTO = {
   image_source_url: null,
   image_ai_generated: false,
 }
+const withPhoto = args["replace-photos"]
+  ? new Set()
+  : await sourceIdsWithPhoto(db, "lazychef", recipes.map((item) => item.recipe.source_id)).catch((error) => fail(error.message))
 const skippedPhotos = []
 let uploaded = 0
+let kept = 0
 for (const item of recipes) {
   if (!item.draft.photo?.from) continue
+  if (withPhoto.has(item.recipe.source_id)) {
+    kept += 1
+    continue
+  }
   const problem = await uploadPhoto(item.draft)
   if (problem) {
     // The recipe still goes in, without a photo, rather than stopping the whole import.
@@ -201,24 +213,21 @@ for (const item of recipes) {
   if (/^https:/i.test(item.draft.photo.from)) await sleep(300)
 }
 if (uploaded > 0) process.stdout.write("\n")
+if (kept > 0) console.log(`${kept} recipes already have a photo and keep it (--replace-photos to overwrite).`)
 
 const BATCH = 50
 let written = 0
 for (let i = 0; i < recipes.length; i += BATCH) {
   const batch = recipes.slice(i, i + BATCH).map((item) => item.recipe)
-  // Upsert on (source, source_id): re-running updates the same rows.
-  const { data, error } = await db
-    .from("recipes")
-    .upsert(
-      batch.map((recipe) => {
-        const row = { ...recipe, household_id: null }
-        delete row.ingredients
-        return row
-      }),
-      { onConflict: "source,source_id" },
-    )
-    .select("id, source_id")
-  if (error) fail(`Saving recipes failed: ${error.message}`)
+  // Upsert on (source, source_id): re-running updates the same rows (rows with a photo keep it).
+  const rowsToSave = batch.map((recipe) => {
+    const row = { ...recipe, household_id: null }
+    delete row.ingredients
+    return row
+  })
+  const data = await upsertLibraryRows(db, rowsToSave, { withPhoto, replacePhotos: args["replace-photos"] }).catch(
+    (error) => fail(error.message),
+  )
 
   const ids = new Map(data.map((row) => [row.source_id, row.id]))
   const { error: deleteError } = await db.from("recipe_ingredients").delete().in("recipe_id", [...ids.values()])

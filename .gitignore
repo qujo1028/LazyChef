@@ -50,3 +50,5 @@ next-env.d.ts
 
 # Supabase CLI link state
 supabase/.temp/
+/data/library-photos/cache/
+/data/library-photos/candidates/

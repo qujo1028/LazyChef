@@ -1,0 +1,674 @@
+[
+  {
+    "id": "b274cf3b-cbd4-49e4-bf4f-acdda331ceb4",
+    "title": "Hot Dogs with Onions",
+    "verdict": "fail",
+    "reasons": [
+      "plate glare and flat snapshot light",
+      "plain cluttered marble counter look"
+    ],
+    "note": "Two hot dogs with onions and ketchup on a brown plate"
+  },
+  {
+    "id": "b4f4086b-3fc6-467e-b12e-1b0f8e5bf279",
+    "title": "Pork and Chive Dumplings",
+    "verdict": "fail",
+    "reasons": [
+      "dim and dark",
+      "murky colors"
+    ],
+    "note": "Dumplings on a square white plate with sauce"
+  },
+  {
+    "id": "b4febdcf-36e8-415b-9bb3-2483b44afeb3",
+    "title": "Garlic Shrimp Stir-Fry",
+    "verdict": "fail",
+    "reasons": [
+      "napkin, spoon and other plate cluttering frame",
+      "harsh restaurant light"
+    ],
+    "note": "Garlic shrimp on a white plate with spoon"
+  },
+  {
+    "id": "b5597b2e-d390-4b2a-a8dc-62e93ce50d05",
+    "title": "Stuffed Shells",
+    "verdict": "fail",
+    "reasons": [
+      "placemat, cutlery and napkin clutter",
+      "flat overhead snapshot"
+    ],
+    "note": "Stuffed shells in sauce on a white plate, overhead"
+  },
+  {
+    "id": "b64bee04-3d02-44fc-809f-975d768b81aa",
+    "title": "Collard Greens with Bacon",
+    "verdict": "fail",
+    "reasons": [
+      "food still in the pot on a stovetop"
+    ],
+    "note": "Collard greens in a pot on a stove"
+  },
+  {
+    "id": "b835f153-4051-4c5d-9ad3-022eb13d046d",
+    "title": "Hoppin' John",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Bowl of black-eyed peas and rice with scallions and cornbread on a wood table"
+  },
+  {
+    "id": "ba5f3959-a3f9-4e7c-aaa3-cf70852021f5",
+    "title": "Claypot Chicken Rice",
+    "verdict": "fail",
+    "reasons": [
+      "served in clay pot with foil base and other tables in frame",
+      "busy background"
+    ],
+    "note": "Claypot chicken rice in a clay pot"
+  },
+  {
+    "id": "ba60828f-d5b9-49a9-b958-80b8e985e298",
+    "title": "Smashed Cucumber Salad",
+    "verdict": "fail",
+    "reasons": [
+      "blurry tight crop, bowl cut off"
+    ],
+    "note": "Close-up smashed cucumbers in chili sauce"
+  },
+  {
+    "id": "bd37b1f6-9335-4a20-abe1-e6430403d802",
+    "title": "Caramel Popcorn",
+    "verdict": "fail",
+    "reasons": [
+      "close-up texture only, not a plated dish"
+    ],
+    "note": "Close-up caramel popcorn"
+  },
+  {
+    "id": "bdd5e75d-f835-4c0f-9762-c58d79432d41",
+    "title": "Chicken Chow Mein",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait with cluttered table",
+      "harsh restaurant light"
+    ],
+    "note": "Noodles with grilled chicken and red cabbage on an oval plate"
+  },
+  {
+    "id": "bdf869d3-1c68-4ca0-984b-c1195a8cb297",
+    "title": "Sweet and Sour Shrimp",
+    "verdict": "fail",
+    "reasons": [
+      "dim yellow cast",
+      "striped cloth and side plate clutter"
+    ],
+    "note": "Sweet and sour shrimp over rice on a striped cloth"
+  },
+  {
+    "id": "bf20df0d-c851-470a-a6f0-c8c4c4cc0e8a",
+    "title": "Chinese Sausage Rice in a Rice Cooker",
+    "verdict": "fail",
+    "reasons": [
+      "in clay pot with spoon and diners in background",
+      "dim cast"
+    ],
+    "note": "Chinese sausage rice in a clay pot"
+  },
+  {
+    "id": "bfdf2896-f86f-4f84-9f71-8dfb984c4a9f",
+    "title": "French Toast",
+    "verdict": "fail",
+    "reasons": [
+      "flash glare, plain amateur plating"
+    ],
+    "note": "French toast pieces with butter on a plate"
+  },
+  {
+    "id": "c15b78bf-c369-47b6-96e7-f2fa728d8d4c",
+    "title": "Cranberry Sauce",
+    "verdict": "fail",
+    "reasons": [
+      "tiny portion on a big plate, wicker background",
+      "poor crop"
+    ],
+    "note": "Small cup of cranberry sauce on a plate with spoon"
+  },
+  {
+    "id": "c1d67c56-63fc-493d-8a26-da442c01ed74",
+    "title": "Pasta Primavera",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered background with glass and bowls",
+      "odd low angle"
+    ],
+    "note": "Pasta with asparagus and peas, side view"
+  },
+  {
+    "id": "c262041f-b508-4b80-b295-3f8a78e38d9e",
+    "title": "Wonton Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "person in background",
+      "dim yellow cast"
+    ],
+    "note": "Bowl of wonton noodle soup"
+  },
+  {
+    "id": "c29358eb-6245-40fd-98b5-33d7f47bf46b",
+    "title": "Tomato Egg Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "menu text, QR code and logo on mat and bowl",
+      "clutter"
+    ],
+    "note": "Tomato egg beef noodle soup with menu behind"
+  },
+  {
+    "id": "c2d363ff-3e12-4536-a195-40c2fd1ffbd3",
+    "title": "Chicken Fried Steak",
+    "verdict": "fail",
+    "reasons": [
+      "busy restaurant plate with sides",
+      "dark flat light"
+    ],
+    "note": "Chicken fried steak with gravy and sides"
+  },
+  {
+    "id": "c439604c-1de1-4d80-96b4-7094940e08d2",
+    "title": "Breakfast Burritos",
+    "verdict": "fail",
+    "reasons": [
+      "messy plating on wood",
+      "harsh light"
+    ],
+    "note": "Two breakfast burritos with sauce on a plate"
+  },
+  {
+    "id": "c663c9c4-d961-406f-a7ae-3d11b598dae7",
+    "title": "Pineapple Upside-Down Cake",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Whole pineapple upside-down cake with cherries on a paper round"
+  },
+  {
+    "id": "c6d29742-8281-4772-bbeb-344f6f597be5",
+    "title": "Sesame Chicken",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait with chopsticks",
+      "flat light"
+    ],
+    "note": "Sesame chicken on a white plate with chopsticks"
+  },
+  {
+    "id": "c7242536-7556-42d4-8f07-ebe65c2eb85a",
+    "title": "Chocolate Pudding",
+    "verdict": "fail",
+    "reasons": [
+      "blurry, dark and out of focus",
+      "glasses not a recipe-style serving"
+    ],
+    "note": "Chocolate pudding with cream in martini glasses"
+  },
+  {
+    "id": "c7ca0477-54b2-40ba-885b-9f453ed717ce",
+    "title": "Cold Sesame Noodles",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered table with takeout and other containers",
+      "top-down snapshot"
+    ],
+    "note": "Noodle bowl with cucumber among takeout containers"
+  },
+  {
+    "id": "c7ddd3ea-8690-44d0-b284-019af5e143da",
+    "title": "Chicken and Dumplings",
+    "verdict": "fail",
+    "reasons": [
+      "flash look, hard to tell dumplings",
+      "amateur snapshot"
+    ],
+    "note": "Bowl of dumpling soup"
+  },
+  {
+    "id": "ca592367-017e-4834-b064-83ca9849da05",
+    "title": "Chicken Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered plate with spoon and bread, flash look"
+    ],
+    "note": "Bowl of chicken noodle soup with bread slices"
+  },
+  {
+    "id": "cad549c2-b009-46a1-839d-ee02d1ddfe2d",
+    "title": "Soy Sauce Chicken",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Sliced glossy soy sauce chicken on an oval plate with a herb and flower garnish"
+  },
+  {
+    "id": "caf2971f-329b-4cbb-8d14-e1dc5d7e8125",
+    "title": "Nachos",
+    "verdict": "fail",
+    "reasons": [
+      "person, beer and glasses in frame",
+      "food small in frame",
+      "parchment with logos"
+    ],
+    "note": "Tray of nachos with dips on a table"
+  },
+  {
+    "id": "cbebfb9e-c1a0-4e0e-9712-3d6782400470",
+    "title": "Crab Cakes",
+    "verdict": "fail",
+    "reasons": [
+      "menu and bench clutter",
+      "dim"
+    ],
+    "note": "Crab cakes with salad and dip on a plate"
+  },
+  {
+    "id": "cc1147f8-880c-4c89-b170-ca6c6c2857c7",
+    "title": "Dinner Rolls",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Golden knotted dinner rolls in a speckled bowl on a wood table"
+  },
+  {
+    "id": "ccecb4bd-18d0-421e-a425-9a5cce6d36f7",
+    "title": "Overnight Oats",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait jar, messy",
+      "dark"
+    ],
+    "note": "Chocolate overnight oats in a jar"
+  },
+  {
+    "id": "d1eea792-ce70-4862-8312-9d1865eec349",
+    "title": "Buttermilk Biscuits",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Stack of golden flaky biscuits in a bowl, close view"
+  },
+  {
+    "id": "d31297e3-41ad-4c69-a648-f7470979711e",
+    "title": "Rice Pudding",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait, flash and shadows",
+      "clutter"
+    ],
+    "note": "Rice pudding in a glass dish with cinnamon"
+  },
+  {
+    "id": "d3294283-2190-4219-acbf-9ef0f94fe1a8",
+    "title": "Zucchini Bread",
+    "verdict": "fail",
+    "reasons": [
+      "shows whole zucchini beside the loaf, not clearly the recipe",
+      "cooling rack and knife clutter"
+    ],
+    "note": "Zucchini bread loaf behind a whole zucchini"
+  },
+  {
+    "id": "d6958097-6223-4784-b8bb-06222789f85e",
+    "title": "Chocolate Chip Cookies",
+    "verdict": "fail",
+    "reasons": [
+      "cookies on a messy board with knife and chopped chocolate"
+    ],
+    "note": "Chocolate chip cookies on a board"
+  },
+  {
+    "id": "d82c9bda-8e9a-4055-9d4d-081824c5e261",
+    "title": "Taco Salad",
+    "verdict": "fail",
+    "reasons": [
+      "paper plate on printed table with receipt and logos",
+      "dim"
+    ],
+    "note": "Taco salad in a shell on a paper plate"
+  },
+  {
+    "id": "d901c1c8-ee3f-4307-9689-f7dbfddaf717",
+    "title": "Laziji Chongqing Chili Chicken",
+    "verdict": "fail",
+    "reasons": [
+      "text on plate and table",
+      "dim restaurant light"
+    ],
+    "note": "Chili chicken with dried chilies on a plate"
+  },
+  {
+    "id": "db29e595-b01a-4f73-af15-3601f2853668",
+    "title": "Beef Tacos",
+    "verdict": "fail",
+    "reasons": [
+      "paper plate, napkin and branded salt packet",
+      "clutter"
+    ],
+    "note": "Three tacos on a paper plate"
+  },
+  {
+    "id": "dd468c6c-1fa9-49bc-a264-36d2ddfcb578",
+    "title": "Gong Bao Shrimp",
+    "verdict": "fail",
+    "reasons": [
+      "dim in a dark dish with other plates",
+      "glare"
+    ],
+    "note": "Shrimp stir-fry with cashews and peppers on a patterned plate"
+  },
+  {
+    "id": "ddba9ba7-a02f-41a8-b9a5-d7c47e9bfc7f",
+    "title": "Garlic Bok Choy",
+    "verdict": "fail",
+    "reasons": [
+      "plain harsh flash, messy plating"
+    ],
+    "note": "Garlic bok choy on a striped plate"
+  },
+  {
+    "id": "df100a9d-f955-465d-b841-cfe4bfbf0cdb",
+    "title": "Jambalaya",
+    "verdict": "fail",
+    "reasons": [
+      "flash close-up in a bowl, messy"
+    ],
+    "note": "Close-up bowl of jambalaya"
+  },
+  {
+    "id": "e1c8ef7a-8b0a-40b2-988b-0fcacfc6e760",
+    "title": "Chicken Tenders",
+    "verdict": "fail",
+    "reasons": [
+      "takeout box on a lap or chair with backpack",
+      "clutter"
+    ],
+    "note": "Chicken tenders and fries in a paper tray"
+  },
+  {
+    "id": "e30fb960-228b-4993-9a7e-51c47838c9fe",
+    "title": "Fish-Fragrant Pork",
+    "verdict": "fail",
+    "reasons": [
+      "glare on table, restaurant snapshot",
+      "flat lighting"
+    ],
+    "note": "Shredded pork with green stems on an oval plate"
+  },
+  {
+    "id": "e3b24dfe-4f42-4411-9664-16d79b211ef3",
+    "title": "Dan Dan Noodles",
+    "verdict": "fail",
+    "reasons": [
+      "dark moody crop, hard to see plate",
+      "wok-like black base"
+    ],
+    "note": "Overhead dan dan noodles on a dark surface"
+  },
+  {
+    "id": "e40da6ca-abe7-4da1-ba2a-f0e46059e71a",
+    "title": "Baked Ziti",
+    "verdict": "fail",
+    "reasons": [
+      "fork and napkin in bowl, flat flash"
+    ],
+    "note": "Baked ziti in a bowl"
+  },
+  {
+    "id": "e5438f44-674e-4053-923b-37e67c5debc0",
+    "title": "Char Siu Barbecue Pork",
+    "verdict": "fail",
+    "reasons": [
+      "in a takeout box, tight crop"
+    ],
+    "note": "Roast pork and greens in a takeout box"
+  },
+  {
+    "id": "e6f1e15e-7c46-4c5d-a123-a9bd5fc06e9d",
+    "title": "Shrimp Scampi",
+    "verdict": "fail",
+    "reasons": [
+      "still in the pan"
+    ],
+    "note": "Shrimp scampi in a pan"
+  },
+  {
+    "id": "e781e06c-9395-4e2e-a428-79c7394942da",
+    "title": "Chicken Caesar Salad",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered patterned table, flat light"
+    ],
+    "note": "Chicken caesar salad on a coral plate"
+  },
+  {
+    "id": "e8ab2377-20a9-48b9-b874-7f7f5ecc6957",
+    "title": "Roasted Brussels Sprouts with Bacon",
+    "verdict": "fail",
+    "reasons": [
+      "tilted odd angle, metal table background",
+      "blurry"
+    ],
+    "note": "Brussels sprouts topped with bacon on a white plate"
+  },
+  {
+    "id": "ea39cea6-eacd-458a-b9bb-f924a5fdd98c",
+    "title": "Fish Tacos with Lime Crema",
+    "verdict": "fail",
+    "reasons": [
+      "checkered paper and food truck feel",
+      "messy"
+    ],
+    "note": "Fish taco on checkered paper with lime"
+  },
+  {
+    "id": "ec956ba8-a7a4-40f7-b2ff-b0d61cc58f00",
+    "title": "Pineapple Fried Rice",
+    "verdict": "fail",
+    "reasons": [
+      "clutter of plates and glasses",
+      "served in pineapple on messy table"
+    ],
+    "note": "Fried rice served in a pineapple half"
+  },
+  {
+    "id": "ee05ffc0-15aa-4ee4-953e-a0258c14c3cc",
+    "title": "Taiwanese Beef Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait with chopsticks, messy close-up"
+    ],
+    "note": "Beef noodle soup with chopsticks, close-up"
+  },
+  {
+    "id": "ee27da18-5af4-4d3c-bf2a-de40b2d34ef8",
+    "title": "Chicken Salad Sandwich",
+    "verdict": "fail",
+    "reasons": [
+      "dim warm cast, cropped sandwich"
+    ],
+    "note": "Chicken salad sandwich halves on a plate"
+  },
+  {
+    "id": "ee4b2a49-5573-4eef-b606-ecdce6d6ec16",
+    "title": "Cobb Salad",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Overhead cobb-style salad on an orange oval plate with chicken, egg, bacon and corn"
+  },
+  {
+    "id": "ee708fc5-9490-4057-89eb-a6a31994298f",
+    "title": "Cantonese Roast Pork Belly",
+    "verdict": "fail",
+    "reasons": [
+      "flat light, plain plate, snapshot"
+    ],
+    "note": "Roast pork belly over rice with greens"
+  },
+  {
+    "id": "ee7c6beb-1434-4b3b-9115-c5afb655e331",
+    "title": "Sweet Potato Pie",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Slice of sweet potato pie on a white plate, side view"
+  },
+  {
+    "id": "ee89d1b0-398f-44e4-9a51-8574ab112c20",
+    "title": "Beef Chow Fun",
+    "verdict": "fail",
+    "reasons": [
+      "napkin and table clutter, harsh light"
+    ],
+    "note": "Beef chow fun on a decorated plate"
+  },
+  {
+    "id": "eeb4d61e-c16c-4ffc-80bb-34b15a450bca",
+    "title": "Chocolate Cake",
+    "verdict": "fail",
+    "reasons": [
+      "text on chocolate plaque"
+    ],
+    "note": "Chocolate cake with berries and a text plaque"
+  },
+  {
+    "id": "ef860d53-0f83-4755-b522-0ee606f5e667",
+    "title": "Herb Stuffing",
+    "verdict": "fail",
+    "reasons": [
+      "paper plate, crumbs, unappetizing"
+    ],
+    "note": "Stuffing on a paper plate"
+  },
+  {
+    "id": "efa1574f-7490-4c15-b9c8-020ffff5bea1",
+    "title": "Green Bean Casserole",
+    "verdict": "fail",
+    "reasons": [
+      "still in casserole dish on a stovetop"
+    ],
+    "note": "Green bean casserole in a baking dish"
+  },
+  {
+    "id": "efda6217-9712-4f93-af14-fa3d7ceab533",
+    "title": "Loaded Baked Potato Soup",
+    "verdict": "fail",
+    "reasons": [
+      "branded cracker packet and glass in frame"
+    ],
+    "note": "Loaded potato soup in a crock with an oyster cracker packet"
+  },
+  {
+    "id": "f4564492-6466-4914-b708-2b347450a384",
+    "title": "Wedge Salad",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Overhead wedge salad with bacon, tomato and pickled onion on a green plate"
+  },
+  {
+    "id": "f48b86b3-1c43-4cf9-b401-d1feb315798d",
+    "title": "Chicken Pot Pie",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Overhead chicken pot pie with a puff pastry top in a white bowl"
+  },
+  {
+    "id": "f76d5968-ac7b-4f5c-b096-2f07dea36868",
+    "title": "Hot Pot at Home",
+    "verdict": "fail",
+    "reasons": [
+      "whole table of containers and clutter, not a plated dish"
+    ],
+    "note": "Hot pot ingredients spread across a table"
+  },
+  {
+    "id": "f7864143-1da3-4ee5-90b7-02f0c75415d4",
+    "title": "Orange Beef",
+    "verdict": "fail",
+    "reasons": [
+      "tongs across the dish, glare"
+    ],
+    "note": "Orange beef with orange slice and tongs"
+  },
+  {
+    "id": "f92366e0-25ae-4016-a491-7a0cbbce8de9",
+    "title": "Waldorf Salad",
+    "verdict": "fail",
+    "reasons": [
+      "flash and shadows in a glass bowl, flat look"
+    ],
+    "note": "Waldorf salad in a glass bowl"
+  },
+  {
+    "id": "f9285578-85ad-4392-b896-6a4e9e5d596c",
+    "title": "Grilled Cheese Sandwich",
+    "verdict": "fail",
+    "reasons": [
+      "crumbs on white cloth, flat flash"
+    ],
+    "note": "Grilled cheese sandwich halves"
+  },
+  {
+    "id": "fa87b1cd-de39-4dd8-81cb-b21eb52ecfc2",
+    "title": "Club Sandwich",
+    "verdict": "fail",
+    "reasons": [
+      "carpet, chair and napkin in frame",
+      "flat light"
+    ],
+    "note": "Club sandwich with fries and ketchup"
+  },
+  {
+    "id": "fae64aaa-b694-4b7f-8f6c-a5c99a87aded",
+    "title": "Potstickers with Chicken and Cabbage",
+    "verdict": "fail",
+    "reasons": [
+      "messy tight crop, hard to read plate"
+    ],
+    "note": "Pan-fried potstickers piled up"
+  },
+  {
+    "id": "fb22dc68-3bfb-4252-bd09-6aba4fd7545c",
+    "title": "Pepper Steak",
+    "verdict": "fail",
+    "reasons": [
+      "flat flash, plain bowl, messy plating"
+    ],
+    "note": "Pepper steak stir-fry on a beige plate"
+  },
+  {
+    "id": "fb339518-679e-4c56-8bfe-74ae1c0d36c4",
+    "title": "Steamed Pork Buns",
+    "verdict": "fail",
+    "reasons": [
+      "in a steamer basket with dim cast, tight crop"
+    ],
+    "note": "Three steamed buns in a bamboo steamer"
+  },
+  {
+    "id": "fb47a910-3e51-42e5-997d-3d89c383c95f",
+    "title": "Twice-Baked Potatoes",
+    "verdict": "fail",
+    "reasons": [
+      "flash look and busy patterned plate"
+    ],
+    "note": "Twice-baked potato with cheese and bacon on a floral plate"
+  },
+  {
+    "id": "fbd85b50-0475-4df5-ac21-eb3f30d4827a",
+    "title": "Classic Cheeseburger",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Tall cheeseburger with lettuce, tomato and pickles, professional style"
+  },
+  {
+    "id": "ff014560-3efe-426e-ae54-dc541618155f",
+    "title": "Cashew Chicken",
+    "verdict": "fail",
+    "reasons": [
+      "extreme close-up, no plate, badly cropped"
+    ],
+    "note": "Extreme close-up of cashew chicken with vegetables"
+  }
+]

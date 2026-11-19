@@ -1,0 +1,52 @@
+[
+ {
+  "id": "821f6f01-644e-4219-9e22-13c361cb9b34",
+  "title": "Bakewell tart",
+  "reason": "current photo is better (lead spot-check)"
+ },
+ {
+  "id": "279e5cf0-d9cf-4d46-abb3-7b64887e204f",
+  "title": "Blueberry Pie",
+  "reason": "crust looks unbaked (lead spot-check)"
+ },
+ {
+  "id": "4cb311c1-3602-4a7d-9e16-f840bc3f2f09",
+  "title": "Brazilian chocolate truffles - brigadeiro",
+  "reason": "photo shows buildings, not the dish (lead spot-check)"
+ },
+ {
+  "id": "f759ec1f-560b-475e-987f-89a5b966acd7",
+  "title": "Cayman Style Potato Salad",
+  "reason": "different salad (ham, no dressing) (lead spot-check)"
+ },
+ {
+  "id": "adb9454a-ef87-43ab-ba39-d2a40c7e43f2",
+  "title": "Chicken and Sausage Gumbo",
+  "reason": "not clearly better than the current photo (lead spot-check)"
+ },
+ {
+  "id": "ca592367-017e-4834-b064-83ca9849da05",
+  "title": "Chicken Noodle Soup",
+  "reason": "no noodles; looks like rice soup (lead spot-check)"
+ },
+ {
+  "id": "e893f722-a38b-4ede-97f5-1abf555cff7f",
+  "title": "Chinese Braised Beef Shank",
+  "reason": "shows beef noodle soup, not the dish (lead spot-check)"
+ },
+ {
+  "id": "4b2ef4c5-6fe6-4efe-ae16-7ab70360c3b9",
+  "title": "Dry-Fried Green Beans",
+  "reason": "drinks in frame; current photo is better (lead spot-check)"
+ },
+ {
+  "id": "616122fa-0543-4de0-9a91-82aecf647e74",
+  "title": "Fish Congee",
+  "reason": "no fish visible, sign in frame (lead spot-check)"
+ },
+ {
+  "id": "02ec16d7-f1d1-4ec4-8969-d86c987c7e19",
+  "title": "Western Omelet",
+  "reason": "plain omelet on a dated plate (lead spot-check)"
+ }
+]
