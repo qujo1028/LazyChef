@@ -939,4 +939,8 @@ Open for P5's exit check (needs the user and a phone in Expo Go):
   takes the allowance before the rate limit (a web bug fix: swap the order); the `limit_reached` weekday is UTC;
   `recipes` on the live project predates the shared `_shared/http.ts` move (same behavior; redeploy it next time it
   changes).
-- Deploy (waits for the user's go-ahead): set `GROQ_API_KEY` on Supabase, deploy `ai`, diff the deployed files.
+- Deployed 2026-11-18 (user approved): `GROQ_API_KEY` set as a function secret from `.env.local` through a temporary,
+  gitignored `supabase/functions/.env` (deleted afterwards; the key never went through chat), and `ai` v1 deployed with
+  JWT verification on (`npx supabase functions deploy ai --project-ref gldppemwlecnbarxamcb`). The 20 deployed files
+  were diffed against the repo: all identical. Smoke test: no auth 401 (gateway), a non-user token 401 with the
+  function's own JSON, CORS preflight 204. Not yet tested with a signed-in session: do it from the Ideas sheet on a phone.
