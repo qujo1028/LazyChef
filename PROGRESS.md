@@ -827,7 +827,7 @@ Open before P4's exit check:
 
 ## Library expansion: 150 American + 150 Chinese recipes (2026-11-18, lead: `feature/library-expansion`)
 Based on `origin/feature/p4-recipes` (PR #71 still open; the mobile recipe page lives there). **Migration lock:
-`feature/library-expansion`** (`20261118140000_library_expansion.sql` and `src/types/database.ts`), cleared when it merges.
+`feature/library-expansion`** (`20261119024109_library_expansion.sql` and `src/types/database.ts`), cleared when it merges.
 
 Why: the shared library had 33 "United States" and 27 "Chinese" recipes, and TheMealDB has no more. Narrow pantries got
 fewer than 10 local ideas and fell back to Spoonacular's 50 daily points.
@@ -862,7 +862,7 @@ Finished (P5 lead session, 2026-11-18, worktree `.claude/worktrees/library`, pus
 - Checks: web typecheck, lint, 2,445 tests, `npm run test:db` (221 pass), ingredients check; mobile typecheck and lint.
 
 Still to do (each needs the user's OK):
-- Apply `20261118140000_library_expansion.sql` to the live project (every earlier migration is live, checked 2026-11-18).
+- Done 2026-11-18 (user approved): the migration is live as `20261119024109` (applied through the Supabase connector; the file was renamed to match). Security advisor: nothing new.
 - `npm run recipes:lazychef -- --write`: uploads 254 photos to `library-photos` and upserts the 300 recipes with the
   secret key from `.env.local`. Re-runnable.
 - Then check a few recipe pages and their photo credits on the web and on a phone, and clear the migration lock when
