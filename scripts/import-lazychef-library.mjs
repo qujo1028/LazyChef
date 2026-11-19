@@ -137,9 +137,14 @@ console.log(`Writing to ${new URL(url).host} …`)
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+/** Photos come only from Wikimedia Commons uploads (or a local file); anything else is refused. */
+const PHOTO_HOST = "upload.wikimedia.org"
+
 async function download(from, attempt = 1) {
   if (!/^https:\/\//i.test(from)) return readFileSync(path.resolve(ROOT, from))
-  const response = await fetch(from, { headers: { "user-agent": USER_AGENT } }).catch(() => null)
+  const target = new URL(from)
+  if (target.protocol !== "https:" || target.hostname !== PHOTO_HOST) fail(`Photos must come from ${PHOTO_HOST}: ${from}`)
+  const response = await fetch(target, { headers: { "user-agent": USER_AGENT } }).catch(() => null)
   if (response?.ok) return Buffer.from(await response.arrayBuffer())
   if (attempt >= 4) fail(`Couldn't download ${from}${response ? ` (HTTP ${response.status})` : ""}.`)
   await sleep(1500 * 2 ** attempt)

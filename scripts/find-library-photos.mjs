@@ -6,7 +6,7 @@
 // per dish afterwards; this script never decides.
 //
 //   node scripts/find-library-photos.mjs [--only slug,slug]
-import { readFileSync, writeFileSync, existsSync } from "node:fs"
+import { readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -20,9 +20,26 @@ const PER_DISH = 6
 const onlyArg = process.argv.indexOf("--only")
 const only = onlyArg > 0 ? new Set(process.argv[onlyArg + 1].split(",")) : null
 const dishes = JSON.parse(readFileSync(path.join(ROOT, "data/lazychef/dishes.json"), "utf8")).filter((d) => !only || only.has(d.slug))
-const results = existsSync(OUT) ? JSON.parse(readFileSync(OUT, "utf8")) : {}
+/** Earlier results, so --only runs add to them. Read in one step (no exists check first). */
+function readResults() {
+  try {
+    return JSON.parse(readFileSync(OUT, "utf8"))
+  } catch (error) {
+    if (error.code === "ENOENT") return {}
+    throw error
+  }
+}
+const results = readResults()
 
-const strip = (html) => String(html ?? "").replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/\s+/g, " ").trim()
+// &amp; is decoded last, so "&amp;quot;" stays the text "&quot;" instead of being decoded twice.
+const strip = (html) =>
+  String(html ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim()
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 /** "CC BY-SA 4.0" → kept; anything else (GFDL only, fair use, NC, ND) → null. */
