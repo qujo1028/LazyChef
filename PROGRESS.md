@@ -832,7 +832,7 @@ Based on `origin/feature/p4-recipes` (PR #71 still open; the mobile recipe page 
 Why: the shared library had 33 "United States" and 27 "Chinese" recipes, and TheMealDB has no more. Narrow pantries got
 fewer than 10 local ideas and fell back to Spoonacular's 50 daily points.
 
-In progress (this entry is finished when the import is done):
+Built (the first session stopped after the code; the P5 lead session finished the data on 2026-11-18):
 - Migration: `recipe_source` value `lazychef` (no household, slug as `source_id`), photo credit columns on `recipes`
   (`image_author`, `image_license`, `image_license_url`, `image_source_url`, `image_ai_generated`), public bucket
   `library-photos` (no policies, so only the secret key writes). PGlite test `supabase/tests/library-expansion.test.mjs`.
@@ -845,3 +845,25 @@ In progress (this entry is finished when the import is done):
   shown under the photo on the web and mobile recipe pages.
 - Import: `npm run recipes:lazychef -- --dry-run | --write` (`scripts/import-lazychef-library.mjs`), reading the reviewed
   `data/lazychef/recipes.json`.
+
+Finished (P5 lead session, 2026-11-18, worktree `.claude/worktrees/library`, pushed to `feature/library-expansion`):
+- The first session's uncommitted work was committed as found (`8885fc4`) so it was on GitHub.
+- Dishes: `data/lazychef/dishes.json`, 150 American and 150 Chinese, none matching a library title by `titleKey`.
+- Recipes: written by 10 Sonnet agents (30 each) against `checkLibraryRecipe`, merged into `data/lazychef/recipes.json`.
+  Dry run: 300 recipes, 3,280 ingredient lines, 3,212 matched, no notes. Spot-checked by the lead. "Hunan Steamed Fish
+  Head" became "Hunan Steamed Fish with Chopped Chilies" (it uses fillets).
+- Ingredient library: specialty items no longer fall back to generic ones (century eggs were "eggs", winter melon
+  "melon", wood ear mushrooms "mushrooms", tofu skin "tofu", Chinese noodles "pasta"); added those plus lotus and bamboo
+  leaves.
+- Photos: `scripts/find-library-photos.mjs` lists Commons candidates (CC0, public domain, CC BY, CC BY-SA, at least
+  1200 px) into `data/lazychef/photo-candidates.json`; 5 Sonnet agents looked at the thumbnails and picked one per dish
+  or none. 254 photos, 46 dishes without. The lead dropped picks showing a different dish or a brand, and tidied 4 author
+  names. No AI images (needs the user to pick a provider, if wanted).
+- Checks: web typecheck, lint, 2,445 tests, `npm run test:db` (221 pass), ingredients check; mobile typecheck and lint.
+
+Still to do (each needs the user's OK):
+- Apply `20261118140000_library_expansion.sql` to the live project (every earlier migration is live, checked 2026-11-18).
+- `npm run recipes:lazychef -- --write`: uploads 254 photos to `library-photos` and upserts the 300 recipes with the
+  secret key from `.env.local`. Re-runnable.
+- Then check a few recipe pages and their photo credits on the web and on a phone, and clear the migration lock when
+  the branch merges.
