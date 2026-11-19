@@ -49,7 +49,7 @@ export default function HomeScreen() {
       contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg, paddingBottom: 112 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
     >
-      <Welcome displayName={context?.profile?.displayName ?? null} householdName={household?.name ?? null} />
+      <Welcome displayName={context?.profile?.displayName ?? null} />
       <View>
         <ThisWeekCard />
       </View>

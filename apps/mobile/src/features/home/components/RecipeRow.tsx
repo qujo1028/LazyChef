@@ -1,4 +1,4 @@
-import { trendingLine, type HomeRecipeCard } from '@lazychef/core/home/trending';
+import { homeRecipesHeading, trendingLine, type HomeRecipeCard } from '@lazychef/core/home/trending';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { memo, useCallback } from 'react';
@@ -56,7 +56,7 @@ export function RecipeRow() {
   return (
     <View style={{ gap: spacing.md }}>
       <Text accessibilityRole="header" style={[type.heading, { color: colors.ink }]}>
-        Trending recipes
+        {homeRecipesHeading(cards)}
       </Text>
       {body}
     </View>
