@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: held by `feature/library-curation` until its PR merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: nobody (library curation merged as #76). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -1122,7 +1122,7 @@ Open for P6's exit check (needs the user):
 
 ## Library curation (2026-11-19, `feature/library-curation`)
 
-Based on `origin/main` (P6 merged as #74). Migration lock: held by this branch.
+Based on `origin/main` (P6 merged as #74). Merged as #76; migration lock released.
 
 The user asked to drop drinks and dishes that aren't generally popular with Americans from the shared library.
 Haiku tagged all 1,090 library recipes (drink or not, kind, plain name, notes); Sonnet then decided keep or cut
