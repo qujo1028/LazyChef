@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/p6-activity-account` until PR #74 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: held by `feature/library-curation` until its PR merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -1119,4 +1119,23 @@ Open for P6's exit check (needs the user):
   unregistered on sign out stays until someone registers on that phone; the web's ring still uses the fixed goal of 3
   (web takes bug fixes only); the web join action and the app could each push once for the same join right at a
   5-minute boundary.
+
+## Library curation (2026-11-19, `feature/library-curation`)
+
+Based on `origin/main` (P6 merged as #74). Migration lock: held by this branch.
+
+The user asked to drop drinks and dishes that aren't generally popular with Americans from the shared library.
+Haiku tagged all 1,090 library recipes (drink or not, kind, plain name, notes); Sonnet then decided keep or cut
+against a "familiar to most Americans" bar (keep American staples, popular takeout cuisines, recognizable European
+classics and approachable dishes; cut drinks, non-dishes such as oils, offal and other off-putting ingredients,
+obscure regional dishes, near-duplicates). Result: 820 kept, 270 hidden (TheMealDB 232 of 790, LazyChef 38 of 300,
+including all 5 drinks). The list with each reason is `data/library-curation/hidden.json`.
+
+- `recipes.hidden` (new column, server-set only, no column grant): `match_local_recipes` always skips hidden recipes,
+  even with Extended search or a title search. They still open directly, so saved recipes and past cooks keep
+  working. Test: `supabase/tests/library-curation.test.mjs`.
+- Live: migration applied and the 270 flags set with the secret key on 2026-11-19. Re-running the import scripts
+  leaves `hidden` alone (they don't send it); newly imported recipes start visible.
+- To unhide one: `update public.recipes set hidden = false where id = '<id>'` (secret key / SQL editor).
+- Not checked in a browser (no signed-in test account here).
 
