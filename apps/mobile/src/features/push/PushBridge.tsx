@@ -4,13 +4,16 @@
 // opens the right screen when a push is tapped (including a tap that launched the app).
 import * as Notifications from 'expo-notifications';
 import { useRootNavigationState, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AppState, Platform } from 'react-native';
 
 import { useToast } from '@/components/Toast';
 import { createTapGuard, tapRouteFor, toastMessage } from '@/lib/push-state';
 
 import { refreshPushRegistration } from './device';
+
+// Module scope so a remount (sign out, sign in as someone else) can't replay an old tap.
+const tapGuard = createTapGuard();
 
 export function PushBridge() {
   // Expo web has no push: skip every notifications call there.
@@ -21,7 +24,7 @@ function NativePushBridge() {
   const router = useRouter();
   const toast = useToast();
   const navigationReady = useRootNavigationState()?.key != null;
-  const [guard] = useState(createTapGuard);
+  
 
   // Re-register on launch and each time the app comes back to the front.
   useEffect(() => {
@@ -34,14 +37,6 @@ function NativePushBridge() {
 
   // A push while the app is open: no system banner, an in-app toast with a way to open it.
   useEffect(() => {
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowBanner: false,
-        shouldShowList: false,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-      }),
-    });
     const sub = Notifications.addNotificationReceivedListener((notification) => {
       const { title, body, data } = notification.request.content;
       const route = tapRouteFor(data);
@@ -51,20 +46,30 @@ function NativePushBridge() {
         action: { label: 'Open', onPress: () => router.push(route) },
       });
     });
-    return () => {
-      sub.remove();
-      Notifications.setNotificationHandler(null);
-    };
+    return () => sub.remove();
   }, [router, toast]);
+
+  // Set once: no system banner while the app is open (the toast above replaces it).
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowBanner: false,
+        shouldShowList: false,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
+  }, []);
 
   // Taps while running, plus the tap that cold-started the app. The guard makes each count once.
   const lastResponse = Notifications.useLastNotificationResponse();
   useEffect(() => {
     if (!navigationReady || !lastResponse) return;
     if (lastResponse.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) return;
-    if (!guard.first(lastResponse)) return;
+    if (!tapGuard.first(lastResponse)) return;
     router.push(tapRouteFor(lastResponse.notification.request.content.data));
-  }, [navigationReady, lastResponse, guard, router]);
+    Notifications.clearLastNotificationResponse();
+  }, [navigationReady, lastResponse, router]);
 
   return null;
 }

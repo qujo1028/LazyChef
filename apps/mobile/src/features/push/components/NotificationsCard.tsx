@@ -1,6 +1,6 @@
 // The three push switches on the Account screen. Turning one on is "the first reminder": that is
 // when the app explains, asks for notification permission and registers this phone (never at launch).
-import { PREF_LABELS, type NotificationPrefs } from '@lazychef/core/push/prefs';
+import { DEFAULT_PREFS, PREF_LABELS, type NotificationPrefs } from '@lazychef/core/push/prefs';
 import * as Notifications from 'expo-notifications';
 import { onlineManager, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -39,7 +39,8 @@ export function NotificationsCard() {
   const setup = setupQuery.data ?? null;
   const refreshSetup = () => void setupQuery.refetch();
 
-  const values = prefs.data;
+  // No row (or no connection yet) means the defaults, which are all on.
+  const values = prefs.data ?? (prefs.isError ? DEFAULT_PREFS : undefined);
   const status = result && result !== 'ok' && result !== 'offline' ? result : setup?.status;
 
   const toggle = async (key: keyof NotificationPrefs, on: boolean) => {

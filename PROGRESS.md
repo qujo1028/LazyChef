@@ -1036,3 +1036,4 @@ W4 (`feature/p6-push-app`): push in the app.
 - Pure logic and tests: `lib/push-state.ts` (10 tests).
 - Not checked: no device or simulator run, no real push, no signed-in account, no EAS project ID yet (`eas init`
   pending, so the card says push isn't set up). Android also needs FCM credentials in EAS before tokens work.
+- Review fixes: module-level tap guard plus `clearLastNotificationResponse` so a tap never replays after signing in as someone else; the notification handler is set once; switches show the defaults if prefs fail to load.
