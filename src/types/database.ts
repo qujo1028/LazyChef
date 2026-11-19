@@ -577,6 +577,7 @@ export type Database = {
           created_by: string | null
           cuisine: string | null
           extended: boolean
+          hidden: boolean
           household_id: string | null
           id: string
           image_ai_generated: boolean
@@ -603,6 +604,7 @@ export type Database = {
           created_by?: string | null
           cuisine?: string | null
           extended?: boolean
+          hidden?: boolean
           household_id?: string | null
           id?: string
           image_ai_generated?: boolean
@@ -629,6 +631,7 @@ export type Database = {
           created_by?: string | null
           cuisine?: string | null
           extended?: boolean
+          hidden?: boolean
           household_id?: string | null
           id?: string
           image_ai_generated?: boolean
