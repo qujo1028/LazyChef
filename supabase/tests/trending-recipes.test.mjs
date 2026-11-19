@@ -124,6 +124,14 @@ describe("trending recipes", () => {
     assert.ok(!(await trending(users.eli)).some((r) => r.id === mine))
   })
 
+  test("recipes hidden from the library never show up", async () => {
+    const hiddenId = await importMeal("5", "Cut dish", 10)
+    await t.q("update public.recipes set hidden = true where id = $1", [hiddenId])
+    await cook(users.alex, homes.alex, hiddenId)
+    await cook(users.blair, homes.blair, hiddenId)
+    assert.ok(!(await trending(users.eli)).some((r) => r.id === hiddenId))
+  })
+
   test("only the last 7 days count", async () => {
     await cook(users.alex, homes.alex, lib.old)
     await cook(users.blair, homes.blair, lib.old)

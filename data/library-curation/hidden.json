@@ -1,0 +1,1892 @@
+[
+ {
+  "id": "e45bce89-61ec-4f62-b06b-725d9975501d",
+  "source": "themealdb",
+  "cuisine": "Brazil",
+  "title": "Acaraje black-eyed pea fritters with shrimp filling",
+  "reason": "obscure Brazilian fritter"
+ },
+ {
+  "id": "1fefe99e-6876-4e85-9fa6-f9e969e322ab",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "title": "Achiote Oil (Aceite Achiotado) Recipe",
+  "reason": "just a flavored oil"
+ },
+ {
+  "id": "2b9a29ed-3ac7-4b70-9916-0a683fe4d29d",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "title": "Ají de Aguacate Recipe (Colombian Spicy Avocado Sauce)",
+  "reason": "obscure regional sauce"
+ },
+ {
+  "id": "9721217a-cd33-49ed-ab85-562a615db995",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Ajo blanco",
+  "reason": "obscure cold almond soup"
+ },
+ {
+  "id": "279e1263-a6bd-4783-af83-74e307c7516d",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Algerian Bouzgene Berber Bread with Roasted Pepper Sauce",
+  "reason": "obscure regional bread"
+ },
+ {
+  "id": "12b3fe71-0442-4d00-9080-5f3e85aca4aa",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Algerian Flafla (Bell Pepper Salad)",
+  "reason": "obscure regional salad"
+ },
+ {
+  "id": "49a7bb72-bd8f-45ec-a45e-bca84501e90f",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "title": "Almojábanas (Colombian Cheese Bread)",
+  "reason": "obscure regional cheese bread"
+ },
+ {
+  "id": "cad628f8-c935-4ca0-9be2-a4d6134b0d51",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Almond Jelly",
+  "reason": "unfamiliar jelly dessert"
+ },
+ {
+  "id": "205aa08b-2856-47f4-b2e4-9ca28e2f1bf4",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Amok Trey – Cambodian Fish Curry",
+  "reason": "obscure regional curry"
+ },
+ {
+  "id": "8dc691ba-a283-4dd3-9137-62d6f5c99e99",
+  "source": "themealdb",
+  "cuisine": "Antigua and Barbuda",
+  "title": "Antiguan Breakfast (Chop Up and ‘Saltfish’)",
+  "reason": "obscure saltfish breakfast"
+ },
+ {
+  "id": "5ab5c3f7-d303-4aa3-a392-f4581cafaed6",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Ants Climbing a Tree",
+  "reason": "obscure noodle dish"
+ },
+ {
+  "id": "18f02947-db20-48f9-a564-1b0267c74ba7",
+  "source": "themealdb",
+  "cuisine": "Malaysian",
+  "title": "Apam balik",
+  "reason": "obscure regional dessert"
+ },
+ {
+  "id": "64bb52cf-f07f-4312-a4b9-31fcebd31010",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Apple Potato Mash (Hete bliksem)",
+  "reason": "obscure Dutch side"
+ },
+ {
+  "id": "18b0db95-b33f-48f4-80bc-be1e9fc402ea",
+  "source": "themealdb",
+  "cuisine": "Turkish",
+  "title": "Apricot & Turkish delight mess",
+  "reason": "unfamiliar Turkish delight dessert"
+ },
+ {
+  "id": "4a5b4eca-9140-4336-92d1-466199c18530",
+  "source": "themealdb",
+  "cuisine": "Venezuela",
+  "title": "Arepa Pabellón",
+  "reason": "obscure regional arepa"
+ },
+ {
+  "id": "b8c17201-95bb-401b-b8bc-f241ef9140b5",
+  "source": "themealdb",
+  "cuisine": "Venezuela",
+  "title": "Arepa pelua",
+  "reason": "obscure regional arepa"
+ },
+ {
+  "id": "9f946d9a-f11f-4c24-9fb7-9df24ff129d4",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Arnhemse meisjes",
+  "reason": "obscure Dutch pastry"
+ },
+ {
+  "id": "5f88e0b2-cf2d-4b3e-96e0-dec7b3335ac3",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Arra të Mbushura me Fik Walnut Stuffed Figs (with Fig Syrup)",
+  "reason": "obscure Albanian dessert"
+ },
+ {
+  "id": "c58698d8-97ee-4780-87e9-6546b966c94f",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Arroz al horno (baked rice)",
+  "reason": "obscure regional rice dish"
+ },
+ {
+  "id": "37f0ad58-6301-4405-a788-422092a8033c",
+  "source": "themealdb",
+  "cuisine": "Argentina",
+  "title": "Asado",
+  "reason": "includes blood sausage"
+ },
+ {
+  "id": "657bc141-6bf7-48f3-a033-e95e281f37b1",
+  "source": "themealdb",
+  "cuisine": "Laos",
+  "title": "Authentic Laos Tapioca Pudding with Bananas",
+  "reason": "unfamiliar tapioca dessert"
+ },
+ {
+  "id": "1b734d1a-a3b8-49b0-8ed4-1109cb7d2473",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Authentic Norwegian Kransekake",
+  "reason": "obscure Norwegian cake"
+ },
+ {
+  "id": "3fd5dba3-c137-4242-8b0a-bef5be470a93",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Baghlaw-e-Khanagi",
+  "reason": "obscure Afghan dessert"
+ },
+ {
+  "id": "99a83a7b-7488-4b63-b701-a28e9ee339cb",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Bajan Salt Bread Recipe",
+  "reason": "obscure regional bread"
+ },
+ {
+  "id": "84e84740-e970-466c-8362-a3e67c113097",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Bajan Sweet Bread",
+  "reason": "obscure regional bread"
+ },
+ {
+  "id": "1c32f9a3-fea0-41c6-82ca-d8d5dd6cb19c",
+  "source": "themealdb",
+  "cuisine": "Aruba",
+  "title": "Balchi di Pisca",
+  "reason": "salted cod specialty"
+ },
+ {
+  "id": "989a5aef-f6aa-4669-8bb0-3f4eae51a3b2",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Barbados Pepperpot",
+  "reason": "trotters and oxtail stew"
+ },
+ {
+  "id": "69daca96-47b4-49e6-bcfb-d7a0c09bdf60",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Battenberg Cake",
+  "reason": "obscure British cake"
+ },
+ {
+  "id": "b93aad6a-9f23-4050-b34e-fe2e258219c7",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Beef and Oyster pie",
+  "reason": "oysters in pie, off-putting"
+ },
+ {
+  "id": "3650918d-5446-4a13-84ae-b510ad99c82e",
+  "source": "themealdb",
+  "cuisine": "Filipino",
+  "title": "Beef Asado",
+  "reason": "obscure regional beef dish"
+ },
+ {
+  "id": "df28c94b-e1a7-48b9-9605-e98dc32ad5cb",
+  "source": "themealdb",
+  "cuisine": "India",
+  "title": "Beef Mandi",
+  "reason": "obscure regional rice dish"
+ },
+ {
+  "id": "d9811b89-3843-4ebb-9e91-61cb16330365",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Beetroot & red cabbage sauerkraut",
+  "reason": "fermented, obscure"
+ },
+ {
+  "id": "db3caf23-47b4-4c3c-99d4-b8901ff0220b",
+  "source": "themealdb",
+  "cuisine": "Ukrainian",
+  "title": "Beetroot latkes",
+  "reason": "unfamiliar beetroot fritter"
+ },
+ {
+  "id": "a81defb4-297b-4e8c-9eb5-ca41bfc31022",
+  "source": "themealdb",
+  "cuisine": "Ukrainian",
+  "title": "Beetroot pancakes",
+  "reason": "unfamiliar beetroot pancake"
+ },
+ {
+  "id": "65d6b74e-1518-4400-96f6-2a1c861cc5b0",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Bigos (Polish hunter's stew)",
+  "reason": "duplicate of Bigos (Hunters Stew)"
+ },
+ {
+  "id": "f75d24c5-be16-497c-abbe-2bcb9f8fbf7e",
+  "source": "themealdb",
+  "cuisine": "India",
+  "title": "Biss Jaggery Modak",
+  "reason": "obscure Indian sweet"
+ },
+ {
+  "id": "105dfcd1-ded3-454f-bf6b-472b5ece5adf",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Bolani with Potato Filling",
+  "reason": "obscure Afghan flatbread"
+ },
+ {
+  "id": "51d297d0-c74a-4e45-b6d7-cabaf1bff710",
+  "source": "themealdb",
+  "cuisine": "Ukrainian",
+  "title": "Borsch",
+  "reason": "duplicate of Beetroot Soup (Borscht)"
+ },
+ {
+  "id": "b8f7e35e-86f6-4c47-aeb5-8d3f9cef54a3",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Boterkoek (Dutch Butter Cake)",
+  "reason": "obscure Dutch cake"
+ },
+ {
+  "id": "7a9fa225-19a0-4f76-a8ed-3d32b9ceb558",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Braised stuffed cabbage",
+  "reason": "duplicate of Golabki (cabbage roll)"
+ },
+ {
+  "id": "05de950b-d93c-4502-8579-279605b0cab0",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Breadfruit in Butter Sauce",
+  "reason": "obscure breadfruit dish"
+ },
+ {
+  "id": "c272f8f8-4e43-412d-9d18-389dd2f32a92",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Breadfruit in Butter Sauce Recipe",
+  "reason": "obscure breadfruit dish"
+ },
+ {
+  "id": "d567e84f-a496-4746-b1df-b4a9f1bb0be3",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Breadfruit Tacos",
+  "reason": "breadfruit and codfish"
+ },
+ {
+  "id": "308fcd24-c51f-4a9b-9882-06577e0735e1",
+  "source": "themealdb",
+  "cuisine": "Slovakia",
+  "title": "Bryndzové Halušky",
+  "reason": "obscure Slovak dish"
+ },
+ {
+  "id": "b66b02a6-d360-4ce5-afea-a8ec2ce8525f",
+  "source": "themealdb",
+  "cuisine": "Croatian",
+  "title": "Burek",
+  "reason": "obscure regional pastry"
+ },
+ {
+  "id": "72b1ff92-51da-4e5b-aab6-0d5ee9363611",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Callaloo and SaltFish",
+  "reason": "salt cod dish"
+ },
+ {
+  "id": "2c31ac91-dddf-4594-a0c4-e708d419db2c",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Callaloo Jamaican Style",
+  "reason": "obscure Caribbean greens"
+ },
+ {
+  "id": "089ed345-7df9-4b29-a95c-5ac4f1674e2c",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Cambodian Stir-fried Morning Glory with Pork, Fermented Soybeans, and Garlic",
+  "reason": "fermented soybeans, obscure"
+ },
+ {
+  "id": "84a58dd7-c64e-4146-884d-cbef6261aea2",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Cambodian Waffles (Num Poum)",
+  "reason": "obscure Cambodian dessert"
+ },
+ {
+  "id": "15e8f22a-f424-4b40-a67d-c7cb1f5b302c",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Caribbean Tamarind balls",
+  "reason": "obscure tamarind candy"
+ },
+ {
+  "id": "a8aa294e-b843-4d42-b5b9-fe4df7f22feb",
+  "source": "themealdb",
+  "cuisine": "Tunisian",
+  "title": "Cashew Ghoriba Biscuits",
+  "reason": "obscure Tunisian cookie"
+ },
+ {
+  "id": "89543931-7aeb-4e7b-98b4-2d398d445205",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Cassava bread",
+  "reason": "obscure cassava bread"
+ },
+ {
+  "id": "611e7d9e-d77e-4bc6-aadc-834aa7a2ebf1",
+  "source": "themealdb",
+  "cuisine": "Cayman Islands",
+  "title": "Cassava Cake",
+  "reason": "obscure cassava dessert"
+ },
+ {
+  "id": "ac47d80c-1a7f-4688-983e-60d9fff30b76",
+  "source": "themealdb",
+  "cuisine": "Venezuela",
+  "title": "Cassava pizza",
+  "reason": "obscure cassava dish"
+ },
+ {
+  "id": "bc09ff34-a4ff-4ec6-90eb-5a80875b2ea8",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Century Egg and Pork Congee",
+  "reason": "century egg, off-putting"
+ },
+ {
+  "id": "b0d1bf4a-627d-4c6c-b291-52d810993de1",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Cheese Borek",
+  "reason": "obscure regional pastry"
+ },
+ {
+  "id": "a08db70f-8f17-43ab-9bb4-bc8539fa9b47",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Chicken and Potato Roti",
+  "reason": "obscure Bajan roti"
+ },
+ {
+  "id": "a18e696b-8488-48c9-96a8-526c46e26453",
+  "source": "themealdb",
+  "cuisine": "Barbados",
+  "title": "Chicken Liver Pate Recipe",
+  "reason": "offal, chicken liver"
+ },
+ {
+  "id": "8fe0da1b-f536-4dc7-978c-8d9d6db9a999",
+  "source": "themealdb",
+  "cuisine": "Chile",
+  "title": "Chilean Dobladitas",
+  "reason": "obscure Chilean fried dough"
+ },
+ {
+  "id": "91c73a80-b229-4021-aa57-66ce0b2ab27a",
+  "source": "themealdb",
+  "cuisine": "Chile",
+  "title": "Chilean-Style Sopaipillas",
+  "reason": "obscure Chilean fried dough"
+ },
+ {
+  "id": "93ba479f-a140-4109-b423-ba2275459e20",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Chili Oil",
+  "reason": "just a condiment oil"
+ },
+ {
+  "id": "5678aabf-72a8-4111-8924-9b9788f48216",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Chinese Pickled Vegetables",
+  "reason": "fermented pickles, obscure"
+ },
+ {
+  "id": "4006cdf5-e54d-479d-9482-ad7dcefb929d",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Chinese Steamed Egg Custard",
+  "reason": "unfamiliar steamed egg dish"
+ },
+ {
+  "id": "61d1fb9d-3c3d-4f5a-9bf1-a65fc5b50fb3",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Chinese Turnip Cake",
+  "reason": "obscure dim sum cake"
+ },
+ {
+  "id": "41f8fbea-e8ba-4515-aa92-5593d10ec36a",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "title": "Chivito sandwich",
+  "reason": "duplicate of Chivito uruguayo"
+ },
+ {
+  "id": "50e20184-eeb9-4999-b050-4e6e973d440f",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "title": "Chocolate alfajores",
+  "reason": "duplicate of Alfajores"
+ },
+ {
+  "id": "c099dea8-40b5-425b-a043-3c38dfb5c3b8",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "title": "Chocolate empanadas",
+  "reason": "obscure dessert empanada"
+ },
+ {
+  "id": "321617e4-351f-4bfb-8da2-87c24646d4d0",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "title": "Chocolate Milkshake",
+  "reason": "drink"
+ },
+ {
+  "id": "ec02ce1a-699d-4cfd-ac58-df6f6a977ee9",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Chorba Hamra bel Frik (Algerian Lamb, Tomato, and Freekeh Soup)",
+  "reason": "obscure freekeh soup"
+ },
+ {
+  "id": "190b3276-6e6d-4529-bb39-d6d8805a9c74",
+  "source": "themealdb",
+  "cuisine": "Costa Rica",
+  "title": "Chorreadas",
+  "reason": "obscure corn pancake"
+ },
+ {
+  "id": "7e46a34f-1540-478c-89fb-408038de1733",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Christmas Pudding Flapjack",
+  "reason": "obscure British holiday bake"
+ },
+ {
+  "id": "5338ddf0-b02c-4243-bd6a-788fd5fb0f2f",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Christmas Pudding Trifle",
+  "reason": "obscure British holiday dessert"
+ },
+ {
+  "id": "39b9f72f-0020-420d-b22c-c1eb440f48f4",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Classic Christmas pudding",
+  "reason": "suet-based British pudding, unfamiliar"
+ },
+ {
+  "id": "7420ce63-c370-43fc-84d0-b4142ad39f7f",
+  "source": "themealdb",
+  "cuisine": "Austria",
+  "title": "Clear Soup with Semolina Dumplings",
+  "reason": "obscure dumpling soup"
+ },
+ {
+  "id": "15e9b92f-98d0-4d57-b4b6-8c5dca128e76",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "title": "Coconut Natilla Recipe",
+  "reason": "obscure Colombian dessert"
+ },
+ {
+  "id": "f542951a-8a1d-4ba2-af7b-0c95802dcd8b",
+  "source": "themealdb",
+  "cuisine": "Brazil",
+  "title": "Coconut quindim",
+  "reason": "obscure Brazilian dessert"
+ },
+ {
+  "id": "a79f4787-20bc-41eb-aef8-e9d5c791e44e",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Codfish deviled eggs",
+  "reason": "salt cod deviled eggs"
+ },
+ {
+  "id": "02d63bb4-cd07-4ead-9659-ec967fbc13a1",
+  "source": "themealdb",
+  "cuisine": "Colombia",
+  "title": "Colombian Buñuelos Recipe",
+  "reason": "obscure fried fritter"
+ },
+ {
+  "id": "0040e81f-4461-4de0-b93b-abd6fc68316c",
+  "source": "themealdb",
+  "cuisine": "Cayman Islands",
+  "title": "Conch Fritters",
+  "reason": "conch, unfamiliar"
+ },
+ {
+  "id": "ac085cd0-d592-4ab4-8a29-30012fa23e32",
+  "source": "themealdb",
+  "cuisine": "Cayman Islands",
+  "title": "Conch Stew",
+  "reason": "conch, unfamiliar"
+ },
+ {
+  "id": "d66875fa-df59-47f8-841f-5362204ab528",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Cornes de Gazelle (Gazelle Horns)",
+  "reason": "obscure Algerian pastry"
+ },
+ {
+  "id": "056a7cda-adbe-40d1-8ad2-f0ed55b38f21",
+  "source": "themealdb",
+  "cuisine": "Brazil",
+  "title": "Creamy Aji green sauce",
+  "reason": "obscure regional sauce"
+ },
+ {
+  "id": "eb6e9416-80a6-41eb-981d-c9d7c60fdf1b",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Creamy mango smoothie",
+  "reason": "drink"
+ },
+ {
+  "id": "0441f599-127c-453f-bffb-8902fa0fb1e9",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Crispy fried fish with ginger and fermented soybeans (trey chien chuon)",
+  "reason": "fermented soybeans, obscure"
+ },
+ {
+  "id": "cd8e779f-27c2-46ac-9c98-c3083bbaf831",
+  "source": "themealdb",
+  "cuisine": "Croatian",
+  "title": "Croatian lamb peka",
+  "reason": "obscure lamb peka"
+ },
+ {
+  "id": "da87b5fa-b396-4efe-94b9-a021fd394a83",
+  "source": "themealdb",
+  "cuisine": "Denmark",
+  "title": "Danish Rye Bread",
+  "reason": "obscure rye bread"
+ },
+ {
+  "id": "b8bd8612-cb84-4b92-9799-6bf10668fc0f",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Dominica mastiff bread",
+  "reason": "obscure bread"
+ },
+ {
+  "id": "1b317e31-f23e-4d16-bfdd-516875e264fd",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Dominica’s coconut rough cake",
+  "reason": "obscure Caribbean cake"
+ },
+ {
+  "id": "8027d75e-91a8-4d9b-b953-d775876babde",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Dominican Bakes",
+  "reason": "obscure fried bread"
+ },
+ {
+  "id": "e64d49d2-4233-4f50-b7ad-d2d7b1a2e009",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Dongpo Pork",
+  "reason": "obscure Chinese pork belly"
+ },
+ {
+  "id": "94b3cf2f-f97d-4f63-a9f6-3eb739f111a6",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Dundee cake",
+  "reason": "obscure British fruitcake"
+ },
+ {
+  "id": "a974a978-96d2-418e-a599-10d11aa997ee",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Dutch Spiced Breakfast Cake (Ontbijtkoek)",
+  "reason": "obscure Dutch spice cake"
+ },
+ {
+  "id": "8f33e0ed-5851-43da-8c78-794e62c0eb4f",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Dziriat (Algerian Almond Tarts)",
+  "reason": "obscure Algerian pastry"
+ },
+ {
+  "id": "225dfc76-1c8c-488d-9ba2-1e3a518c4d36",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Eccles Cakes",
+  "reason": "obscure British pastry"
+ },
+ {
+  "id": "2e1ed793-0d46-4ff4-81e4-35c7af8cdb6d",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Egyptian Fatteh",
+  "reason": "obscure Egyptian dish"
+ },
+ {
+  "id": "590ea5e9-9232-4b45-8675-970240586202",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "English Breakfast",
+  "reason": "duplicate of Full English Breakfast"
+ },
+ {
+  "id": "591211f7-81b3-4597-bc66-16234f5591f9",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Ensaimada",
+  "reason": "obscure Spanish pastry"
+ },
+ {
+  "id": "57f038ac-ee9a-408a-ae30-8cecbf67c127",
+  "source": "themealdb",
+  "cuisine": "Turkish",
+  "title": "Ezme",
+  "reason": "obscure Turkish relish"
+ },
+ {
+  "id": "d32a0419-b827-442e-b79a-1f6af5c4ff8b",
+  "source": "themealdb",
+  "cuisine": "Argentina",
+  "title": "Fainá",
+  "reason": "obscure chickpea flatbread"
+ },
+ {
+  "id": "211ea0a0-d691-4c99-a52f-a1f0ec392ac1",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Fårikål (Norwegian National Dish)",
+  "reason": "obscure Norwegian mutton stew"
+ },
+ {
+  "id": "d155616f-f2cb-42c5-983c-d033460d4104",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Feteer Meshaltet",
+  "reason": "obscure Egyptian pastry"
+ },
+ {
+  "id": "7ef78ff5-e02d-4556-a98c-365dab980223",
+  "source": "themealdb",
+  "cuisine": "Italian",
+  "title": "Fettucine alfredo",
+  "reason": "duplicate of Fettuccine Alfredo"
+ },
+ {
+  "id": "d0b9cabc-f057-4141-80ca-aabba39f8e80",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Figgy Duff",
+  "reason": "obscure Newfoundland pudding"
+ },
+ {
+  "id": "2b1fa51a-51f4-4500-8720-2a5feefe1258",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Firni",
+  "reason": "obscure Afghan pudding"
+ },
+ {
+  "id": "e89dec33-caa4-45fc-8cfb-44bae3e83ade",
+  "source": "themealdb",
+  "cuisine": "Portuguese",
+  "title": "Fish fofos",
+  "reason": "obscure Portuguese fish cakes"
+ },
+ {
+  "id": "0c484640-db87-4ca5-af2c-5ac548bfe799",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Flapper Pie",
+  "reason": "obscure Canadian pie"
+ },
+ {
+  "id": "e036fd5e-57e2-4e28-a81e-a643fe1abdff",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Flija Layered Pancake / Crepe",
+  "reason": "obscure Albanian layered pancake"
+ },
+ {
+  "id": "c24cc985-510c-4611-afc4-e6249f0d8f6b",
+  "source": "themealdb",
+  "cuisine": "Croatian",
+  "title": "Fresh sardines",
+  "reason": "whole sardines, off-putting"
+ },
+ {
+  "id": "342c53f6-81d4-4244-8b75-e80259e2269d",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Fried cocoy banana",
+  "reason": "obscure fried banana"
+ },
+ {
+  "id": "8c4680f4-0982-4d38-be11-ac7e88c14e71",
+  "source": "themealdb",
+  "cuisine": "Cayman Islands",
+  "title": "Fried Crab",
+  "reason": "obscure whole crab dish"
+ },
+ {
+  "id": "4d6dd500-9232-4e50-9594-b0958e176693",
+  "source": "themealdb",
+  "cuisine": "Belgium",
+  "title": "Frog Legs Recipe in Garlic Butter",
+  "reason": "frog legs"
+ },
+ {
+  "id": "333e27d1-c79e-40a6-98fd-d857d2acb444",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Ful Medames",
+  "reason": "obscure fava bean dish"
+ },
+ {
+  "id": "aabdd205-b1ac-4f0f-ba24-193337e8a291",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Fyrstekake – Norwegian Prince Cake",
+  "reason": "obscure Norwegian cake"
+ },
+ {
+  "id": "adef703c-6f22-447c-8cdc-07d869873e72",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Gevulde speculaas",
+  "reason": "obscure Dutch pastry"
+ },
+ {
+  "id": "0a13d775-e113-4489-894c-8fba09a03753",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Ginger Scallion Sauce",
+  "reason": "just a condiment"
+ },
+ {
+  "id": "041e2912-9e5a-4b77-8ba7-8cc76034c829",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Grape Nut Ice Cream",
+  "reason": "obscure ice cream"
+ },
+ {
+  "id": "168f1d23-92c3-42fd-aeb9-13b755b96cfb",
+  "source": "themealdb",
+  "cuisine": "Turkish",
+  "title": "Griddled flatbreads",
+  "reason": "plain flatbread, not a dish"
+ },
+ {
+  "id": "5c55d55d-570a-4d45-a7ee-afaf0539f69f",
+  "source": "themealdb",
+  "cuisine": "Portuguese",
+  "title": "Grilled Portuguese sardines",
+  "reason": "whole grilled sardines"
+ },
+ {
+  "id": "38b3973f-bd3c-473a-9308-be163ad56036",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Haft Mewa Recipe",
+  "reason": "obscure Afghan dessert"
+ },
+ {
+  "id": "72cebd87-d716-4b0d-a7f5-a88732c7a236",
+  "source": "themealdb",
+  "cuisine": "Bangladesh",
+  "title": "Handesh – Bangladeshi rice flour and date molasses cakes",
+  "reason": "obscure Bangladeshi dessert"
+ },
+ {
+  "id": "3834e9c5-63d4-458f-9ce8-b2824d2bc556",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "title": "Hot Chocolate",
+  "reason": "drink"
+ },
+ {
+  "id": "25a06413-4661-4bdc-a4ce-e5c3096f21ac",
+  "source": "themealdb",
+  "cuisine": "Denmark",
+  "title": "Hveder - Danish Wheat Buns",
+  "reason": "obscure Danish buns"
+ },
+ {
+  "id": "4f9b7c5c-fa05-47db-ac8b-1aa5f4586b79",
+  "source": "themealdb",
+  "cuisine": "Armenia",
+  "title": "Jajek",
+  "reason": "obscure yogurt dip"
+ },
+ {
+  "id": "b03f5e20-d67e-48c5-9b58-a0dcc2133012",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Jam Roly-Poly",
+  "reason": "suet pudding, unfamiliar"
+ },
+ {
+  "id": "51f58afe-7cab-4716-979a-50e4ea044f4d",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Boiled Dumplings",
+  "reason": "plain dumplings, not a dish"
+ },
+ {
+  "id": "e142c0b6-7d8f-483a-874a-59d45529191d",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Cornmeal Porridge",
+  "reason": "obscure porridge"
+ },
+ {
+  "id": "706aa03c-dc37-43ff-a69a-53bce413d78b",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Curry Goat",
+  "reason": "goat meat"
+ },
+ {
+  "id": "cf028cbf-0ee1-4088-a87b-ee1e8c79c010",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Festival (Sweet Dumpling)",
+  "reason": "obscure fried dough"
+ },
+ {
+  "id": "f16ccda5-ee81-4936-9081-9415c2bd93f7",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Fried Dumplings",
+  "reason": "plain fried dumplings"
+ },
+ {
+  "id": "666e19d5-a7d2-4aab-a963-5966e7d93e77",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Jamaican Spice Bun Recipe",
+  "reason": "obscure spice bun"
+ },
+ {
+  "id": "76af092f-a7b0-4256-ac2f-0fa7427188d1",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Jianbing",
+  "reason": "obscure street crepe"
+ },
+ {
+  "id": "7aae632c-c59f-4c09-a835-ebe674e76e47",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Jiggs Dinner",
+  "reason": "salt beef boiled dinner, obscure"
+ },
+ {
+  "id": "e2343495-8b9a-41b3-887b-836683558771",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "kabse",
+  "reason": "obscure regional rice dish"
+ },
+ {
+  "id": "7d74ab2b-fcea-47b1-a66d-99aca3117ccc",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Kadu Borani",
+  "reason": "obscure Afghan squash dish"
+ },
+ {
+  "id": "61f19913-92c6-4389-a35c-62f9ab523cc6",
+  "source": "themealdb",
+  "cuisine": "Tunisian",
+  "title": "Kafteji",
+  "reason": "obscure Tunisian dish"
+ },
+ {
+  "id": "8379d9dc-6dbd-4572-acb3-9c3b1a30e179",
+  "source": "themealdb",
+  "cuisine": "Austria",
+  "title": "Kaspressknödel - Cheese Dumplings",
+  "reason": "obscure Austrian dumplings"
+ },
+ {
+  "id": "6aee8803-a81b-456f-a8f3-82c5d41f88da",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Kedgeree",
+  "reason": "smoked fish and rice, unfamiliar"
+ },
+ {
+  "id": "a54a979d-e5af-4270-a09a-e9d92b7e0305",
+  "source": "themealdb",
+  "cuisine": "Tunisian",
+  "title": "Keleya Zaara",
+  "reason": "obscure Tunisian lamb dish"
+ },
+ {
+  "id": "65986d05-41c9-46eb-863e-acc7d04f47e0",
+  "source": "themealdb",
+  "cuisine": "Bulgaria",
+  "title": "Keto Banitsa",
+  "reason": "obscure Bulgarian keto pie"
+ },
+ {
+  "id": "d0cfdfa4-8753-4581-abc2-6b5d88ab3076",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Khmer Banh Xeo – Cambodian Savory Pancake",
+  "reason": "obscure Cambodian pancake"
+ },
+ {
+  "id": "13ef956c-e95e-473e-939d-347998f1c661",
+  "source": "themealdb",
+  "cuisine": "Algerian",
+  "title": "Khobz el Dar (Algerian Semolina Bread)",
+  "reason": "obscure Algerian bread"
+ },
+ {
+  "id": "db921d47-3046-43df-af9f-9c3f786e83cd",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Knafeh",
+  "reason": "obscure Middle Eastern cheese pastry"
+ },
+ {
+  "id": "c97436f9-c2c7-47d2-a4d0-7322310e3e22",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Koshari",
+  "reason": "unfamiliar Egyptian dish"
+ },
+ {
+  "id": "7b553c6d-87b3-4835-bdcd-d756f8bfeafe",
+  "source": "themealdb",
+  "cuisine": "Armenia",
+  "title": "Koulenje",
+  "reason": "obscure Armenian bread"
+ },
+ {
+  "id": "d3b70f90-ed62-4f67-9027-730e6209b2dc",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Kulaç Soda Bread",
+  "reason": "obscure Albanian bread"
+ },
+ {
+  "id": "755a0ecf-a1a0-4dc9-8e60-2939488c41d9",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Lakror me Kungull Summer Squash Pie",
+  "reason": "obscure Albanian squash pie"
+ },
+ {
+  "id": "661127bb-a855-4dfd-b5cc-374421bac0b8",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Lancashire hotpot",
+  "reason": "contains lamb kidney"
+ },
+ {
+  "id": "324f2be1-6360-475b-8640-e1d41efda0b7",
+  "source": "themealdb",
+  "cuisine": "Laos",
+  "title": "Lao Naem Khao",
+  "reason": "obscure Laotian sour sausage dish"
+ },
+ {
+  "id": "b9522ff9-3938-48ee-bf28-b1c5d8ab89b8",
+  "source": "themealdb",
+  "cuisine": "Laos",
+  "title": "Lao Som Pak Pickled Cabbage",
+  "reason": "obscure Laotian pickle"
+ },
+ {
+  "id": "166d52e7-4c85-4172-a76a-fff3c700316d",
+  "source": "themealdb",
+  "cuisine": "Laos",
+  "title": "Laos Plantain Coconut Bake (Flourless Muffin)",
+  "reason": "obscure Laotian dessert"
+ },
+ {
+  "id": "46bcd69a-2988-488d-81a1-27b137654079",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "title": "Lemonade",
+  "reason": "drink"
+ },
+ {
+  "id": "af2ffef2-e44e-4d18-aeac-aacbca3de5d5",
+  "source": "themealdb",
+  "cuisine": "Argentina",
+  "title": "Locro",
+  "reason": "obscure regional stew"
+ },
+ {
+  "id": "3cdfb137-c868-475d-ad12-8adeb3a46145",
+  "source": "themealdb",
+  "cuisine": "Cayman Islands",
+  "title": "Macaroni Pudding",
+  "reason": "unfamiliar macaroni pudding dessert"
+ },
+ {
+  "id": "37186bd6-972c-41a9-a4ba-516a335896cc",
+  "source": "themealdb",
+  "cuisine": "Botswana",
+  "title": "Madombi: Dumplings from Botswana",
+  "reason": "obscure Botswana dumplings"
+ },
+ {
+  "id": "4a634ce5-7b63-4cea-b895-e3df4c9ea155",
+  "source": "themealdb",
+  "cuisine": "Antigua and Barbuda",
+  "title": "Mango chow",
+  "reason": "obscure Caribbean mango relish"
+ },
+ {
+  "id": "38c2bcbe-e55a-4c2f-8093-1beb879bfaa3",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Mantu Afghan Dumpling",
+  "reason": "obscure Afghan dumplings"
+ },
+ {
+  "id": "9c33917f-90e4-4cf5-a993-2d37d49f2714",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Mastawa Lamb and Rice",
+  "reason": "obscure Afghan dish"
+ },
+ {
+  "id": "7e13e380-efa7-4ab0-880d-07c478b2a53f",
+  "source": "themealdb",
+  "cuisine": "Argentina",
+  "title": "Matambre a la Pizza",
+  "reason": "obscure Argentine dish"
+ },
+ {
+  "id": "aaa07c08-a14b-45e6-88ec-e592247a326a",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Mazariner – Scandinavian Almond Tartlets",
+  "reason": "obscure Norwegian pastry"
+ },
+ {
+  "id": "0288e8c4-75fd-4d7b-b135-79651f79c878",
+  "source": "themealdb",
+  "cuisine": "Kenyan",
+  "title": "Mbuzi Choma (Roasted Goat)",
+  "reason": "roasted goat, unusual"
+ },
+ {
+  "id": "f8dfaa81-9a76-4396-894b-399232d1f784",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "McSinghs Scotch pie",
+  "reason": "obscure Scotch pie"
+ },
+ {
+  "id": "4b07371e-2012-476b-a453-5ef19f946fd6",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Meang Nem",
+  "reason": "obscure Cambodian wraps"
+ },
+ {
+  "id": "1622298e-16cc-4ca4-b265-60ed8adc1f43",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Migas",
+  "reason": "obscure Spanish breadcrumb dish"
+ },
+ {
+  "id": "72584734-05bc-4034-9a8a-12f85a7df076",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Mulukhiyah",
+  "reason": "obscure jute leaf stew"
+ },
+ {
+  "id": "6e70e6c6-8a30-471a-81ab-3a052d5f8201",
+  "source": "themealdb",
+  "cuisine": "Afghanistan",
+  "title": "Muraba-E-Kadu (Pumpkin Jam)",
+  "reason": "pumpkin jam, condiment"
+ },
+ {
+  "id": "8ed972d6-f3e0-4b87-b462-7ba9401f185e",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Mutabbaq",
+  "reason": "obscure Saudi pastry"
+ },
+ {
+  "id": "efc3412e-8332-4b4e-b37f-43fdc84db13a",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "title": "Napa Cabbage with Dried Shrimp",
+  "reason": "dried shrimp cabbage, unfamiliar"
+ },
+ {
+  "id": "9b5cd6ef-5b67-4e98-9fae-c29c05dc01e4",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Nom Banh Chok – Cambodian Noodle Soup",
+  "reason": "obscure Cambodian noodle soup"
+ },
+ {
+  "id": "47c87712-605c-4a1b-9725-6f933624ba5e",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Nordic smørrebrød with asparagus and horseradish cream",
+  "reason": "obscure Nordic open sandwich"
+ },
+ {
+  "id": "d0448a7a-33f3-40bd-b746-94ff01dd45e6",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Num Ansom – Sticky Rice Cake",
+  "reason": "obscure Cambodian dessert"
+ },
+ {
+  "id": "40ec0a55-a5d5-42be-b36c-8b219ba3e461",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Num E (Sticky Rice Balls in Sugar Syrup and Coconut Cream)",
+  "reason": "obscure Cambodian dessert"
+ },
+ {
+  "id": "f95e9439-4db8-4579-920b-095dd1b40109",
+  "source": "themealdb",
+  "cuisine": "Denmark",
+  "title": "Open-faced Sandwich With Potato",
+  "reason": "obscure Danish open sandwich"
+ },
+ {
+  "id": "29ae7ec1-777f-4d95-a2fc-9a8063248ba0",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Oyster Omelette",
+  "reason": "oyster omelet, unfamiliar"
+ },
+ {
+  "id": "c3d43ece-60c9-4fa3-a15f-51dda06c7bfe",
+  "source": "themealdb",
+  "cuisine": "Andorra",
+  "title": "Pa Amb Tomaquet (Bread with Tomato)",
+  "reason": "simple tomato bread, not a dish"
+ },
+ {
+  "id": "1d0e942f-228e-4eae-85a3-d57261b79bb4",
+  "source": "themealdb",
+  "cuisine": "Costa Rica",
+  "title": "Pan De Yucca",
+  "reason": "obscure cassava bread"
+ },
+ {
+  "id": "c6caba84-a5ec-4062-9376-211ced9f26aa",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Parkin Cake",
+  "reason": "obscure British gingerbread cake"
+ },
+ {
+  "id": "7f7d2c46-7b85-4339-a643-57cb88236994",
+  "source": "themealdb",
+  "cuisine": "Chile",
+  "title": "Pastel de Choclo",
+  "reason": "obscure Chilean corn pie"
+ },
+ {
+  "id": "cba4d554-6d93-4952-8bd1-619408956591",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Paszteciki (Polish Pasties)",
+  "reason": "obscure Polish pasties"
+ },
+ {
+  "id": "1f85b477-0d89-40e6-9c50-67cd367d7b4f",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Pearl Meatballs",
+  "reason": "obscure sticky rice meatballs"
+ },
+ {
+  "id": "782f24cb-7ea6-4fa8-9a27-57acf4f31ffb",
+  "source": "themealdb",
+  "cuisine": "Botswana",
+  "title": "Phaphatha Flatbreads",
+  "reason": "obscure Botswana flatbread"
+ },
+ {
+  "id": "8be0f252-7658-4fb5-a2d3-a6613ad91b0f",
+  "source": "themealdb",
+  "cuisine": "Italian",
+  "title": "Pilchard puttanesca",
+  "reason": "pilchards, unfamiliar"
+ },
+ {
+  "id": "96079d26-d6d9-4487-88ab-ca6c429edb79",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Pineapple Buns",
+  "reason": "unfamiliar bakery bun"
+ },
+ {
+  "id": "c35e4692-ea15-4d7a-a82f-fee50fe60daa",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Pistachio Kunafa Chocolate Cake and Cupcakes",
+  "reason": "unusual kunafa cake"
+ },
+ {
+  "id": "e30d6e39-c5a0-4356-b4ec-3578cf878023",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "plantain rolls",
+  "reason": "salt cod plantain rolls"
+ },
+ {
+  "id": "a5850516-0117-48c0-ab54-ef6d1972e5df",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Pork with Garlic Sauce",
+  "reason": "cold pork belly, unfamiliar"
+ },
+ {
+  "id": "5c14d4ac-dc22-4b57-8d52-a8a599b9ce03",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "title": "Postre Chajá",
+  "reason": "obscure Uruguayan dessert"
+ },
+ {
+  "id": "7369d0c1-5f1d-4b44-b585-838cc242eac6",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Prahok Ktis – Pork and Coconut Dip",
+  "reason": "fermented fish dip"
+ },
+ {
+  "id": "f07600f2-0fdc-433f-b89e-d82b325443f3",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Presh me Oriz Leek and Rice Bake",
+  "reason": "obscure Albanian bake"
+ },
+ {
+  "id": "d2c69d42-57b2-4204-9f24-242cace3071f",
+  "source": "themealdb",
+  "cuisine": "Estonia",
+  "title": "Quark and Rhubarb Pie",
+  "reason": "obscure Estonian pie"
+ },
+ {
+  "id": "1518dd84-d8d6-4e24-8a7a-330460e5dea6",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Rappie Pie",
+  "reason": "obscure Acadian dish"
+ },
+ {
+  "id": "e760581f-5ad1-4022-9e86-a2c4559ffeef",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Raspeballer (Norwegian Potato Dumplings)",
+  "reason": "obscure Norwegian dumplings, pork knuckle"
+ },
+ {
+  "id": "d800f349-a9fe-4fb2-84cb-d7b269cec3d1",
+  "source": "themealdb",
+  "cuisine": "India",
+  "title": "Recheado Masala Fish",
+  "reason": "obscure spiced mackerel"
+ },
+ {
+  "id": "03544659-5b66-40bd-a8ba-24b211eb1258",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Red Bean Soup",
+  "reason": "sweet red bean soup, unfamiliar"
+ },
+ {
+  "id": "ef788432-b1db-443b-9d7a-51ea9b93be57",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Red onion pickle",
+  "reason": "single condiment"
+ },
+ {
+  "id": "dbcc51ba-6e01-48f1-b24d-1649ee08d3b3",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Rogaliki (Polish Croissant Cookies)",
+  "reason": "obscure Polish cookies"
+ },
+ {
+  "id": "2040e6e3-5ec2-4849-bdf8-2ba44407cf56",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Rømmegrøt – Norwegian Sour Cream Porridge",
+  "reason": "obscure Norwegian porridge"
+ },
+ {
+  "id": "656b1245-be15-4406-a420-ed9191e43553",
+  "source": "themealdb",
+  "cuisine": "Malaysian",
+  "title": "Roti john",
+  "reason": "obscure Malaysian sandwich"
+ },
+ {
+  "id": "d9aa2203-180f-4d91-8add-c7440db2f76a",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Runner Bean Mash (Snijbonen Stamppot)",
+  "reason": "obscure Dutch mash"
+ },
+ {
+  "id": "182680a9-ebd0-4f07-b385-08683de3f2c8",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Saliva Chicken",
+  "reason": "unfamiliar cold chili chicken"
+ },
+ {
+  "id": "9727245e-96ec-4ef7-8660-b82f969c4114",
+  "source": "themealdb",
+  "cuisine": "Vietnamese",
+  "title": "Salt & pepper squid",
+  "reason": "duplicate of Quick salt & pepper squid"
+ },
+ {
+  "id": "9c334651-3c6f-4bbf-9171-6f030a8955d0",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Salt cod tortilla",
+  "reason": "salt cod specialty"
+ },
+ {
+  "id": "5940f6fb-c418-44ee-927a-7db7086d447c",
+  "source": "themealdb",
+  "cuisine": "Jamaican",
+  "title": "Saltfish and Ackee",
+  "reason": "salt cod specialty"
+ },
+ {
+  "id": "92584431-5b98-4942-99f9-dbbe77e5869e",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Samlar Kari – Khmer Red Curry",
+  "reason": "obscure Cambodian curry"
+ },
+ {
+  "id": "7d7c750e-83ce-4ca9-8097-e559c1e8f195",
+  "source": "themealdb",
+  "cuisine": "Cambodia",
+  "title": "Samlar Machu Kreung – Cambodian Sour Stew",
+  "reason": "obscure Cambodian stew"
+ },
+ {
+  "id": "263f370b-dc69-41ff-9d1e-8db11e470c5c",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Saskatoon Pie",
+  "reason": "obscure berry pie"
+ },
+ {
+  "id": "f847f55b-92db-4436-84c0-39d7bc147119",
+  "source": "themealdb",
+  "cuisine": "Estonia",
+  "title": "Sauerkraut and Fish Salad",
+  "reason": "fish and sauerkraut salad, off-putting"
+ },
+ {
+  "id": "e2fc8fab-751f-4888-94d5-e820c82ace37",
+  "source": "themealdb",
+  "cuisine": "Ukrainian",
+  "title": "Sauerkraut pierogii",
+  "reason": "duplicate of Sauerkraut pierogi"
+ },
+ {
+  "id": "a258c6cb-efd6-48f5-955d-7a1f3b3ea79f",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Scallion Flower Rolls",
+  "reason": "obscure steamed rolls"
+ },
+ {
+  "id": "9d8f34b9-ddf3-4f3d-a253-fa8a79dfff81",
+  "source": "themealdb",
+  "cuisine": "Malaysian",
+  "title": "Seri muka kuih",
+  "reason": "obscure Malaysian layer cake"
+ },
+ {
+  "id": "8d842a91-43f3-4302-877a-45b88d8e7b34",
+  "source": "themealdb",
+  "cuisine": "Botswana",
+  "title": "Seswaa",
+  "reason": "obscure Botswana dish"
+ },
+ {
+  "id": "b73bca0f-a020-4db1-b79f-088c04c868c8",
+  "source": "themealdb",
+  "cuisine": "Egyptian",
+  "title": "Shakshuka",
+  "reason": "duplicate of Shakshouka"
+ },
+ {
+  "id": "1935e16a-094f-476c-940a-4f02ac47a774",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Shakshuka Feta Cheese",
+  "reason": "duplicate of Shakshouka"
+ },
+ {
+  "id": "aa2098e6-3854-4868-81ea-801047100a4e",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Shawarma bread",
+  "reason": "plain flatbread, not a dish"
+ },
+ {
+  "id": "60914dd1-02ed-49eb-b35d-eb2256833c22",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Shendetlie Honey and Nut Cake",
+  "reason": "obscure Albanian cake"
+ },
+ {
+  "id": "2f017844-eed1-42e7-8140-6c1848cc20c6",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Sichuan Boiled Beef",
+  "reason": "unfamiliar Sichuan dish"
+ },
+ {
+  "id": "1a290ae7-9084-48aa-98a7-fd56c78faafc",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Sichuan Boiled Fish",
+  "reason": "unfamiliar Sichuan dish"
+ },
+ {
+  "id": "c2534325-275f-481f-873c-93ede0c165f9",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Sichuan Mala Dry Pot Cauliflower",
+  "reason": "unfamiliar Sichuan dry pot"
+ },
+ {
+  "id": "8159922c-2f01-4dcd-b6b7-1c403ee0bcaa",
+  "source": "themealdb",
+  "cuisine": "Chinese",
+  "title": "Silken Tofu with Sesame Soy Sauce",
+  "reason": "too simple, unfamiliar"
+ },
+ {
+  "id": "aa545eec-ae17-466c-b165-c164243afb81",
+  "source": "themealdb",
+  "cuisine": "Polish",
+  "title": "Sledz w Oleju (Polish Herrings)",
+  "reason": "herring in oil, off-putting"
+ },
+ {
+  "id": "b3bbf1dc-2a76-4737-81e8-5f2e070690d4",
+  "source": "themealdb",
+  "cuisine": "India",
+  "title": "Smoked Haddock Kedgeree",
+  "reason": "smoked haddock kedgeree, unfamiliar"
+ },
+ {
+  "id": "4c3be56e-2702-4382-a7fd-d1deb940f987",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Spanish fig & almond balls",
+  "reason": "obscure Spanish sweet"
+ },
+ {
+  "id": "b635358f-d056-4b3f-b577-616dbbd72ac8",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Spanish meatballs with clams, chorizo & squid",
+  "reason": "clams, squid meatballs, unusual"
+ },
+ {
+  "id": "6a08a8f4-582e-450a-814b-da034acd7d9f",
+  "source": "themealdb",
+  "cuisine": "Spanish",
+  "title": "Spanish seafood rice",
+  "reason": "duplicate of Paella"
+ },
+ {
+  "id": "bbd7c90d-c9f5-421c-aeb7-7e0691ab7288",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Spicy Fragrant Pot",
+  "reason": "unfamiliar numbing stir-fry"
+ },
+ {
+  "id": "7bb156c9-cae9-44d5-b039-400796255468",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Spotted Dick",
+  "reason": "suet pudding, unfamiliar"
+ },
+ {
+  "id": "aadf4ad4-b23b-4e0f-8f5d-f8cf5f771314",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Steak and Kidney Pie",
+  "reason": "contains kidney"
+ },
+ {
+  "id": "c15dd0e1-496b-450c-b80c-a2c18ccb5c0e",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Steamed Milk Pudding",
+  "reason": "unfamiliar steamed pudding"
+ },
+ {
+  "id": "840b3134-09f4-4e38-bd55-8a597d9b2ae8",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Sticky Rice in Lotus Leaf",
+  "reason": "obscure lotus leaf rice"
+ },
+ {
+  "id": "78ffc96a-44de-4624-a03d-465e4763ddb0",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Sticky Toffee Pudding Ultimate",
+  "reason": "duplicate of Sticky Toffee Pudding"
+ },
+ {
+  "id": "5df838e6-467e-4b48-8092-299713ae4c06",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Stir-Fried Lotus Root",
+  "reason": "unfamiliar lotus root dish"
+ },
+ {
+  "id": "ddb09903-594e-430a-b54c-37b387cad673",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Stir-Fried Snow Pea Shoots",
+  "reason": "unfamiliar pea shoots dish"
+ },
+ {
+  "id": "a1ae8fd1-9498-4720-884d-128a1fbdf511",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Stir-Fried Tofu Skin with Celery",
+  "reason": "unfamiliar tofu skin dish"
+ },
+ {
+  "id": "d60cac28-271d-480e-831e-7953c74ad61a",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Stir-Fried Water Spinach with Garlic",
+  "reason": "unfamiliar water spinach dish"
+ },
+ {
+  "id": "d11225e5-9800-4c52-b227-744b722a748c",
+  "source": "themealdb",
+  "cuisine": "Dominica",
+  "title": "Stuffed plantain cups",
+  "reason": "obscure plantain cups"
+ },
+ {
+  "id": "593e74c5-26af-40ae-9152-61c4814fac44",
+  "source": "themealdb",
+  "cuisine": "Canadian",
+  "title": "Sugar Pie",
+  "reason": "obscure Canadian pie"
+ },
+ {
+  "id": "e5ebb889-febf-4f4c-8540-a30f2716a64b",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Suksessterte (Norwegian almond “success cake”)",
+  "reason": "obscure Norwegian cake"
+ },
+ {
+  "id": "a34df39a-6dd0-472c-94c0-194d1812cc8d",
+  "source": "themealdb",
+  "cuisine": "Kenyan",
+  "title": "Sukuma Wiki",
+  "reason": "obscure Kenyan greens"
+ },
+ {
+  "id": "07782409-c964-4b86-a134-1a42443e2b2b",
+  "source": "themealdb",
+  "cuisine": "Slovakia",
+  "title": "Šúĺlance s Makom",
+  "reason": "obscure Slovak dumplings"
+ },
+ {
+  "id": "2db97232-d4b8-4a82-96da-d59f64276947",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Summer Pudding",
+  "reason": "unfamiliar British pudding"
+ },
+ {
+  "id": "df998489-cc70-4d4c-aa80-f391b7603df8",
+  "source": "lazychef",
+  "cuisine": "United States",
+  "title": "Sweet Tea",
+  "reason": "drink"
+ },
+ {
+  "id": "967ad11f-d144-40eb-ae31-c37a62f6fc84",
+  "source": "themealdb",
+  "cuisine": "Syrian",
+  "title": "Syrian Bread",
+  "reason": "plain flatbread, obscure"
+ },
+ {
+  "id": "25c596f5-593c-4778-b1e9-e04ac89dff02",
+  "source": "themealdb",
+  "cuisine": "Austria",
+  "title": "Tafelspitz",
+  "reason": "obscure Austrian boiled beef"
+ },
+ {
+  "id": "887f12b4-7960-4a38-adb4-c7b66d18f27c",
+  "source": "themealdb",
+  "cuisine": "Moroccan",
+  "title": "Tahini Lentils",
+  "reason": "unfamiliar tahini lentil dish"
+ },
+ {
+  "id": "b6711584-13f2-4877-9ef5-88d62bec8f26",
+  "source": "themealdb",
+  "cuisine": "Norway",
+  "title": "Tall Skoleboller",
+  "reason": "obscure Norwegian buns"
+ },
+ {
+  "id": "ce255c98-39e8-42da-9255-dd23c5fb4a76",
+  "source": "themealdb",
+  "cuisine": "Costa Rica",
+  "title": "Tamal De Maicena",
+  "reason": "obscure Costa Rican dessert"
+ },
+ {
+  "id": "ae372d16-2683-46fd-9ab5-d4a4a89c2e9f",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Tangyuan",
+  "reason": "unfamiliar rice ball dessert"
+ },
+ {
+  "id": "91bb9458-c3cf-42ae-91ac-430fd710584d",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Tavë Kosi Baked Lamb and Yogurt",
+  "reason": "obscure Albanian lamb yogurt bake"
+ },
+ {
+  "id": "0ee87e00-e9fd-42db-bf68-08504bc39e2b",
+  "source": "themealdb",
+  "cuisine": "Albania",
+  "title": "Tavë me Presh ska Mish Meatless Leek Bake",
+  "reason": "obscure Albanian bake"
+ },
+ {
+  "id": "d0fdd660-ca81-48fa-83fb-7b89d6b118e4",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Tea Eggs",
+  "reason": "unfamiliar tea eggs"
+ },
+ {
+  "id": "e72f79f1-8b9c-4433-aec1-9f645b4f3597",
+  "source": "themealdb",
+  "cuisine": "Azerbaijan",
+  "title": "Tendir Choreyi (Tandoori Bread)",
+  "reason": "obscure Azerbaijani bread"
+ },
+ {
+  "id": "5daca814-68d2-4152-8dd3-510ca326894a",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Tiger Salad",
+  "reason": "unfamiliar Chinese cucumber salad"
+ },
+ {
+  "id": "a283d518-2c33-415a-98ef-cb6f4a627207",
+  "source": "themealdb",
+  "cuisine": "Austria",
+  "title": "Tirolean Dumplings",
+  "reason": "obscure Austrian dumplings"
+ },
+ {
+  "id": "fa876848-e914-4020-a130-15af9979a166",
+  "source": "themealdb",
+  "cuisine": "Thai",
+  "title": "Tom yum soup with prawns",
+  "reason": "duplicate of Tom yum soup with prawns (hot & sour)"
+ },
+ {
+  "id": "564da7de-83ba-4374-9910-f803f3de07f6",
+  "source": "themealdb",
+  "cuisine": "Andorra",
+  "title": "Torrijas",
+  "reason": "duplicate of Torrijas with sherry"
+ },
+ {
+  "id": "52817c9c-fcd1-4fbf-afd4-52b3e7ecd428",
+  "source": "themealdb",
+  "cuisine": "Uruguayan",
+  "title": "Torta de fiambre",
+  "reason": "obscure Uruguayan savory cake"
+ },
+ {
+  "id": "c9f421ce-cc62-4a1d-8120-1803c85613c5",
+  "source": "themealdb",
+  "cuisine": "Filipino",
+  "title": "Tortang Talong",
+  "reason": "obscure Filipino eggplant omelet"
+ },
+ {
+  "id": "23f0dc3f-8f29-4d52-96d6-a7d9b784ebff",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Traditional Dutch rice tart (rijstevlaai)",
+  "reason": "obscure Dutch rice tart"
+ },
+ {
+  "id": "6a390ecd-9777-4708-a112-1ddefa4cf521",
+  "source": "themealdb",
+  "cuisine": "British",
+  "title": "Treacle Tart",
+  "reason": "unfamiliar British treacle tart"
+ },
+ {
+  "id": "63fd485b-842b-423a-9adb-a9b13dbb9761",
+  "source": "themealdb",
+  "cuisine": "Tunisian",
+  "title": "Tuna and Egg Briks",
+  "reason": "obscure Tunisian pastries"
+ },
+ {
+  "id": "4732dd2e-2533-440c-a3e0-cb21d1f63757",
+  "source": "themealdb",
+  "cuisine": "Vietnamese",
+  "title": "Turkey Bánh mì",
+  "reason": "contains chicken liver"
+ },
+ {
+  "id": "f8a120eb-fb64-4f81-aa1a-b5b19eca3f88",
+  "source": "themealdb",
+  "cuisine": "Kenyan",
+  "title": "Ugali – Kenyan cornmeal",
+  "reason": "plain cornmeal mush, obscure"
+ },
+ {
+  "id": "85936d5e-8b74-4660-83f6-d099c72ecfed",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Vegetarian Shakshuka",
+  "reason": "duplicate of Shakshouka"
+ },
+ {
+  "id": "a3644404-7c4e-42d6-91d9-af7c1d6aabbd",
+  "source": "themealdb",
+  "cuisine": "Vietnamese",
+  "title": "Vietnamese caramel trout",
+  "reason": "unfamiliar caramel fish"
+ },
+ {
+  "id": "f3f28aa5-68e8-4596-8179-a7b869d77ae8",
+  "source": "themealdb",
+  "cuisine": "Croatian",
+  "title": "Walnut Roll Gužvara",
+  "reason": "obscure Croatian pastry"
+ },
+ {
+  "id": "979eaf2c-ec50-42eb-94b5-d174ed092301",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "West Lake Beef Soup",
+  "reason": "unfamiliar Chinese soup"
+ },
+ {
+  "id": "63c14e76-e5fe-4a91-a479-585d57fe8056",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Winter Melon Soup",
+  "reason": "unfamiliar winter melon soup"
+ },
+ {
+  "id": "6b22af6a-956b-4772-9a6c-599de4f04928",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Wood Ear Mushroom Salad",
+  "reason": "unfamiliar wood ear salad"
+ },
+ {
+  "id": "78fbcd03-9bdd-471c-8c71-211709ecb8a6",
+  "source": "themealdb",
+  "cuisine": "Saudi Arabian",
+  "title": "Yemeni Lahsa (Elite Shakshuka)",
+  "reason": "duplicate of Shakshouka"
+ },
+ {
+  "id": "9c2a2ddb-c66a-4dba-8723-69fdf0584527",
+  "source": "themealdb",
+  "cuisine": "Netherlands",
+  "title": "Zeeuwse bolussen",
+  "reason": "obscure Dutch buns"
+ },
+ {
+  "id": "032bee3e-b2ec-4be3-9983-81ce9cb828f7",
+  "source": "lazychef",
+  "cuisine": "Chinese",
+  "title": "Zongzi",
+  "reason": "unfamiliar Chinese rice dumplings"
+ }
+]

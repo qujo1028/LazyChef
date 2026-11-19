@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/home-tab` (`20261119080000_trending_recipes.sql`, not applied live yet) until its PR merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: held by `feature/home-tab` (`20261119080000_trending_recipes.sql`, not applied live yet) until PR #75 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -1136,7 +1136,7 @@ Decisions (user, 2026-11-18; recorded in `docs/product-scope.md` and `docs/react
 Step 0 (lead):
 - Migration `20261119080000_trending_recipes.sql`: `get_trending_recipes(p_limit default 10)` (security definer,
   `search_path = ''`, signed-in only, anon revoked; reads `details->>'local_recipe_id'` on `cooked` rows, joins only
-  `recipes.household_id is null`) and a partial index on recent cooks. 8 PGlite tests (`trending-recipes.test.mjs`):
+  `recipes.household_id is null`) and a partial index on recent cooks; skips `recipes.hidden`. 9 PGlite tests (`trending-recipes.test.mjs`):
   anon blocked, 2-household minimum (the caller's own households never count), counts households not cooks, no actor columns, household recipes excluded,
   7-day window, malformed ids and the limit. Types updated.
 - Docs: scope, plan phase row and design check updated. `apps/mobile/src/app/(tabs)/home.tsx` stub so both workers
@@ -1182,7 +1182,25 @@ trending recipes (`get_trending_recipes`, topped up with day-seeded library pick
   public library, so it isn't worth gating.
 - Both workers' `/code-review` runs reviewed the wrong target (origin/main, then another session's files), so the lead
   read both diffs by hand.
-- Another session has an uncommitted `20261119060000_library_curation.sql` (branch `feature/library-curation`, main
-  checkout) while this branch holds the migration lock. Its timestamp is earlier than this branch's. Whichever merges
-  second needs a later timestamp than everything live; trending and the pool should also skip `recipes.hidden` once
-  that column exists.
+- Library curation (#76) merged first while this branch held the lock; its live version `20261119060658` is still
+  earlier than this branch's file. After merging main in, trending and the Home pool skip `recipes.hidden` too.
+
+## Library curation (2026-11-19, `feature/library-curation`)
+
+Based on `origin/main` (P6 merged as #74). Merged as #76; migration lock released.
+
+The user asked to drop drinks and dishes that aren't generally popular with Americans from the shared library.
+Haiku tagged all 1,090 library recipes (drink or not, kind, plain name, notes); Sonnet then decided keep or cut
+against a "familiar to most Americans" bar (keep American staples, popular takeout cuisines, recognizable European
+classics and approachable dishes; cut drinks, non-dishes such as oils, offal and other off-putting ingredients,
+obscure regional dishes, near-duplicates). Result: 820 kept, 270 hidden (TheMealDB 232 of 790, LazyChef 38 of 300,
+including all 5 drinks). The list with each reason is `data/library-curation/hidden.json`.
+
+- `recipes.hidden` (new column, server-set only, no column grant): `match_local_recipes` always skips hidden recipes,
+  even with Extended search or a title search. They still open directly, so saved recipes and past cooks keep
+  working. Test: `supabase/tests/library-curation.test.mjs`.
+- Live: migration applied and the 270 flags set with the secret key on 2026-11-19. Re-running the import scripts
+  leaves `hidden` alone (they don't send it); newly imported recipes start visible.
+- To unhide one: `update public.recipes set hidden = false where id = '<id>'` (secret key / SQL editor).
+- Not checked in a browser (no signed-in test account here).
+

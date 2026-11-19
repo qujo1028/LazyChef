@@ -28,7 +28,7 @@ export function useTrendingRecipes() {
   });
 }
 
-/** The shared core library (no household recipes, no Extended-only ones), to top the row up. Changes rarely. */
+/** The shared core library (no household recipes, no Extended-only or hidden ones), to top the row up. Changes rarely. */
 export function useLibraryPool() {
   return useQuery({
     queryKey: queryKeys.libraryPool(),
@@ -39,6 +39,7 @@ export function useLibraryPool() {
         .select('id, title, image_url, ready_in_minutes')
         .is('household_id', null)
         .eq('extended', false)
+        .eq('hidden', false)
         .order('id')
         .limit(POOL_LIMIT);
       if (error) throw error;
