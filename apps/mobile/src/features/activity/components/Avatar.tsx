@@ -8,7 +8,9 @@ import { useTheme } from '@/theme';
 /** The sign-in photo, or initials when there is none (or it fails to load). Decorative: the row names the person. */
 export function Avatar({ name, uri, size = 40 }: { name: string; uri: string | null; size?: number }) {
   const { colors, fonts } = useTheme();
-  const [failed, setFailed] = useState(false);
+  // Remember which photo failed, so a new photo gets a fresh try.
+  const [failedUri, setFailedUri] = useState<string | null>(null);
+  const failed = uri !== null && failedUri === uri;
   const showPhoto = uri !== null && !failed;
   return (
     <View
@@ -29,7 +31,7 @@ export function Avatar({ name, uri, size = 40 }: { name: string; uri: string | n
           source={{ uri }}
           style={{ width: size, height: size }}
           contentFit="cover"
-          onError={() => setFailed(true)}
+          onError={() => setFailedUri(uri)}
           accessible={false}
         />
       ) : (

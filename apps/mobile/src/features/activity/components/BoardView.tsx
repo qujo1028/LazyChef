@@ -64,9 +64,14 @@ export function BoardView({ householdId, viewerId, dev, devGoalPreset }: Props) 
   const max = Math.max(0, ...entries.map((e) => (mode === 'week' ? e.week : e.allTime)));
   const winners = board.lastWeekWinners.map((e) => (e.userId === viewerId ? 'You' : e.name));
   const nobodyYet = mode === 'week' && max === 0;
-  const waitingForMembers = !dev && membersQuery.data === undefined;
-
-  const query = dev ? { ...cooks, data: rows } : waitingForMembers ? { ...cooks, data: undefined } : cooks;
+  // Loading, error and refresh cover both reads: the board needs the cooks and the members.
+  const query = {
+    data: dev ? rows : cooks.data !== undefined && membersQuery.data !== undefined ? cooks.data : undefined,
+    isError: cooks.isError || membersQuery.isError,
+    isFetching: cooks.isFetching || membersQuery.isFetching,
+    error: cooks.error ?? membersQuery.error,
+    refetch: () => Promise.all([cooks.refetch(), membersQuery.refetch()]),
+  };
 
   return (
     <QueryScroll query={query} loadingLabel="Loading the board">

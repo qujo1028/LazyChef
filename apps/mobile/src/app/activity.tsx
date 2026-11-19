@@ -40,7 +40,7 @@ export default function ActivityScreen() {
   const now = useNow();
   const dev = useMemo(
     () =>
-      __DEV__ && devBoard
+      __DEV__ && devBoard && viewerId
         ? devBoardData(devBoard, { userId: viewerId, displayName: viewerName, avatarUrl: viewerAvatar }, now, deviceTimeZone())
         : null,
     [devBoard, viewerId, viewerName, viewerAvatar, now],
