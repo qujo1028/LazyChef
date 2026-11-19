@@ -50,7 +50,9 @@ export function useSetWeeklyGoal() {
       return { previous };
     },
     onError: (_error, _goal, context) => {
-      queryClient.setQueryData(key, context?.previous);
+      // setQueryData(undefined) is ignored, so a goal that never loaded is refetched instead.
+      if (context?.previous !== undefined) queryClient.setQueryData(key, context.previous);
+      else void queryClient.invalidateQueries({ queryKey: key });
     },
     onSuccess: (saved) => {
       queryClient.setQueryData(key, saved);

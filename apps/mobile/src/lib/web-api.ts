@@ -57,6 +57,10 @@ export async function callWebApi<T extends { ok: true }>(path: string, body: unk
     if (response.status === 401) return failure('unauthorized', 'Sign in again to do that.');
     return failure('failed', 'Something went wrong. Try again in a minute.');
   } catch {
+    // A timeout may still have gone through on the server, so it isn't worded as "offline".
+    if (controller.signal.aborted) {
+      return failure('failed', 'That took too long. Check whether it worked before you try again.');
+    }
     return failure('offline', "Couldn't reach LazyChef. Check your connection and try again.");
   } finally {
     clearTimeout(timer);

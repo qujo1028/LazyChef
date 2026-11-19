@@ -65,6 +65,6 @@ export type PushTapRoute = (typeof PUSH_TAP_ROUTES)[number]
 
 export function pushTapRoute(url: unknown): PushTapRoute {
   if (typeof url !== "string") return "/pantry"
-  const path = url.split(/[?#]/)[0]
+  const path = url.split(/[?#]/)[0].replace(/(.)\/+$/, "$1")
   return (PUSH_TAP_ROUTES as readonly string[]).includes(path) ? (path as PushTapRoute) : "/pantry"
 }

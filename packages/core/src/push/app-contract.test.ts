@@ -7,6 +7,7 @@ describe("pushTapRoute", () => {
     expect(pushTapRoute("/list")).toBe("/list")
     expect(pushTapRoute("/household?x=1")).toBe("/household")
     expect(pushTapRoute("/activity#top")).toBe("/activity")
+    expect(pushTapRoute("/list/")).toBe("/list")
   })
   it("sends anything else to the pantry", () => {
     expect(pushTapRoute("https://evil.example/list")).toBe("/pantry")
