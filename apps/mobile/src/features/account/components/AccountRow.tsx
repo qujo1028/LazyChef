@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useHouseholdContext } from '@/lib/household';
 import { useTheme } from '@/theme';
 
-import { Avatar } from './Avatar';
+import { Avatar } from '@/components/Avatar';
 
 /** "Your account" card at the top of the Household tab: opens the Account screen. */
 export function AccountRow() {

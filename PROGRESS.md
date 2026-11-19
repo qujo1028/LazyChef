@@ -1046,3 +1046,25 @@ W4 (`feature/p6-push-app`): push in the app.
 - Not checked: no device or simulator run, no real push, no signed-in account, no EAS project ID yet (`eas init`
   pending, so the card says push isn't set up). Android also needs FCM credentials in EAS before tokens work.
 - Review fixes: module-level tap guard plus `clearLastNotificationResponse` so a tap never replays after signing in as someone else; the notification handler is set once; switches show the defaults if prefs fail to load.
+
+W2 `feature/p6-activity` (Activity screen, Expo app):
+- `app/activity.tsx`: a Log / Chart / Board segmented control on one screen; the selected view is local state.
+  Feature code in `features/activity/` (`api.ts`, `components/`), pure logic in `lib/activity-screen.ts` (+ 18 tests).
+- Log: same query as web (100 rows, actor profile joined) under `queryKeys.activity`, refetched on any
+  `activity_log` change via `useHouseholdChanges`. Core `groupActivity`/`summarizeEntry`, day headings, "and N more"
+  expand, pull to refresh, empty state, error with Try again, offline shows cached rows (or a message with Try
+  again when nothing is cached).
+- Chart: `buildHeatmap` in the device time zone, drawn with plain Views (16 weeks, Monday first). One spoken summary
+  for the grid, not per-tile labels.
+- Board: `computeLeaderboard` (Weekly / All time), avatars via expo-image with initials fallback, "(you)", last
+  week's winner, invite prompt when alone (goes to the Household tab). All-time shows "N+" once the cook read hits
+  `COOK_ROW_LIMIT`.
+- Goal and challenge: a card at the top of Board (not the whole screen, so the Log stays short): `WeekRing` against
+  `useWeeklyGoal()`, tier, streak, rotating challenge, and a "Change goal" link to `/account`. No editing here.
+- Dev only (`__DEV__`): "Dev preview" row on Chart and Board with fake household presets (nobody, quiet, busy, tie,
+  just you) and, on Board, the existing `DEV_PRESETS` for the goal card. Display only, nothing is written.
+- Avatar lives in `features/activity/components/Avatar.tsx` (W3 may want the same for Account; move it to
+  `components/` when both land). No existing exports in `packages/core` changed. No migration, no server code.
+- Checked: root typecheck, lint, test (2550 pass), mobile typecheck and lint, `npx expo export -p web`.
+- Not checked: no simulator, no Playwright, no signed-in test account on this Mac, so the screen was never seen
+  running (layout at 375px, Dynamic Type, VoiceOver, dark mode, realtime refetch and pull to refresh are untested).

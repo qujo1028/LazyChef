@@ -11,7 +11,7 @@ import { SettingsCard } from '@/features/household/components/SettingsCard';
 import { useTheme } from '@/theme';
 
 import { useUpdateDisplayName } from '../api';
-import { Avatar } from './Avatar';
+import { Avatar } from '@/components/Avatar';
 
 /** Avatar, display name (editable) and email. */
 export function ProfileCard() {
@@ -50,7 +50,7 @@ export function ProfileCard() {
       action={!editing ? <PrimaryPillButton title="Edit" variant="text" onPress={start} accessibilityLabel="Edit your name" /> : null}
     >
       <View style={[styles.head, { gap: spacing.md }]}>
-        <Avatar name={name} url={context.data?.profile?.avatarUrl ?? null} />
+        <Avatar name={name} url={context.data?.profile?.avatarUrl ?? null} size={56} />
         <View style={styles.info}>
           <Text style={[type.titleSmall, { color: colors.ink }]} numberOfLines={2}>
             {name || 'Your name'}
