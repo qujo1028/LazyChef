@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -6,6 +7,7 @@ import { FormMessage } from '@/components/FormMessage';
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
 import { AppleSignInButton } from '@/features/auth/components/AppleSignInButton';
 import { useSocialSignIn } from '@/features/auth/use-social-sign-in';
+import { setAccountNotice, useAccountNotice } from '@/lib/account-notice';
 import { useTheme } from '@/theme';
 
 export default function WelcomeScreen() {
@@ -13,6 +15,9 @@ export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const social = useSocialSignIn();
+  const notice = useAccountNotice();
+  // Show the deleted message once: leaving this screen (to sign in, say) clears it.
+  useEffect(() => () => setAccountNotice(null), []);
   const busy = social.busy !== null;
 
   return (
@@ -37,6 +42,9 @@ export default function WelcomeScreen() {
       </View>
 
       <View style={{ gap: spacing.md }}>
+        {notice ? (
+          <FormMessage tone="success" text={[notice.message, notice.appleNote].filter(Boolean).join(' ')} />
+        ) : null}
         {social.error ? <FormMessage tone="error" text={social.error} /> : null}
         <AppleSignInButton onPress={social.apple} disabled={busy} />
         <PrimaryPillButton

@@ -1018,3 +1018,11 @@ Workers (branch from `origin/feature/p6-activity-account`):
 - W3 `feature/p6-account` (Sonnet: the Account screen and the Household tab cleanup).
 - W4 `feature/p6-push-app` (Sonnet: registration, permission at first toggle, tap deep links, notify calls).
 
+
+### W3 `feature/p6-account`: Account screen and Household tab cleanup
+- Household tab: `SignOutCard` is gone; a "Your account" row (avatar, name, email, chevron) sits at the top and opens `/account`.
+- `app/account.tsx` cards in order: Profile (name edit, 1 to 60 chars, `profiles` update as the user; photo only when `avatar_url` is https, else initials), Weekly goal (stepper over `useWeeklyGoal`/`useSetWeeklyGoal`), Food preferences (no mobile editor existed; new card over `set_my_preferences` with core options, invalidates recipe queries on save), Notifications (W4's `NotificationsCard`), About (Privacy, Terms, Support in `expo-web-browser`, app version), Sign out, Delete account.
+- Haptics toggle skipped: the app has no haptics setting (`lib/haptics.ts` always fires), so there is nothing to toggle.
+- Delete: confirm alert with the outcome copy, then `callWebApi(APP_API.deleteAccount)`; success clears the query cache and persisted cache, signs out locally and the welcome screen shows "Your account is deleted." (plus the Apple Settings note when `appleNotRevoked`). The notice lives in memory (`lib/account-notice.ts`) and clears when the welcome screen is left. `__DEV__` shows preview buttons for the outcomes without calling the server.
+- Pure logic with tests: `lib/account.ts`, `lib/preferences.ts`. Code is in `features/account/`.
+- Not checked: no simulator, no Playwright, no signed-in account; the delete route (W1) was coded against the contract only, never called. Nothing was written to or deleted on the live project.
