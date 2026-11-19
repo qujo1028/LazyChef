@@ -59,7 +59,34 @@ describe("notifyListAdded", () => {
           throw new Error("db down")
         },
       }),
-    ).resolves.toBeUndefined()
+    ).resolves.toBe(true)
+  })
+})
+
+describe("deferred delivery", () => {
+  it("claims now, delivers in the deferred task, and says the slot was claimed", async () => {
+    const tasks: (() => Promise<void>)[] = []
+    const defer = (task: () => Promise<void>) => void tasks.push(task)
+    expect(await notifyListAdded("h1", "sam", "Milk", { sender, store, memberIds, now: () => t0, defer })).toBe(true)
+    expect(sender.sent).toHaveLength(0)
+    await tasks[0]()
+    expect(sender.sent).toHaveLength(2)
+    expect(await notifyListAdded("h1", "sam", "Eggs", { sender, store, memberIds, now: () => t0, defer })).toBe(false)
+    expect(tasks).toHaveLength(1)
+  })
+
+  it("a failing deferred task doesn't throw", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {})
+    const tasks: (() => Promise<void>)[] = []
+    const failing = async () => {
+      throw new Error("db down")
+    }
+    await notifyJoined("h1", "sam", { sender, store, memberIds: failing, now: () => t0, defer: (t) => void tasks.push(t) })
+    await expect(tasks[0]()).resolves.toBeUndefined()
+  })
+
+  it("is false when push isn't configured", async () => {
+    expect(await notifyJoined("h1", "sam", { sender, store: null })).toBe(false)
   })
 })
 
