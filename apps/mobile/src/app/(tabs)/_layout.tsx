@@ -11,6 +11,9 @@ import { PantryProvider } from "@/features/pantry/pantry-provider";
 import { useActiveHousehold } from "@/lib/household";
 import { HouseholdChannelProvider } from "@/providers/household-channel";
 
+// Open on Home; the tab order below puts it in the middle.
+export const unstable_settings = { initialRouteName: "home" };
+
 export default function TabsLayout() {
   const router = useRouter();
   const { household } = useActiveHousehold();
@@ -49,6 +52,7 @@ export default function TabsLayout() {
                 ),
               }}
             />
+            <Tabs.Screen name="home" options={{ title: "Home" }} />
             <Tabs.Screen name="list" options={{ title: "List" }} />
             <Tabs.Screen name="household" options={{ title: "Household" }} />
           </Tabs>

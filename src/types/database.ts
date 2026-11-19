@@ -1216,6 +1216,16 @@ export type Database = {
           will_renew: boolean | null
         }[]
       }
+      get_trending_recipes: {
+        Args: { p_limit?: number }
+        Returns: {
+          household_count: number
+          id: string
+          image_url: string | null
+          ready_in_minutes: number | null
+          title: string
+        }[]
+      }
       join_household: {
         Args: { p_code: string }
         Returns: string | null

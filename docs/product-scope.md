@@ -4,7 +4,8 @@ What the app should do, based on a consumer review of the current web app (2026-
 
 ## Keep
 
-- **Tab navigation:** four bottom tabs (Pantry, Recipes, List, Household). Activity is a header icon, top right. Plain labels, clear active state, safe-area spacing.
+- **Tab navigation:** in the Expo app, five bottom tabs (Pantry, Recipes, Home, List, Household), with Home as a raised round button in the center, and the app opens on Home (decided 2026-11-18). The web app keeps its four tabs (Pantry, Recipes, List, Household). Activity is a header icon, top right. Plain labels, clear active state, safe-area spacing.
+- **Home tab** (Expo app, decided 2026-11-18): a greeting with the household name and an expiring-soon line (only when something expires in the next 7 days; it opens Pantry), the "This week" card (moved here from Pantry), a compact household board ("See all" opens Activity; the challenge stays on the This week card), and a row of trending recipes. Trending is the library recipes that at least 2 different households cooked in the last 7 days, ranked by how many households cooked them. It never shows household recipes or who cooked. Until enough households cook the same thing, random library picks (stable for the day) fill the row up to 10, tagged "Try something new".
 - **Shared household with live updates.** Invites, members, and changes showing up for everyone. This is the core value.
 - **Fast pantry entry.** Quick-add with autocomplete, "Used some," Undo on −1, staples.
 - **Recipes that check the pantry.** "Make now" vs. "almost there (1 to 3 missing)," and "add missing to list."
@@ -42,8 +43,8 @@ Every feature is checked against five parts, in order. The app needs all five to
 1. **Core function:** the pantry knows what's in the house and suggests what to cook from it.
 2. **Core loop:** an action with a reward within about 30 seconds. "I cooked this" is the action. The reward is haptic on every cook; confetti and a stronger haptic on milestones. The weekly ring and streak update right away.
 3. **Accessory features:** Activity log, chart, and board; household leaderboard; personal goals; challenges. These support the loop and don't change it.
-4. **Surface area:** 5 to 7 screens. Four bottom tabs, Activity from the header, recipe detail, and account settings. Onboarding is a single pass.
-5. **Retention hook:** a reason to come back. The weekly ring and the "This week" card on Pantry, a rotating challenge (for example, "Cook 3 days in a row"), and a push when food is about to expire. The app shouldn't claim people will use it once.
+4. **Surface area:** 5 to 7 screens. Five bottom tabs in the Expo app (four on the web), Activity from the header, recipe detail, and account settings. Onboarding is a single pass. With Home, the Expo app is at the top of this range: a new screen means cutting or merging one.
+5. **Retention hook:** a reason to come back. The Home tab: the weekly ring and the "This week" card (on Pantry in the web app), a rotating challenge (for example, "Cook 3 days in a row"), trending recipes from other households, and a push when food is about to expire. The app shouldn't claim people will use it once.
 
 Work through these five before any coding, so the scope can be handed to Claude as a spec.
 

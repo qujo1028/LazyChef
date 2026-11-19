@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: nobody (library curation merged as #76). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. `20261119060658_library_curation.sql` applied 2026-11-19 through the Supabase connector (file renamed to match). Migration lock: held by `feature/home-tab` (`20261119080000_trending_recipes.sql`, not applied live yet) until PR #75 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -1119,6 +1119,71 @@ Open for P6's exit check (needs the user):
   unregistered on sign out stays until someone registers on that phone; the web's ring still uses the fixed goal of 3
   (web takes bug fixes only); the web join action and the app could each push once for the same join right at a
   5-minute boundary.
+
+## Home tab (2026-11-18, lead: `feature/home-tab`)
+Based on `origin/main` (P6 merged as #74). Expo app only; the web app keeps its four tabs. Migration lock: held by
+this branch (`20261119080000_trending_recipes.sql`). Workers don't touch `supabase/migrations/` or
+`src/types/database.ts`.
+
+Decisions (user, 2026-11-18; recorded in `docs/product-scope.md` and `docs/react-native-app.md`):
+- Five tabs with Home as a raised round button in the center (Pantry, Recipes, Home, List, Household). The app opens
+  on Home. The "This week" card moves from Pantry to Home.
+- Trending recipes are part of the retention hook: library recipes only, ranked by how many different households
+  cooked them in the last 7 days, at least 2 households, nothing about who cooked. Random library picks (seeded by
+  day) top the row up to 10 while few recipes qualify.
+- Five tabs puts the Expo app at the top of the 5 to 7 screen range.
+
+Step 0 (lead):
+- Migration `20261119080000_trending_recipes.sql`: `get_trending_recipes(p_limit default 10)` (security definer,
+  `search_path = ''`, signed-in only, anon revoked; reads `details->>'local_recipe_id'` on `cooked` rows, joins only
+  `recipes.household_id is null`) and a partial index on recent cooks; skips `recipes.hidden`. 9 PGlite tests (`trending-recipes.test.mjs`):
+  anon blocked, 2-household minimum (the caller's own households never count), counts households not cooks, no actor columns, household recipes excluded,
+  7-day window, malformed ids and the limit. Types updated.
+- Docs: scope, plan phase row and design check updated. `apps/mobile/src/app/(tabs)/home.tsx` stub so both workers
+  branch from a registered route.
+- Not applied to the live project yet: apply through the Supabase connector after review, rename the file to the
+  version it gets, and run the security advisor.
+
+Workers (branch from `feature/home-tab` at the step 0 commit):
+- W1 `feature/home-screen` (Sonnet: the Home screen, `packages/core/src/home/*` helpers and tests, card off Pantry).
+- W2 `feature/home-tabbar` (Sonnet: raised Home tab button, tab order, default route and redirects).
+
+### W2 `feature/home-tabbar` (Sonnet)
+- `BottomTabBar`: Home added as the middle tab, drawn as a raised 56px olive circle (on-primary icon, small shadow and
+  elevation, light haptic on press). The tab row owns the lift (the bar background sits behind it) so the button is
+  inside its parent's bounds and stays tappable on Android. Household's icon is now `people`. Press feedback is a
+  colour change only, so nothing to skip for reduced motion.
+- `(tabs)/_layout.tsx`: order Pantry, Recipes, Home, List, Household; `unstable_settings.initialRouteName = "home"`.
+- Landings: `app/index.tsx` and `app/join/[code].tsx` go to `/home`. The auth callback and onboarding already go
+  through `/`, so they follow. The expiring-food push tap stays `/pantry`. The unknown-tap fallback in
+  `packages/core/src/push/app-contract.ts` also stays `/pantry` (shared with web, which has no Home tab).
+- `docs/app-design.md` tab row says five tabs.
+- Not checked: no simulator, Playwright or signed-in account here. The raised button, the 375px fit with five labels,
+  and the Android tap on the part above the bar need a look in Expo Go.
+
+### W1 `feature/home-screen`
+Built the Home screen in the Expo app. Pure helpers in `packages/core/src/home/` (`greeting`, `trending`, `expiring`,
+22 Vitest tests). Screen in `apps/mobile/src/app/(tabs)/home.tsx` with parts in `apps/mobile/src/features/home/`:
+welcome (greeting, household name, expiring line that opens Pantry), the "This week" card (moved off Pantry), a compact
+household board ("See all" opens Activity; the challenge shows once, on the This week card, invite prompt when alone), and a sideways row of
+trending recipes (`get_trending_recipes`, topped up with day-seeded library picks). New query keys `trending` and
+`libraryPool` (under `['home', ...]`, no realtime). Pull to refresh refetches all of it.
+- Expiring rule: next 7 days including today, already-expired items count, ran-out (quantity 0) and staples do not.
+- Not checked: no simulator or signed-in account here, so nothing was seen on a device (375pt layout, dark mode,
+  the trending row against live data, the migration is not applied live yet).
+- Lead fixes on merge: the board no longer repeats the card's challenge; the pool reads the whole core library
+  (`extended = false`, ordered by id) instead of an arbitrary 300 rows; theme fonts instead of a hardcoded name.
+  The card's expiring nudge ("Find a recipe") stays alongside the welcome line ("open Pantry"): different actions.
+
+### Lead merge notes
+- Trending fix from review: the caller's own households never count toward the 2-household minimum (otherwise a
+  recipe at 2 told the caller what exactly one other household cooked). Test added (8 total).
+- Accepted risk: two throwaway households can make a library recipe trend. It only promotes a recipe already in the
+  public library, so it isn't worth gating.
+- Both workers' `/code-review` runs reviewed the wrong target (origin/main, then another session's files), so the lead
+  read both diffs by hand.
+- Library curation (#76) merged first while this branch held the lock; its live version `20261119060658` is still
+  earlier than this branch's file. After merging main in, trending and the Home pool skip `recipes.hidden` too.
 
 ## Library curation (2026-11-19, `feature/library-curation`)
 
