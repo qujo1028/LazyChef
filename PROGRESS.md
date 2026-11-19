@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). Pending: `20261120000100_weekly_goal.sql` on `feature/p6-activity-account`. Migration lock: held by `feature/p6-activity-account` (P6 lead). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/p6-activity-account` until PR #74 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -992,7 +992,7 @@ Open for P5's exit check (needs the user and a phone in Expo Go):
 
 ## P6 Activity, account, legal (2026-11-18, lead: `feature/p6-activity-account`)
 Based on `origin/main` (P5 and the library expansion merged as #72 and #73). Migration lock: held by this branch
-(`20261120000100_weekly_goal.sql`). Workers don't touch `supabase/migrations/` or `src/types/database.ts`; a worker
+(`20261119053713_weekly_goal.sql`). Workers don't touch `supabase/migrations/` or `src/types/database.ts`; a worker
 that needs a schema change stops and tells the lead.
 
 Decisions (user, 2026-11-18; recorded in `docs/react-native-app.md` and `docs/product-scope.md`):
@@ -1003,7 +1003,7 @@ Decisions (user, 2026-11-18; recorded in `docs/react-native-app.md` and `docs/pr
 - A stored weekly cook goal per person (1 to 7, default 3).
 
 Step 0 (lead):
-- Migration `20261120000100_weekly_goal.sql`: `user_preferences.weekly_goal` and `set_my_weekly_goal()`; 6 PGlite
+- Migration `20261119053713_weekly_goal.sql`: `user_preferences.weekly_goal` and `set_my_weekly_goal()`; 6 PGlite
   tests (`weekly-goal.test.mjs`); types updated.
 - `packages/core/src/push/app-contract.ts` (+ test): routes, `notifyRequestSchema` (ids only), responses, error
   codes, `isExpoPushToken`, `pushTapRoute`.
@@ -1109,10 +1109,8 @@ web typecheck, lint, 2,614 tests, `npm run test:db` (227 pass), audit, ingredien
 and web exports.
 
 Open for P6's exit check (needs the user):
-- Apply `20261120000100_weekly_goal.sql` to the live project before anyone runs this app build: the goal query reads
-  `user_preferences.weekly_goal`, so the ring falls back to 3 and saving fails until it's live.
-- `eas init` in `apps/mobile` (free Expo account) for the EAS project ID; without it the Notifications card says push
-  isn't set up. Check `SUPABASE_SECRET_KEY` is set in Vercel (Production and Preview); `EXPO_ACCESS_TOKEN` is optional.
+- Done 2026-11-18: the weekly goal migration is live (`20261119053713`); `eas init` linked `@quinn2212/lazychef`
+  (project ID in `app.json`); `SUPABASE_SECRET_KEY` is set in Vercel (Production and Preview).
 - On a phone in Expo Go: Activity (Log, Chart, Board, goal card) at 375pt, light and dark; Account (name, goal stepper,
   food preferences, legal links, sign out); turn on a notification (the permission prompt), then have a housemate add
   to the list and tap the push (the exit check: it opens the List); delete a throwaway account end to end (the other
