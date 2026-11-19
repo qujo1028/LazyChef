@@ -49,7 +49,7 @@ Radius and spacing: use the brief's scale (8, 14, 20, pill; spacing 4 to 32), ma
 |---|---|---|
 | Recipe discovery (circles, carousels, see all) | Recipes tab | Visual pattern only: circular images, horizontal carousels, favourite hearts. Replaces the card grid. One screen with Mine / Saved / Suggested filters (see product-scope.md). |
 | Recipe editing (rounded images, stepper, save button) | Recipe edit sheet | Visual pattern only, applied to LazyChef's existing add and edit recipe form. |
-| Bottom navigation | Tab bar | Four tabs (Pantry, Recipes, List, Household). Activity is a header icon, top right. Olive active state, muted inactive. |
+| Bottom navigation | Tab bar | Five tabs (Pantry, Recipes, Home raised in the center, List, Household). Activity is a header icon, top right. Olive active state, muted inactive. |
 
 Screens outside the brief still use the same tokens and components: Pantry, List, Activity, Household, account settings, sign-in, and onboarding.
 

@@ -77,7 +77,7 @@ function SignedInJoin({ code, userId }: { code: string | null; userId: string })
   const finish = useCallback(async () => {
     await clearPendingInvite();
     await queryClient.invalidateQueries({ queryKey: queryKeys.all });
-    router.replace('/pantry');
+    router.replace('/home');
   }, [queryClient, router]);
 
   const enterCode = useCallback(async () => {
