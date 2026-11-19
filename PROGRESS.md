@@ -1027,3 +1027,22 @@ Workers (branch from `origin/feature/p6-activity-account`):
 - Pure logic with tests: `lib/account.ts`, `lib/preferences.ts`. Code is in `features/account/`.
 - Not checked: no simulator, no Playwright, no signed-in account; the delete route (W1) was coded against the contract only, never called. Nothing was written to or deleted on the live project.
 - W3 review (`/code-review` medium on the branch diff): fixed a delete that timed out but finished (now asks the server if the login still exists before reporting failure), a failed local sign out after delete (message, busy reset, notice cleared), the deleted notice vanishing on remount (now cleared when sign in starts), the "YA" avatar fallback, overlapping goal taps (ignored while saving), and stale preference fields on save (draft keeps only edited fields). Left: the delete route is W1's and must be merged before this ships; the goal hook's rollback is the lead's.
+
+W4 (`feature/p6-push-app`): push in the app.
+- `features/push/device.ts`: `enablePush` (the first reminder: permission asked only when a switch is turned on, then
+  `getExpoPushTokenAsync({ projectId })` and `register_device_token`), `refreshPushRegistration` (launch and resume,
+  never asks), `unregisterThisDevice` (deletes this token from `device_tokens`, which RLS allows; there is no unregister
+  function; 3 second cap; called from `SignOutCard` and the onboarding sign out before `signOut`).
+- `PushBridge`: foreground handler shows no banner, the received push becomes a toast with an Open action
+  (ToastProvider sits above it in `AppProviders`); taps use `useLastNotificationResponse` (covers cold start), wait for
+  the root navigation state, and run once per tap. Skipped on Expo web.
+- `NotificationsCard`: three switches (`use-notification-prefs.ts`, optimistic with rollback), one line explaining
+  the permission ask, denied (Open Settings), no project ID, simulator or web, offline. `__DEV__` buttons fire a local
+  notification per kind.
+- `notifyHousemates` is wired into `addListText` and `addListItems` (only when a new line was added, not a top-up) and
+  `joinWithCode` (covers onboarding and the join screen). Undo in the list edit sheet passes `{ notify: false }`:
+  putting back something you just removed isn't news.
+- Pure logic and tests: `lib/push-state.ts` (10 tests).
+- Not checked: no device or simulator run, no real push, no signed-in account, no EAS project ID yet (`eas init`
+  pending, so the card says push isn't set up). Android also needs FCM credentials in EAS before tokens work.
+- Review fixes: module-level tap guard plus `clearLastNotificationResponse` so a tap never replays after signing in as someone else; the notification handler is set once; switches show the defaults if prefs fail to load.

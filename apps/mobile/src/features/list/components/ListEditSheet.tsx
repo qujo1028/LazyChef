@@ -172,7 +172,7 @@ function ListEditContent({
       action: {
         label: 'Undo',
         onPress: () => {
-          void addListItems(householdId, [line]).then((undo) => {
+          void addListItems(householdId, [line], { notify: false }).then((undo) => {
             if (undo.error !== undefined) send({ message: undo.error, tone: 'error' });
           });
         },

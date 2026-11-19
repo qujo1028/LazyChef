@@ -1,7 +1,7 @@
 // Shopping list reads and writes, straight to Supabase as the signed-in user (RLS and the
 // column grants on shopping_list_items apply). Same rules as the web app's
 // src/features/list/actions.ts. Every write fails fast offline and returns { error }.
-// Not ported: the "added to the list" push (server-only; it comes with P6 push work).
+// New lines tell housemates through notifyHousemates (fire and forget; the server sends the push).
 import { onlineManager } from '@tanstack/react-query';
 import { z } from 'zod';
 
@@ -18,6 +18,7 @@ import { convertQuantity } from '@lazychef/core/units';
 
 import { dbErrorMessage } from '@/lib/db-error';
 import { OFFLINE_ACTION_MESSAGE } from '@/lib/household-settings';
+import { notifyHousemates } from '@/features/push/notify';
 import { supabase } from '@/lib/supabase';
 
 export type { AddToListSummary, ListItem, ListItemFields };
@@ -158,6 +159,12 @@ async function addLines(householdId: string, inputs: z.output<typeof lineSchema>
   return { added: plan.added, toppedUp: plan.toppedUp, alreadyOnList: plan.alreadyOnList, ids };
 }
 
+/** Tells housemates after a real new line (topping up an existing one isn't news). */
+function announceAdded(householdId: string, result: ActionResult<AddToListSummary>): ActionResult<AddToListSummary> {
+  if (result.error === undefined && result.added > 0) notifyHousemates({ event: 'list_added', householdId });
+  return result;
+}
+
 /** Typed or pasted text ("2 lbs chicken breast, milk"). Library categories only. */
 export async function addListText(householdId: string, text: string): Promise<ActionResult<AddToListSummary>> {
   const parsed = z
@@ -172,14 +179,20 @@ export async function addListText(householdId: string, text: string): Promise<Ac
     .filter((line) => line.name)
     .map((line) => ({ name: line.name.slice(0, 80), quantity: line.quantity, unit: line.unit }));
   if (lines.length === 0) return { error: 'Type something to add, like "2 lbs chicken breast".' };
-  return offline() ?? guard('addListText', () => addLines(householdId, lines));
+  return offline() ?? announceAdded(householdId, await guard('addListText', () => addLines(householdId, lines)));
 }
 
 /** Structured lines: from the pantry ("Add to list"), a recipe, or Undo after a delete. */
-export async function addListItems(householdId: string, lines: ListLineInput[]): Promise<ActionResult<AddToListSummary>> {
+export async function addListItems(
+  householdId: string,
+  lines: ListLineInput[],
+  options: { notify?: boolean } = {},
+): Promise<ActionResult<AddToListSummary>> {
   const parsed = z.array(lineSchema).min(1, 'Nothing to add.').max(MAX_LINES).safeParse(lines);
   if (!parsed.success) return { error: firstIssue(parsed.error) };
-  return offline() ?? guard('addListItems', () => addLines(householdId, parsed.data));
+  const result = offline() ?? (await guard('addListItems', () => addLines(householdId, parsed.data)));
+  // Undo re-adds a line the person just removed: that isn't news for housemates, so it passes notify: false.
+  return options.notify === false ? result : announceAdded(householdId, result);
 }
 
 /** Checks a line off (or back on). The database stamps who and when. */

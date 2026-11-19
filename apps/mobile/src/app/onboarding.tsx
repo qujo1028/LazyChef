@@ -8,6 +8,7 @@ import { FormScreen } from '@/components/FormScreen';
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
 import { TextField } from '@/components/TextField';
 import { InviteCard } from '@/features/invite/InviteCard';
+import { unregisterThisDevice } from '@/features/push/device';
 import { fetchInvitePreview, joinWithCode } from '@/features/invite/join';
 import { usePendingInvite } from '@/features/invite/pending-invite-store';
 import { StapleChips } from '@/features/onboarding/StapleChips';
@@ -127,7 +128,7 @@ function Welcome({ name }: { name: string | null }) {
 }
 
 function SignOut() {
-  return <PrimaryPillButton title="Sign out" variant="text" onPress={() => void supabase.auth.signOut()} />;
+  return <PrimaryPillButton title="Sign out" variant="text" onPress={() => void unregisterThisDevice().then(() => supabase.auth.signOut())} />;
 }
 
 function PendingInvite({
