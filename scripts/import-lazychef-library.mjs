@@ -149,21 +149,48 @@ async function download(from, attempt = 1) {
 /** Resize to 1200 px wide (never upscaled), strip metadata, JPEG. */
 async function uploadPhoto(draft) {
   const original = await download(draft.photo.from)
-  const jpeg = await sharp(original)
-    .rotate()
-    .resize({ width: PHOTO_WIDTH, withoutEnlargement: true })
-    .jpeg({ quality: 80, mozjpeg: true })
-    .toBuffer()
-  const { error } = await db.storage
-    .from(BUCKET)
-    .upload(`${draft.slug}.jpg`, jpeg, { contentType: "image/jpeg", upsert: true, cacheControl: "604800" })
-  if (error) fail(`Uploading the photo for ${draft.slug} failed: ${error.message}`)
+  let jpeg
+  try {
+    // failOn "none": tolerate the small encoding faults some camera JPEGs carry.
+    jpeg = await sharp(original, { failOn: "none" })
+      .rotate()
+      .resize({ width: PHOTO_WIDTH, withoutEnlargement: true })
+      .jpeg({ quality: 80, mozjpeg: true })
+      .toBuffer()
+  } catch (error) {
+    return `couldn't read the image (${error.message})`
+  }
+  // Retries: a long run of uploads can hit a dropped connection ("fetch failed").
+  for (let attempt = 1; ; attempt++) {
+    const { error } = await db.storage
+      .from(BUCKET)
+      .upload(`${draft.slug}.jpg`, jpeg, { contentType: "image/jpeg", upsert: true, cacheControl: "604800" })
+      .catch((thrown) => ({ error: thrown }))
+    if (!error) return null
+    if (attempt >= 4) fail(`Uploading the photo for ${draft.slug} failed: ${error.message}`)
+    await sleep(1500 * 2 ** attempt)
+  }
 }
 
+const NO_PHOTO = {
+  image_url: null,
+  image_author: null,
+  image_license: null,
+  image_license_url: null,
+  image_source_url: null,
+  image_ai_generated: false,
+}
+const skippedPhotos = []
 let uploaded = 0
 for (const item of recipes) {
   if (!item.draft.photo?.from) continue
-  await uploadPhoto(item.draft)
+  const problem = await uploadPhoto(item.draft)
+  if (problem) {
+    // The recipe still goes in, without a photo, rather than stopping the whole import.
+    skippedPhotos.push(`${item.draft.slug}: ${problem}`)
+    Object.assign(item.recipe, NO_PHOTO)
+    continue
+  }
   uploaded += 1
   process.stdout.write(`\rPhotos ${uploaded}`)
   if (/^https:/i.test(item.draft.photo.from)) await sleep(300)
@@ -200,3 +227,7 @@ for (let i = 0; i < recipes.length; i += BATCH) {
 }
 
 summary("\nImported")
+if (skippedPhotos.length > 0) {
+  console.log(`\n${skippedPhotos.length} photos skipped (those recipes went in without one):`)
+  for (const line of skippedPhotos) console.log(`  ${line}`)
+}

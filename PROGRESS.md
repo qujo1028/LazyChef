@@ -863,7 +863,9 @@ Finished (P5 lead session, 2026-11-18, worktree `.claude/worktrees/library`, pus
 
 Still to do (each needs the user's OK):
 - Done 2026-11-18 (user approved): the migration is live as `20261119024109` (applied through the Supabase connector; the file was renamed to match). Security advisor: nothing new.
-- `npm run recipes:lazychef -- --write`: uploads 254 photos to `library-photos` and upserts the 300 recipes with the
-  secret key from `.env.local`. Re-runnable.
+- Done 2026-11-18 (user approved): `npm run recipes:lazychef -- --write` imported the 300 recipes (1,090 in the library
+  now) and uploaded all 254 photos to `library-photos` (public URL checked). Two fixes to get there:
+  `scripts/lib/ts-paths.mjs` no longer rewrites requires inside node_modules (it broke sharp), and the importer
+  retries uploads and imports a recipe without its photo if the image can't be read, instead of stopping.
 - Then check a few recipe pages and their photo credits on the web and on a phone, and clear the migration lock when
   the branch merges.

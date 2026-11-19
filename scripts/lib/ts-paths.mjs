@@ -18,6 +18,9 @@ function isFile(file) {
 
 registerHooks({
   resolve(specifier, context, nextResolve) {
+    // Packages resolve their own files. Rewriting their relative require() calls to file:// URLs
+    // breaks CommonJS packages such as sharp's semver.
+    if (context.parentURL?.includes("/node_modules/")) return nextResolve(specifier, context)
     let base = null
     if (specifier.startsWith("@/")) base = path.join(SRC, specifier.slice(2))
     else if ((specifier.startsWith("./") || specifier.startsWith("../")) && context.parentURL?.startsWith("file:")) {
