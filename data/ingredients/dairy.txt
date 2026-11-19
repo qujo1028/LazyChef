@@ -52,6 +52,7 @@ hard-boiled eggs ~4 : hard boiled eggs, boiled eggs | count, package
 egg yolks ~5 : egg yolk
 duck eggs ~5
 quail eggs ~5
+century eggs ~5 : preserved eggs, thousand year eggs, pidan | count
 
 # ── Cheese ───────────────────────────────────────────────────────────────────────────────────
 @units oz, lb, package, cup
