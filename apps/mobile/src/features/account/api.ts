@@ -90,8 +90,8 @@ export async function signOutLocal(): Promise<{ error: Error | null }> {
 export async function deleteAccount(): Promise<DeleteOutcome> {
   const result = await callWebApi<DeleteAccountResponse>(APP_API.deleteAccount, {});
   let outcome = deleteOutcome(result);
-  // A timeout or dropped connection may hide a delete that finished: ask the server if the account is still there.
-  if (outcome.kind === 'error' && !result.ok && result.code === 'offline' && (await accountIsGone())) {
+  // A timeout, dropped connection or server error may hide a delete that finished: ask the server if the account is still there.
+  if (outcome.kind === 'error' && !result.ok && (result.code === 'offline' || result.code === 'failed') && (await accountIsGone())) {
     outcome = deleteOutcome({ ok: true, appleNotRevoked: false });
   }
   if (outcome.kind === 'deleted') {
@@ -106,7 +106,8 @@ async function accountIsGone(): Promise<boolean> {
   try {
     const { data, error } = await supabase.auth.getUser();
     if (data.user) return false;
-    return error?.status === 401 || error?.status === 403 || error?.status === 404;
+    // 401 can mean an expired token, not a deleted user, so only an explicit "no such user" counts.
+    return error?.code === 'user_not_found' || error?.status === 403 || error?.status === 404;
   } catch {
     return false;
   }
