@@ -1,5 +1,6 @@
 import { cleanInviteCode, householdErrorMessage, MESSAGES } from '@/lib/invite-code';
 import { classifyPreview, type InvitePreview, type PreviewRow } from '@/lib/invite-preview';
+import { notifyHousemates } from '@/features/push/notify';
 import { supabase } from '@/lib/supabase';
 
 export type JoinResult = { ok: true; householdId: string } | { ok: false; message: string };
@@ -12,6 +13,7 @@ export async function joinWithCode(rawCode: string): Promise<JoinResult> {
     const { data, error } = await supabase.rpc('join_household', { p_code: code });
     if (error) return { ok: false, message: householdErrorMessage(error) };
     if (!data) return { ok: false, message: MESSAGES.noMatch };
+    notifyHousemates({ event: 'joined', householdId: data });
     return { ok: true, householdId: data };
   } catch (e) {
     return { ok: false, message: householdErrorMessage(e as Error) };
