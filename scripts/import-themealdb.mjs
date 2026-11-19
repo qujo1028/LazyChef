@@ -4,7 +4,9 @@
 //
 //   npm run recipes:import -- --dry-run            fetch everything, write a JSON preview, touch nothing
 //   npm run recipes:import -- --dry-run --out x.json
-//   npm run recipes:import -- --write              upsert into Supabase (safe to re-run)
+//   npm run recipes:import -- --write              upsert into Supabase (safe to re-run; rows that
+//                                                  already have a photo keep it and its credit)
+//   npm run recipes:import -- --write --replace-photos   also overwrite existing photos with TheMealDB's
 //   npm run recipes:import -- --dry-run --from file.json   read meals from a saved response instead of the API
 //
 // Env (from the shell or .env.local):
@@ -13,14 +15,15 @@
 //   NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SECRET_KEY   only for --write (the secret key bypasses RLS,
 //                          which is the only way to write the shared library).
 //
-// Images and source links stay TheMealDB's (linked, not copied); the app credits TheMealDB on
-// every imported recipe.
+// New rows link TheMealDB's image (not copied); the app credits TheMealDB for the recipe. Library
+// photos replaced later (scripts/library-photos.mjs) live in our bucket with their own credit.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 
 import "./lib/ts-paths.mjs"
+import { sourceIdsWithPhoto, upsertLibraryRows } from "./lib/library-upsert.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const { convertMeals, mealsFromResponse } = await import(path.join(ROOT, "packages/core/src/recipes/import/themealdb.ts"))
@@ -32,6 +35,7 @@ const { values: args } = parseArgs({
     out: { type: "string", default: "data/themealdb/preview.json" },
     from: { type: "string" },
     "delay-ms": { type: "string", default: "250" },
+    "replace-photos": { type: "boolean", default: false },
   },
 })
 
@@ -142,19 +146,22 @@ const BATCH = 50
 let written = 0
 for (let i = 0; i < recipes.length; i += BATCH) {
   const batch = recipes.slice(i, i + BATCH)
-  // Upsert on (source, source_id): re-running updates the same rows.
-  const { data, error } = await db
-    .from("recipes")
-    .upsert(
-      batch.map((recipe) => {
-        const row = { ...recipe, household_id: null }
-        delete row.ingredients
-        return row
-      }),
-      { onConflict: "source,source_id" },
-    )
-    .select("id, source_id")
-  if (error) fail(`Saving recipes failed: ${error.message}`)
+  // Upsert on (source, source_id): re-running updates the same rows. Rows that already have a photo
+  // keep it and its credit (replaced library photos must survive a re-run), unless --replace-photos.
+  const rowsToSave = batch.map((recipe) => {
+    const row = { ...recipe, household_id: null }
+    delete row.ingredients
+    return row
+  })
+  let data
+  try {
+    const withPhoto = args["replace-photos"]
+      ? new Set()
+      : await sourceIdsWithPhoto(db, "themealdb", rowsToSave.map((row) => row.source_id))
+    data = await upsertLibraryRows(db, rowsToSave, { withPhoto, replacePhotos: args["replace-photos"] })
+  } catch (error) {
+    fail(error.message)
+  }
 
   const ids = new Map(data.map((row) => [row.source_id, row.id]))
   const recipeIds = [...ids.values()]

@@ -1,0 +1,721 @@
+[
+ {
+  "id": "51a95602-9658-4eb9-934d-6966628bdb99",
+  "title": "Shrimp and Grits",
+  "verdict": "fail",
+  "reasons": [
+   "glass and clutter in background",
+   "glare on plate"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "5258334d-ad8d-4ce2-b447-d8307d182fa8",
+  "title": "Hunan Chicken",
+  "verdict": "fail",
+  "reasons": [
+   "harsh flash, floral plate",
+   "overhead snapshot look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "52674511-b2cd-42a8-ac25-6bb18d3dd0c5",
+  "title": "Rice Krispie Treats",
+  "verdict": "fail",
+  "reasons": [
+   "plain snapshot on blank background",
+   "dull lighting"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "5288ee33-9802-4b65-adf3-a7d7176c66f4",
+  "title": "Barbecue Chicken Drumsticks",
+  "verdict": "fail",
+  "reasons": [
+   "busy tablecloth clutter",
+   "messy sauce on plate"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "5423c11c-d02c-4f6b-8a70-6b6bf3f2671d",
+  "title": "Succotash",
+  "verdict": "fail",
+  "reasons": [
+   "too tight, no plate",
+   "hard to read as a dish"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "54886f43-bddb-4e88-be1d-18acbd086430",
+  "title": "Chicken Enchiladas with Red Sauce",
+  "verdict": "fail",
+  "reasons": [
+   "served in casserole dish",
+   "yellow cast"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "553cd811-8f26-47d9-8bee-663081d0e648",
+  "title": "Classic Meatloaf",
+  "verdict": "fail",
+  "reasons": [
+   "raw-looking, flat light",
+   "plain white plate"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "559ba231-0412-4e44-b3c6-a0486f0bc91b",
+  "title": "Philly Cheesesteak",
+  "verdict": "fail",
+  "reasons": [
+   "wax paper tray and clutter",
+   "dim, messy"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "5a51fada-108b-421f-a059-2913326506ca",
+  "title": "Mashed Potatoes",
+  "verdict": "fail",
+  "reasons": [
+   "dated cut-out look on a plain white background (lead override)"
+  ],
+  "note": "Mound of mashed potatoes on a plate, plain white background"
+ },
+ {
+  "id": "5abfd417-daa6-4dd8-8d8f-b8eec750a9e3",
+  "title": "Sesame Balls",
+  "verdict": "fail",
+  "reasons": [
+   "blue-white restaurant plate, table clutter",
+   "amateur light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "5fd0bd25-d282-4a8d-9695-04c4094e32e9",
+  "title": "Scalloped Potatoes",
+  "verdict": "fail",
+  "reasons": [
+   "still in baking dish",
+   "orange cast"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "60c6500f-dc41-42cf-947e-6128ea3b5a20",
+  "title": "Garlic Eggplant",
+  "verdict": "fail",
+  "reasons": [
+   "other plates and chopstick sleeve in frame",
+   "flat overhead"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "616d655c-e421-44f1-86b8-f1c980e6f87b",
+  "title": "Cajun Chicken Pasta",
+  "verdict": "fail",
+  "reasons": [
+   "busy cloth background",
+   "amateur light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "6263856a-d4fb-461f-9489-a194c5241d7c",
+  "title": "Egg Fried Rice",
+  "verdict": "fail",
+  "reasons": [
+   "forks and spoon in frame",
+   "dim restaurant look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "634c62a5-0338-464a-a17f-9f095703334b",
+  "title": "Braised Chicken Wings in Coke",
+  "verdict": "fail",
+  "reasons": [
+   "people and red tray in background",
+   "dish is not the focus"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "64cdd10b-240c-4b42-842a-17390ce13e97",
+  "title": "Shepherd's Pie with Ground Beef",
+  "verdict": "fail",
+  "reasons": [
+   "portrait with clutter",
+   "extra dishes and basket in frame"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "68d37ac3-5a52-481c-84d9-1a3382f33aa9",
+  "title": "Chicken Quesadillas",
+  "verdict": "fail",
+  "reasons": [
+   "table clutter, glasses, cutlery",
+   "amateur light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "68fda846-e0cb-4531-9791-c8c369953b41",
+  "title": "Texas Beef Chili",
+  "verdict": "fail",
+  "reasons": [
+   "tall portrait",
+   "food at bottom"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "695b4e6a-4f3d-47c4-ac7b-eed49f9e05c1",
+  "title": "Chinese Chicken Salad",
+  "verdict": "fail",
+  "reasons": [
+   "placemat and cutlery clutter",
+   "flash look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "6a1352c3-43e5-4011-a7e9-e5372e2ac181",
+  "title": "Egg Salad Sandwich",
+  "verdict": "fail",
+  "reasons": [
+   "glass plate, wood table glare",
+   "amateur look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "6b848991-bf83-4762-8e76-aba2a7dc5c61",
+  "title": "Barbecue Sauce",
+  "verdict": "fail",
+  "reasons": [
+   "just a close crop of sauce",
+   "not clearly the recipe"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "6b9743d4-20b9-49c8-88c5-97a7d24c591b",
+  "title": "Salt and Pepper Tofu",
+  "verdict": "fail",
+  "reasons": [
+   "other plates in frame",
+   "dim restaurant light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "6c6f3fe2-9dc3-41d7-af59-7030f9ef9fd4",
+  "title": "Banana Bread",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Sliced banana bread loaf on a wooden board"
+ },
+ {
+  "id": "7216b805-1e8a-434b-8116-f243fea9754e",
+  "title": "Chicken with Snow Peas",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Chicken, snow peas and green beans over rice on an oval plate"
+ },
+ {
+  "id": "73802150-1e2d-4198-9e25-945f37db3c23",
+  "title": "Shrimp Toast",
+  "verdict": "fail",
+  "reasons": [
+   "dark table, plain overhead",
+   "amateur look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "7573d5d0-926c-497a-843e-e8fc805cab37",
+  "title": "Pork Siu Mai",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Six pork siu mai in a bamboo steamer, dark wood background"
+ },
+ {
+  "id": "776086a0-c247-4802-ae2d-312fe546ef6d",
+  "title": "Sloppy Joes",
+  "verdict": "fail",
+  "reasons": [
+   "flash glare, patterned plate",
+   "dated look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "78d8b3c7-5770-4d6e-81cb-cd377a0c026a",
+  "title": "White Cut Chicken with Ginger Scallion Sauce",
+  "verdict": "fail",
+  "reasons": [
+   "orange tray and sauce cups",
+   "amateur snapshot"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "797d5cfd-485e-4b04-9d2b-36a4217ca64d",
+  "title": "Red Velvet Cake",
+  "verdict": "fail",
+  "reasons": [
+   "foam plate, dark clutter",
+   "harsh light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "7d150a05-1f05-4cc5-9393-b2e3d6b3f01c",
+  "title": "Beef Stew",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Bowl of beef stew with carrots and potatoes"
+ },
+ {
+  "id": "7da1a451-ad1c-4c8b-b4c0-19e583c14015",
+  "title": "Oatmeal Raisin Cookies",
+  "verdict": "fail",
+  "reasons": [
+   "tall portrait on parchment",
+   "plain snapshot"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "7e01d309-94b4-4ad4-a913-e08ed1fa7aec",
+  "title": "Twice-Cooked Pork",
+  "verdict": "fail",
+  "reasons": [
+   "dim restaurant, background clutter",
+   "harsh cast"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "7f050b58-d5c8-412b-9fff-1de725c4a686",
+  "title": "Cinnamon Rolls",
+  "verdict": "fail",
+  "reasons": [
+   "tight crop, still in pan",
+   "hard to crop"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8061e455-8a74-4ce8-8442-e46acf1517df",
+  "title": "Pot Roast with Carrots and Potatoes",
+  "verdict": "fail",
+  "reasons": [
+   "tile background, glare",
+   "amateur"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "80f19565-c7be-4182-b9b4-1fff19872bfe",
+  "title": "Blondies",
+  "verdict": "fail",
+  "reasons": [
+   "still in pan on rack, jar in frame",
+   "dull"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8116508c-ec56-42ae-9899-f30bec8ba1f6",
+  "title": "Baby Back Ribs",
+  "verdict": "fail",
+  "reasons": [
+   "cutlery, keyboard and jar in frame",
+   "floral plate"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "828fa4dd-cd85-467e-b0f2-a3f5b529637a",
+  "title": "Taiwanese Popcorn Chicken",
+  "verdict": "fail",
+  "reasons": [
+   "paper bag and skewers on blue cloth",
+   "amateur"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "82b9e957-578d-4425-8f9c-85c1cb764f0e",
+  "title": "Lemon Bars",
+  "verdict": "fail",
+  "reasons": [
+   "still in glass dish",
+   "tall portrait"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "835eba8c-f32a-4808-b675-f8135f6f4597",
+  "title": "Chinese Sesame Flatbread",
+  "verdict": "fail",
+  "reasons": [
+   "unclear it is flatbread",
+   "dim"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "86613d5e-7f87-4601-8d52-8348b06f820d",
+  "title": "Southern Fried Chicken",
+  "verdict": "fail",
+  "reasons": [
+   "drink and other dishes in frame",
+   "amateur"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "86976ccf-7b87-4282-a185-b2588c34fd58",
+  "title": "Biang Biang Noodles",
+  "verdict": "fail",
+  "reasons": [
+   "checked cloth and newspaper clutter",
+   "cluttered"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "86c54700-b613-4255-ae76-151b1e552f5e",
+  "title": "Mongolian Beef",
+  "verdict": "fail",
+  "reasons": [
+   "chopsticks, blurry, dark tray",
+   "off focus"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "86cacd00-5e61-4978-906e-cfc9cabe2fd2",
+  "title": "Shrimp and Egg Stir-Fry",
+  "verdict": "fail",
+  "reasons": [
+   "wallet and menus in background",
+   "clutter"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "88179f7c-279b-4946-8991-2371e5b8f5dc",
+  "title": "Baked Mac and Cheese",
+  "verdict": "fail",
+  "reasons": [
+   "foil tray, tall portrait",
+   "clutter"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8a1921a3-3fb6-4f3c-8ce7-44994a647ccc",
+  "title": "Granola",
+  "verdict": "fail",
+  "reasons": [
+   "plain pile on plate",
+   "dull"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8b8cbe3d-249b-4ef1-9e57-cd190bfd19d4",
+  "title": "Home-Style Tofu",
+  "verdict": "fail",
+  "reasons": [
+   "flat flash, messy",
+   "plain overhead"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8ba297c2-df87-4256-bfc0-0ca44fb3aea1",
+  "title": "Corn Dogs",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Two corn dogs on a white plate, one cut open"
+ },
+ {
+  "id": "8c6960e2-653e-4809-8189-1738675b0531",
+  "title": "Yellow Cake with Chocolate Frosting",
+  "verdict": "fail",
+  "reasons": [
+   "dim cake, not clearly yellow cake",
+   "plain"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8ccdd7dc-3912-4d20-98a9-6b77be6cbf55",
+  "title": "Snickerdoodles",
+  "verdict": "fail",
+  "reasons": [
+   "tall portrait, piled on plate",
+   "dim"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8d217819-e2c7-48d0-bb99-8f6133eb08e4",
+  "title": "Quiche Lorraine",
+  "verdict": "fail",
+  "reasons": [
+   "flat light, plain snapshot",
+   "tight crop"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8d90120a-52a1-4283-bba1-38c0b8c6c679",
+  "title": "Sweet and Sour Spare Ribs",
+  "verdict": "fail",
+  "reasons": [
+   "patterned cloth and clutter",
+   "flash look"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "8fe51185-46a4-4eef-a832-b734eb1d9500",
+  "title": "Steamed Fish with Ginger and Scallions",
+  "verdict": "fail",
+  "reasons": [
+   "whole fish with spoons",
+   "hard to read"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "9063834c-eb8d-44b2-be02-fab23ac26b9a",
+  "title": "Skillet Cornbread",
+  "verdict": "fail",
+  "reasons": [
+   "still in skillet",
+   "speckled counter"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "92536b5c-7982-4f18-9e0d-bbffaf3d9b36",
+  "title": "Bread Pudding with Vanilla Sauce",
+  "verdict": "fail",
+  "reasons": [
+   "wood table clutter",
+   "dull plate"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "926cc593-3caa-47e9-8621-0a14d8bcf11d",
+  "title": "Black Pepper Beef",
+  "verdict": "fail",
+  "reasons": [
+   "person in background",
+   "clutter"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "92a0e889-9487-445b-8d41-bbe99602aa0a",
+  "title": "Lemon Chicken",
+  "verdict": "fail",
+  "reasons": [
+   "takeout box",
+   "harsh"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "95c38470-9692-4613-9565-cdce15395802",
+  "title": "Pan-Seared Steak with Garlic Butter",
+  "verdict": "fail",
+  "reasons": [
+   "glasses and wood clutter",
+   "dim"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "966731a6-7127-48d7-be7d-79989f2f16af",
+  "title": "Coleslaw",
+  "verdict": "fail",
+  "reasons": [
+   "tight crop, unclear dish",
+   "orange bowl cut off"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "97b47d5e-729f-4c72-a238-718dbeff06c4",
+  "title": "Pulled Pork Sandwich",
+  "verdict": "fail",
+  "reasons": [
+   "drink and fries clutter",
+   "too many items"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "9973a807-8e5d-4b07-8cdb-a6f71dcb0524",
+  "title": "Macaroni Salad",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Blue bowl of macaroni salad on a wooden table"
+ },
+ {
+  "id": "9d509620-3e80-4d15-8342-ff1e329c7a67",
+  "title": "Sweet Potato Fries",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Rosemary sweet potato fries with ketchup on a rectangular plate"
+ },
+ {
+  "id": "9ee1aa7f-a143-4ccf-98d0-1a5905ab32b7",
+  "title": "Crab Rangoon",
+  "verdict": "fail",
+  "reasons": [
+   "orchid garnish, dim",
+   "tight crop"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "9f2ed134-2f34-44e7-bcb3-9f7532b2e3b1",
+  "title": "Beef Burritos",
+  "verdict": "fail",
+  "reasons": [
+   "table pattern clutter",
+   "dim yellow cast"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "a073574b-6efc-4414-8030-ec6471ed88e3",
+  "title": "Glazed Carrots",
+  "verdict": "fail",
+  "reasons": [
+   "glare, mismatched sides",
+   "amateur"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "a1037dce-a51c-4834-9595-e6b8499f2dc9",
+  "title": "Stuffed Bell Peppers with Rice and Beef",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Four cheese-topped stuffed bell peppers in colors"
+ },
+ {
+  "id": "a201f9e8-75b0-49c4-be84-147e70da902c",
+  "title": "Blueberry Muffins",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "Two blueberry muffins on white background, one broken open"
+ },
+ {
+  "id": "a20df43a-9de2-4176-b1da-8c66b15ed9b8",
+  "title": "Egg Tarts",
+  "verdict": "fail",
+  "reasons": [
+   "tight, tall portrait",
+   "second tart cropped"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "a2ba42ac-7aa1-4c6b-9659-4f80b80c0230",
+  "title": "Roast Chicken with Lemon and Herbs",
+  "verdict": "fail",
+  "reasons": [
+   "glasses and bottle in frame",
+   "dim"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "a83bcba8-ccaa-4f0c-abf4-e3675de0c98c",
+  "title": "Roast Turkey Breast",
+  "verdict": "fail",
+  "reasons": [
+   "fork, glass, odd color",
+   "dull light"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "a89db5c3-26e9-4749-ae02-e97d764e39ca",
+  "title": "Honey Walnut Shrimp",
+  "verdict": "fail",
+  "reasons": [
+   "spoon in frame",
+   "yellow cast, tight"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "aabc9d69-0af7-4a15-ab30-82181736a566",
+  "title": "Fried Green Tomatoes",
+  "verdict": "fail",
+  "reasons": [
+   "shows hush puppies, not fried green tomatoes",
+   "glass and clutter"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "ab3d8020-6ba4-414d-a5d3-6066815dad1c",
+  "title": "BLT Sandwich",
+  "verdict": "pass",
+  "reasons": [],
+  "note": "BLT sandwich close up on a white plate"
+ },
+ {
+  "id": "ac5787a3-2398-4250-8ddc-0efe2df6ac18",
+  "title": "Corn Chowder",
+  "verdict": "fail",
+  "reasons": [
+   "tight crop, unclear dish",
+   "glass mug"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "acd5f113-45f1-4087-ae8f-f652c29bd82c",
+  "title": "Garlic Bread",
+  "verdict": "fail",
+  "reasons": [
+   "cutlery, tall portrait",
+   "plain"
+  ],
+  "note": "See reasons"
+ },
+ {
+  "id": "adb9454a-ef87-43ab-ba39-d2a40c7e43f2",
+  "title": "Chicken and Sausage Gumbo",
+  "verdict": "fail",
+  "reasons": [
+   "hot sauce brand label, clutter",
+   "food in bowl, yellow tray"
+  ],
+  "note": "See reasons"
+ }
+]

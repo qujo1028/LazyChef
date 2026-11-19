@@ -1,0 +1,779 @@
+[
+  {
+    "id": "00509c60-be3e-41cb-8ff5-563b3ccef8d1",
+    "title": "Chicken Alfredo Bake",
+    "verdict": "fail",
+    "reasons": [
+      "extreme close crop of pasta in a dish",
+      "dim yellow cast",
+      "no plating"
+    ],
+    "note": "Snapshot of Chicken Alfredo Bake; extreme close crop of pasta in a dish"
+  },
+  {
+    "id": "0113950d-4630-4713-82f0-1c0319c5b3b6",
+    "title": "Sichuan Wontons in Chili Oil",
+    "verdict": "fail",
+    "reasons": [
+      "flat harsh light",
+      "messy sauce and plate",
+      "tight crop"
+    ],
+    "note": "Snapshot of Sichuan Wontons in Chili Oil; flat harsh light"
+  },
+  {
+    "id": "02ec16d7-f1d1-4ec4-8969-d86c987c7e19",
+    "title": "Western Omelet",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered table with fruit, glass and napkin",
+      "looks like a taco, not a Western omelet"
+    ],
+    "note": "Snapshot of Western Omelet; cluttered table with fruit, glass and napkin"
+  },
+  {
+    "id": "03b654ff-f5b4-416f-aafa-b9c17ab78d30",
+    "title": "Lion's Head Meatballs",
+    "verdict": "fail",
+    "reasons": [
+      "fork and knife clutter",
+      "restaurant table and marble background",
+      "glare"
+    ],
+    "note": "Snapshot of Lion's Head Meatballs; fork and knife clutter"
+  },
+  {
+    "id": "03ff34eb-7b03-4a20-bd87-4f84d4ef277d",
+    "title": "Tuna Melt",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant booth and other plate in background",
+      "dim yellow light"
+    ],
+    "note": "Snapshot of Tuna Melt; restaurant booth and other plate in background"
+  },
+  {
+    "id": "051e37c6-9798-4133-b8fc-f767abe01bde",
+    "title": "Hunan Pork with Peppers",
+    "verdict": "fail",
+    "reasons": [
+      "messy plating on patterned plate",
+      "flat flash light",
+      "amateur snapshot"
+    ],
+    "note": "Snapshot of Hunan Pork with Peppers; messy plating on patterned plate"
+  },
+  {
+    "id": "05fe0f8c-8a85-4fae-a793-3f7e689b593b",
+    "title": "Smothered Pork Chops",
+    "verdict": "fail",
+    "reasons": [
+      "flash glare and dim light",
+      "cluttered plate with fork and bread",
+      "messy"
+    ],
+    "note": "Snapshot of Smothered Pork Chops; flash glare and dim light"
+  },
+  {
+    "id": "065c47e6-fffd-431d-9584-171b483b9626",
+    "title": "Zhajiangmian",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait, glossy yellow table",
+      "cluttered background",
+      "poor light"
+    ],
+    "note": "Snapshot of Zhajiangmian; tall portrait, glossy yellow table"
+  },
+  {
+    "id": "07483cae-878c-45d5-a19f-8ac2a740dad1",
+    "title": "Three Bean Salad",
+    "verdict": "fail",
+    "reasons": [
+      "food in a glass mixing bowl",
+      "poor light",
+      "not plated"
+    ],
+    "note": "Snapshot of Three Bean Salad; food in a glass mixing bowl"
+  },
+  {
+    "id": "08730464-c82f-40f3-b06d-a26c230e2fd0",
+    "title": "Xiaolongbao Soup Dumplings",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant table and side plates",
+      "dish small in frame",
+      "yellow cast"
+    ],
+    "note": "Snapshot of Xiaolongbao Soup Dumplings; restaurant table and side plates"
+  },
+  {
+    "id": "09742ecf-52a6-4c0a-ad82-c4b95270e419",
+    "title": "Breakfast Casserole",
+    "verdict": "fail",
+    "reasons": [
+      "plastic kid plate and fork on bare table",
+      "stock-like and flat",
+      "unappetizing"
+    ],
+    "note": "Snapshot of Breakfast Casserole; plastic kid plate and fork on bare table"
+  },
+  {
+    "id": "0c25dc20-aada-4431-a720-3c6daaccb82f",
+    "title": "Onion Rings",
+    "verdict": "fail",
+    "reasons": [
+      "sugar packets and drink in frame",
+      "harsh sun",
+      "paper tray"
+    ],
+    "note": "Snapshot of Onion Rings; sugar packets and drink in frame"
+  },
+  {
+    "id": "0d543101-6a8d-4f7a-9d4d-72e925fdf057",
+    "title": "Peach Cobbler",
+    "verdict": "fail",
+    "reasons": [
+      "still in baking dish",
+      "dark kitchen counter",
+      "no serving shown"
+    ],
+    "note": "Snapshot of Peach Cobbler; still in baking dish"
+  },
+  {
+    "id": "0e2e4123-ab46-403c-8460-b4456c3d151f",
+    "title": "Pan-Fried Pork Buns",
+    "verdict": "fail",
+    "reasons": [
+      "other plate and glass in background",
+      "dim restaurant light"
+    ],
+    "note": "Snapshot of Pan-Fried Pork Buns; other plate and glass in background"
+  },
+  {
+    "id": "0e5b3abc-fcfd-498e-b6ac-e5b1e65c8190",
+    "title": "Ranch Dressing",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait of a jar",
+      "lid in frame",
+      "does not crop well to landscape"
+    ],
+    "note": "Snapshot of Ranch Dressing; tall portrait of a jar"
+  },
+  {
+    "id": "0eb5fe9c-b524-453f-a38f-c8d5540594bc",
+    "title": "Spaghetti and Meatballs",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Plate of spaghetti and meatballs with parmesan and parsley on a wood table"
+  },
+  {
+    "id": "0f6c83d9-5432-437b-916a-ee0198334b32",
+    "title": "Strawberry Shortcake",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait",
+      "cluttered blurry background with mug",
+      "off-white wash"
+    ],
+    "note": "Snapshot of Strawberry Shortcake; tall portrait"
+  },
+  {
+    "id": "10b8f2e5-e99c-4347-9d82-6e9430f0da4f",
+    "title": "Seven Layer Dip",
+    "verdict": "fail",
+    "reasons": [
+      "still in glass dish with spoon",
+      "dim light",
+      "cluttered"
+    ],
+    "note": "Snapshot of Seven Layer Dip; still in glass dish with spoon"
+  },
+  {
+    "id": "115845f2-691e-4b10-b4d1-e6e0196b8601",
+    "title": "Broccoli Cheddar Soup",
+    "verdict": "fail",
+    "reasons": [
+      "tilted fisheye look",
+      "oversaturated teal table",
+      "bread messy"
+    ],
+    "note": "Snapshot of Broccoli Cheddar Soup; tilted fisheye look"
+  },
+  {
+    "id": "127a1b8d-7683-434b-ad44-a946747ddc92",
+    "title": "Spring Rolls",
+    "verdict": "fail",
+    "reasons": [
+      "bright wooden table, plain plate",
+      "amateur snapshot",
+      "dish small in frame"
+    ],
+    "note": "Snapshot of Spring Rolls; bright wooden table, plain plate"
+  },
+  {
+    "id": "128fdf31-e865-4291-83a3-0956e8b29c70",
+    "title": "Yangzhou Fried Rice",
+    "verdict": "fail",
+    "reasons": [
+      "flat flash light",
+      "plain plate close crop",
+      "yellow cast"
+    ],
+    "note": "Snapshot of Yangzhou Fried Rice; flat flash light"
+  },
+  {
+    "id": "13fc10ce-fcbd-4d94-86f8-de5ae6e924a8",
+    "title": "Fudgy Brownies",
+    "verdict": "fail",
+    "reasons": [
+      "still in baking pan",
+      "countertop and puzzle in frame",
+      "not cut or plated"
+    ],
+    "note": "Snapshot of Fudgy Brownies; still in baking pan"
+  },
+  {
+    "id": "15e60b1c-9385-4d76-ac0a-9c03cb489547",
+    "title": "Shrimp with Lobster Sauce",
+    "verdict": "fail",
+    "reasons": [
+      "dark dim photo",
+      "metal dish with spoon",
+      "cluttered background"
+    ],
+    "note": "Snapshot of Shrimp with Lobster Sauce; dark dim photo"
+  },
+  {
+    "id": "169bea6f-90ca-4645-a46f-772ae78959ef",
+    "title": "Chinese Spinach with Garlic",
+    "verdict": "fail",
+    "reasons": [
+      "extreme close crop of greens, no plating",
+      "hard to read as dish"
+    ],
+    "note": "Snapshot of Chinese Spinach with Garlic; extreme close crop of greens, no plating"
+  },
+  {
+    "id": "176ed30a-2bb4-4680-862f-6d580a78c057",
+    "title": "Huevos Rancheros",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Close shot of fried eggs on tortillas with salsa and grated cheese"
+  },
+  {
+    "id": "18277b02-9c9d-4eec-bcb7-4ef596950575",
+    "title": "Pigs in a Blanket",
+    "verdict": "fail",
+    "reasons": [
+      "in a bowl on a granite counter",
+      "plain casual snapshot",
+      "dull light"
+    ],
+    "note": "Snapshot of Pigs in a Blanket; in a bowl on a granite counter"
+  },
+  {
+    "id": "1861b38b-8f12-4a83-84a3-ea62589fb818",
+    "title": "Buttermilk Pancakes",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered table with other plates and glasses",
+      "dish small in frame"
+    ],
+    "note": "Snapshot of Buttermilk Pancakes; cluttered table with other plates and glasses"
+  },
+  {
+    "id": "1889c5dc-fdc6-4729-b152-7cdf0f9b3241",
+    "title": "Three Cup Chicken",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait",
+      "still in clay pot with spoon",
+      "cluttered green table"
+    ],
+    "note": "Snapshot of Three Cup Chicken; tall portrait"
+  },
+  {
+    "id": "190a3147-b589-47b8-bcfc-99f32da2f654",
+    "title": "Cherry Pie",
+    "verdict": "fail",
+    "reasons": [
+      "flour mess and tools on table",
+      "harsh light",
+      "uncut in pan"
+    ],
+    "note": "Snapshot of Cherry Pie; flour mess and tools on table"
+  },
+  {
+    "id": "19cbb527-8b6c-4f00-92c5-f371cc9271eb",
+    "title": "Spinach Artichoke Dip",
+    "verdict": "fail",
+    "reasons": [
+      "leftover look in ramekin",
+      "glare on white plate",
+      "spoon and salsa clutter"
+    ],
+    "note": "Snapshot of Spinach Artichoke Dip; leftover look in ramekin"
+  },
+  {
+    "id": "1a63b064-175d-4eaa-920b-267e1cac2e71",
+    "title": "Red Beans and Rice",
+    "verdict": "fail",
+    "reasons": [
+      "napkin and glossy table in frame",
+      "flat flash light",
+      "messy"
+    ],
+    "note": "Snapshot of Red Beans and Rice; napkin and glossy table in frame"
+  },
+  {
+    "id": "1be62935-22f3-459a-ac80-290e98dac7a6",
+    "title": "Sugar Cookies",
+    "verdict": "fail",
+    "reasons": [
+      "pile of plain cookies on a plate",
+      "flat light",
+      "granite background"
+    ],
+    "note": "Snapshot of Sugar Cookies; pile of plain cookies on a plate"
+  },
+  {
+    "id": "1cf00b6e-5d71-4dcc-8db2-9cd3aee65eda",
+    "title": "Red Braised Pork Belly",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Top-down red braised pork belly with bok choy on a speckled plate"
+  },
+  {
+    "id": "1dc6c826-964f-42b1-912a-cf32fa8a5688",
+    "title": "Scallion Pancakes",
+    "verdict": "fail",
+    "reasons": [
+      "green mat, laptop and objects in frame",
+      "tall portrait",
+      "torn pancakes"
+    ],
+    "note": "Snapshot of Scallion Pancakes; green mat, laptop and objects in frame"
+  },
+  {
+    "id": "1f41c7b9-2374-402f-85f5-f2c976c3c0c8",
+    "title": "New England Fish and Chips",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered table, person's lap and patterned cloth",
+      "odd angle"
+    ],
+    "note": "Snapshot of New England Fish and Chips; cluttered table, person's lap and patterned cloth"
+  },
+  {
+    "id": "1f463e88-0cd0-4e2e-a44c-3d02c9824bd8",
+    "title": "Stir-Fried Gai Lan with Oyster Sauce",
+    "verdict": "fail",
+    "reasons": [
+      "dim blurry background",
+      "flat flash light",
+      "amateur"
+    ],
+    "note": "Snapshot of Stir-Fried Gai Lan with Oyster Sauce; dim blurry background"
+  },
+  {
+    "id": "20551474-4b33-41c0-bd3f-b39cd0f7ad72",
+    "title": "Steamed Spare Ribs with Black Bean",
+    "verdict": "fail",
+    "reasons": [
+      "takeout container",
+      "clutter at frame edge",
+      "poor plating"
+    ],
+    "note": "Snapshot of Steamed Spare Ribs with Black Bean; takeout container"
+  },
+  {
+    "id": "214fd9de-121a-4af7-8e1f-b6d6b3235e0e",
+    "title": "Hoisin Chicken Lettuce Wraps",
+    "verdict": "fail",
+    "reasons": [
+      "harsh light",
+      "messy plate",
+      "amateur snapshot"
+    ],
+    "note": "Snapshot of Hoisin Chicken Lettuce Wraps; harsh light"
+  },
+  {
+    "id": "215817b4-1ffb-4cf5-ad94-d6d26c1522c9",
+    "title": "Ginger Scallion Lobster",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant table with teapot, people and stove",
+      "clutter and glare"
+    ],
+    "note": "Snapshot of Ginger Scallion Lobster; restaurant table with teapot, people and stove"
+  },
+  {
+    "id": "21870f72-36a7-4fb1-936e-2de27409e0b9",
+    "title": "Lobster Roll",
+    "verdict": "fail",
+    "reasons": [
+      "paper boat with plastic fork, napkin and street background",
+      "amateur look"
+    ],
+    "note": "Snapshot of Lobster Roll; paper boat with plastic fork, napkin and street background"
+  },
+  {
+    "id": "232f667a-f701-496b-9fda-32b37a65ff48",
+    "title": "Corn on the Cob with Herb Butter",
+    "verdict": "fail",
+    "reasons": [
+      "old patterned plate, harsh flash",
+      "plain, unstyled"
+    ],
+    "note": "Snapshot of Corn on the Cob with Herb Butter; old patterned plate, harsh flash"
+  },
+  {
+    "id": "2403a7bc-5327-49c6-84a3-b64238141ac6",
+    "title": "Belgian Waffles",
+    "verdict": "fail",
+    "reasons": [
+      "cutlery and glasses cluttering frame",
+      "dish small in frame",
+      "rustic table distracts"
+    ],
+    "note": "Snapshot of Belgian Waffles; cutlery and glasses cluttering frame"
+  },
+  {
+    "id": "243b42df-f794-4948-a66d-e4f93e338cd0",
+    "title": "Eggs Benedict",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Two eggs Benedict with hollandaise and roasted tomatoes on a white plate"
+  },
+  {
+    "id": "24b22683-b899-4663-835a-4e5c5ce8e0a5",
+    "title": "Hainanese Chicken Rice",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant table with drink and tea cup",
+      "dim yellow light",
+      "dish small in frame"
+    ],
+    "note": "Snapshot of Hainanese Chicken Rice; restaurant table with drink and tea cup"
+  },
+  {
+    "id": "24fa45a5-643b-4b67-88d6-de4bac42ff07",
+    "title": "Banana Pudding",
+    "verdict": "fail",
+    "reasons": [
+      "still in glass baking dish",
+      "flat light",
+      "side view of messy layers"
+    ],
+    "note": "Snapshot of Banana Pudding; still in glass baking dish"
+  },
+  {
+    "id": "26458192-e9cb-4638-9d3b-8f8665268915",
+    "title": "Baked Beans",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait",
+      "floral bowl and spoon distract",
+      "oversaturated"
+    ],
+    "note": "Snapshot of Baked Beans; tall portrait"
+  },
+  {
+    "id": "268dee57-332c-4015-af4c-1b860a3245ad",
+    "title": "Sweet and Sour Fish",
+    "verdict": "fail",
+    "reasons": [
+      "cluttered table with other dishes",
+      "dim light",
+      "messy plate"
+    ],
+    "note": "Snapshot of Sweet and Sour Fish; cluttered table with other dishes"
+  },
+  {
+    "id": "279e5cf0-d9cf-4d46-abb3-7b64887e204f",
+    "title": "Blueberry Pie",
+    "verdict": "fail",
+    "reasons": [
+      "half eaten slice with fork",
+      "dim and cluttered place mat",
+      "melted ice cream mess"
+    ],
+    "note": "Snapshot of Blueberry Pie; half eaten slice with fork"
+  },
+  {
+    "id": "280ed511-79a0-47d5-8e9d-3aefeedd7650",
+    "title": "Creamed Spinach",
+    "verdict": "fail",
+    "reasons": [
+      "close crop in bowl",
+      "flash glare",
+      "soupy and unappetizing"
+    ],
+    "note": "Snapshot of Creamed Spinach; close crop in bowl"
+  },
+  {
+    "id": "284ce001-1384-4b6a-a4ab-68a5b6bbaebe",
+    "title": "Fish-Fragrant Eggplant",
+    "verdict": "fail",
+    "reasons": [
+      "dim, blurry restaurant shot",
+      "clutter around the bowl"
+    ],
+    "note": "Snapshot of Fish-Fragrant Eggplant; dim, blurry restaurant shot"
+  },
+  {
+    "id": "2a34c28d-aca5-4e04-ac91-8b56d3687bbb",
+    "title": "Salt and Pepper Shrimp",
+    "verdict": "fail",
+    "reasons": [
+      "pink tablecloth",
+      "flat flash light",
+      "messy plate"
+    ],
+    "note": "Snapshot of Salt and Pepper Shrimp; pink tablecloth"
+  },
+  {
+    "id": "2a811912-96ef-4c2a-9dee-1d037ca7a8c7",
+    "title": "Beef Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "receipt and chopsticks in frame",
+      "glossy table glare"
+    ],
+    "note": "Snapshot of Beef Noodle Soup; receipt and chopsticks in frame"
+  },
+  {
+    "id": "2e917b9b-fb56-4a76-9492-44f7891d295e",
+    "title": "Apple Crisp",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Apple crisp square with whipped cream and mint on a white plate"
+  },
+  {
+    "id": "2e98dc0e-8e21-4770-81c8-936cdfb5a9d8",
+    "title": "Taiwanese Braised Pork Rice",
+    "verdict": "fail",
+    "reasons": [
+      "blurry, dim",
+      "gray background",
+      "messy bowl"
+    ],
+    "note": "Snapshot of Taiwanese Braised Pork Rice; blurry, dim"
+  },
+  {
+    "id": "305aa247-6612-4652-a7c9-d1bcd041d39e",
+    "title": "Biscuits and Sausage Gravy",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Biscuits and sausage gravy with parsley on a green-rimmed plate"
+  },
+  {
+    "id": "31cf1682-a505-4b91-af4b-1cd90422745e",
+    "title": "Scrambled Eggs and Toast",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Scrambled eggs with chives on toast, top-down, fork and cup at edge"
+  },
+  {
+    "id": "3271742e-bea1-4108-8d7c-244da3b84023",
+    "title": "Moo Shu Pork",
+    "verdict": "fail",
+    "reasons": [
+      "extreme close crop, no plating",
+      "flash light",
+      "unappetizing"
+    ],
+    "note": "Snapshot of Moo Shu Pork; extreme close crop, no plating"
+  },
+  {
+    "id": "359be21e-bc6f-4362-a30c-915f356b5ccf",
+    "title": "Shrimp Har Gow",
+    "verdict": "fail",
+    "reasons": [
+      "steamer basket crop, dark",
+      "flat light",
+      "text on tray liner"
+    ],
+    "note": "Snapshot of Shrimp Har Gow; steamer basket crop, dark"
+  },
+  {
+    "id": "35a4d00e-8b47-4f49-a25a-17c12499de53",
+    "title": "Home Fries",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant table clutter",
+      "flat flash light",
+      "mug and plates in frame"
+    ],
+    "note": "Snapshot of Home Fries; restaurant table clutter"
+  },
+  {
+    "id": "35a9e905-664d-4ea3-bb68-cc122d83295e",
+    "title": "Chinese Almond Cookies",
+    "verdict": "fail",
+    "reasons": [
+      "single cookie on white paper",
+      "flat flash",
+      "amateur look"
+    ],
+    "note": "Snapshot of Chinese Almond Cookies; single cookie on white paper"
+  },
+  {
+    "id": "3851ee23-1ac1-4f33-9c75-c812ffbdcaf2",
+    "title": "Hash Browns",
+    "verdict": "fail",
+    "reasons": [
+      "odd angle with patterned cloth",
+      "blurry crop",
+      "plain"
+    ],
+    "note": "Snapshot of Hash Browns; odd angle with patterned cloth"
+  },
+  {
+    "id": "38cbc955-f962-4e19-a9cb-1f9a19a88722",
+    "title": "Buffalo Chicken Wings",
+    "verdict": "fail",
+    "reasons": [
+      "beer, packets, shaker and bag in frame",
+      "clutter",
+      "dim yellow light"
+    ],
+    "note": "Snapshot of Buffalo Chicken Wings; beer, packets, shaker and bag in frame"
+  },
+  {
+    "id": "3a769002-951e-48ab-a5b0-9aac32c6001f",
+    "title": "Chongqing Hot and Sour Noodles",
+    "verdict": "fail",
+    "reasons": [
+      "hand and chopsticks in frame",
+      "cluttered table and tray",
+      "flat light"
+    ],
+    "note": "Snapshot of Chongqing Hot and Sour Noodles; hand and chopsticks in frame"
+  },
+  {
+    "id": "3fbbffdd-d2c2-4d61-96b7-22a1043e5f10",
+    "title": "Blackened Salmon",
+    "verdict": "fail",
+    "reasons": [
+      "not clearly blackened",
+      "flat harsh light on plate",
+      "amateur plating"
+    ],
+    "note": "Snapshot of Blackened Salmon; not clearly blackened"
+  },
+  {
+    "id": "403bf8e4-1ad7-4dab-a3ef-e8c8f565d78e",
+    "title": "Creamed Corn",
+    "verdict": "fail",
+    "reasons": [
+      "messy blob on plate with fork",
+      "flash glare",
+      "unappetizing"
+    ],
+    "note": "Snapshot of Creamed Corn; messy blob on plate with fork"
+  },
+  {
+    "id": "403d6082-1dd3-4162-a634-e07ccbb3f4b0",
+    "title": "Reuben Sandwich",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Tight side view of a loaded Reuben sandwich on a plate"
+  },
+  {
+    "id": "4185b3b1-275a-49bf-832a-bae4bcb6b7fe",
+    "title": "Mango Pudding",
+    "verdict": "fail",
+    "reasons": [
+      "white tablecloth restaurant shot",
+      "flat flash",
+      "dish and spoon uneven"
+    ],
+    "note": "Snapshot of Mango Pudding; white tablecloth restaurant shot"
+  },
+  {
+    "id": "45ed89f7-3156-473c-a250-c3f75f00770c",
+    "title": "Chicken Parmesan",
+    "verdict": "fail",
+    "reasons": [
+      "tall portrait",
+      "glasses and other food in background",
+      "harsh flash"
+    ],
+    "note": "Snapshot of Chicken Parmesan; tall portrait"
+  },
+  {
+    "id": "46027c7d-b8b7-482d-844f-6f8aa621fc3c",
+    "title": "Salisbury Steak",
+    "verdict": "pass",
+    "reasons": [],
+    "note": "Salisbury steak with onion gravy, mashed potatoes and corn on an oval plate"
+  },
+  {
+    "id": "46ca0fa4-8f94-4067-bf41-3e531c9e0285",
+    "title": "Deviled Eggs",
+    "verdict": "fail",
+    "reasons": [
+      "foreground blur",
+      "cropped eggs at edges",
+      "tray glare"
+    ],
+    "note": "Snapshot of Deviled Eggs; foreground blur"
+  },
+  {
+    "id": "49a68831-2122-49aa-a66f-064c3cdc1bdf",
+    "title": "Lanzhou Hand-Pulled Beef Noodle Soup",
+    "verdict": "fail",
+    "reasons": [
+      "clutter: tray, other plates, chopsticks",
+      "flat light"
+    ],
+    "note": "Snapshot of Lanzhou Hand-Pulled Beef Noodle Soup; clutter: tray, other plates, chopsticks"
+  },
+  {
+    "id": "4b2ef4c5-6fe6-4efe-ae16-7ab70360c3b9",
+    "title": "Dry-Fried Green Beans",
+    "verdict": "fail",
+    "reasons": [
+      "restaurant table with other dish and cup",
+      "dim light",
+      "messy plate"
+    ],
+    "note": "Snapshot of Dry-Fried Green Beans; restaurant table with other dish and cup"
+  },
+  {
+    "id": "4c22531d-e52b-40b6-9fd4-6164b9ff3850",
+    "title": "Hush Puppies",
+    "verdict": "fail",
+    "reasons": [
+      "knife and fork clutter",
+      "stained paper",
+      "half eaten"
+    ],
+    "note": "Snapshot of Hush Puppies; knife and fork clutter"
+  },
+  {
+    "id": "4f74b3e3-24a4-4c6f-ba88-76c62f8fea44",
+    "title": "Cheese Enchiladas",
+    "verdict": "fail",
+    "reasons": [
+      "dark background, plain pale plate",
+      "flat light",
+      "unappetizing sauce"
+    ],
+    "note": "Snapshot of Cheese Enchiladas; dark background, plain pale plate"
+  },
+  {
+    "id": "50860963-77e5-4d09-a0b7-496296d9c415",
+    "title": "Hunan Steamed Fish with Chopped Chilies",
+    "verdict": "fail",
+    "reasons": [
+      "clutter: napkin, other plates, hot plate",
+      "dim light",
+      "dish small in frame"
+    ],
+    "note": "Snapshot of Hunan Steamed Fish with Chopped Chilies; clutter: napkin, other plates, hot plate"
+  }
+]
