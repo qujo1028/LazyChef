@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { Alert } from 'react-native';
 
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
+import { SettingsCard } from '@/features/household/components/SettingsCard';
+import { unregisterThisDevice } from '@/features/push/device';
 import { friendlyError } from '@/lib/household-settings';
-import { supabase } from '@/lib/supabase';
 
-import { SettingsCard } from './SettingsCard';
+import { signOutLocal } from '../api';
 
-/** Temporary home for sign out until account settings land (P6). The route gate does the rest. */
-export function SignOutCard({ email }: { email: string | null }) {
+/** Sign out. The route gate sends the person to the welcome screen. */
+export function SignOutCard() {
   const [busy, setBusy] = useState(false);
 
   const signOut = async () => {
     setBusy(true);
-    const { error } = await supabase.auth.signOut();
+    await unregisterThisDevice();
+    const { error } = await signOutLocal();
     if (error) {
       setBusy(false);
       Alert.alert("Couldn't sign out", friendlyError(error));
@@ -21,7 +23,7 @@ export function SignOutCard({ email }: { email: string | null }) {
   };
 
   return (
-    <SettingsCard title="Account" description={email ? `Signed in as ${email}` : undefined}>
+    <SettingsCard title="Sign out">
       <PrimaryPillButton title="Sign out" variant="outline" onPress={signOut} loading={busy} />
     </SettingsCard>
   );

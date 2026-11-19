@@ -17,6 +17,7 @@ import { View } from 'react-native';
 
 import { AppScreenHeader } from '@/components/AppScreenHeader';
 import { EmptyState } from '@/components/EmptyState';
+import { PushBridge } from '@/features/push/PushBridge';
 import { useHouseholdContext } from '@/lib/household';
 import { useSession } from '@/lib/use-session';
 import { AppProviders } from '@/providers/app-providers';
@@ -67,6 +68,8 @@ function Navigation() {
     <>
       {/* Dark icons on cream, light icons in dark mode. */}
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      {/* Push registration on resume, the foreground toast and tap deep links (P6). */}
+      {signedIn && hasHousehold ? <PushBridge /> : null}
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
         {/* Always reachable: they work out the session state themselves. */}
         <Stack.Screen name="index" />
@@ -89,6 +92,13 @@ function Navigation() {
             options={{
               headerShown: true,
               header: () => <AppScreenHeader title="Activity" onBack={() => router.back()} />,
+            }}
+          />
+          <Stack.Screen
+            name="account"
+            options={{
+              headerShown: true,
+              header: () => <AppScreenHeader title="Account" onBack={() => router.back()} />,
             }}
           />
           <Stack.Screen

@@ -4,11 +4,11 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View }
 
 import { FormMessage } from '@/components/FormMessage';
 import { PrimaryPillButton } from '@/components/PrimaryPillButton';
+import { AccountRow } from '@/features/account/components/AccountRow';
 import { HouseholdNameCard } from '@/features/household/components/HouseholdNameCard';
 import { InviteCard } from '@/features/household/components/InviteCard';
 import { LeaveCard } from '@/features/household/components/LeaveCard';
 import { MembersCard } from '@/features/household/components/MembersCard';
-import { SignOutCard } from '@/features/household/components/SignOutCard';
 import { SwitchHouseholdCard } from '@/features/household/components/SwitchHouseholdCard';
 import { useHouseholdMembers } from '@/features/household/api';
 import { friendlyError } from '@/lib/household-settings';
@@ -73,6 +73,8 @@ export default function HouseholdScreen() {
       keyboardShouldPersistTaps="handled"
       refreshControl={refreshControl}
     >
+      <AccountRow />
+
       <HouseholdNameCard householdId={household.id} name={household.name} memberCount={memberCount} canRename={isOwner} />
 
       <InviteCard
@@ -107,8 +109,6 @@ export default function HouseholdScreen() {
       ) : null}
 
       <LeaveCard householdId={household.id} householdName={household.name} memberCount={memberCount} isOwner={isOwner} />
-
-      <SignOutCard email={active.data?.email ?? null} />
     </ScrollView>
   );
 }

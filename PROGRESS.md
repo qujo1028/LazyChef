@@ -5,7 +5,7 @@ The older "paused / waiting for resume" notes from 2026-09-28 and 2026-09-29 wer
 
 ## Current status (2026-11-18)
 - **Live:** web app at https://lazychef-gamma.vercel.app (Vercel project `lazychef`). iOS is a Capacitor shell around that site (`docs/mobile-apps.md`).
-- **Database:** `20261118060000_admin_dashboard.sql` is already applied to the live project (checked 2026-11-18). Still pending: `20261118120000_push_notifications.sql` (on `main`, not live). Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
+- **Database:** every repo migration through `20261119024109_library_expansion.sql` is live (checked 2026-11-18, including push notifications). `20261119053713_weekly_goal.sql` (P6) applied 2026-11-18 through the Supabase connector (file renamed to match); security advisor: nothing new beyond the intended `set_my_weekly_goal` grant. Migration lock: held by `feature/p6-activity-account` until PR #74 merges. Version mismatch: `undo_cook` is recorded live as `20261118074317`, but the repo file is `20261117000100_undo_cook.sql`. Security advisor was last run 2026-09-30.
 - **Planned:** a React Native (Expo) rebuild of the app. Plan in `docs/react-native-app.md`, scope decisions in `docs/product-scope.md`. The web app takes bug fixes only until the Expo app passes TestFlight.
 - **Open items:**
   - Revisit onboarding in the Expo app once the rest of the app is built (after P6 or so): the first pantry items step, copy, and whether it shows off the core loop, now that the screens it leads into exist. User asked for this on 2026-11-18.
@@ -989,3 +989,134 @@ Open for P5's exit check (needs the user and a phone in Expo Go):
   JWT verification on (`npx supabase functions deploy ai --project-ref gldppemwlecnbarxamcb`). The 20 deployed files
   were diffed against the repo: all identical. Smoke test: no auth 401 (gateway), a non-user token 401 with the
   function's own JSON, CORS preflight 204. Not yet tested with a signed-in session: do it from the Ideas sheet on a phone.
+
+## P6 Activity, account, legal (2026-11-18, lead: `feature/p6-activity-account`)
+Based on `origin/main` (P5 and the library expansion merged as #72 and #73). Migration lock: held by this branch
+(`20261119053713_weekly_goal.sql`). Workers don't touch `supabase/migrations/` or `src/types/database.ts`; a worker
+that needs a schema change stops and tells the lead.
+
+Decisions (user, 2026-11-18; recorded in `docs/react-native-app.md` and `docs/product-scope.md`):
+- Account deletion and app-triggered pushes are Vercel routes with bearer auth, reusing the web code.
+- Push goes through Expo's push service until the P7 dev build (Expo tokens in `device_tokens`, no migration).
+  Needs `eas init` once for the EAS project ID (user, free Expo account).
+- Avatar: the sign-in photo or initials. No upload in v1.
+- A stored weekly cook goal per person (1 to 7, default 3).
+
+Step 0 (lead):
+- Migration `20261119053713_weekly_goal.sql`: `user_preferences.weekly_goal` and `set_my_weekly_goal()`; 6 PGlite
+  tests (`weekly-goal.test.mjs`); types updated.
+- `packages/core/src/push/app-contract.ts` (+ test): routes, `notifyRequestSchema` (ids only), responses, error
+  codes, `isExpoPushToken`, `pushTapRoute`.
+- Mobile: `expo-notifications` (plugin in `app.json`), `lib/web-api.ts` (`callWebApi`, `EXPO_PUBLIC_API_URL`),
+  query keys `activity`, `weeklyGoal`, `notificationPrefs`, `features/habit/use-weekly-goal.ts` (wired into the ring
+  and the cook done lines), the `account` route, and stubs: `features/push/{PushBridge.tsx,notify.ts}`,
+  `features/push/components/NotificationsCard.tsx`. `PushBridge` is mounted in the root layout.
+
+Workers (branch from `origin/feature/p6-activity-account`):
+- W1 `feature/p6-server-routes` (Opus: bearer auth, account deletion, push delivery to housemates).
+- W2 `feature/p6-activity` (Sonnet: the Activity screen: log, chart, board, challenge and goal).
+- W3 `feature/p6-account` (Sonnet: the Account screen and the Household tab cleanup).
+- W4 `feature/p6-push-app` (Sonnet: registration, permission at first toggle, tap deep links, notify calls).
+
+
+### W3 `feature/p6-account`: Account screen and Household tab cleanup
+- Household tab: `SignOutCard` is gone; a "Your account" row (avatar, name, email, chevron) sits at the top and opens `/account`.
+- `app/account.tsx` cards in order: Profile (name edit, 1 to 60 chars, `profiles` update as the user; photo only when `avatar_url` is https, else initials), Weekly goal (stepper over `useWeeklyGoal`/`useSetWeeklyGoal`), Food preferences (no mobile editor existed; new card over `set_my_preferences` with core options, invalidates recipe queries on save), Notifications (W4's `NotificationsCard`), About (Privacy, Terms, Support in `expo-web-browser`, app version), Sign out, Delete account.
+- Haptics toggle skipped: the app has no haptics setting (`lib/haptics.ts` always fires), so there is nothing to toggle.
+- Delete: confirm alert with the outcome copy, then `callWebApi(APP_API.deleteAccount)`; success clears the query cache and persisted cache, signs out locally and the welcome screen shows "Your account is deleted." (plus the Apple Settings note when `appleNotRevoked`). The notice lives in memory (`lib/account-notice.ts`) and clears when the welcome screen is left. `__DEV__` shows preview buttons for the outcomes without calling the server.
+- Pure logic with tests: `lib/account.ts`, `lib/preferences.ts`. Code is in `features/account/`.
+- Not checked: no simulator, no Playwright, no signed-in account; the delete route (W1) was coded against the contract only, never called. Nothing was written to or deleted on the live project.
+- W3 review (`/code-review` medium on the branch diff): fixed a delete that timed out but finished (now asks the server if the login still exists before reporting failure), a failed local sign out after delete (message, busy reset, notice cleared), the deleted notice vanishing on remount (now cleared when sign in starts), the "YA" avatar fallback, overlapping goal taps (ignored while saving), and stale preference fields on save (draft keeps only edited fields). Left: the delete route is W1's and must be merged before this ships; the goal hook's rollback is the lead's.
+
+W4 (`feature/p6-push-app`): push in the app.
+- `features/push/device.ts`: `enablePush` (the first reminder: permission asked only when a switch is turned on, then
+  `getExpoPushTokenAsync({ projectId })` and `register_device_token`), `refreshPushRegistration` (launch and resume,
+  never asks), `unregisterThisDevice` (deletes this token from `device_tokens`, which RLS allows; there is no unregister
+  function; 3 second cap; called from `SignOutCard` and the onboarding sign out before `signOut`).
+- `PushBridge`: foreground handler shows no banner, the received push becomes a toast with an Open action
+  (ToastProvider sits above it in `AppProviders`); taps use `useLastNotificationResponse` (covers cold start), wait for
+  the root navigation state, and run once per tap. Skipped on Expo web.
+- `NotificationsCard`: three switches (`use-notification-prefs.ts`, optimistic with rollback), one line explaining
+  the permission ask, denied (Open Settings), no project ID, simulator or web, offline. `__DEV__` buttons fire a local
+  notification per kind.
+- `notifyHousemates` is wired into `addListText` and `addListItems` (only when a new line was added, not a top-up) and
+  `joinWithCode` (covers onboarding and the join screen). Undo in the list edit sheet passes `{ notify: false }`:
+  putting back something you just removed isn't news.
+- Pure logic and tests: `lib/push-state.ts` (10 tests).
+- Not checked: no device or simulator run, no real push, no signed-in account, no EAS project ID yet (`eas init`
+  pending, so the card says push isn't set up). Android also needs FCM credentials in EAS before tokens work.
+- Review fixes: module-level tap guard plus `clearLastNotificationResponse` so a tap never replays after signing in as someone else; the notification handler is set once; switches show the defaults if prefs fail to load.
+
+W2 `feature/p6-activity` (Activity screen, Expo app):
+- `app/activity.tsx`: a Log / Chart / Board segmented control on one screen; the selected view is local state.
+  Feature code in `features/activity/` (`api.ts`, `components/`), pure logic in `lib/activity-screen.ts` (+ 18 tests).
+- Log: same query as web (100 rows, actor profile joined) under `queryKeys.activity`, refetched on any
+  `activity_log` change via `useHouseholdChanges`. Core `groupActivity`/`summarizeEntry`, day headings, "and N more"
+  expand, pull to refresh, empty state, error with Try again, offline shows cached rows (or a message with Try
+  again when nothing is cached).
+- Chart: `buildHeatmap` in the device time zone, drawn with plain Views (16 weeks, Monday first). One spoken summary
+  for the grid, not per-tile labels.
+- Board: `computeLeaderboard` (Weekly / All time), avatars via expo-image with initials fallback, "(you)", last
+  week's winner, invite prompt when alone (goes to the Household tab). All-time shows "N+" once the cook read hits
+  `COOK_ROW_LIMIT`.
+- Goal and challenge: a card at the top of Board (not the whole screen, so the Log stays short): `WeekRing` against
+  `useWeeklyGoal()`, tier, streak, rotating challenge, and a "Change goal" link to `/account`. No editing here.
+- Dev only (`__DEV__`): "Dev preview" row on Chart and Board with fake household presets (nobody, quiet, busy, tie,
+  just you) and, on Board, the existing `DEV_PRESETS` for the goal card. Display only, nothing is written.
+- Avatar lives in `features/activity/components/Avatar.tsx` (W3 may want the same for Account; move it to
+  `components/` when both land). No existing exports in `packages/core` changed. No migration, no server code.
+- Checked: root typecheck, lint, test (2550 pass), mobile typecheck and lint, `npx expo export -p web`.
+- Not checked: no simulator, no Playwright, no signed-in test account on this Mac, so the screen was never seen
+  running (layout at 375px, Dynamic Type, VoiceOver, dark mode, realtime refetch and pull to refresh are untested).
+
+W1 `feature/p6-server-routes` (Opus, 2026-11-18): the Vercel routes the Expo app calls.
+- `src/lib/supabase/bearer.ts`: `authenticate()` reads `Authorization: Bearer`, verifies with `auth.getUser(token)` and
+  returns the user plus a client acting as them (publishable key + token, RLS applies). 401 `unauthorized` for a
+  missing or bad token. `readJsonBody()`: JSON
+  only (415), 4 KB cap checked while reading (413), bad JSON 400. Auth outages (retryable fetch errors, 429, 5xx)
+  are 500 `failed`, only 4xx token rejections are 401; missing Supabase settings are 503 `not_configured`. Other methods get 405 in the `AppApiFailure` shape.
+  No CORS on purpose: Expo web can't call these routes.
+- `POST /api/account/delete`: the deletion moved to `src/features/account/delete.ts` (`deleteAccountCore`), used by
+  the web action (same redirects and local sign-out) and by `src/features/account/api.ts`. Returns
+  `{ ok, appleNotRevoked }`, or 503 `not_configured` without `SUPABASE_SECRET_KEY`.
+- `POST /api/push/notify` (`src/features/push/app-notify.ts`): membership checked as the caller (403 `forbidden`).
+  `list_added` names the caller's newest `shopping_list_items` line from the last 5 minutes (`added_by` is stamped
+  from `auth.uid()` by a trigger, so it can't be forged); `joined` needs `household_members.joined_at` within 10
+  minutes and role `member` (the owner's row is from creating the household). Both events key the dedupe slot on
+  the database time (line `created_at`, `joined_at`), so app retries never push twice.
+- `notifyListAdded` / `notifyJoined` now return `Promise<boolean>` and take an optional `defer` (the route passes
+  `after`): the dedupe claim happens in the request, delivery runs after the response. `sent: true` means this
+  request claimed the slot and delivery was scheduled, not that a phone buzzed. Server actions unchanged.
+- `src/lib/push/expo.ts`: Expo push service sender (title, body, `data: { url, kind }`, sound default).
+  `DeviceNotRegistered` forgets the token, `MessageRateExceeded`/429/5xx retry, the rest fail; reasons hold codes
+  only (Expo's messages quote the token). Receipts aren't polled. `getSender()` sends Expo tokens there and raw
+  tokens to APNs/FCM, so the daily expiring cron (`/api/push/expiring`, which uses `getSender()`) reaches Expo
+  phones with no other change. Optional `EXPO_ACCESS_TOKEN` (README, `.env.example`).
+- Both routes excluded from the `src/proxy.ts` matcher. No schema change.
+- Not checked: no deployed routes, no signed-in test account, no real push to a phone, nothing run against the
+  live Supabase project. Vitest covers bearer parsing, body limits, auth outcomes, both handlers with fakes
+  (unauthorized, forbidden, bad body, list_added with/without a recent line, joined new/old, delete
+  not_configured/success/failures), the Expo sender and the sender routing.
+
+Lead merge (P6): W3, W4, W2, W1 merged into `feature/p6-activity-account` in that order; PROGRESS.md and the sign-out
+card (W3 moved it, W4 added the token unregister) conflicted. The lead read every diff; W1 was reviewed for bearer auth
+(401 only when Auth rejects the token, outages 500), the size-capped JSON body, membership checked as the caller, names
+read from the database, the secret key only in the deletion path, and no CORS. Fixes on merge: step 0's goal rollback
+when the goal never loaded, `pushTapRoute` trailing slashes, a timeout from `callWebApi` worded as "took too long", not
+"offline"; the delete flow checks whether the account is gone after a timeout or server error too, and a 401 alone no
+longer counts as deleted; one shared `components/Avatar.tsx` (W2 and W3 each had one). Checks on the merged branch:
+web typecheck, lint, 2,614 tests, `npm run test:db` (227 pass), audit, ingredients check; mobile typecheck, lint, iOS
+and web exports.
+
+Open for P6's exit check (needs the user):
+- Done 2026-11-18: the weekly goal migration is live (`20261119053713`); `eas init` linked `@quinn2212/lazychef`
+  (project ID in `app.json`); `SUPABASE_SECRET_KEY` is set in Vercel (Production and Preview).
+- On a phone in Expo Go: Activity (Log, Chart, Board, goal card) at 375pt, light and dark; Account (name, goal stepper,
+  food preferences, legal links, sign out); turn on a notification (the permission prompt), then have a housemate add
+  to the list and tap the push (the exit check: it opens the List); delete a throwaway account end to end (the other
+  exit check), including the Apple note when it applies.
+- Known gaps: Expo push receipts aren't checked (a dead token is dropped on its next send); a token that couldn't be
+  unregistered on sign out stays until someone registers on that phone; the web's ring still uses the fixed goal of 3
+  (web takes bug fixes only); the web join action and the app could each push once for the same join right at a
+  5-minute boundary.
+

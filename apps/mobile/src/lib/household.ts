@@ -43,6 +43,12 @@ export const queryKeys = {
   aiAllowance: (householdId: string) => ['household', 'ai-allowance', householdId] as const,
   /** What the household calls each barcode it scanned before (household_barcodes). */
   barcodes: (householdId: string) => ['household', 'barcodes', householdId] as const,
+  /** The household's activity feed rows (Activity: Log). */
+  activity: (householdId: string) => ['household', 'activity', householdId] as const,
+  /** The viewer's weekly cook goal (user_preferences.weekly_goal; per person, never broadcast). */
+  weeklyGoal: (userId: string) => ['household', 'weekly-goal', userId] as const,
+  /** The viewer's push settings (notification_prefs; per person). */
+  notificationPrefs: (userId: string) => ['household', 'notification-prefs', userId] as const,
 };
 
 async function fetchHouseholdContext(userId: string, email: string | null): Promise<HouseholdContext> {

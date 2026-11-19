@@ -101,6 +101,10 @@ Authentication → Emails → Templates:
      doesn't say which host it came from.
    - Admin dashboard (optional): `ADMIN_EMAILS`, `GITHUB_DASHBOARD_TOKEN`, `GITHUB_REPO`, `CRON_SECRET`.
      Set them for Production, and mark the token and secret Sensitive. See [Admin dashboard](#admin-dashboard-admin).
+   - `EXPO_ACCESS_TOKEN` (optional, Sensitive): pushes to the Expo app go through Expo's push service
+     and work without it. Set it (expo.dev → Account settings → Access tokens) only if "enhanced push
+     security" is turned on for the Expo project. The Expo app's account deletion and push routes
+     (`/api/account/delete`, `/api/push/notify`) also need `SUPABASE_SECRET_KEY`.
 3. `npx vercel@latest deploy --prod`
 4. Supabase → Authentication → URL Configuration: set Site URL to the production URL, add
    `https://<domain>/**` to Redirect URLs, and keep `http://localhost:3000/**` for local development.
