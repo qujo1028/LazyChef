@@ -1,9 +1,10 @@
 -- LazyChef · Trending recipes for the Home tab.
 -- get_trending_recipes() lists the library recipes (TheMealDB imports, household_id is
 -- null) that the most different households cooked in the last 7 days. Household recipes
--- never show up. It returns only the recipe and a household count, never who cooked, and
--- a recipe needs at least 2 households so the list can't reveal what one household eats.
--- One household cooking the same thing 5 times still counts once.
+-- never show up. It returns only the recipe and a household count, never who cooked.
+-- Only other households count (never the caller's own), and a recipe needs at least 2 of
+-- them, so the list can't reveal what one other household eats. One household cooking the
+-- same thing 5 times still counts once.
 
 -- Cooks across every household in the last week, without scanning the whole log.
 create index activity_log_cooked_recent_idx
@@ -23,8 +24,10 @@ stable
 security definer
 set search_path = ''
 as $$
+declare
+  v_user uuid := (select auth.uid());
 begin
-  if (select auth.uid()) is null then
+  if v_user is null then
     raise exception 'Sign in to see trending recipes' using errcode = '42501';
   end if;
 
@@ -35,6 +38,10 @@ begin
     where a.action = 'cooked'
       and a.created_at >= now() - interval '7 days'
       and a.details ? 'local_recipe_id'
+      and not exists (
+        select 1 from public.household_members m
+        where m.household_id = a.household_id and m.user_id = v_user
+      )
   )
   select r.id, r.title, r.image_url, r.ready_in_minutes, count(*)::integer as household_count
   from cooks c

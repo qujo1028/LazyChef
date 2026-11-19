@@ -39,7 +39,7 @@ describe("trending recipes", () => {
     users = {}
     homes = {}
     eggs = {}
-    for (const name of ["alex", "blair", "casey", "drew"]) {
+    for (const name of ["alex", "blair", "casey", "drew", "eli"]) {
       users[name] = await t.createUser(`${name}@test.dev`, { full_name: name })
       homes[name] = await t.as(users[name], async () =>
         (await t.q("select public.create_household($1) as id", [`${name} home`]))[0].id,
@@ -71,9 +71,9 @@ describe("trending recipes", () => {
 
   test("a recipe needs at least 2 households", async () => {
     await cook(users.alex, homes.alex, lib.soup)
-    assert.deepEqual(await trending(users.alex), [])
+    assert.deepEqual(await trending(users.eli), [])
     await cook(users.blair, homes.blair, lib.soup)
-    const rows = await trending(users.casey)
+    const rows = await trending(users.eli)
     assert.equal(rows.length, 1)
     assert.equal(rows[0].id, lib.soup)
     assert.equal(rows[0].title, "Soup")
@@ -82,16 +82,22 @@ describe("trending recipes", () => {
     assert.match(rows[0].image_url, /^https:\/\//)
   })
 
+  test("your own household never counts toward the minimum", async () => {
+    // Soup: alex and blair. To alex only blair counts, so alex can't learn what blair cooked.
+    assert.ok(!(await trending(users.alex)).some((r) => r.id === lib.soup))
+    assert.ok(!(await trending(users.blair)).some((r) => r.id === lib.soup))
+  })
+
   test("counts households, not cooks", async () => {
     for (let i = 0; i < 5; i += 1) await cook(users.alex, homes.alex, lib.curry)
-    assert.ok(!(await trending(users.alex)).some((r) => r.id === lib.curry), "one household alone never trends")
+    assert.ok(!(await trending(users.eli)).some((r) => r.id === lib.curry), "one household alone never trends")
 
     await cook(users.alex, homes.alex, lib.tacos)
     await cook(users.blair, homes.blair, lib.tacos)
     await cook(users.casey, homes.casey, lib.tacos)
     await cook(users.drew, homes.drew, lib.curry)
 
-    const rows = await trending(users.drew)
+    const rows = await trending(users.eli)
     assert.deepEqual(
       rows.map((r) => [r.title, r.household_count]),
       [
@@ -103,7 +109,7 @@ describe("trending recipes", () => {
   })
 
   test("returns only the recipe and a count, never who cooked", async () => {
-    const [row] = await trending(users.alex)
+    const [row] = await trending(users.eli)
     assert.deepEqual(Object.keys(row).sort(), ["household_count", "id", "image_url", "ready_in_minutes", "title"])
   })
 
@@ -115,18 +121,18 @@ describe("trending recipes", () => {
        values ($1, $2, 'cooked', 'eggs', 1, jsonb_build_object('local_recipe_id', $3::text))`,
       [homes.blair, users.blair, mine],
     )
-    assert.ok(!(await trending(users.alex)).some((r) => r.id === mine))
+    assert.ok(!(await trending(users.eli)).some((r) => r.id === mine))
   })
 
   test("only the last 7 days count", async () => {
     await cook(users.alex, homes.alex, lib.old)
     await cook(users.blair, homes.blair, lib.old)
-    assert.ok((await trending(users.alex)).some((r) => r.id === lib.old))
+    assert.ok((await trending(users.eli)).some((r) => r.id === lib.old))
     await t.q(
       "update public.activity_log set created_at = now() - interval '8 days' where details ->> 'local_recipe_id' = $1",
       [lib.old],
     )
-    assert.ok(!(await trending(users.alex)).some((r) => r.id === lib.old))
+    assert.ok(!(await trending(users.eli)).some((r) => r.id === lib.old))
   })
 
   test("ignores malformed recipe ids and honours the limit", async () => {
@@ -135,7 +141,7 @@ describe("trending recipes", () => {
        values ($1, $2, 'cooked', 'eggs', 2, '{"local_recipe_id": "not-a-uuid"}')`,
       [homes.casey, users.casey],
     )
-    assert.equal((await trending(users.alex, 1)).length, 1)
-    assert.equal((await trending(users.alex)).length, 3)
+    assert.equal((await trending(users.eli, 1)).length, 1)
+    assert.equal((await trending(users.eli)).length, 3)
   })
 })

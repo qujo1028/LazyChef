@@ -1136,8 +1136,8 @@ Decisions (user, 2026-11-18; recorded in `docs/product-scope.md` and `docs/react
 Step 0 (lead):
 - Migration `20261119080000_trending_recipes.sql`: `get_trending_recipes(p_limit default 10)` (security definer,
   `search_path = ''`, signed-in only, anon revoked; reads `details->>'local_recipe_id'` on `cooked` rows, joins only
-  `recipes.household_id is null`) and a partial index on recent cooks. 7 PGlite tests (`trending-recipes.test.mjs`):
-  anon blocked, 2-household minimum, counts households not cooks, no actor columns, household recipes excluded,
+  `recipes.household_id is null`) and a partial index on recent cooks. 8 PGlite tests (`trending-recipes.test.mjs`):
+  anon blocked, 2-household minimum (the caller's own households never count), counts households not cooks, no actor columns, household recipes excluded,
   7-day window, malformed ids and the limit. Types updated.
 - Docs: scope, plan phase row and design check updated. `apps/mobile/src/app/(tabs)/home.tsx` stub so both workers
   branch from a registered route.
