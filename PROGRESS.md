@@ -1152,7 +1152,7 @@ Workers (branch from `feature/home-tab` at the step 0 commit):
 Built the Home screen in the Expo app. Pure helpers in `packages/core/src/home/` (`greeting`, `trending`, `expiring`,
 22 Vitest tests). Screen in `apps/mobile/src/app/(tabs)/home.tsx` with parts in `apps/mobile/src/features/home/`:
 welcome (greeting, household name, expiring line that opens Pantry), the "This week" card (moved off Pantry), a compact
-household board with the current challenge ("See all" opens Activity, invite prompt when alone), and a sideways row of
+household board ("See all" opens Activity; the challenge shows once, on the This week card, invite prompt when alone), and a sideways row of
 trending recipes (`get_trending_recipes`, topped up with day-seeded library picks). New query keys `trending` and
 `libraryPool` (under `['home', ...]`, no realtime). Pull to refresh refetches all of it.
 - Expiring rule: next 7 days including today, already-expired items count, ran-out (quantity 0) and staples do not.

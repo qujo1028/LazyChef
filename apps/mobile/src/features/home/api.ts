@@ -8,8 +8,8 @@ import { supabase } from '@/lib/supabase';
 import { deviceTimeZone } from '@/lib/time-zone';
 import { useNow } from '@/lib/use-now';
 
-/** How many library recipes the row can draw its "Try something new" picks from (well under PostgREST's 1000). */
-const POOL_LIMIT = 300;
+/** PostgREST's cap; the core library is smaller, so this reads all of it. */
+const POOL_LIMIT = 1000;
 const ROW_LIMIT = 10;
 
 /**
@@ -28,7 +28,7 @@ export function useTrendingRecipes() {
   });
 }
 
-/** A slice of the shared library (no household recipes), to top the row up. Changes rarely. */
+/** The shared core library (no household recipes, no Extended-only ones), to top the row up. Changes rarely. */
 export function useLibraryPool() {
   return useQuery({
     queryKey: queryKeys.libraryPool(),
@@ -38,6 +38,8 @@ export function useLibraryPool() {
         .from('recipes')
         .select('id, title, image_url, ready_in_minutes')
         .is('household_id', null)
+        .eq('extended', false)
+        .order('id')
         .limit(POOL_LIMIT);
       if (error) throw error;
       return data;
